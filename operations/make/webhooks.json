@@ -1,0 +1,56 @@
+{
+  "platform": "Make (formerly Integromat)",
+  "description": "Webhook and scenario configs for automating lead flow from Tally form to contractor delivery",
+  "scenarios": [
+    {
+      "scenario_id": "sc-001",
+      "name": "Tally Form → Lead Qualification → Contractor Notification",
+      "trigger": "Tally form submission webhook",
+      "steps": [
+        {
+          "step": 1,
+          "action": "Receive Tally webhook payload",
+          "tool": "Make Webhooks (Custom)"
+        },
+        {
+          "step": 2,
+          "action": "Parse form fields (name, phone, address, budget, timeline)",
+          "tool": "Make Data Parser"
+        },
+        {
+          "step": 3,
+          "action": "Run qualification scoring against /operations/leads/scoring-rules.json",
+          "tool": "Make Router / Filter"
+        },
+        {
+          "step": 4,
+          "action": "If qualified: look up contractor by territory from routing-rules.json",
+          "tool": "Make Router"
+        },
+        {
+          "step": 5,
+          "action": "Send email notification to contractor",
+          "tool": "Make Email (Gmail or SMTP)"
+        },
+        {
+          "step": 6,
+          "action": "Send SMS notification to contractor",
+          "tool": "Make SMS (Twilio or similar)"
+        },
+        {
+          "step": 7,
+          "action": "Create deal record in HubSpot CRM",
+          "tool": "Make HubSpot module"
+        },
+        {
+          "step": 8,
+          "action": "If not qualified: log disqualification reason and notify admin",
+          "tool": "Make Email"
+        }
+      ],
+      "webhook_url": "[MAKE_WEBHOOK_URL — fill after scenario creation]",
+      "status": "not_built"
+    }
+  ],
+  "notes": "Build scenario sc-001 in Make before running first ad campaign. Test with sample Tally submission before going live."
+}

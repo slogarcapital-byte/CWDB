@@ -1,0 +1,57 @@
+{
+  "contractor_profile_template": {
+    "meta": {
+      "version": "1.0",
+      "description": "Intake form data collected during contractor onboarding"
+    },
+    "business_info": {
+      "company_name": "",
+      "owner_name": "",
+      "phone": "",
+      "email": "",
+      "website": "",
+      "years_in_business": "",
+      "license_number": "",
+      "insured": null
+    },
+    "service_area": {
+      "primary_city": "",
+      "zip_codes": [],
+      "radius_miles": ""
+    },
+    "services": {
+      "deck_new_build": null,
+      "deck_repair": null,
+      "deck_replacement": null,
+      "composite_decking": null,
+      "wood_decking": null,
+      "pergolas": null,
+      "railings": null
+    },
+    "capacity": {
+      "current_availability": "",
+      "avg_jobs_per_month": "",
+      "min_project_size_usd": "",
+      "max_project_size_usd": ""
+    },
+    "billing": {
+      "pricing_model": "",
+      "monthly_fee_usd": null,
+      "cost_per_lead_usd": null,
+      "billing_email": "",
+      "payment_method": ""
+    },
+    "lead_delivery": {
+      "preferred_notification": ["email", "sms"],
+      "notification_email": "",
+      "notification_phone": "",
+      "crm_integration": ""
+    },
+    "onboarding": {
+      "date_signed": "",
+      "trial_lead_sent": null,
+      "trial_lead_date": "",
+      "status": "pending"
+    }
+  }
+}

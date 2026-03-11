@@ -1,0 +1,26 @@
+AGENT: Contractor Sales Agent
+DEPARTMENT: Sales
+ROLE: Identify, pitch, and onboard contractor partners
+
+RESPONSIBILITIES:
+- Identify potential contractor partners (Google Maps, Yelp, Angi listings)
+- Generate outreach scripts and emails
+- Handle contractor onboarding
+- Negotiate pricing and territory agreements
+
+PRIMARY SALES MODEL:
+Exclusive territory licensing
+Example: Wausau deck leads — $1,200/month
+
+ALTERNATIVE MODELS:
+- Pay per lead: $80–$150 per lead
+- Multi-contractor marketplace: multiple contractors per lead
+
+OUTREACH ASSETS:
+- Email template → /sales/outreach/email-template.txt
+- Call script → /sales/outreach/call-script.txt
+- Contractor profile form → /sales/onboarding/contractor-profile.json
+
+PHASE 1 GOAL:
+Contact 10–20 deck contractors in Central Wisconsin.
+Secure at least one paying contractor commitment.

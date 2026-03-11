@@ -1,0 +1,58 @@
+{
+  "scoring": {
+    "description": "Lead scoring rules for qualifying Tally form submissions. Leads scoring 60+ are routed to contractors.",
+    "pass_threshold": 60,
+    "max_score": 100,
+    "rules": [
+      {
+        "field": "Do you own this property?",
+        "rule": "Must be homeowner",
+        "condition": "value == 'Yes, I own this home'",
+        "points": 30,
+        "disqualify_if_fail": true,
+        "disqualify_reason": "Non-homeowner (renter)"
+      },
+      {
+        "field": "Property Address",
+        "rule": "Must be in service territory",
+        "condition": "zip_code in service_territory_list",
+        "points": 20,
+        "disqualify_if_fail": true,
+        "disqualify_reason": "Outside service area"
+      },
+      {
+        "field": "Phone Number",
+        "rule": "Must be a valid US phone number",
+        "condition": "valid_us_phone_format",
+        "points": 10,
+        "disqualify_if_fail": true,
+        "disqualify_reason": "Invalid phone number"
+      },
+      {
+        "field": "What is your estimated budget?",
+        "rule": "Budget must be $5,000 or above",
+        "condition": "value != 'Under $5,000'",
+        "points": 20,
+        "disqualify_if_fail": false,
+        "low_score_reason": "Budget under $5,000 — flag for review"
+      },
+      {
+        "field": "When are you looking to start?",
+        "rule": "Timeline indicates near-term intent",
+        "condition": "value in ['As soon as possible', 'Within 1–3 months']",
+        "points": 20,
+        "disqualify_if_fail": false
+      }
+    ],
+    "service_territory": {
+      "zip_codes": ["54401", "54403", "54476", "54474", "54452"],
+      "cities": ["Wausau", "Schofield", "Weston", "Mosinee", "Merrill"]
+    },
+    "auto_disqualify_conditions": [
+      "Renter (non-homeowner)",
+      "Outside service territory",
+      "Invalid/missing phone number",
+      "Duplicate submission (same phone within 30 days)"
+    ]
+  }
+}

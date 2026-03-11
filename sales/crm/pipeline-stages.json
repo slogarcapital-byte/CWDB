@@ -1,0 +1,55 @@
+{
+  "crm": "HubSpot",
+  "pipeline": "Contractor Sales",
+  "description": "Tracks contractor prospects from first contact through active billing",
+  "stages": [
+    {
+      "id": 1,
+      "name": "Prospect Identified",
+      "description": "Contractor found via Google Maps, Yelp, Angi, or referral. Not yet contacted.",
+      "probability": 5
+    },
+    {
+      "id": 2,
+      "name": "Outreach Sent",
+      "description": "Email or call attempted. Awaiting response.",
+      "probability": 10
+    },
+    {
+      "id": 3,
+      "name": "Connected",
+      "description": "Had a conversation. Contractor is interested and considering.",
+      "probability": 30
+    },
+    {
+      "id": 4,
+      "name": "Trial Lead Sent",
+      "description": "Free trial lead delivered. Awaiting contractor feedback.",
+      "probability": 50
+    },
+    {
+      "id": 5,
+      "name": "Proposal Sent",
+      "description": "Pricing and terms sent. Awaiting agreement.",
+      "probability": 65
+    },
+    {
+      "id": 6,
+      "name": "Closed — Active",
+      "description": "Contractor is signed and receiving leads. Billing active.",
+      "probability": 100
+    },
+    {
+      "id": 7,
+      "name": "Closed — Lost",
+      "description": "Contractor declined or went unresponsive.",
+      "probability": 0
+    },
+    {
+      "id": 8,
+      "name": "Churned",
+      "description": "Was active, cancelled or stopped paying.",
+      "probability": 0
+    }
+  ]
+}

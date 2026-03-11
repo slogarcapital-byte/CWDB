@@ -1,0 +1,24 @@
+# Claude IDE local settings
+.claude/settings.local.json
+
+# Environment / secrets
+.env
+.env.local
+*.env
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor artifacts
+.vscode/
+*.swp
+*~
+
+# Node (if added later)
+node_modules/
+
+# Generated reports and P&L outputs (optional — uncomment to exclude)
+# finance/pl/*.xlsx
+# finance/reports/**/*.xlsx
