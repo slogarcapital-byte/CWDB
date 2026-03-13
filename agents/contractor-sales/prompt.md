@@ -17,9 +17,13 @@ ALTERNATIVE MODELS:
 - Multi-contractor marketplace: multiple contractors per lead
 
 OUTREACH ASSETS:
-- Email template → /sales/outreach/email-template.txt
-- Call script → /sales/outreach/call-script.txt
+- Email template → /sales/outreach/email-template.md
+- Call script → /sales/outreach/call-script.md
 - Contractor profile form → /sales/onboarding/contractor-profile.json
+
+OBJECTION HANDLING — ANGI / HOMEADVISOR COMPARISON:
+When contractors say "I already use Angi or HomeAdvisor," use this differentiator:
+"Our leads come from Nextdoor — the neighborhood app where homeowners ask their actual neighbors for contractor recommendations. These aren't shared with 3–5 other contractors like Angi leads. The homeowner is already warm because a neighbor pointed them your way."
 
 PHASE 1 GOAL:
 Contact 10–20 deck contractors in Central Wisconsin.

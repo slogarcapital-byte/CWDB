@@ -20,6 +20,8 @@ METRICS BY STAGE:
 DATA SOURCES:
 - Google Ads dashboard
 - Meta Ads Manager
+- Nextdoor Ads dashboard (paid ad performance by neighborhood/zip)
+- Nextdoor organic engagement (post views, replies, link clicks — tracked manually or via UTM)
 - TikTok Ads Manager
 - Tally form analytics
 - HubSpot pipeline data

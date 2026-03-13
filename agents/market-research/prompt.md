@@ -23,6 +23,7 @@ RESEARCH INPUTS:
 - Local competitor density
 - Homeowner income demographics
 - Seasonal demand patterns (WI peak: May–September)
+- Nextdoor neighborhood posts (monitor "does anyone know a deck builder?" posts to validate demand by city before ad spend)
 
 EXPANSION PIPELINE:
 - Eau Claire
