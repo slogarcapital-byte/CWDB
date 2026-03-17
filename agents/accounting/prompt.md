@@ -9,8 +9,8 @@ RESPONSIBILITIES:
 - Produce monthly P&L statements
 
 REVENUE STREAMS:
-- Territory licensing fees (recurring monthly)
-- Pay-per-lead billing (variable)
+- Pay per accepted bid billing: $1,000 per accepted bid (contractor pays when they win a job from our lead)
+- Territory licensing fees (secondary model, recurring monthly)
 
 EXPENSE CATEGORIES:
 - Ad spend (Google, Facebook, TikTok)

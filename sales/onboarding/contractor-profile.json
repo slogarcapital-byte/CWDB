@@ -35,9 +35,8 @@
       "max_project_size_usd": ""
     },
     "billing": {
-      "pricing_model": "",
-      "monthly_fee_usd": null,
-      "cost_per_lead_usd": null,
+      "pricing_model": "pay_per_accepted_bid",
+      "cost_per_accepted_bid_usd": 1000,
       "billing_email": "",
       "payment_method": ""
     },

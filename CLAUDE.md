@@ -22,16 +22,17 @@ The system captures the lead and sells it to contractors.
 
 Revenue models:
 
-1. Pay per lead
-2. Territory licensing
+1. Pay per accepted bid (primary — contractor pays $1,000 when they win a job from our lead)
+2. Territory licensing (secondary)
 3. Multi contractor lead marketplace
 
 Example economics:
 
-Average lead cost: $20–$60  
-Average lead sale price: $80–$150  
+Average ad cost per lead: $20–$60
+Revenue per accepted bid: $1,000
+Estimated cost per accepted bid (at 20% contractor close rate): ~$300
 
-Target margin: $40–$100 per lead.
+Target margin: ~$700 per accepted bid.
 
 ---
 
@@ -86,6 +87,7 @@ Advertising Platforms
 - Google Ads
 - Facebook / Instagram Ads
 - TikTok
+- Nextdoor (primary community channel — where homeowners go for neighbor contractor recommendations)
 
 Landing Pages
 
@@ -114,7 +116,7 @@ The system is organized as a company with agents as employees and folders as dep
 ```
 CWDB/
 ├── agents/          EMPLOYEES — AI agent system prompts and configs
-├── marketing/       DEPT — Ad campaigns (Google, Facebook, TikTok)
+├── marketing/       DEPT — Ad campaigns (Google, Facebook, TikTok, Nextdoor)
 ├── website/         DEPT — Webflow pages and templates
 ├── sales/           DEPT — Contractor outreach, onboarding, CRM
 ├── operations/      DEPT — Lead processing, qualification, routing, Make automation
@@ -140,6 +142,7 @@ Responsibilities:
 - Analyze local market demand
 - Identify underserved cities
 - Estimate lead value by niche
+- Monitor Nextdoor neighborhood posts to validate demand in target cities
 
 Outputs:
 
@@ -187,6 +190,7 @@ Platforms:
 Google Ads
 Facebook / Instagram Ads
 TikTok
+Nextdoor (paid ads + organic community engagement)
 
 Key metric:
 
@@ -250,12 +254,12 @@ Responsibilities:
 
 Primary sales model:
 
-Exclusive territory licensing.
+Pay per accepted bid.
 
 Example:
 
-Wausau deck leads  
-$1,200 per month.
+Contractor pays $1,000 each time they win a job
+sourced from one of our leads (homeowner accepts their bid).
 
 ---
 
@@ -270,8 +274,9 @@ Responsibilities:
 
 Key metrics:
 
-Cost per lead
-Revenue per lead
+Cost per lead (ad efficiency)
+Revenue per accepted bid (target: $1,000)
+Cost per accepted bid (target: <$400)
 Contractor retention
 Ad ROI
 
@@ -439,15 +444,16 @@ Thumbtack
 
 Primary metrics:
 
-Cost per lead  
-Revenue per lead  
-Contractor lifetime value  
-Lead to job conversion rate
+Cost per lead (ad efficiency)
+Revenue per accepted bid
+Contractor lifetime value
+Lead-to-accepted-bid conversion rate
 
 Target benchmarks:
 
-Cost per lead: <$60  
-Lead sale price: >$100  
+Cost per lead: <$60
+Revenue per accepted bid: $1,000
+Cost per accepted bid: <$400
 ROI: 2x+ advertising return
 
 ---

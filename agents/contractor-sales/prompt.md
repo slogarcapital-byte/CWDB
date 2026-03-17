@@ -9,12 +9,13 @@ RESPONSIBILITIES:
 - Negotiate pricing and territory agreements
 
 PRIMARY SALES MODEL:
-Exclusive territory licensing
-Example: Wausau deck leads — $1,200/month
+Pay per accepted bid — $1,000 per accepted bid
+"Accepted bid" = homeowner accepts the contractor's estimate and awards them the project.
+Contractor pays $1,000 only when they WIN a job sourced from our lead. Zero cost if they don't close.
 
 ALTERNATIVE MODELS:
-- Pay per lead: $80–$150 per lead
-- Multi-contractor marketplace: multiple contractors per lead
+- Territory licensing: flat monthly fee for all leads in a service area
+- Multi-contractor marketplace: multiple contractors per lead (Phase 4)
 
 OUTREACH ASSETS:
 - Email template → /sales/outreach/email-template.md

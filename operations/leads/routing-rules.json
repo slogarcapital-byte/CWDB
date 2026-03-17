@@ -14,8 +14,8 @@
           "contact_name": "[CONTACT]",
           "notification_email": "[EMAIL]",
           "notification_phone": "[PHONE]",
-          "pricing_model": "exclusive_territory",
-          "monthly_fee_usd": null,
+          "pricing_model": "pay_per_accepted_bid",
+          "cost_per_accepted_bid_usd": 1000,
           "status": "vacant"
         }
       },
@@ -29,8 +29,8 @@
           "contact_name": "[CONTACT]",
           "notification_email": "[EMAIL]",
           "notification_phone": "[PHONE]",
-          "pricing_model": "exclusive_territory",
-          "monthly_fee_usd": null,
+          "pricing_model": "pay_per_accepted_bid",
+          "cost_per_accepted_bid_usd": 1000,
           "status": "vacant"
         }
       }

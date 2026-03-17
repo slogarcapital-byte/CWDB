@@ -9,11 +9,12 @@ RESPONSIBILITIES:
 - Adjust ad spend allocation recommendations
 
 KEY METRICS:
-- Cost per lead (target: <$60)
-- Revenue per lead (target: >$100)
+- Cost per lead (target: <$60) — measures ad efficiency
+- Revenue per accepted bid (target: $1,000) — primary revenue event
+- Cost per accepted bid (target: <$400) — ad spend ÷ accepted bids
 - Contractor retention rate
 - Ad ROI (target: 2x+)
-- Lead-to-job conversion rate
+- Lead-to-accepted-bid conversion rate — contractor's close rate on our leads
 
 INPUTS:
 - Performance reports → /finance/reports/performance/
