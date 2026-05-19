@@ -1,0 +1,118 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - link "Central Wisconsin Deck Builders Logo" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Central Wisconsin Deck Builders Logo" [ref=e5]
+      - generic [ref=e6]:
+        - link "Our Builders" [ref=e7] [cursor=pointer]:
+          - /url: /our-builders
+        - button "Resources" [ref=e9] [cursor=pointer]:
+          - generic [ref=e10]: Resources
+        - link "About" [ref=e11] [cursor=pointer]:
+          - /url: /about
+      - generic [ref=e12]:
+        - link "(715) 544-7941" [ref=e13] [cursor=pointer]:
+          - /url: tel:+17155447941
+        - link "Start My Quote →" [ref=e14] [cursor=pointer]:
+          - /url: /get-a-quote
+    - text: 
+  - generic [ref=e17]:
+    - generic [ref=e18]: RESOURCES
+    - heading "Frequently Asked Questions" [level=1] [ref=e19]
+    - paragraph [ref=e20]: Straight answers about deck quotes, costs, permits, and materials for Central Wisconsin homeowners.
+  - generic [ref=e22]:
+    - heading "Your Questions, Answered" [level=2] [ref=e23]
+    - group [ref=e24]:
+      - generic "How does Central Wisconsin Deck Builders work?" [ref=e25] [cursor=pointer]
+    - group [ref=e26]:
+      - generic "Is the quote really free?" [ref=e27] [cursor=pointer]
+    - group [ref=e28]:
+      - generic "How quickly will I hear back?" [ref=e29] [cursor=pointer]
+    - group [ref=e30]:
+      - generic "How do you choose which contractors are in your network?" [ref=e31] [cursor=pointer]
+    - group [ref=e32]:
+      - generic "What areas do you serve?" [ref=e33] [cursor=pointer]
+    - group [ref=e34]:
+      - generic "What types of deck projects do you handle?" [ref=e35] [cursor=pointer]
+    - group [ref=e36]:
+      - generic "How much does a deck cost in Central Wisconsin?" [ref=e37] [cursor=pointer]
+    - group [ref=e38]:
+      - generic "Do I need a permit to build a deck in Wisconsin?" [ref=e39] [cursor=pointer]
+    - group [ref=e40]:
+      - generic "What decking materials are available?" [ref=e41] [cursor=pointer]
+    - group [ref=e42]:
+      - generic "What if I'm just in the planning phase and not ready to build yet?" [ref=e43] [cursor=pointer]
+    - group [ref=e44]:
+      - generic "Can I choose which contractor I work with?" [ref=e45] [cursor=pointer]
+    - group [ref=e46]:
+      - generic "Is my information shared with anyone?" [ref=e47] [cursor=pointer]
+  - generic [ref=e49]:
+    - heading "Start your deck quote. 48-hour response from a local builder." [level=2] [ref=e50]
+    - link "Start My Quote →" [ref=e51] [cursor=pointer]:
+      - /url: /get-a-quote
+  - generic [ref=e54]:
+    - generic [ref=e55]:
+      - img "Central Wisconsin Deck Builders Logo" [ref=e56]
+      - link "(715) 544-7941" [ref=e57] [cursor=pointer]:
+        - /url: tel:+17155447941
+      - generic [ref=e58]:
+        - link "Facebook" [ref=e59] [cursor=pointer]:
+          - /url: https://facebook.com
+          - img "Facebook" [ref=e60]
+        - link "Instagram" [ref=e62] [cursor=pointer]:
+          - /url: https://instagram.com
+          - img "Instagram" [ref=e63]
+        - link "Nextdoor" [ref=e65] [cursor=pointer]:
+          - /url: https://nextdoor.com
+          - img "Nextdoor" [ref=e66]
+    - generic [ref=e68]:
+      - heading "Service Areas" [level=4] [ref=e69]
+      - link "Wausau" [ref=e70] [cursor=pointer]:
+        - /url: /service-area/wausau
+      - link "Schofield" [ref=e71] [cursor=pointer]:
+        - /url: /service-area/schofield
+      - link "Weston" [ref=e72] [cursor=pointer]:
+        - /url: /service-area/weston
+      - link "Mosinee" [ref=e73] [cursor=pointer]:
+        - /url: /service-area/mosinee
+      - link "Merrill" [ref=e74] [cursor=pointer]:
+        - /url: /service-area/merrill
+    - generic [ref=e75]:
+      - heading "Company" [level=4] [ref=e76]
+      - link "About Us" [ref=e77] [cursor=pointer]:
+        - /url: /about
+      - link "Our Builders" [ref=e78] [cursor=pointer]:
+        - /url: /our-builders
+      - link "Gallery" [ref=e79] [cursor=pointer]:
+        - /url: /gallery
+      - link "FAQ" [ref=e80] [cursor=pointer]:
+        - /url: /faq
+      - link "Blog" [ref=e81] [cursor=pointer]:
+        - /url: /blog
+      - link "Cost Calculator" [ref=e82] [cursor=pointer]:
+        - /url: /cost-calculator
+    - generic [ref=e83]:
+      - heading "Contact 906 N 16th Ave Wausau, WI 54401 info@cwdeckbuilders.com" [level=4] [ref=e84]:
+        - text: Contact
+        - paragraph [ref=e85]:
+          - text: 906 N 16th Ave
+          - text: Wausau, WI 54401
+        - link "info@cwdeckbuilders.com" [ref=e86] [cursor=pointer]:
+          - /url: mailto:info@cwdeckbuilders.com
+      - link "(715) 544-7941" [ref=e87] [cursor=pointer]:
+        - /url: tel:+17155447941
+      - link "Get a Free Quote" [ref=e88] [cursor=pointer]:
+        - /url: /get-a-quote
+      - paragraph [ref=e89]: Central Wisconsin
+      - paragraph [ref=e90]: Mon–Fri 8am–6pm CT
+    - paragraph [ref=e91]: © 2026 Central Wisconsin Deck Builders. All rights reserved.
+    - generic [ref=e92]:
+      - link "Privacy Policy" [ref=e93] [cursor=pointer]:
+        - /url: /privacy
+      - link "Terms of Service" [ref=e94] [cursor=pointer]:
+        - /url: /terms
+  - generic [ref=e95]:
+    - link "GET YOUR FREE QUOTE →" [ref=e96] [cursor=pointer]:
+      - /url: /get-a-quote
+    - button "Dismiss" [ref=e97] [cursor=pointer]: ×

@@ -1,0 +1,13 @@
+- generic [active] [ref=e1]:
+  - img "Central Wisconsin wood deck with stairs and railing" [ref=e2]:
+    - img "Central Wisconsin Deck Builders" [ref=e3]
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - heading "48 hours. Not 48 days." [level=1] [ref=e6]:
+        - text: 48 hours.
+        - text: Not 48 days.
+      - paragraph [ref=e7]: Licensed local deck builders in Central Wisconsin. One short form. Real quote. No phone tag.
+    - generic [ref=e8]:
+      - link "Get Quote" [ref=e9] [cursor=pointer]:
+        - /url: "#"
+      - generic [ref=e10]: Licensed·Insured·Local

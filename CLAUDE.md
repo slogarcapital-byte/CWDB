@@ -1,5 +1,25 @@
 # Trades Lead Generation AI Operating System
 
+## Daily Operating System (read first each session)
+
+- **Today's brief:** `_vault/briefs/<today>.md` (auto-generated 7:03 AM Central via in-session cron + SessionStart check)
+- **Yesterday's brief:** `_vault/briefs/<yesterday>.md` — sealed; carries Jim's `[x]` marks + `%...%` comments forward into today's
+- **Project board:** `_vault/board/{directives,in-flight,shipped,killed}.md` — Kanban; ship-type tags `build` / `artifact-prod` / `scheduled-recurring-automation`
+- **Brief INDEX:** `_vault/briefs/INDEX.md` · **Board INDEX:** `_vault/board/INDEX.md` (next WB-NNN)
+- **Singleton DEPRECATED:** `_vault/state-of-cwdb.md` — read-only historical reference; do not write
+- **Migration plan:** `C:\Users\jslog\.claude\plans\cwdb-ceo-operator-agent-once-again-hazy-shamir.md`
+
+## Default Delegation Hierarchy (CEO behavior)
+
+Every Top-3 daily brief item must be classified by tier:
+1. **Tier 1 — Recipe (default):** Specialty agents own execution. CEO orchestrates only.
+2. **Tier 2 — Hybrid:** Mostly automated, minimal Jim touch.
+3. **Tier 3 — User-driven:** Jim must do this manually. Requires written justification.
+
+When Agent tool unavailable: CEO diagnoses + attempts fix first; if still blocked, BLOCK + FLAG affected items. Never silently fall back to direct execution.
+
+24h default-ship rule: CEO ships autonomously at deadline, then writes a "Shipped Without Asking" entry in the brief listing what + where + how to roll back.
+
 ## Mission
 
 Build and operate a scalable lead generation engine that generates homeowner project leads and sells them to contractors.
@@ -103,9 +123,38 @@ CRM
 
 Lead Forms
 
-- Tally (free, unlimited responses)
+- Webflow native forms (replaced Tally as of 2026-03-29 — simpler stack, better design control)
+
+Website
+
+- 21-page authority site (see `/business-context/website-plan.md` for full spec)
+- Design system: `/website/design-system.md`
+- Site architecture: `/website/site-architecture.md`
 
 Future upgrades may include custom infrastructure.
+
+---
+
+# Brand Identity
+
+Brand name: Central Wisconsin Deck Builders
+Abbreviated: CWDB (internal use, favicons, small UI only)
+Domain: cwdeckbuilders.com (GoDaddy)
+Tagline: "Fast Quotes. Trusted Builders."
+
+Color palette:
+
+- `#e54c00`  Crafted Orange    — CTAs, highlights, primary accent
+- `#323434`  Timber Slate      — backgrounds, primary text
+- `#646760`  Builders Grey     — subheadings, secondary text, borders
+- `#83b2cf`  Wisconsin Sky Blue — complementary accent, outdoor feel
+
+Logo files (in /branding/logos/):
+
+- `1.1-primary-logo-high-res.png`    — stacked layout; use for website hero, print, large placements
+- `1.2-horizontal-logo-high-res.png` — horizontal layout; use for email signatures, banners, constrained widths
+
+Full brand guidelines: /business-context/brand-discovery/
 
 ---
 
@@ -115,13 +164,15 @@ The system is organized as a company with agents as employees and folders as dep
 
 ```
 CWDB/
-├── agents/          EMPLOYEES — AI agent system prompts and configs
-├── marketing/       DEPT — Ad campaigns (Google, Facebook, TikTok, Nextdoor)
-├── website/         DEPT — Webflow pages and templates
-├── sales/           DEPT — Contractor outreach, onboarding, CRM
-├── operations/      DEPT — Lead processing, qualification, routing, Make automation
-├── finance/         DEPT — P&L statements and performance reports
-└── templates/       SHARED — Reusable assets across departments
+├── agents/           EMPLOYEES — AI agent system prompts and configs
+├── branding/         BRAND — Logo files and brand assets
+├── business-context/ PLANNING — Phase plans and brand discovery docs
+├── marketing/        DEPT — Ad campaigns (Google, Facebook, TikTok, Nextdoor)
+├── website/          DEPT — Webflow pages and templates
+├── sales/            DEPT — Contractor outreach, onboarding, CRM
+├── operations/       DEPT — Lead processing, qualification, routing, Make automation
+├── finance/          DEPT — P&L statements and performance reports
+└── templates/        SHARED — Reusable assets across departments
 ```
 
 ---
@@ -360,10 +411,11 @@ Steps:
 
 1. Contact 10–20 deck contractors
 2. Ask if they would pay for deck project leads
-3. Secure at least one contractor commitment
-4. Build simple landing page
-5. Run small ad campaign
-6. Deliver first leads
+3. Secure at least one contractor commitment ✅ DONE — $1,000/accepted bid (2026-03-12)
+4. Confirm brand name and domain ✅ DONE — Central Wisconsin Deck Builders / cwdeckbuilders.com (2026-03-28)
+5. Build full 21-page website ← EXPANDED from single landing page (2026-03-29, see `/business-context/website-plan.md`)
+6. Run small ad campaign
+7. Deliver first leads
 
 Timeline:
 

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- CMS-bound: seo-title field -->
+  <title>Deck Builders in Wausau, WI | Free Quotes — Central Wisconsin</title>
+
+  <!-- CMS-bound: meta-description field -->
+  <meta name="description" content="Get free deck quotes from vetted deck builders in Wausau, WI. Licensed, insured contractors respond within 24 hours. Serving Wausau and surrounding Marathon County." />
+
+  <link rel="canonical" href="https://cwdeckbuilders.com/wausau" />
+
+  <!-- Open Graph — CMS-bound: og-image field -->
+  <meta property="og:title" content="Deck Builders in Wausau, WI | Central Wisconsin Deck Builders" />
+  <meta property="og:description" content="Get free deck quotes from vetted deck builders in Wausau, WI. Licensed, insured contractors. Fast quotes within 24 hours." />
+  <meta property="og:image" content="[CMS: og-image]" />
+  <meta property="og:url" content="https://cwdeckbuilders.com/wausau" />
+  <meta property="og:type" content="website" />
+</head>
+
+<!--
+  ==========================================================================
+  WEBFLOW CMS COLLECTION PAGE — Service Areas Template
+  Page ID:        69cf0c27f69f8fdddb60ccc0
+  Collection ID:  69cf0c26f69f8fdddb60ccba
+  CMS Item ID:    69cf112fbe18751bee0d022a  (Wausau)
+  Staging URL:    https://central-wisconsin-deck-builders.webflow.io/service-area/wausau
+  Production URL: https://cwdeckbuilders.com/wausau (post-publish)
+  Built:          2026-04-02
+  Revamp updated: 2026-04-20 (Phase 4 Wave 3)
+  ==========================================================================
+
+  SECTION ORDER (post-revamp Wave 3 — all Webflow components):
+  1.  header                    — glassmorphism global nav
+  2.  hero-interior             — CMS-bind: hero-headline, hero-subheadline, hero-background-image
+  3.  city-intro-section        — CMS-bind: city-intro-heading, city-intro (RichText)
+  4.  faq-section               — CMS-bind: faq-1..5 question + answer
+  5.  testimonials              — CMS-bind: testimonial-1/2/3 quote + name
+  6.  gallery-featured          — static (3 featured CWDB builds; default content)
+  7.  builders-strip            — static (Ben Barton + John Garcia profiles)
+  8.  coverage-map              — static (5-city constellation)
+  9.  quote-form-inline         — REBIND NEEDED: Title → quote-form-headline (lost on re-insert)
+  10. cta-final                 — static ("Start your deck quote. 48-hour response...")
+  11. footer                    — static
+  12. mobile-sticky-bar         — static fixed-position bar
+
+  RETIRED (removed 2026-04-20 Wave 3):
+    - cedar-strip               (CSS class lingers in stylesheet; no DOM usage)
+    - coverage-area-cards       (replaced by coverage-map)
+    - three-up                  (not present in current template)
+    - how-it-works              (not present in current template)
+    - gallery                   (CMS gallery-images deferred; gallery-featured uses defaults)
+
+  MANUAL STEPS REMAINING IN WEBFLOW DESIGNER (Jim):
+  A. Rebind quote-form-inline > Title property → Service Areas > quote-form-headline field
+     (bind was lost during sibling-insert reorder on 2026-04-20)
+  B. Optional: filter gallery-featured by city if CMS hookup feasible (deferred)
+  C. Page SEO settings already CMS-bound (seo-title, meta-description, og-image)
+  D. JSON-LD structured data block lives in page Custom Code (unchanged)
+
+  ==========================================================================
+  CMS FIELD BINDINGS (connect in Webflow Designer via element settings panel)
+  ==========================================================================
+
+  hero-section-subpage component:
+    Title property        → hero-headline field
+    (subheadline)         → hero-subheadline field  [if property exposed]
+    Background image      → hero-background-image field
+
+  quote-form-inline component:
+    Title property        → quote-form-headline field
+
+  gallery component:
+    Gallery images        → gallery-images field (MultiImage)
+
+  testimonials component:
+    Testimonial 1 quote   → testimonial-1-quote field
+    Testimonial 1 name    → testimonial-1-name field
+    Testimonial 2 quote   → testimonial-2-quote field
+    Testimonial 2 name    → testimonial-2-name field
+    Testimonial 3 quote   → testimonial-3-quote field
+    Testimonial 3 name    → testimonial-3-name field
+
+  city-intro section (custom):
+    Rich text block       → city-intro field (RichText)
+
+  faq section (custom):
+    FAQ item h3 #1        → faq-1-question field
+    FAQ item p  #1        → faq-1-answer field
+    FAQ item h3 #2        → faq-2-question field
+    FAQ item p  #2        → faq-2-answer field
+    FAQ item h3 #3        → faq-3-question field
+    FAQ item p  #3        → faq-3-answer field
+    FAQ item h3 #4        → faq-4-question field
+    FAQ item p  #4        → faq-4-answer field
+    FAQ item h3 #5        → faq-5-question field
+    FAQ item p  #5        → faq-5-answer field
+
+  page SEO settings:
+    Title tag             → seo-title field
+    Meta description      → meta-description field
+    OG image              → og-image field
+
+  ==========================================================================
+  WAUSAU CMS ITEM — FIELD DATA REFERENCE
+  ==========================================================================
+
+  name:             Wausau
+  slug:             wausau
+  seo-title:        Deck Builders in Wausau, WI | Free Quotes — Central Wisconsin
+  meta-description: Get free deck quotes from vetted deck builders in Wausau, WI.
+                    Licensed, insured contractors respond within 24 hours.
+                    Serving Wausau and surrounding Marathon County.
+  hero-headline:    Deck Builders in Wausau, WI
+  hero-subheadline: Get free quotes from licensed, insured deck builders serving
+                    Wausau and Marathon County. Hear back within 24 hours.
+  city-intro:       [Rich text — 3 paragraphs covering Wausau market context,
+                    CWDB value proposition, and CTA to submit. Full text in CMS.]
+  quote-form-headline: Get Your Free Wausau Deck Quote
+  testimonial-1-quote: We had three quotes within two days. The contractor they
+                       matched us with was professional, on time, and the deck
+                       came out exactly how we imagined.
+  testimonial-1-name:  Sarah M. — Wausau, WI
+  testimonial-2-quote: Didn't realize how easy getting a deck quote could be.
+                       Filled out the form on a Tuesday, had a contractor
+                       on-site Thursday. Highly recommend.
+  testimonial-2-name:  Mike T. — Wausau, WI
+  testimonial-3-quote: The builder they connected us with knew exactly what
+                       permits we needed in Marathon County. Saved us a lot
+                       of headaches.
+  testimonial-3-name:  Jennifer K. — Schofield, WI
+  faq-1-question:   How much does a deck cost in Wausau, WI?
+  faq-2-question:   Do I need a permit to build a deck in Wausau?
+  faq-3-question:   How long does it take to build a deck in Wausau?
+  faq-4-question:   What deck materials work best in Wisconsin winters?
+  faq-5-question:   What areas near Wausau do you serve?
+  [Full FAQ answers stored in CMS — see Webflow CMS > Service Areas > Wausau]
+
+  ==========================================================================
+  JSON-LD STRUCTURED DATA — add to Webflow Page Settings > Custom Code > Footer
+  ==========================================================================
+-->
+
+<!--
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Central Wisconsin Deck Builders — Wausau",
+  "description": "Connect with vetted local deck contractors in Wausau, Wisconsin. Free quotes for deck replacements, new builds, and composite upgrades.",
+  "url": "https://cwdeckbuilders.com/wausau",
+  "areaServed": {
+    "@type": "City",
+    "name": "Wausau",
+    "containedInPlace": { "@type": "State", "name": "Wisconsin" }
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "44.9591",
+    "longitude": "-89.6301"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Wausau",
+    "addressRegion": "WI",
+    "addressCountry": "US"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Deck Building Services in Wausau",
+    "itemListElement": [
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Deck Replacement", "description": "Full deck replacement for aging wood decks on Wausau homes" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "New Deck Construction", "description": "Custom new deck builds for Wausau residential properties" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Composite Deck Installation", "description": "Low-maintenance composite decking designed for Central Wisconsin winters" } }
+    ]
+  }
+}
+</script>
+-->
+
+<body>
+  <!--
+    All sections are Webflow component instances built via MCP.
+    This file is a reference document only — the live page is in Webflow.
+
+    COMPONENT INSTANCE ELEMENT IDs (for Designer reference):
+    global-nav:           cda10e1f-9549-2c87-5e4a-db5aa9df5c1f
+    hero-section-subpage: b9f8d9cd-7e4a-35f4-d783-2c4c9387eb2f
+    quote-form-inline:    bdafc721-964b-2e76-7f53-444a5595c0fd
+    three-up:             0dd1fb65-a804-73b0-daaa-509c0753327a
+    gallery:              7bc6b86d-17b3-e6ec-2541-0f539fb9f09c
+    how-it-works:         87e96fcc-5fe0-00bd-75fe-58fa8ad4c7a6
+    testimonials:         1af59175-6b11-18d0-7c7e-315c10ae6989
+    cedar-strip:          30357efd-848a-e77e-5206-a3eab791cc4c
+    coverage-area-cards:  ee3532ea-c9d5-4091-845f-a937b09a5a8d
+    mobile-sticky-bar:    9a9ecfba-3d25-b6fc-e595-0bba965480f1
+    global-footer:        3adfcb6d-ac61-570d-ee08-a57782c38d16
+    city-intro (custom):  02ac224f-ceff-bc49-c9ae-53454ae13300  [REPOSITION: after hero]
+    faq (custom):         54eeeac9-a227-316a-d5a7-a31cb145abe6  [REPOSITION: after testimonials]
+  -->
+</body>
+</html>

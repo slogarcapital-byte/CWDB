@@ -1,0 +1,109 @@
+{
+  "nodes": [
+    {
+      "id": "c100000000000001",
+      "type": "group",
+      "x": 0,
+      "y": 0,
+      "width": 400,
+      "height": 500,
+      "color": "4",
+      "label": "Phase 1 — Validation (ACTIVE)"
+    },
+    {
+      "id": "c100000000000010",
+      "type": "text",
+      "x": 20,
+      "y": 60,
+      "width": 360,
+      "height": 420,
+      "text": "## [[Phase 1 - Validation]]\n**Goal:** Prove contractors will pay\n\n- [x] Contractor commitment ✅\n- [x] Brand finalized ✅\n- [x] Website built (A-E) ✅\n- [x] LLC formed ✅\n- [x] Agreements sent ✅\n- [ ] Phase F: SEO/analytics\n- [ ] Make automation\n- [ ] HubSpot pipeline\n- [ ] First ad campaign\n- [ ] First leads delivered"
+    },
+    {
+      "id": "c100000000000002",
+      "type": "group",
+      "x": 500,
+      "y": 0,
+      "width": 300,
+      "height": 300,
+      "color": "3",
+      "label": "Phase 2 — Profitability"
+    },
+    {
+      "id": "c100000000000020",
+      "type": "text",
+      "x": 520,
+      "y": 60,
+      "width": 260,
+      "height": 220,
+      "text": "## [[Phase 2 - Profitability]]\n**Goal:** Stable funnel\n\n- 20-50 leads/month\n- $3K-$10K/month\n- Optimize CPL\n- Optimize conversion"
+    },
+    {
+      "id": "c100000000000003",
+      "type": "group",
+      "x": 900,
+      "y": 0,
+      "width": 300,
+      "height": 300,
+      "color": "5",
+      "label": "Phase 3 — Replication"
+    },
+    {
+      "id": "c100000000000030",
+      "type": "text",
+      "x": 920,
+      "y": 60,
+      "width": 260,
+      "height": 220,
+      "text": "## [[Phase 3 - Replication]]\n**Goal:** Geographic expansion\n\nClone funnel to:\n- [[Eau Claire]]\n- [[Appleton]]\n- [[Green Bay]]\n- [[Stevens Point]]\n- [[Madison]]\n- [[Minneapolis Suburbs]]"
+    },
+    {
+      "id": "c100000000000004",
+      "type": "group",
+      "x": 1300,
+      "y": 0,
+      "width": 300,
+      "height": 300,
+      "color": "6",
+      "label": "Phase 4 — Marketplace"
+    },
+    {
+      "id": "c100000000000040",
+      "type": "text",
+      "x": 1320,
+      "y": 60,
+      "width": 260,
+      "height": 220,
+      "text": "## [[Phase 4 - Marketplace Expansion]]\n**Goal:** Multi-trade marketplace\n\nNew verticals:\n- Roofing\n- Bathroom remodels\n- Concrete\n- Basement finishing\n- Pole barns\n\n$50K-$150K/mo potential"
+    }
+  ],
+  "edges": [
+    {
+      "id": "ce10000000000001",
+      "fromNode": "c100000000000001",
+      "fromSide": "right",
+      "toNode": "c100000000000002",
+      "toSide": "left",
+      "toEnd": "arrow",
+      "label": "validated"
+    },
+    {
+      "id": "ce10000000000002",
+      "fromNode": "c100000000000002",
+      "fromSide": "right",
+      "toNode": "c100000000000003",
+      "toSide": "left",
+      "toEnd": "arrow",
+      "label": "profitable"
+    },
+    {
+      "id": "ce10000000000003",
+      "fromNode": "c100000000000003",
+      "fromSide": "right",
+      "toNode": "c100000000000004",
+      "toSide": "left",
+      "toEnd": "arrow",
+      "label": "scaled"
+    }
+  ]
+}

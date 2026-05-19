@@ -1,0 +1,57 @@
+<!--
+  Paste into: Webflow Designer → Service Areas Template page → Page Settings → Custom Code → Head Code
+
+  Uses Webflow CMS field bindings so ONE snippet covers all 5 city pages dynamically.
+  Requires these CMS fields on Service Areas collection (verify they exist, add if missing):
+    - name            (PlainText) — city name, e.g. "Wausau"                    ✅ already exists
+    - slug            (PlainText) — URL segment, e.g. "wausau"                  ✅ already exists
+    - geo-latitude    (Number)    — e.g. 44.9591                                ❌ ADD THIS FIELD
+    - geo-longitude   (Number)    — e.g. -89.6301                               ❌ ADD THIS FIELD
+    - wikipedia-url   (Link)      — e.g. https://en.wikipedia.org/wiki/Wausau,_Wisconsin  ❌ ADD THIS FIELD
+
+  Then populate the 5 city items with their coords + Wikipedia URLs:
+    Wausau     lat 44.9591  lng -89.6301  https://en.wikipedia.org/wiki/Wausau,_Wisconsin
+    Schofield  lat 44.9094  lng -89.6065  https://en.wikipedia.org/wiki/Schofield,_Wisconsin
+    Weston     lat 44.8914  lng -89.5598  https://en.wikipedia.org/wiki/Weston,_Marathon_County,_Wisconsin
+    Mosinee    lat 44.7925  lng -89.7032  https://en.wikipedia.org/wiki/Mosinee,_Wisconsin
+    Merrill    lat 45.1805  lng -89.6837  https://en.wikipedia.org/wiki/Merrill,_Wisconsin
+-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HomeAndConstructionBusiness",
+  "@id": "https://www.cwdeckbuilders.com/service-area/{{wf {&quot;path&quot;:&quot;slug&quot;,&quot;type&quot;:&quot;PlainText&quot;} }}#business",
+  "name": "Central Wisconsin Deck Builders — {{wf {&quot;path&quot;:&quot;name&quot;,&quot;type&quot;:&quot;PlainText&quot;} }}",
+  "description": "Licensed, insured deck builders serving {{wf {&quot;path&quot;:&quot;name&quot;,&quot;type&quot;:&quot;PlainText&quot;} }}, Wisconsin. Free quotes, vetted contractors, 48-hour response.",
+  "url": "https://www.cwdeckbuilders.com/service-area/{{wf {&quot;path&quot;:&quot;slug&quot;,&quot;type&quot;:&quot;PlainText&quot;} }}",
+  "telephone": "+1-715-544-7941",
+  "email": "info@cwdeckbuilders.com",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "906 N 16th Ave",
+    "addressLocality": "Wausau",
+    "addressRegion": "WI",
+    "postalCode": "54401",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": {{wf {&quot;path&quot;:&quot;geo-latitude&quot;,&quot;type&quot;:&quot;Number&quot;} }},
+    "longitude": {{wf {&quot;path&quot;:&quot;geo-longitude&quot;,&quot;type&quot;:&quot;Number&quot;} }}
+  },
+  "areaServed": {
+    "@type": "City",
+    "name": "{{wf {&quot;path&quot;:&quot;name&quot;,&quot;type&quot;:&quot;PlainText&quot;} }}",
+    "sameAs": "{{wf {&quot;path&quot;:&quot;wikipedia-url&quot;,&quot;type&quot;:&quot;Link&quot;} }}"
+  },
+  "serviceType": "Deck Building",
+  "openingHoursSpecification": [{
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    "opens": "08:00",
+    "closes": "18:00"
+  }],
+  "parentOrganization": { "@id": "https://www.cwdeckbuilders.com/#business" }
+}
+</script>

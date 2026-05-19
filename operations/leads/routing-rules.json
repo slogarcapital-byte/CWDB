@@ -1,41 +1,26 @@
 {
   "routing": {
-    "description": "Territory-to-contractor routing rules. Determines which contractor receives each qualified lead.",
-    "model": "exclusive_territory",
+    "description": "Lead routing configuration for CWDB. All qualified homeowner leads are delivered simultaneously to all active contractors. Contractor contact info is looked up at runtime from HubSpot — not hardcoded here.",
+    "model": "multi_contractor",
     "delivery_sla_minutes": 5,
-    "territories": [
-      {
-        "territory_id": "cwi-wausau",
-        "name": "Wausau Metro",
-        "zip_codes": ["54401", "54403", "54476", "54474"],
-        "cities": ["Wausau", "Schofield", "Weston"],
-        "assigned_contractor": {
-          "company": "[CONTRACTOR NAME]",
-          "contact_name": "[CONTACT]",
-          "notification_email": "[EMAIL]",
-          "notification_phone": "[PHONE]",
-          "pricing_model": "pay_per_accepted_bid",
-          "cost_per_accepted_bid_usd": 1000,
-          "status": "vacant"
-        }
-      },
-      {
-        "territory_id": "cwi-mosinee",
-        "name": "Mosinee / Merrill",
-        "zip_codes": ["54455", "54452"],
-        "cities": ["Mosinee", "Merrill"],
-        "assigned_contractor": {
-          "company": "[CONTRACTOR NAME]",
-          "contact_name": "[CONTACT]",
-          "notification_email": "[EMAIL]",
-          "notification_phone": "[PHONE]",
-          "pricing_model": "pay_per_accepted_bid",
-          "cost_per_accepted_bid_usd": 1000,
-          "status": "vacant"
-        }
-      }
-    ],
-    "fallback_rule": "If no contractor assigned to territory — hold lead and notify admin",
-    "multi_contractor_rule": "Not active in Phase 1. Enable in Phase 4 marketplace expansion."
+    "contractor_source": {
+      "platform": "HubSpot",
+      "lookup_method": "search_crm_objects",
+      "object_type": "contacts",
+      "filter": { "lifecyclestage": "customer" },
+      "properties_to_fetch": ["firstname", "lastname", "email", "phone", "company"],
+      "note": "All HubSpot contacts with lifecyclestage=customer are treated as active contractors and receive every qualified lead. Current active contractors (as of 2026-04-15): Ben Barton (Barton Builders LLC) and John Garcia (John Garcia Construction). Both cover the full Wausau Metro service territory."
+    },
+    "service_territory": {
+      "name": "Wausau Metro",
+      "zip_codes": ["54401", "54403", "54476", "54474", "54452"],
+      "cities": ["Wausau", "Schofield", "Weston", "Mosinee", "Merrill"]
+    },
+    "delivery_methods": {
+      "email": "Gmail MCP (mcp__claude_ai_Gmail__*)",
+      "sms": "Twilio REST API — see /operations/automation/twilio-sms-template.md"
+    },
+    "fallback_rule": "If no active contractors found in HubSpot (lifecyclestage=customer) — hold the qualified lead and send admin alert to slogarjw@gmail.com with subject: [ACTION REQUIRED] Qualified Lead — No Active Contractors Found. Do not drop the lead.",
+    "multi_contractor_rule": "Active. All contractors with lifecyclestage=customer in HubSpot receive every qualified lead simultaneously. No territory exclusivity in current phase."
   }
 }

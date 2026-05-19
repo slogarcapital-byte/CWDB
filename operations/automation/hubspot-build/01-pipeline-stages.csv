@@ -1,0 +1,37 @@
+Step,Section,Field,Value,Notes
+1,Pipeline Settings,Settings path,HubSpot → Settings (gear icon top-right) → Objects → Deals → Pipelines tab → Create pipeline,One-time
+1,Pipeline Settings,Pipeline name,Homeowner Leads,Distinct from existing Contractor Sales pipeline
+1,Pipeline Settings,Pipeline internal name,homeowner_leads,Auto-generated from name; verify in URL after save
+2,Stage 1,Stage label,New Lead,Stage order = 1
+2,Stage 1,Win probability %,10,
+2,Stage 1,Notes,Lead received from Webflow form. Not yet scored or qualified.,Optional description field
+3,Stage 2,Stage label,Qualified,Stage order = 2
+3,Stage 2,Win probability %,20,
+3,Stage 2,Notes,Lead passed scoring threshold (60+/100). Ready to route.,Optional description field
+4,Stage 3,Stage label,Scheduled / Delivered to Contractor,Stage order = 3
+4,Stage 3,Win probability %,30,
+4,Stage 3,Notes,Lead routed to contractor(s). Contractor schedules site visit with homeowner.,Optional description field
+5,Stage 4,Stage label,Creating Bid,Stage order = 4
+5,Stage 4,Win probability %,50,
+5,Stage 4,Notes,Contractor has visited site / gathered specs and is actively writing the bid.,Optional description field
+6,Stage 5,Stage label,Delivered Bid,Stage order = 5
+6,Stage 5,Win probability %,70,
+6,Stage 5,Notes,Contractor has sent written bid to homeowner. Awaiting homeowner decision.,Optional description field
+7,Stage 6,Stage label,Accepted Bid,Stage order = 6
+7,Stage 6,Win probability %,90,
+7,Stage 6,Notes,Homeowner accepted contractor's bid. Revenue event — $1000 referral fee owed. Invoice trigger.,Optional description field
+8,Stage 7,Stage label,Won - Contractor Payment Received,Stage order = 7
+8,Stage 7,Win probability %,100,Mark as Closed Won
+8,Stage 7,Closed Won?,Yes,Toggle the "Closed Won" checkbox on this stage
+8,Stage 7,Notes,Referral fee collected ($1000). Deal closed. Revenue recognized.,Optional description field
+9,Stage 8,Stage label,Expired Bid - No Response,Stage order = 8
+9,Stage 8,Win probability %,50,Holding stage — NOT closed; warm-revisit candidate
+9,Stage 8,Closed flag?,No,Deliberately open — homeowner may still come back; revisit win % after first 10 leads
+9,Stage 8,Notes,Bid delivered but homeowner went cold or 'still deciding' beyond reasonable window. Not yet truly lost.,Optional description field
+10,Stage 9,Stage label,Lost,Stage order = 9
+10,Stage 9,Win probability %,0,Mark as Closed Lost
+10,Stage 9,Closed Lost?,Yes,Toggle the "Closed Lost" checkbox on this stage
+10,Stage 9,Notes,Bid rejected or lead permanently cold (no resurrection signal).,Optional description field
+11,Save,Action,Click Save,Pipeline now visible under Deals → Pipeline dropdown
+12,Capture IDs,Action,Open one stage to view URL,URL contains stage IDs like 12345678 — paste into operations/automation/hubspot-lead-pipeline.json
+13,Set as default for new homeowner deals?,Decision,No,Keep Contractor Sales as default; workflow explicitly sets pipeline=homeowner_leads

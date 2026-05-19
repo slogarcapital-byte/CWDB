@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>CWDB Launch 2026-04 · Google Display · 960x1200</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Staatliches&display=swap">
+  <style>
+    :root {
+      --cwdb-orange:    #e54c00;
+      --cwdb-slate:     #323434;
+      --cwdb-grey:      #646760;
+      --cwdb-off-white: #f8f8f6;
+      --cwdb-white:     #ffffff;
+      --cwdb-font-display: 'Staatliches', sans-serif;
+      --cwdb-font-body:    'Public Sans', sans-serif;
+    }
+    html, body { margin: 0; padding: 0; }
+    body {
+      width: 960px;
+      height: 1200px;
+      overflow: hidden;
+      font-family: var(--cwdb-font-body);
+      background: var(--cwdb-slate);
+      position: relative;
+    }
+    .photo {
+      position: absolute;
+      inset: 0;
+      background-image: url("/branding/logos/web/hero-merrill.webp");
+      background-size: cover;
+      background-position: center 52%;
+    }
+    .scrim-top {
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 200px;
+      background: linear-gradient(180deg, rgba(50,52,52,0.55) 0%, rgba(50,52,52,0.0) 100%);
+    }
+    .scrim-bottom {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg,
+        rgba(0,0,0,0.0) 0%,
+        rgba(0,0,0,0.0) 40%,
+        rgba(50,52,52,0.55) 60%,
+        rgba(50,52,52,0.95) 100%);
+    }
+    .logo-wrap {
+      position: absolute;
+      top: 48px;
+      left: 52px;
+      z-index: 2;
+    }
+    .logo-wrap img {
+      height: 50px;
+      width: auto;
+      display: block;
+    }
+    .content {
+      position: absolute;
+      left: 52px;
+      right: 52px;
+      bottom: 56px;
+      z-index: 2;
+      color: var(--cwdb-white);
+    }
+    .cwdb-hed {
+      font-family: var(--cwdb-font-display);
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 0.92;
+      font-size: 100px;
+      color: var(--cwdb-white);
+      margin: 0 0 22px 0;
+      max-width: 14ch;
+    }
+    .cwdb-sub {
+      font-family: var(--cwdb-font-body);
+      font-weight: 500;
+      font-size: 24px;
+      line-height: 1.38;
+      color: rgba(255,255,255,0.94);
+      margin: 0 0 32px 0;
+      max-width: 30ch;
+    }
+    .footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .cwdb-cta {
+      display: inline-flex;
+      align-items: center;
+      padding: 20px 32px;
+      background: var(--cwdb-orange);
+      color: var(--cwdb-white);
+      font-family: var(--cwdb-font-body);
+      font-weight: 700;
+      font-size: 17px;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+    .cwdb-trust-row {
+      font-family: var(--cwdb-font-body);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.82);
+      white-space: nowrap;
+    }
+    .cwdb-trust-row > span:not(:last-child)::after {
+      content: "·";
+      margin: 0 8px;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="photo" role="img" aria-label="Central Wisconsin deck with patio furniture"></div>
+  <div class="scrim-top"></div>
+  <div class="scrim-bottom"></div>
+
+  <div class="logo-wrap">
+    <img src="/branding/logos/web/logo-horizontal@2x-white.png" alt="Central Wisconsin Deck Builders">
+  </div>
+
+  <div class="content">
+    <h1 class="cwdb-hed">48 hours.<br>Not 48 days.</h1>
+    <p class="cwdb-sub">Licensed local deck builders in Central Wisconsin. Real quote. No phone tag.</p>
+    <div class="footer-row">
+      <a class="cwdb-cta" href="#">Get a Free Quote</a>
+      <div class="cwdb-trust-row">
+        <span>Licensed</span><span>Insured</span><span>Local</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

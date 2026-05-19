@@ -1,0 +1,97 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - img "Central Wisconsin Deck Builders logo featuring the state of Wisconsin with wood grain pattern and bold orange text." [ref=e5]
+      - button "menu" [ref=e6] [cursor=pointer]:
+        - generic [ref=e7]: 
+  - generic [ref=e10]:
+    - generic [ref=e11]: RESOURCES
+    - heading "Frequently Asked Questions" [level=1] [ref=e12]
+    - paragraph [ref=e13]: Straight answers about deck quotes, costs, permits, and materials for Central Wisconsin homeowners.
+  - generic [ref=e15]:
+    - heading "Your Questions, Answered" [level=2] [ref=e16]
+    - group [ref=e17]:
+      - generic "How does Central Wisconsin Deck Builders work?" [ref=e18] [cursor=pointer]
+    - group [ref=e19]:
+      - generic "Is the quote really free?" [ref=e20] [cursor=pointer]
+    - group [ref=e21]:
+      - generic "How quickly will I hear back?" [ref=e22] [cursor=pointer]
+    - group [ref=e23]:
+      - generic "How do you choose which contractors are in your network?" [ref=e24] [cursor=pointer]
+    - group [ref=e25]:
+      - generic "What areas do you serve?" [ref=e26] [cursor=pointer]
+    - group [ref=e27]:
+      - generic "What types of deck projects do you handle?" [ref=e28] [cursor=pointer]
+    - group [ref=e29]:
+      - generic "How much does a deck cost in Central Wisconsin?" [ref=e30] [cursor=pointer]
+    - group [ref=e31]:
+      - generic "Do I need a permit to build a deck in Wisconsin?" [ref=e32] [cursor=pointer]
+    - group [ref=e33]:
+      - generic "What decking materials are available?" [ref=e34] [cursor=pointer]
+    - group [ref=e35]:
+      - generic "What if I'm just in the planning phase and not ready to build yet?" [ref=e36] [cursor=pointer]
+    - group [ref=e37]:
+      - generic "Can I choose which contractor I work with?" [ref=e38] [cursor=pointer]
+    - group [ref=e39]:
+      - generic "Is my information shared with anyone?" [ref=e40] [cursor=pointer]
+  - generic [ref=e42]:
+    - heading "Start your deck quote. 48-hour response from a local builder." [level=2] [ref=e43]
+    - link "Start My Quote →" [ref=e44] [cursor=pointer]:
+      - /url: /get-a-quote
+  - generic [ref=e47]:
+    - generic [ref=e48]:
+      - img "Central Wisconsin Deck Builders Logo" [ref=e49]
+      - generic [ref=e50]:
+        - link "Facebook" [ref=e51] [cursor=pointer]:
+          - /url: https://facebook.com
+          - img "Facebook" [ref=e52]
+        - link "Instagram" [ref=e54] [cursor=pointer]:
+          - /url: https://instagram.com
+          - img "Instagram" [ref=e55]
+        - link "Nextdoor" [ref=e57] [cursor=pointer]:
+          - /url: https://nextdoor.com
+          - img "Nextdoor" [ref=e58]
+    - generic [ref=e60]:
+      - heading "Service Areas" [level=4] [ref=e61]
+      - link "Wausau" [ref=e62] [cursor=pointer]:
+        - /url: /deck-builders-wausau
+      - link "Schofield" [ref=e63] [cursor=pointer]:
+        - /url: /deck-builders-schofield
+      - link "Weston" [ref=e64] [cursor=pointer]:
+        - /url: /deck-builders-weston
+      - link "Mosinee" [ref=e65] [cursor=pointer]:
+        - /url: /deck-builders-mosinee
+      - link "Merrill" [ref=e66] [cursor=pointer]:
+        - /url: /deck-builders-merrill
+    - generic [ref=e67]:
+      - heading "Company" [level=4] [ref=e68]
+      - link "About Us" [ref=e69] [cursor=pointer]:
+        - /url: /about
+      - link "Our Builders" [ref=e70] [cursor=pointer]:
+        - /url: /our-builders
+      - link "Gallery" [ref=e71] [cursor=pointer]:
+        - /url: /gallery
+      - link "FAQ" [ref=e72] [cursor=pointer]:
+        - /url: /faq
+      - link "Blog" [ref=e73] [cursor=pointer]:
+        - /url: /blog
+      - link "Cost Calculator" [ref=e74] [cursor=pointer]:
+        - /url: /cost-calculator
+    - generic [ref=e75]:
+      - heading "Contact" [level=4] [ref=e76]
+      - link "(715) 544-7941" [ref=e77] [cursor=pointer]:
+        - /url: tel:+17155447941
+      - link "Get a Free Quote" [ref=e78] [cursor=pointer]:
+        - /url: /get-a-quote
+      - paragraph [ref=e79]: Central Wisconsin
+      - paragraph [ref=e80]: Mon–Fri 8am–6pm CT
+    - paragraph [ref=e81]: © 2026 Central Wisconsin Deck Builders. All rights reserved.
+    - generic [ref=e82]:
+      - link "Privacy Policy" [ref=e83] [cursor=pointer]:
+        - /url: /privacy
+      - link "Terms of Service" [ref=e84] [cursor=pointer]:
+        - /url: /terms
+  - generic [ref=e85]:
+    - link "GET YOUR FREE QUOTE →" [ref=e86] [cursor=pointer]:
+      - /url: /get-a-quote
+    - button "Dismiss" [ref=e87] [cursor=pointer]: ×

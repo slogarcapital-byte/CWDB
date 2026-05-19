@@ -1,4 +1,14 @@
-# Partner with Central Wisconsin Deck Builders
+---
+type: reference
+tags:
+  - type/reference
+  - dept/sales
+created: 2026-03-11
+updated: 2026-04-16
+status: active
+---
+
+# Partner with [[Central Wisconsin Deck Builders LLC|Central Wisconsin Deck Builders]]
 
 **Unlock a Steady Stream of Qualified Deck Leads in Your Area**
 
@@ -8,7 +18,7 @@
 
 At Central Wisconsin Deck Builders, we understand the challenges of finding consistent, high-quality projects. That's why we've built a system designed to deliver pre-qualified deck leads directly to your inbox, allowing you to focus on what you do best: building exceptional decks.
 
-We specialize in connecting homeowners in Wausau, Schofield, Weston, Mosinee, Merrill, and surrounding Central Wisconsin communities with trusted local deck contractors like you.
+We specialize in connecting homeowners in [[Wausau]], [[Schofield]], [[Weston]], [[Mosinee]], [[Merrill]], and surrounding Central Wisconsin communities with trusted local deck contractors like you.
 
 ---
 

@@ -1,0 +1,86 @@
+{
+  "collapse-filter": true,
+  "search": "",
+  "showTags": false,
+  "showAttachments": false,
+  "hideUnresolved": false,
+  "showOrphans": true,
+  "collapse-color-groups": false,
+  "colorGroups": [
+    {
+      "query": "tag:#type/agent",
+      "color": {
+        "a": 1,
+        "rgb": 15027200
+      }
+    },
+    {
+      "query": "tag:#type/person",
+      "color": {
+        "a": 1,
+        "rgb": 8630991
+      }
+    },
+    {
+      "query": "tag:#type/session",
+      "color": {
+        "a": 1,
+        "rgb": 8629997
+      }
+    },
+    {
+      "query": "tag:#type/decision",
+      "color": {
+        "a": 1,
+        "rgb": 15040512
+      }
+    },
+    {
+      "query": "tag:#type/page",
+      "color": {
+        "a": 1,
+        "rgb": 3375871
+      }
+    },
+    {
+      "query": "tag:#type/market",
+      "color": {
+        "a": 1,
+        "rgb": 2263842
+      }
+    },
+    {
+      "query": "tag:#type/entity",
+      "color": {
+        "a": 1,
+        "rgb": 16766720
+      }
+    },
+    {
+      "query": "tag:#type/product",
+      "color": {
+        "a": 1,
+        "rgb": 11162879
+      }
+    },
+    {
+      "query": "tag:#type/memory",
+      "color": {
+        "a": 1,
+        "rgb": 8421504
+      }
+    }
+  ],
+  "collapse-display": false,
+  "showArrow": false,
+  "textFadeMultiplier": 0,
+  "nodeSizeMultiplier": 1.73333333333333,
+  "lineSizeMultiplier": 1.01875,
+  "collapse-forces": true,
+  "centerStrength": 0.518713248970312,
+  "repelStrength": 10,
+  "linkStrength": 1,
+  "linkDistance": 250,
+  "scale": 0.21947073441184226,
+  "close": true
+}

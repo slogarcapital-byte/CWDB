@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<!--
+  About Page — Central Wisconsin Deck Builders
+  Webflow page ID: 69cff11ab796bc97b788f894
+  Staging: https://central-wisconsin-deck-builders.webflow.io/about
+  Live: https://cwdeckbuilders.com/about
+  Built: 2026-04-03 (Phase D)
+  Last synced: 2026-04-20 (Phase 4 Wave 1.5 — body content build — web-dev agent)
+
+  Wave 1α changes (2026-04-20 earlier):
+    - Removed textbox-section instance (Lorem ipsum + raw "Heading 2/3/4/5/6" placeholder content; also duplicated hero eyebrow/title)
+    - Removed quote-form-inline instance (redundant with cta-final closing CTA)
+    - Inserted builders-strip between hero and cta-final for proof density (Ben Barton + John Garcia headshots)
+    - Reordered body so cta-final now correctly precedes footer (was previously placed mid-page)
+
+  Wave 1.5 changes applied via Webflow MCP (this sync):
+    - Built net-new Tier-3 component "about-body" (component ID 7c007a7c-8035-0eb5-a546-8cff8fffc0f5)
+    - Inserted about-body instance (element aa89b652-3d34-4cce-64ab-40215b400318) between hero-interior_about and builders-strip
+    - `before` sibling insert adjacent to builders-strip component instance succeeded — no fallback workaround required
+    - Body copy sourced verbatim from website/pages/about/content.md — Mission, Story, Differentiators, Service Area
+    - Obsidian wikilinks rendered as plain text (Wausau, Weston, Schofield, Mosinee, Merrill). Only link in component: inline link to /get-a-quote in service-area closing paragraph.
+
+  Sections (in order):
+    1. header                (component instance: 0c6fa774-fa94-148b-9f39-65dd44c2dec2)
+    2. hero-interior_about   (component instance: 5b060bbb-70dd-ff61-7580-378a84538ddb)
+    3. about-body            (component instance: aa89b652-3d34-4cce-64ab-40215b400318)
+    4. builders-strip        (component instance: 78a5b47f-bf81-a8fa-4806-9183dc737b6f)
+    5. cta-final             (component instance: 73d9c381-3338-b0ac-ac86-d9dc808b4b99)
+    6. footer                (component instance: 1b3b9d3c-f05a-5130-90f6-8e3c12575b3f)
+
+  about-body structure (4 sub-sections, component ID 7c007a7c-8035-0eb5-a546-8cff8fffc0f5):
+    .about-body__mission          — narrow 760px column · "Our Mission" H2 + lead paragraph · white bg
+    .about-body__story            — narrow 760px column · "Why We Started CWDB" H2 + 5 paragraphs with sky-blue pullquote · off-white bg (#fafaf7)
+    .about-body__differentiators  — wide 1200px column · "How We're Different" H2 + 4-card grid (desktop 4-col, tablet 2x2, mobile 1-col) with sky-blue numerals 01–04
+    .about-body__service-area     — narrow 760px column · "Our Service Area" H2 + intro + 5-city list + closing paragraph with inline /get-a-quote link
+
+  Typography:
+    H2: Staatliches 44px desktop / 36px tablet / 32px mobile · Timber Slate #323434
+    H3: Staatliches 24px · Timber Slate
+    Lead: Public Sans 19px · Timber Slate
+    Body: Public Sans 17px line-height 1.7 · Timber Slate
+    Card body: Public Sans 16px · Builders Grey #646760
+    Numerals + inline link: Public Sans · Wisconsin Sky Blue #83b2cf (Color Rule #9: sky reserved for accents)
+    Pullquote: Staatliches 26px · 3px sky-blue left border (flagged brand override — consistent with live border-accent card language, not /impeccable BAN 1)
+
+  Breakpoints verified: desktop ≥992px 4-col grid · 991px–768px 2-col grid · ≤767px 1-col grid; section padding 96px/72px/64px
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us | Central Wisconsin Deck Builders</title>
+  <meta name="description" content="CWDB connects Central Wisconsin homeowners with vetted, licensed deck contractors. Learn how we make finding a trusted builder fast and easy." />
+  <link rel="canonical" href="https://cwdeckbuilders.com/about" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="About Us | Central Wisconsin Deck Builders" />
+  <meta property="og:description" content="CWDB connects Central Wisconsin homeowners with vetted, licensed deck contractors. Learn how we make finding a trusted builder fast and easy." />
+  <meta property="og:image" content="https://cwdeckbuilders.com/assets/images/og-about.jpg" />
+  <meta property="og:url" content="https://cwdeckbuilders.com/about" />
+  <meta property="og:type" content="website" />
+</head>
+<body>
+
+  <!-- WEBFLOW COMPONENT: header -->
+  <!-- instance: 0c6fa774-fa94-148b-9f39-65dd44c2dec2 | component: header (17135213-0f65-1d96-c6af-955d586e2f00) -->
+  <!-- Variant override: About -->
+  <!-- /WEBFLOW COMPONENT: header -->
+
+  <!-- WEBFLOW COMPONENT: hero-interior_about -->
+  <!-- instance: 5b060bbb-70dd-ff61-7580-378a84538ddb -->
+  <!-- eyebrow: "About CWDB" -->
+  <!-- heading: "Building decks should be exciting not stressful" -->
+  <!-- subheading: "Central Wisconsin Deck Builders exists to take the guesswork out of finding a great contractor. We vet the builders so you don't have to." -->
+  <!-- /WEBFLOW COMPONENT: hero-interior_about -->
+
+  <!-- WEBFLOW COMPONENT: about-body -->
+  <!-- instance: aa89b652-3d34-4cce-64ab-40215b400318 | component: about-body (7c007a7c-8035-0eb5-a546-8cff8fffc0f5) -->
+  <!-- Group: Page body -->
+  <!-- Zero-decoration narrative body: Mission + Story + Differentiators (4-card grid) + Service Area (5-city list) -->
+  <section class="about-body">
+    <div class="about-body__mission">
+      <div class="about-body__narrow">
+        <h2 class="about-body__h2">Our Mission</h2>
+        <p class="about-body__lead">We connect Central Wisconsin homeowners with trusted, licensed deck builders — quickly and without hassle. Every contractor in our network is vetted for licensing, insurance, and quality of work. Our goal is simple: make it easy for you to find the right builder and start your project with confidence.</p>
+      </div>
+    </div>
+    <div class="about-body__story">
+      <div class="about-body__narrow">
+        <h2 class="about-body__h2">Why We Started CWDB</h2>
+        <p class="about-body__p">Here's how it usually goes. You decide you want a new deck. You search online, ask neighbors, maybe post on Nextdoor. You call a few contractors. One doesn't answer. One says they're booked through October. Another gives you a quote but never follows up.</p>
+        <p class="about-body__p">Weeks go by. You're no closer to breaking ground.</p>
+        <p class="about-body__pullquote">We started Central Wisconsin Deck Builders because that experience is too common — and it doesn't have to be that way.</p>
+        <p class="about-body__p">We do the work upfront. We find experienced, licensed deck builders in the Wausau area. We verify their credentials, their insurance, and their reputation. Then when you're ready to build, we connect you with a contractor who's actually available, qualified, and ready to earn your business.</p>
+        <p class="about-body__p">No cold-calling five companies. No chasing callbacks. No wondering if the guy your cousin's neighbor recommended is actually insured.</p>
+        <p class="about-body__p">You tell us what you need. We match you with someone who can build it.</p>
+      </div>
+    </div>
+    <div class="about-body__differentiators">
+      <div class="about-body__wide">
+        <h2 class="about-body__h2">How We're Different</h2>
+        <div class="about-body__grid">
+          <div class="about-body__card">
+            <div class="about-body__num">01</div>
+            <h3 class="about-body__h3">We Vet Every Builder</h3>
+            <p class="about-body__cardbody">Contractors in our network go through a credential review before they're approved — licensing, insurance, workers' comp, and references. Not everyone gets in.</p>
+          </div>
+          <div class="about-body__card">
+            <div class="about-body__num">02</div>
+            <h3 class="about-body__h3">You Get Fast Responses</h3>
+            <p class="about-body__cardbody">Most homeowners hear back from a contractor within 48 hours of submitting a request. No more waiting days or weeks for a callback.</p>
+          </div>
+          <div class="about-body__card">
+            <div class="about-body__num">03</div>
+            <h3 class="about-body__h3">It's Free for Homeowners</h3>
+            <p class="about-body__cardbody">There's no fee, no hidden cost, and no obligation. You get a quote, review it, and decide on your own terms.</p>
+          </div>
+          <div class="about-body__card">
+            <div class="about-body__num">04</div>
+            <h3 class="about-body__h3">We're Local</h3>
+            <p class="about-body__cardbody">This isn't a national referral network run out of a call center. We focus exclusively on Central Wisconsin — Wausau, Weston, Schofield, Mosinee, and Merrill. We know the market because we're part of it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="about-body__service-area">
+      <div class="about-body__narrow">
+        <h2 class="about-body__h2">Our Service Area</h2>
+        <p class="about-body__p">We currently serve homeowners in the following Central Wisconsin communities:</p>
+        <ul class="about-body__cities">
+          <li class="about-body__city"><span class="about-body__city-name">Wausau</span><span class="about-body__city-note">Including Rib Mountain and the greater Wausau metro</span></li>
+          <li class="about-body__city"><span class="about-body__city-name">Schofield</span><span class="about-body__city-note">And surrounding neighborhoods</span></li>
+          <li class="about-body__city"><span class="about-body__city-name">Weston</span><span class="about-body__city-note">One of the area's fastest-growing communities</span></li>
+          <li class="about-body__city"><span class="about-body__city-name">Mosinee</span><span class="about-body__city-note">South of Wausau along the Wisconsin River</span></li>
+          <li class="about-body__city"><span class="about-body__city-name">Merrill</span><span class="about-body__city-note">North of Wausau in Lincoln County</span></li>
+        </ul>
+        <p class="about-body__p">We're expanding into additional markets soon. If you're nearby but don't see your city listed, <a class="about-body__link" href="/get-a-quote">submit a quote request</a> anyway — we'll do our best to connect you with a builder.</p>
+      </div>
+    </div>
+  </section>
+  <!-- /WEBFLOW COMPONENT: about-body -->
+
+  <!-- WEBFLOW COMPONENT: builders-strip -->
+  <!-- instance: 78a5b47f-bf81-a8fa-4806-9183dc737b6f | component: builders-strip (7e090a7f-fa01-b93b-fe8f-d3f17f6de3ed) -->
+  <!-- Group: Homepage -->
+  <!-- Contractor headshots: Ben Barton (Barton Builders LLC, Wausau) + John Garcia (John Garcia Construction LLC, Merrill) -->
+  <!-- /WEBFLOW COMPONENT: builders-strip -->
+
+  <!-- WEBFLOW COMPONENT: cta-final -->
+  <!-- instance: 73d9c381-3338-b0ac-ac86-d9dc808b4b99 | component: cta-final (89566b0c-08a5-612a-25f7-1452a65d719d) -->
+  <!-- headline: "Start your deck quote. 48-hour response from a local builder." -->
+  <!-- cta_label: "Start My Quote →" -->
+  <!-- cta_href: /get-a-quote -->
+  <!-- /WEBFLOW COMPONENT: cta-final -->
+
+  <!-- WEBFLOW COMPONENT: footer -->
+  <!-- instance: 1b3b9d3c-f05a-5130-90f6-8e3c12575b3f | component: footer (16ed2b41-9560-24aa-44d6-089f1ffb26d7) -->
+  <!-- /WEBFLOW COMPONENT: footer -->
+
+</body>
+</html>

@@ -1,0 +1,159 @@
+{
+  "nodes": [
+    {
+      "id": "a1b2c3d4e5f60001",
+      "type": "text",
+      "x": 0,
+      "y": 0,
+      "width": 220,
+      "height": 120,
+      "color": "2",
+      "text": "## Traffic Sources\n\n- [[Google Ads]]\n- [[Meta Ads]]\n- [[Nextdoor]]\n- [[TikTok]]"
+    },
+    {
+      "id": "a1b2c3d4e5f60002",
+      "type": "text",
+      "x": 320,
+      "y": 0,
+      "width": 220,
+      "height": 120,
+      "color": "5",
+      "text": "## Landing Pages\n\n[[Webflow]] 21-page site\ncwdeckbuilders.com"
+    },
+    {
+      "id": "a1b2c3d4e5f60003",
+      "type": "text",
+      "x": 640,
+      "y": 0,
+      "width": 220,
+      "height": 120,
+      "color": "5",
+      "text": "## Quote Form\n\n9-field Webflow native form\nTCPA consent included"
+    },
+    {
+      "id": "a1b2c3d4e5f60004",
+      "type": "text",
+      "x": 960,
+      "y": 0,
+      "width": 220,
+      "height": 120,
+      "color": "4",
+      "text": "## Lead Qualification\n\n[[Lead Qualification Agent]]\n60+ score = qualified"
+    },
+    {
+      "id": "a1b2c3d4e5f60005",
+      "type": "text",
+      "x": 1280,
+      "y": 0,
+      "width": 220,
+      "height": 120,
+      "color": "4",
+      "text": "## Lead Routing\n\n[[Lead Routing Agent]]\n[[Make]] automation\n5-min SLA"
+    },
+    {
+      "id": "a1b2c3d4e5f60006",
+      "type": "text",
+      "x": 1600,
+      "y": 0,
+      "width": 220,
+      "height": 120,
+      "color": "4",
+      "text": "## Contractor Delivery\n\nEmail + SMS\n[[Ben Barton]]\n[[John Garcia]]"
+    },
+    {
+      "id": "a1b2c3d4e5f60007",
+      "type": "text",
+      "x": 1920,
+      "y": 0,
+      "width": 220,
+      "height": 120,
+      "color": "6",
+      "text": "## CRM Tracking\n\n[[HubSpot]]\nPipeline stages\nLifecycle mgmt"
+    },
+    {
+      "id": "a1b2c3d4e5f60008",
+      "type": "text",
+      "x": 2240,
+      "y": 0,
+      "width": 220,
+      "height": 120,
+      "color": "6",
+      "text": "## Billing\n\n[[Accounting Agent]]\n$1,000/accepted bid\n[[DocuSign]] agreements"
+    },
+    {
+      "id": "a1b2c3d4e5f60009",
+      "type": "text",
+      "x": 960,
+      "y": -180,
+      "width": 540,
+      "height": 80,
+      "color": "1",
+      "text": "# CWDB Lead Generation Pipeline\n[[Central Wisconsin Deck Builders LLC|Central Wisconsin Deck Builders]] — [[Phase 1 - Validation]]"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1b2c3d4e5f60001",
+      "fromNode": "a1b2c3d4e5f60001",
+      "fromSide": "right",
+      "toNode": "a1b2c3d4e5f60002",
+      "toSide": "left",
+      "toEnd": "arrow",
+      "label": "clicks"
+    },
+    {
+      "id": "e1b2c3d4e5f60002",
+      "fromNode": "a1b2c3d4e5f60002",
+      "fromSide": "right",
+      "toNode": "a1b2c3d4e5f60003",
+      "toSide": "left",
+      "toEnd": "arrow",
+      "label": "submits"
+    },
+    {
+      "id": "e1b2c3d4e5f60003",
+      "fromNode": "a1b2c3d4e5f60003",
+      "fromSide": "right",
+      "toNode": "a1b2c3d4e5f60004",
+      "toSide": "left",
+      "toEnd": "arrow",
+      "label": "scores"
+    },
+    {
+      "id": "e1b2c3d4e5f60004",
+      "fromNode": "a1b2c3d4e5f60004",
+      "fromSide": "right",
+      "toNode": "a1b2c3d4e5f60005",
+      "toSide": "left",
+      "toEnd": "arrow",
+      "label": "qualified"
+    },
+    {
+      "id": "e1b2c3d4e5f60005",
+      "fromNode": "a1b2c3d4e5f60005",
+      "fromSide": "right",
+      "toNode": "a1b2c3d4e5f60006",
+      "toSide": "left",
+      "toEnd": "arrow",
+      "label": "delivers"
+    },
+    {
+      "id": "e1b2c3d4e5f60006",
+      "fromNode": "a1b2c3d4e5f60006",
+      "fromSide": "right",
+      "toNode": "a1b2c3d4e5f60007",
+      "toSide": "left",
+      "toEnd": "arrow",
+      "label": "logs"
+    },
+    {
+      "id": "e1b2c3d4e5f60007",
+      "fromNode": "a1b2c3d4e5f60007",
+      "fromSide": "right",
+      "toNode": "a1b2c3d4e5f60008",
+      "toSide": "left",
+      "toEnd": "arrow",
+      "label": "invoices"
+    }
+  ]
+}

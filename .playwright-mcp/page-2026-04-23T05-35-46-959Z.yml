@@ -1,0 +1,145 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - img "Central Wisconsin Deck Builders logo featuring the state of Wisconsin with wood grain pattern and bold orange text." [ref=e5]
+      - button "menu" [ref=e6] [cursor=pointer]:
+        - generic [ref=e7]: 
+  - generic [ref=e10]:
+    - generic [ref=e11]: About CWDB
+    - heading "Building decks should be exciting not stressful" [level=1] [ref=e12]
+    - paragraph [ref=e13]: Central Wisconsin Deck Builders exists to take the guesswork out of finding a great contractor. We vet the builders so you don't have to.
+  - generic [ref=e14]:
+    - generic [ref=e16]:
+      - heading "Our Mission" [level=2] [ref=e17]
+      - paragraph [ref=e18]: "We connect Central Wisconsin homeowners with trusted, licensed deck builders — quickly and without hassle. Every contractor in our network is vetted for licensing, insurance, and quality of work. Our goal is simple: make it easy for you to find the right builder and start your project with confidence."
+    - generic [ref=e20]:
+      - heading "Why We Started CWDB" [level=2] [ref=e21]
+      - paragraph [ref=e22]: Here's how it usually goes. You decide you want a new deck. You search online, ask neighbors, maybe post on Nextdoor. You call a few contractors. One doesn't answer. One says they're booked through October. Another gives you a quote but never follows up.
+      - paragraph [ref=e23]: Weeks go by. You're no closer to breaking ground.
+      - paragraph [ref=e24]: We started Central Wisconsin Deck Builders because that experience is too common — and it doesn't have to be that way.
+      - paragraph [ref=e25]: We do the work upfront. We find experienced, licensed deck builders in the Wausau area. We verify their credentials, their insurance, and their reputation. Then when you're ready to build, we connect you with a contractor who's actually available, qualified, and ready to earn your business.
+      - paragraph [ref=e26]: No cold-calling five companies. No chasing callbacks. No wondering if the guy your cousin's neighbor recommended is actually insured.
+      - paragraph [ref=e27]: You tell us what you need. We match you with someone who can build it.
+    - generic [ref=e29]:
+      - heading "How We're Different" [level=2] [ref=e30]
+      - generic [ref=e31]:
+        - generic [ref=e32]:
+          - generic [ref=e33]: "01"
+          - heading "We Vet Every Builder" [level=3] [ref=e34]
+          - paragraph [ref=e35]: Contractors in our network go through a credential review before they're approved — licensing, insurance, workers' comp, and references. Not everyone gets in.
+        - generic [ref=e36]:
+          - generic [ref=e37]: "02"
+          - heading "You Get Fast Responses" [level=3] [ref=e38]
+          - paragraph [ref=e39]: Most homeowners hear back from a contractor within 48 hours of submitting a request. No more waiting days or weeks for a callback.
+        - generic [ref=e40]:
+          - generic [ref=e41]: "03"
+          - heading "It's Free for Homeowners" [level=3] [ref=e42]
+          - paragraph [ref=e43]: There's no fee, no hidden cost, and no obligation. You get a quote, review it, and decide on your own terms.
+        - generic [ref=e44]:
+          - generic [ref=e45]: "04"
+          - heading "We're Local" [level=3] [ref=e46]
+          - paragraph [ref=e47]: This isn't a national referral network run out of a call center. We focus exclusively on Central Wisconsin — Wausau, Weston, Schofield, Mosinee, and Merrill. We know the market because we're part of it.
+    - generic [ref=e49]:
+      - heading "Our Service Area" [level=2] [ref=e50]
+      - paragraph [ref=e51]: "We currently serve homeowners in the following Central Wisconsin communities:"
+      - list [ref=e52]:
+        - listitem [ref=e53]:
+          - generic [ref=e54]: Wausau
+          - generic [ref=e55]: Including Rib Mountain and the greater Wausau metro
+        - listitem [ref=e56]:
+          - generic [ref=e57]: Schofield
+          - generic [ref=e58]: And surrounding neighborhoods
+        - listitem [ref=e59]:
+          - generic [ref=e60]: Weston
+          - generic [ref=e61]: One of the area's fastest-growing communities
+        - listitem [ref=e62]:
+          - generic [ref=e63]: Mosinee
+          - generic [ref=e64]: South of Wausau along the Wisconsin River
+        - listitem [ref=e65]:
+          - generic [ref=e66]: Merrill
+          - generic [ref=e67]: North of Wausau in Lincoln County
+      - paragraph [ref=e68]:
+        - text: We're expanding into additional markets soon. If you're nearby but don't see your city listed,
+        - link "submit a quote request" [ref=e69] [cursor=pointer]:
+          - /url: /get-a-quote
+        - text: anyway — we'll do our best to connect you with a builder.
+  - generic [ref=e71]:
+    - generic [ref=e72]: "YOUR LOCAL BUILDERS:"
+    - generic [ref=e73]:
+      - generic [ref=e74]:
+        - img "Portrait of Ben Barton, Barton Builders LLC" [ref=e75]
+        - generic [ref=e76]:
+          - generic [ref=e77]: Ben Barton
+          - generic [ref=e78]: Wausau, WI · Barton Builders LLC
+      - generic [ref=e79]:
+        - img "Portrait of John Garcia, John Garcia Construction" [ref=e80]
+        - generic [ref=e81]:
+          - generic [ref=e82]: John Garcia
+          - generic [ref=e83]: Merrill, WI · John Garcia Construction
+    - link "Meet the team →" [ref=e84] [cursor=pointer]:
+      - /url: /our-builders
+  - generic [ref=e86]:
+    - heading "Start your deck quote. 48-hour response from a local builder." [level=2] [ref=e87]
+    - link "Start My Quote →" [ref=e88] [cursor=pointer]:
+      - /url: /get-a-quote
+  - generic [ref=e91]:
+    - generic [ref=e92]:
+      - img "Central Wisconsin Deck Builders Logo" [ref=e93]
+      - generic [ref=e94]:
+        - link "Facebook" [ref=e95] [cursor=pointer]:
+          - /url: https://facebook.com
+          - img "Facebook" [ref=e96]
+        - link "Instagram" [ref=e98] [cursor=pointer]:
+          - /url: https://instagram.com
+          - img "Instagram" [ref=e99]
+        - link "Nextdoor" [ref=e101] [cursor=pointer]:
+          - /url: https://nextdoor.com
+          - img "Nextdoor" [ref=e102]
+    - generic [ref=e104]:
+      - heading "Service Areas" [level=4] [ref=e105]
+      - link "Wausau" [ref=e106] [cursor=pointer]:
+        - /url: /deck-builders-wausau
+      - link "Schofield" [ref=e107] [cursor=pointer]:
+        - /url: /deck-builders-schofield
+      - link "Weston" [ref=e108] [cursor=pointer]:
+        - /url: /deck-builders-weston
+      - link "Mosinee" [ref=e109] [cursor=pointer]:
+        - /url: /deck-builders-mosinee
+      - link "Merrill" [ref=e110] [cursor=pointer]:
+        - /url: /deck-builders-merrill
+    - generic [ref=e111]:
+      - heading "Company" [level=4] [ref=e112]
+      - link "About Us" [ref=e113] [cursor=pointer]:
+        - /url: /about
+      - link "Our Builders" [ref=e114] [cursor=pointer]:
+        - /url: /our-builders
+      - link "Gallery" [ref=e115] [cursor=pointer]:
+        - /url: /gallery
+      - link "FAQ" [ref=e116] [cursor=pointer]:
+        - /url: /faq
+      - link "Blog" [ref=e117] [cursor=pointer]:
+        - /url: /blog
+      - link "Cost Calculator" [ref=e118] [cursor=pointer]:
+        - /url: /cost-calculator
+    - generic [ref=e119]:
+      - heading "Contact" [level=4] [ref=e120]
+      - link "(715) 544-7941" [ref=e121] [cursor=pointer]:
+        - /url: tel:+17155447941
+      - link "Get a Free Quote" [ref=e122] [cursor=pointer]:
+        - /url: /get-a-quote
+      - paragraph [ref=e123]: Central Wisconsin
+      - paragraph [ref=e124]: Mon–Fri 8am–6pm CT
+    - paragraph [ref=e125]: © 2026 Central Wisconsin Deck Builders. All rights reserved.
+    - generic [ref=e126]:
+      - link "Privacy Policy" [ref=e127] [cursor=pointer]:
+        - /url: /privacy
+      - link "Terms of Service" [ref=e128] [cursor=pointer]:
+        - /url: /terms
+  - generic [ref=e129]:
+    - link "GET YOUR FREE QUOTE →" [ref=e130] [cursor=pointer]:
+      - /url: /get-a-quote
+    - button "Dismiss" [ref=e131] [cursor=pointer]: ×
+  - generic [ref=e132]:
+    - link "GET YOUR FREE QUOTE →" [ref=e133] [cursor=pointer]:
+      - /url: /get-a-quote
+    - button "Dismiss" [ref=e134] [cursor=pointer]: ×

@@ -1,0 +1,11 @@
+- generic [active] [ref=e1]:
+  - img "Central Wisconsin deck with patio furniture in summer" [ref=e2]
+  - img "Central Wisconsin Deck Builders" [ref=e6]
+  - generic [ref=e7]:
+    - paragraph [ref=e8]: Wisconsin Summer 2026
+    - heading "Book before May fills up." [level=1] [ref=e9]
+    - paragraph [ref=e10]: Good Central WI deck builders book out fast. Free quote from a vetted local builder in 48 hours.
+    - generic [ref=e11]:
+      - link "Get Quote" [ref=e12] [cursor=pointer]:
+        - /url: "#"
+      - generic [ref=e13]: Licensed·Local·Summer Slots Open

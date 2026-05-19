@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<!--
+  FAQ Page — Central Wisconsin Deck Builders
+  Webflow page ID: 69cff2909d6b4ef6581d1c83
+  Staging: https://central-wisconsin-deck-builders.webflow.io/faq
+  Live: https://cwdeckbuilders.com/faq
+
+  Phase 4 Wave 1-beta rebuild (2026-04-20):
+    - Legacy #page-hero section REMOVED
+    - Legacy #faq-cta section REMOVED
+    - hero-interior component instance INSERTED at top (element 57050e38-29e6-ae53-a567-2a705b637443)
+    - cta-final component instance INSERTED before footer (element 99d357f5-eabd-1d51-dc42-6625bba71b87)
+    - faq-section-full with 12 native <details>/<summary> items PRESERVED as-is
+    - FAQPage JSON-LD schema lives in Designer Page Settings head tag (untouched; Designer-only surface)
+
+  Component inventory used:
+    - header            (17135213-0f65-1d96-c6af-955d586e2f00)
+    - hero-interior     (ec0fc950-6cea-2755-d848-50ade4f2af3c)  ← props are Designer-only overrides
+    - cta-final         (89566b0c-08a5-612a-25f7-1452a65d719d)
+    - footer            (16ed2b41-9560-24aa-44d6-089f1ffb26d7)
+
+  CMS: FAQs collection (69cff07bd29f3d1624e2ffb9) — 12 items seeded; bind of accordion
+       to Collection List is a Designer-only action pending Jim's handoff.
+
+  Pending Designer handoff for Jim:
+    1. FAQ page → select hero-interior instance → override eyebrow / heading / subheading
+       Eyebrow:    "RESOURCES"
+       Heading:    "Frequently Asked Questions"
+       Subheading: "Straight answers about deck quotes, costs, permits, and materials for Central Wisconsin homeowners."
+       Background image: pick a wide Wisconsin deck photo from the asset library.
+    2. (Optional) Convert the static <details> accordion to a CMS-bound Collection List
+       targeting the FAQs collection — question → summary, answer → details body.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ | Central Wisconsin Deck Builders</title>
+  <meta name="description" content="Get answers about deck quotes, costs, permits, materials, and how Central Wisconsin Deck Builders connects you with vetted local contractors." />
+  <link rel="canonical" href="https://cwdeckbuilders.com/faq" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="FAQ | Central Wisconsin Deck Builders" />
+  <meta property="og:description" content="Get answers about deck quotes, costs, permits, materials, and how Central Wisconsin Deck Builders connects you with vetted local contractors." />
+  <meta property="og:image" content="https://cwdeckbuilders.com/assets/images/og-faq.jpg" />
+  <meta property="og:url" content="https://cwdeckbuilders.com/faq" />
+  <meta property="og:type" content="website" />
+
+  <!-- FAQPage Structured Data (managed in Webflow Designer → Page Settings → Inside head tag) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"How does Central Wisconsin Deck Builders work?","acceptedAnswer":{"@type":"Answer","text":"You fill out a quick form telling us about your deck project. We review your request and match you with a vetted, licensed contractor in your area. The contractor reaches out to discuss your project and provide a detailed quote. The whole process is free for homeowners, and there's never any obligation to move forward."}},
+      {"@type":"Question","name":"Is the quote really free?","acceptedAnswer":{"@type":"Answer","text":"Yes — 100% free. There's no charge to submit a request, no hidden fees, and no cost if you decide not to move forward."}},
+      {"@type":"Question","name":"How quickly will I hear back?","acceptedAnswer":{"@type":"Answer","text":"Most homeowners hear from a contractor within 24 hours. Many get a response the same day."}},
+      {"@type":"Question","name":"How do you choose which contractors are in your network?","acceptedAnswer":{"@type":"Answer","text":"Every contractor goes through a vetting process. We verify active Wisconsin contractor license, general liability insurance, workers' compensation coverage, track record of residential deck projects, and customer references."}},
+      {"@type":"Question","name":"What areas do you serve?","acceptedAnswer":{"@type":"Answer","text":"We currently serve homeowners in Wausau (including Rib Mountain), Schofield, Weston, Mosinee, and Merrill. We're expanding into additional Central Wisconsin communities soon."}},
+      {"@type":"Question","name":"What types of deck projects do you handle?","acceptedAnswer":{"@type":"Answer","text":"Our contractors handle new deck construction, multi-level and wraparound decks, composite and PVC decking, pressure-treated wood decks, cedar and hardwood decks, deck repairs, resurfacing, screened porches, pergolas, and railing and stair upgrades."}},
+      {"@type":"Question","name":"How much does a deck cost in Central Wisconsin?","acceptedAnswer":{"@type":"Answer","text":"Costs vary by size, materials, and design. Rough ranges: basic pressure-treated deck (12x16) $4,000–$8,000, composite deck (12x16) $8,000–$15,000, multi-level or custom $15,000–$30,000+, repairs or resurfacing $1,500–$5,000."}},
+      {"@type":"Question","name":"Do I need a permit to build a deck in Wisconsin?","acceptedAnswer":{"@type":"Answer","text":"In most cases, yes. Wisconsin municipalities generally require a building permit for new deck construction and significant structural modifications. Your contractor typically handles the permit application as part of the project."}},
+      {"@type":"Question","name":"What decking materials are available?","acceptedAnswer":{"@type":"Answer","text":"Common materials include pressure-treated lumber, composite decking (Trex, TimberTech), PVC decking, cedar, and hardwoods like ipe. Your contractor can recommend the best material for your budget and preferences."}},
+      {"@type":"Question","name":"What if I'm just in the planning phase and not ready to build yet?","acceptedAnswer":{"@type":"Answer","text":"That's completely fine. Many homeowners use our service to get a ballpark quote before making decisions. There's no obligation to hire anyone."}},
+      {"@type":"Question","name":"Can I choose which contractor I work with?","acceptedAnswer":{"@type":"Answer","text":"We match you with the best-fit contractor based on location, availability, and specialization. As our network grows, you may receive quotes from multiple builders and choose your preferred one."}},
+      {"@type":"Question","name":"Is my information shared with anyone?","acceptedAnswer":{"@type":"Answer","text":"Your contact and project details are shared only with the vetted contractor(s) matched to your project. We do not sell your information to marketing lists or unrelated third parties."}}
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <!-- WEBFLOW COMPONENT: header -->
+  <!-- component: header (17135213-0f65-1d96-c6af-955d586e2f00) -->
+  <!-- /WEBFLOW COMPONENT: header -->
+
+  <!-- WEBFLOW COMPONENT: hero-interior -->
+  <!-- component: hero-interior (ec0fc950-6cea-2755-d848-50ade4f2af3c) -->
+  <!-- Pending Designer overrides: eyebrow="RESOURCES", heading="Frequently Asked Questions",
+       subheading="Straight answers about deck quotes, costs, permits, and materials for Central Wisconsin homeowners." -->
+  <!-- /WEBFLOW COMPONENT: hero-interior -->
+
+  <!-- WEBFLOW COMPONENT: faq-section-full (legacy page-level section; kept as-is) -->
+  <section class="section-wrap" id="faq-section-full" style="background:#ffffff;">
+    <div class="container-inner" style="max-width:760px; padding-top:64px; padding-bottom:64px;">
+      <h2 style="color:#323434; font-size:1.75rem; font-weight:700; margin-bottom:40px;">Your Questions, Answered</h2>
+
+      <details style="border-bottom:1px solid #e0e0e0; padding:20px 0;">
+        <summary style="font-weight:600; color:#323434; font-size:1rem; cursor:pointer; list-style:none;">How does Central Wisconsin Deck Builders work?</summary>
+        <p style="color:#646760; margin-top:12px; line-height:1.7;">We make it simple. You fill out a quick form telling us about your deck project — size, materials, timeline, budget. We review your request and match you with a vetted, licensed contractor in your area. The contractor reaches out to discuss your project and provide a detailed quote. The whole process is free for homeowners, and there's never any obligation to move forward.</p>
+      </details>
+
+      <details style="border-bottom:1px solid #e0e0e0; padding:20px 0;">
+        <summary style="font-weight:600; color:#323434; font-size:1rem; cursor:pointer; list-style:none;">Is the quote really free?</summary>
+        <p style="color:#646760; margin-top:12px; line-height:1.7;">Yes — 100% free. There's no charge to submit a request, no hidden fees, and no cost if you decide not to move forward. We believe you should be able to get pricing information without opening your wallet.</p>
+      </details>
+
+      <details style="border-bottom:1px solid #e0e0e0; padding:20px 0;">
+        <summary style="font-weight:600; color:#323434; font-size:1rem; cursor:pointer; list-style:none;">How quickly will I hear back?</summary>
+        <p style="color:#646760; margin-top:12px; line-height:1.7;">Most homeowners hear from a contractor within 24 hours. Many get a response the same day. Response times depend on the contractor's schedule, but we prioritize fast turnaround because we know waiting is frustrating.</p>
+      </details>
+
+      <details style="border-bottom:1px solid #e0e0e0; padding:20px 0;">
+        <summary style="font-weight:600; color:#323434; font-size:1rem; cursor:pointer; list-style:none;">How do you choose which contractors are in your network?</summary>
+        <p style="color:#646760; margin-top:12px; line-height:1.7;">Every contractor goes through a vetting process before they're approved. We verify: active Wisconsin contractor license, general liability insurance, workers' compensation coverage, track record of residential deck projects in Central Wisconsin, and customer references. If a contractor doesn't meet our standards, they don't join the network.</p>
+      </details>
+
+      <details style="border-bottom:1px solid #e0e0e0; padding:20px 0;">
+        <summary style="font-weight:600; color:#323434; font-size:1rem; cursor:pointer; list-style:none;">What areas do you serve?</summary>
+        <p style="color:#646760; margin-top:12px; line-height:1.7;">We currently serve homeowners in Wausau (including Rib Mountain), Schofield, Weston, Mosinee, and Merrill. We're expanding into additional Central Wisconsin communities soon.</p>
+      </details>
+
+      <details style="border-bottom:1px solid #e0e0e0; padding:20px 0;">
+        <summary style="font-weight:600; color:#323434; font-size:1rem; cursor:pointer; list-style:none;">What types of deck projects do you handle?</summary>
+        <p style="color:#646760; margin-top:12px; line-height:1.7;">Our contractors handle new deck construction, multi-level and wraparound decks, composite and PVC decking, pressure-treated wood decks, cedar and hardwood decks, deck repairs and board replacement, deck resurfacing and refinishing, screened porches, pergolas, and railing and stair upgrades.</p>
+      </details>
+
+      <details style="border-bottom:1px solid #e0e0e0; padding:20px 0;">
+        <summary style="font-weight:600; color:#323434; font-size:1rem; cursor:pointer; list-style:none;">How much does a deck cost in Central Wisconsin?</summary>
+        <p style="color:#646760; margin-top:12px; line-height:1.7;">Costs vary by size, materials, and design. Rough ranges for the Wausau area: basic pressure-treated deck (12x16) $4,000–$8,000; composite deck (12x16) $8,000–$15,000; multi-level or custom design $15,000–$30,000+; deck repair or resurfacing $1,500–$5,000.</p>
+      </details>
+
+      <details style="border-bottom:1px solid #e0e0e0; padding:20px 0;">
+        <summary style="font-weight:600; color:#323434; font-size:1rem; cursor:pointer; list-style:none;">Do I need a permit to build a deck in Wisconsin?</summary>
+        <p style="color:#646760; margin-top:12px; line-height:1.7;">In most cases, yes. Wisconsin municipalities generally require a building permit for new deck construction and significant structural modifications. The good news: your contractor typically handles the permit application as part of the project.</p>
+      </details>
+
+      <details style="border-bottom:1px solid #e0e0e0; padding:20px 0;">
+        <summary style="font-weight:600; color:#323434; font-size:1rem; cursor:pointer; list-style:none;">What decking materials are available?</summary>
+        <p style="color:#646760; margin-top:12px; line-height:1.7;">Common options include: pressure-treated lumber (most affordable), composite decking like Trex or TimberTech (low-maintenance, long-lasting), PVC decking (fully synthetic, extremely low maintenance), cedar (naturally rot-resistant, classic look), and hardwoods like ipe (premium durability).</p>
+      </details>
+
+      <details style="border-bottom:1px solid #e0e0e0; padding:20px 0;">
+        <summary style="font-weight:600; color:#323434; font-size:1rem; cursor:pointer; list-style:none;">What if I'm just in the planning phase and not ready to build yet?</summary>
+        <p style="color:#646760; margin-top:12px; line-height:1.7;">That's completely fine. Many homeowners use our service to get a ballpark quote before making any decisions. There's no obligation to hire anyone, and we'll never pressure you.</p>
+      </details>
+
+      <details style="border-bottom:1px solid #e0e0e0; padding:20px 0;">
+        <summary style="font-weight:600; color:#323434; font-size:1rem; cursor:pointer; list-style:none;">Can I choose which contractor I work with?</summary>
+        <p style="color:#646760; margin-top:12px; line-height:1.7;">We match you with the contractor who's the best fit based on location, availability, and specialization. As our network grows, you may have the option to receive quotes from multiple builders and choose the one you prefer.</p>
+      </details>
+
+      <details style="border-bottom:1px solid #e0e0e0; padding:20px 0;">
+        <summary style="font-weight:600; color:#323434; font-size:1rem; cursor:pointer; list-style:none;">Is my information shared with anyone?</summary>
+        <p style="color:#646760; margin-top:12px; line-height:1.7;">Your contact and project details are shared only with the vetted contractor(s) matched to your project. We do not sell your information to marketing lists, spam databases, or unrelated third parties.</p>
+      </details>
+    </div>
+  </section>
+  <!-- /WEBFLOW COMPONENT: faq-section-full -->
+
+  <!-- WEBFLOW COMPONENT: cta-final -->
+  <!-- component: cta-final (89566b0c-08a5-612a-25f7-1452a65d719d) -->
+  <!-- Renders: headline="Start your deck quote. 48-hour response from a local builder."
+       cta_label="Start My Quote →" · cta_href="/get-a-quote" -->
+  <!-- /WEBFLOW COMPONENT: cta-final -->
+
+  <!-- WEBFLOW COMPONENT: footer -->
+  <!-- component: footer (16ed2b41-9560-24aa-44d6-089f1ffb26d7) -->
+  <!-- /WEBFLOW COMPONENT: footer -->
+
+</body>
+</html>

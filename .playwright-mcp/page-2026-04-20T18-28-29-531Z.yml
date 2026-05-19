@@ -1,0 +1,218 @@
+- generic [active] [ref=e1]:
+  - text: "(function(){var s=document.createElement('style');s.id='cwdb';s.textContent='.header-wrap.scrolled{background-color:#323434!important;border-bottom-color:rgba(255,255,255,.05)!important}.cedar-strip{background-color:#83b2cf!important;background-image:linear-gradient(90deg,#83b2cf 0%,#9cc4db 40%,#83b2cf 70%,#6a9eba 100%)!important}.btn-primary{box-shadow:0 4px 24px rgba(229,76,0,.45)!important}.w-input:focus,.w-select:focus{border-color:#83b2cf!important;box-shadow:0 0 0 3px rgba(131,178,207,.2)!important;outline:none!important}';document.head.appendChild(s);})();"
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - link "Central Wisconsin Deck Builders Logo" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "Central Wisconsin Deck Builders Logo" [ref=e6]
+        - generic [ref=e7]:
+          - link "Our Builders" [ref=e8] [cursor=pointer]:
+            - /url: /our-builders
+          - button "Resources" [ref=e10] [cursor=pointer]:
+            - generic [ref=e11]: Resources
+          - link "About" [ref=e12] [cursor=pointer]:
+            - /url: /about
+        - generic [ref=e13]:
+          - link "(715) 544-7941" [ref=e14] [cursor=pointer]:
+            - /url: tel:+17155447941
+          - link "Start My Quote →" [ref=e15] [cursor=pointer]:
+            - /url: /get-a-quote
+      - text: 
+    - generic [ref=e16]:
+      - paragraph [ref=e17]: Central Wisconsin's Deck Experts
+      - heading "Your Dream Deck Starts with a Free Quote" [level=1] [ref=e18]
+      - generic [ref=e19]:
+        - link "Get Your Free Quote" [ref=e20] [cursor=pointer]:
+          - /url: /get-a-quote
+        - link "See how it works" [ref=e21] [cursor=pointer]:
+          - /url: https://link
+  - generic [ref=e24]:
+    - generic [ref=e25]: Service Area
+    - heading "Deck Builders in Your City" [level=1] [ref=e26]
+    - paragraph [ref=e27]: Expert deck builders serving your city in Central Wisconsin. Free quotes within 24 hours.
+  - generic [ref=e29]:
+    - heading "Deck Builders Serving Mosinee, Wisconsin" [level=2] [ref=e30]
+    - generic [ref=e32]:
+      - paragraph [ref=e33]: Mosinee sits along the Wisconsin River in the heart of central Wisconsin — a community where outdoor living isn't just a preference, it's part of the culture. Whether you're overlooking the river, backing up to wooded acreage, or settled into a neighborhood lot, a well-built deck extends your season and your usable living space.
+      - paragraph [ref=e34]: Central Wisconsin Deck Builders works with licensed, vetted deck contractors who serve the Mosinee area and understand local permit requirements, Wisconsin River setbacks, and the materials that hold up through hard Wisconsin winters. We connect you with the right builder fast — no searching, no waiting weeks for callbacks.
+      - paragraph [ref=e35]: Fill out your project details and get your first free quote within 24 hours.
+  - generic [ref=e37]:
+    - heading "Frequently Asked Questions" [level=2] [ref=e38]
+    - generic [ref=e39]:
+      - generic [ref=e40]:
+        - heading "How much does a deck cost in Mosinee, WI?" [level=3] [ref=e41]
+        - paragraph [ref=e42]: Deck costs in Mosinee typically range from $7,500 to $28,000+ depending on size, materials, and site conditions. Waterfront or slope properties may require additional footings or structural work. A standard pressure-treated deck starts around $7,500–$12,000. Composite decking runs 20–40% more on materials. Get a free quote for pricing specific to your property.
+      - generic [ref=e43]:
+        - heading "Do I need a permit to build a deck in Mosinee?" [level=3] [ref=e44]
+        - paragraph [ref=e45]: Yes. The City of Mosinee requires building permits for most decks attached to the home or over a certain square footage. Properties near the Wisconsin River may also have additional shoreland zoning setback requirements. Our contractors know Mosinee's permitting process and handle it as part of the project.
+      - generic [ref=e46]:
+        - heading "What's the best deck design for a river or wooded property in Mosinee?" [level=3] [ref=e47]
+        - paragraph [ref=e48]: For river-view and wooded properties, low-maintenance composite decking is highly recommended — it handles humidity, seasonal flooding risk, and UV exposure better than wood. Multi-level designs or decks with angled layouts can maximize views. Our contractors have experience with challenging terrain and waterfront builds in the Mosinee area.
+      - generic [ref=e49]:
+        - heading "When is the best time to build a deck in Mosinee?" [level=3] [ref=e50]
+        - paragraph [ref=e51]: The ideal window for deck construction in Mosinee is May through September. Spring bookings fill fast — if you want your deck done by summer, request your quote in March or April. Fall builds (September–October) are possible and often have better contractor availability. Avoid scheduling concrete footings during freeze periods.
+      - generic [ref=e52]:
+        - heading "What areas near Mosinee do you serve?" [level=3] [ref=e53]
+        - paragraph [ref=e54]: We serve Mosinee and surrounding areas including Wausau, Schofield, Weston, Kronenwetter, Merrill, and rural Marathon County properties. Submit a quote request and we'll confirm coverage for your address within 24 hours.
+  - generic [ref=e56]:
+    - heading "Trusted by Homeowners Across Central Wisconsin" [level=2] [ref=e57]
+    - generic [ref=e58]:
+      - paragraph [ref=e60]: Licensed Contractors
+      - paragraph [ref=e62]: Insured & Bonded
+      - paragraph [ref=e64]: Free Quotes — No Obligation
+      - paragraph [ref=e66]: Local Wisconsin Builders
+    - generic [ref=e67]:
+      - generic [ref=e68]:
+        - paragraph [ref=e69]: ★★★★★
+        - paragraph [ref=e70]: We have a river view property and wanted a deck that took advantage of it. They matched us with a contractor who had done similar projects in the area. Incredible result.
+        - paragraph [ref=e71]: Greg F. — Mosinee, WI
+      - generic [ref=e72]:
+        - paragraph [ref=e73]: ★★★★★
+        - paragraph [ref=e74]: Fastest contractor response I've ever gotten. Quote in hand within a day. The deck was done before the Fourth of July.
+        - paragraph [ref=e75]: Paula S. — Mosinee, WI
+      - generic [ref=e76]:
+        - paragraph [ref=e77]: ★★★★★
+        - paragraph [ref=e78]: Really impressed with the quality of the contractor they found for us. Knew the area, knew the materials, delivered exactly what we wanted.
+        - paragraph [ref=e79]: Brian K. — Mosinee, WI
+  - generic [ref=e82]:
+    - paragraph [ref=e83]: Our Coverage Area
+    - heading "Serving Central Wisconsin Homeowners" [level=2] [ref=e84]
+    - paragraph [ref=e85]: We work with trusted deck builders across the heart of Wisconsin. Whether you're in downtown Wausau or out past Mosinee, our network covers your area.
+    - generic [ref=e86]:
+      - link "Location pin Wausau" [ref=e87] [cursor=pointer]:
+        - /url: /deck-builders-wausau-wi
+        - img "Location pin" [ref=e88]
+        - paragraph [ref=e89]: Wausau
+      - link "Location pin Schofield" [ref=e90] [cursor=pointer]:
+        - /url: /deck-builders-schofield-wi
+        - img "Location pin" [ref=e91]
+        - paragraph [ref=e92]: Schofield
+      - link "Location pin Weston" [ref=e93] [cursor=pointer]:
+        - /url: /deck-builders-weston-wi
+        - img "Location pin" [ref=e94]
+        - paragraph [ref=e95]: Weston
+      - link "Location pin Mosinee" [ref=e96] [cursor=pointer]:
+        - /url: /deck-builders-mosinee-wi
+        - img "Location pin" [ref=e97]
+        - paragraph [ref=e98]: Mosinee
+      - link "Location pin Merrill" [ref=e99] [cursor=pointer]:
+        - /url: /deck-builders-merrill-wi
+        - img "Location pin" [ref=e100]
+        - paragraph [ref=e101]: Merrill
+  - generic [ref=e103]:
+    - paragraph [ref=e104]: GET A FREE QUOTE
+    - heading "Get Your Free Mosinee Deck Quote" [level=2] [ref=e105]
+    - paragraph [ref=e106]: Tell us about your project. A trusted local builder will reach out within 24 hours.
+    - form "Quote Request" [ref=e108]:
+      - generic [ref=e109]:
+        - generic [ref=e110]:
+          - generic [ref=e111]: Name*
+          - textbox "Name* Phone Number*" [ref=e112]:
+            - /placeholder: Jane Doe
+        - generic [ref=e113]:
+          - generic [ref=e114]: Phone Number*
+          - textbox "(715) 555-5555" [ref=e115]
+      - generic [ref=e117]:
+        - generic [ref=e118]: Email Address*
+        - textbox "Email Address*" [ref=e119]:
+          - /placeholder: jane.doe@email.com
+      - generic [ref=e121]:
+        - generic [ref=e122]: Property Address*
+        - textbox "Property Address*" [ref=e123]:
+          - /placeholder: 123 Main St. Wausau, WI 54401
+      - generic [ref=e124]:
+        - generic [ref=e125]:
+          - generic [ref=e126]: Property Ownership?*
+          - combobox "Property Ownership?*" [ref=e127]:
+            - option "Select one..." [selected]
+            - option "Own"
+            - option "Rent"
+        - generic [ref=e128]:
+          - generic [ref=e129]: Type of project?*
+          - combobox "Type of project?*" [ref=e130]:
+            - option "Select one..." [selected]
+            - option "Own"
+            - option "Rent"
+      - generic [ref=e131]:
+        - generic [ref=e132]:
+          - generic [ref=e133]: Estimated budget?*
+          - combobox "Estimated budget?*" [ref=e134]:
+            - option "Select one..." [selected]
+            - option "Own"
+            - option "Rent"
+        - generic [ref=e135]:
+          - generic [ref=e136]: When to start?*
+          - combobox "When to start?*" [ref=e137]:
+            - option "Select one..." [selected]
+            - option "Own"
+            - option "Rent"
+      - generic [ref=e139]:
+        - generic [ref=e140]: Anything else we should know? (optional)
+        - textbox "Anything else we should know? (optional)" [ref=e141]:
+          - /placeholder: description, custom requests, dimensions, etc.
+      - generic [ref=e142]:
+        - generic [ref=e143] [cursor=pointer]:
+          - checkbox "I agree to receive calls, text messages, and emails from Central Wisconsin Deck Builders, LLC and its contractor partners about my project request. Consent is not a condition of receiving a quote. Msg & data rates may apply. Reply STOP to opt out." [ref=e144]
+          - generic [ref=e145]: I agree to receive calls, text messages, and emails from Central Wisconsin Deck Builders, LLC and its contractor partners about my project request. Consent is not a condition of receiving a quote. Msg & data rates may apply. Reply STOP to opt out.
+        - paragraph [ref=e146]: By checking the box above and clicking "Get My Free Quote," you provide your prior express written consent for Central Wisconsin Deck Builders, LLC ("CWDB") and its local contractor partners to contact you at the phone number and email address you provided. This may include calls, text messages (including SMS and MMS), and emails regarding your deck project inquiry, quotes, and scheduling. Calls and texts may be made using automated technology or prerecorded messages. Your consent is not a condition of purchasing any goods or services, and you may revoke your consent at any time by replying STOP to any text message, calling (715) XXX-XXXX, or emailing info@cwdeckbuilders.com. Standard message and data rates may apply. Message frequency varies.
+        - link "View our Privacy Policy" [ref=e147] [cursor=pointer]:
+          - /url: /privacy
+      - button "Request a Quote" [ref=e148] [cursor=pointer]
+      - paragraph [ref=e149]: Your info is private. No spam, no obligation.
+  - generic [ref=e152]:
+    - generic [ref=e153]:
+      - img "Central Wisconsin Deck Builders Logo" [ref=e154]
+      - link "(715) 544-7941" [ref=e155] [cursor=pointer]:
+        - /url: tel:+17155447941
+      - generic [ref=e156]:
+        - link "Facebook" [ref=e157] [cursor=pointer]:
+          - /url: https://facebook.com
+          - img "Facebook" [ref=e158]
+        - link "Instagram" [ref=e160] [cursor=pointer]:
+          - /url: https://instagram.com
+          - img "Instagram" [ref=e161]
+        - link "Nextdoor" [ref=e163] [cursor=pointer]:
+          - /url: https://nextdoor.com
+          - img "Nextdoor" [ref=e164]
+    - generic [ref=e166]:
+      - heading "Service Areas" [level=4] [ref=e167]
+      - link "Wausau" [ref=e168] [cursor=pointer]:
+        - /url: /deck-builders-wausau
+      - link "Schofield" [ref=e169] [cursor=pointer]:
+        - /url: /deck-builders-schofield
+      - link "Weston" [ref=e170] [cursor=pointer]:
+        - /url: /deck-builders-weston
+      - link "Mosinee" [ref=e171] [cursor=pointer]:
+        - /url: /deck-builders-mosinee
+      - link "Merrill" [ref=e172] [cursor=pointer]:
+        - /url: /deck-builders-merrill
+    - generic [ref=e173]:
+      - heading "Company" [level=4] [ref=e174]
+      - link "About Us" [ref=e175] [cursor=pointer]:
+        - /url: /about
+      - link "Our Builders" [ref=e176] [cursor=pointer]:
+        - /url: /our-builders
+      - link "Gallery" [ref=e177] [cursor=pointer]:
+        - /url: /gallery
+      - link "FAQ" [ref=e178] [cursor=pointer]:
+        - /url: /faq
+      - link "Blog" [ref=e179] [cursor=pointer]:
+        - /url: /blog
+      - link "Cost Calculator" [ref=e180] [cursor=pointer]:
+        - /url: /cost-calculator
+    - generic [ref=e181]:
+      - heading "Contact" [level=4] [ref=e182]
+      - link "(715) 544-7941" [ref=e183] [cursor=pointer]:
+        - /url: tel:+17155447941
+      - link "Get a Free Quote" [ref=e184] [cursor=pointer]:
+        - /url: /get-a-quote
+      - paragraph [ref=e185]: Central Wisconsin
+      - paragraph [ref=e186]: Mon–Fri 8am–6pm CT
+    - paragraph [ref=e187]: © 2026 Central Wisconsin Deck Builders. All rights reserved.
+    - generic [ref=e188]:
+      - link "Privacy Policy" [ref=e189] [cursor=pointer]:
+        - /url: /privacy
+      - link "Terms of Service" [ref=e190] [cursor=pointer]:
+        - /url: /terms
+  - text: "(function(){var h=document.querySelector('.header-wrap');if(!h)return;window.addEventListener('scroll',function(){h.classList.toggle('scrolled',window.scrollY>80);},{passive:true});})();"

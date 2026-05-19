@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<!--
+  LOCAL REFERENCE — Webflow is source of truth.
+  Blog Posts Template — /blog-post/{slug}
+  Webflow page ID: 69d043662f0a55d546c1f61a
+  CMS collection:  Blog Posts (69d043662f0a55d546c1f597)
+  Rebuilt:         2026-04-20 (Phase 4 Wave 4)
+
+  Jim Designer handoff — single session:
+  1. Open Blog Posts template in Designer (Collection pages → Blog Posts template).
+  2. Click hero-interior → Properties:
+       eyebrow     → bind to Category
+       heading     → bind to Name
+       subheading  → bind to Published Date (formatted) [+ Read Time if desired]
+       bg_image    → enter instance → background image element → bind image src to Hero Image
+  3. Delete the placeholder <div class="article-body__rich"> inside .article-body__inner.
+     Replace with a native Webflow Rich Text element, add class article-body__rich,
+     then Settings → Get Text From → Body field.
+  4. (Optional) If JSON-LD Article schema is missing from Page Settings → Custom Code → head,
+     paste it back. Per 2026-04-17 memory note it was added; verify before publish.
+  5. Publish the template.
+-->
+<html>
+<head>
+  <title>Blog Posts Template</title>
+</head>
+<body>
+
+<!-- WEBFLOW COMPONENT: header -->
+<header class="header"><!-- site header component instance --></header>
+<!-- /WEBFLOW COMPONENT: header -->
+
+<!-- WEBFLOW COMPONENT: hero-interior -->
+<section class="hero-interior">
+  <!-- Component instance — Designer binds: eyebrow→Category, heading→Name, subheading→Published Date, bg_image→Hero Image -->
+</section>
+<!-- /WEBFLOW COMPONENT: hero-interior -->
+
+<!-- WEBFLOW DOM: article-body (page-scoped, not a component) -->
+<section class="article-body">
+  <div class="article-body__inner">
+    <nav class="article-breadcrumb" aria-label="Breadcrumb">
+      <a href="/" class="article-breadcrumb__link">Home</a>
+      <span class="article-breadcrumb__sep">/</span>
+      <a href="/blog" class="article-breadcrumb__link">Blog</a>
+      <span class="article-breadcrumb__sep">/</span>
+      <span class="article-breadcrumb__current">Article</span>
+    </nav>
+
+    <!--
+      PLACEHOLDER — in the Designer this div gets replaced by a native Webflow
+      Rich Text element (class .article-body__rich) bound to the CMS Body field.
+      Styles below target .article-body__rich * selectors, so they will
+      continue to apply once the div is swapped for the native rich text block.
+    -->
+    <div class="article-body__rich w-richtext">
+      <p>Article body placeholder — bind this Rich Text element to the <strong>Body</strong> field.</p>
+      <h2>Example H2 heading</h2>
+      <p>Paragraph copy in Public Sans 17px, line-height 1.7, slate on white.</p>
+      <h3>Example H3 subheading</h3>
+      <p>Links within body copy <a href="#">render in sky blue with underline</a>. Inline code looks like <code>this snippet</code>.</p>
+      <ul>
+        <li>Unordered list item one</li>
+        <li>Unordered list item two</li>
+      </ul>
+      <blockquote>Pull quotes pick up a 3px sky left rule and italic styling.</blockquote>
+    </div>
+  </div>
+</section>
+<!-- /WEBFLOW DOM: article-body -->
+
+<!-- WEBFLOW COMPONENT: cta-final -->
+<section class="cta-final"><!-- arrival band: slate section, headline, orange CTA --></section>
+<!-- /WEBFLOW COMPONENT: cta-final -->
+
+<!-- WEBFLOW COMPONENT: footer -->
+<footer class="footer"><!-- site footer component instance --></footer>
+<!-- /WEBFLOW COMPONENT: footer -->
+
+<style>
+/* article-body — reading-optimized rich text wrapper */
+.article-body { background-color: #ffffff; padding: 80px 24px 64px; }
+.article-body__inner { max-width: 720px; margin: 0 auto; }
+
+.article-breadcrumb {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  margin-bottom: 32px;
+  font-family: 'Public Sans', sans-serif; font-size: 14px; line-height: 1.5;
+}
+.article-breadcrumb__link { color: #83b2cf; text-decoration: underline; text-underline-offset: 3px; }
+.article-breadcrumb__link:hover { color: #6a9ab8; }
+.article-breadcrumb__sep,
+.article-breadcrumb__current { color: #646760; }
+
+.article-body__rich { font-family: 'Public Sans', sans-serif; color: #323434; }
+.article-body__rich p {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 17px; line-height: 1.7; color: #323434;
+  margin: 0 0 24px 0;
+}
+.article-body__rich h2 {
+  font-family: 'Staatliches', sans-serif;
+  font-size: 32px; line-height: 1.15; color: #323434;
+  margin: 48px 0 16px 0; letter-spacing: 0.01em;
+}
+.article-body__rich h3 {
+  font-family: 'Staatliches', sans-serif;
+  font-size: 24px; line-height: 1.2; color: #323434;
+  margin: 32px 0 12px 0; letter-spacing: 0.01em;
+}
+.article-body__rich a { color: #83b2cf; text-decoration: underline; text-underline-offset: 2px; }
+.article-body__rich a:hover { color: #6a9ab8; }
+.article-body__rich ul,
+.article-body__rich ol {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 17px; line-height: 1.7; color: #323434;
+  padding-left: 24px; margin: 0 0 24px 0;
+}
+.article-body__rich ul li,
+.article-body__rich ol li { margin-bottom: 8px; }
+.article-body__rich blockquote {
+  font-style: italic; border-left: 3px solid #83b2cf; padding-left: 16px;
+  color: #646760; margin: 32px 0; font-size: 18px; line-height: 1.6;
+}
+.article-body__rich img { width: 100%; height: auto; display: block; margin: 32px 0; }
+.article-body__rich code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  background-color: #f5f5f0; padding: 2px 6px; border-radius: 2px;
+  font-size: 15px; color: #323434;
+}
+.article-body__rich strong { font-weight: 700; color: #323434; }
+
+@media screen and (max-width: 767px) {
+  .article-body { padding: 48px 20px; }
+  .article-body__rich p,
+  .article-body__rich ul,
+  .article-body__rich ol { font-size: 16px; line-height: 1.65; }
+  .article-body__rich h2 { font-size: 28px; margin-top: 40px; }
+  .article-body__rich h3 { font-size: 22px; margin-top: 28px; }
+}
+</style>
+</body>
+</html>

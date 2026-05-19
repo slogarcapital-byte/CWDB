@@ -1,0 +1,128 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - img "Central Wisconsin Deck Builders logo featuring the state of Wisconsin with wood grain pattern and bold orange text." [ref=e5]
+      - button "menu" [ref=e6] [cursor=pointer]:
+        - generic [ref=e7]: 
+  - generic [ref=e10]:
+    - generic [ref=e11]: Our Network
+    - heading "Meet Our Trusted Builders" [level=1] [ref=e12]
+    - paragraph [ref=e13]: Every contractor in our network has been vetted for licensing, insurance, experience, and reputation.
+  - generic [ref=e15]:
+    - heading "How We Choose Our Contractors" [level=2] [ref=e16]
+    - paragraph [ref=e17]: "Not every contractor makes the cut. Before a builder joins the CWDB network, we verify:"
+    - list [ref=e18]:
+      - listitem [ref=e19]:
+        - generic [ref=e20]: ✓
+        - generic [ref=e21]:
+          - strong [ref=e22]: Active state license
+          - text: — Confirmed with the Wisconsin Department of Safety and Professional Services
+      - listitem [ref=e23]:
+        - generic [ref=e24]: ✓
+        - generic [ref=e25]:
+          - strong [ref=e26]: General liability insurance
+          - text: — Minimum coverage to protect your property and investment
+      - listitem [ref=e27]:
+        - generic [ref=e28]: ✓
+        - generic [ref=e29]:
+          - strong [ref=e30]: Workers' compensation
+          - text: — Coverage for every crew member on your job site
+      - listitem [ref=e31]:
+        - generic [ref=e32]: ✓
+        - generic [ref=e33]:
+          - strong [ref=e34]: Track record
+          - text: — Proven history of completed residential deck projects in Central Wisconsin
+      - listitem [ref=e35]:
+        - generic [ref=e36]: ✓
+        - generic [ref=e37]:
+          - strong [ref=e38]: Customer references
+          - text: — Verified feedback from past homeowners
+    - paragraph [ref=e39]: We check these credentials before a builder joins — and we continue to monitor them over time. If a contractor doesn't meet our standards, they don't stay in the network.
+  - generic [ref=e41]:
+    - heading "Meet Our Builders" [level=2] [ref=e42]
+    - paragraph [ref=e43]: Licensed, insured, and local. Every builder in the network is vetted before they take a single project.
+    - list [ref=e45]:
+      - listitem [ref=e46]:
+        - link "Builder headshot John Garcia John Garcia Construction, LLC Central and Northern Wisconsin Custom decks, outdoor living spaces, multi-level builds WI DSPS 4011-DCFR" [ref=e47] [cursor=pointer]:
+          - /url: "#"
+          - img "Builder headshot" [ref=e49]
+          - heading "John Garcia" [level=3] [ref=e50]
+          - paragraph [ref=e51]: John Garcia Construction, LLC
+          - paragraph [ref=e52]: Central and Northern Wisconsin
+          - paragraph [ref=e53]: Custom decks, outdoor living spaces, multi-level builds
+          - paragraph [ref=e54]: WI DSPS 4011-DCFR
+      - listitem [ref=e55]:
+        - link "Builder headshot Ben Barton Barton Builders LLC Wausau, WI and surrounding Marathon County Custom decks, pergolas, screened porches, renovations Verified" [ref=e56] [cursor=pointer]:
+          - /url: "#"
+          - img "Builder headshot" [ref=e58]
+          - heading "Ben Barton" [level=3] [ref=e59]
+          - paragraph [ref=e60]: Barton Builders LLC
+          - paragraph [ref=e61]: Wausau, WI and surrounding Marathon County
+          - paragraph [ref=e62]: Custom decks, pergolas, screened porches, renovations
+          - paragraph [ref=e63]: Verified
+  - generic [ref=e65]:
+    - heading "Are You a Deck Contractor in Central Wisconsin?" [level=2] [ref=e66]
+    - paragraph [ref=e67]: We're building a network of trusted builders and connecting them with homeowners who are ready to start their deck projects. If you're licensed, insured, and looking for quality leads — we should talk.
+    - link "Join Our Builder Network" [ref=e68] [cursor=pointer]:
+      - /url: mailto:info@cwdeckbuilders.com?subject=Interested%20in%20joining%20CWDB%20builder%20network
+  - generic [ref=e70]:
+    - heading "Start your deck quote. 48-hour response from a local builder." [level=2] [ref=e71]
+    - link "Start My Quote →" [ref=e72] [cursor=pointer]:
+      - /url: /get-a-quote
+  - generic [ref=e75]:
+    - generic [ref=e76]:
+      - img "Central Wisconsin Deck Builders Logo" [ref=e77]
+      - generic [ref=e78]:
+        - link "Facebook" [ref=e79] [cursor=pointer]:
+          - /url: https://facebook.com
+          - img "Facebook" [ref=e80]
+        - link "Instagram" [ref=e82] [cursor=pointer]:
+          - /url: https://instagram.com
+          - img "Instagram" [ref=e83]
+        - link "Nextdoor" [ref=e85] [cursor=pointer]:
+          - /url: https://nextdoor.com
+          - img "Nextdoor" [ref=e86]
+    - generic [ref=e88]:
+      - heading "Service Areas" [level=4] [ref=e89]
+      - link "Wausau" [ref=e90] [cursor=pointer]:
+        - /url: /deck-builders-wausau
+      - link "Schofield" [ref=e91] [cursor=pointer]:
+        - /url: /deck-builders-schofield
+      - link "Weston" [ref=e92] [cursor=pointer]:
+        - /url: /deck-builders-weston
+      - link "Mosinee" [ref=e93] [cursor=pointer]:
+        - /url: /deck-builders-mosinee
+      - link "Merrill" [ref=e94] [cursor=pointer]:
+        - /url: /deck-builders-merrill
+    - generic [ref=e95]:
+      - heading "Company" [level=4] [ref=e96]
+      - link "About Us" [ref=e97] [cursor=pointer]:
+        - /url: /about
+      - link "Our Builders" [ref=e98] [cursor=pointer]:
+        - /url: /our-builders
+      - link "Gallery" [ref=e99] [cursor=pointer]:
+        - /url: /gallery
+      - link "FAQ" [ref=e100] [cursor=pointer]:
+        - /url: /faq
+      - link "Blog" [ref=e101] [cursor=pointer]:
+        - /url: /blog
+      - link "Cost Calculator" [ref=e102] [cursor=pointer]:
+        - /url: /cost-calculator
+    - generic [ref=e103]:
+      - heading "Contact" [level=4] [ref=e104]
+      - link "(715) 544-7941" [ref=e105] [cursor=pointer]:
+        - /url: tel:+17155447941
+      - link "Get a Free Quote" [ref=e106] [cursor=pointer]:
+        - /url: /get-a-quote
+      - paragraph [ref=e107]: Central Wisconsin
+      - paragraph [ref=e108]: Mon–Fri 8am–6pm CT
+    - paragraph [ref=e109]: © 2026 Central Wisconsin Deck Builders. All rights reserved.
+    - generic [ref=e110]:
+      - link "Privacy Policy" [ref=e111] [cursor=pointer]:
+        - /url: /privacy
+      - link "Terms of Service" [ref=e112] [cursor=pointer]:
+        - /url: /terms
+  - generic [ref=e113]:
+    - link "GET YOUR FREE QUOTE →" [ref=e114] [cursor=pointer]:
+      - /url: /get-a-quote
+    - button "Dismiss" [ref=e115] [cursor=pointer]: ×

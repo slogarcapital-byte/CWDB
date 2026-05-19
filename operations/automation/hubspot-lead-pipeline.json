@@ -1,0 +1,283 @@
+{
+  "crm": "HubSpot",
+  "pipeline_name": "Homeowner Leads",
+  "pipeline_internal_name": "homeowner_leads",
+  "description": "Tracks inbound homeowner deck project leads from initial capture through job award. Separate from the Contractor Sales pipeline (which tracks contractor prospect outreach). Stage structure refined 2026-05-04 by Jim to match actual contractor process — bid lifecycle split into Creating → Delivered → Accepted (three distinct contractor activities, not one).",
+  "object_type": "deals",
+  "setup_status": "in_progress_jim_building",
+  "setup_notes": [
+    "1. HubSpot → Settings → Objects → Deals → Pipelines tab → Create pipeline",
+    "2. Name: 'Homeowner Leads'. Add the 9 stages below in order.",
+    "3. After save, click into each stage to grab stage IDs from URL; paste back here.",
+    "4. Settings → Properties → Deal properties → Create property — add the 10 custom deal properties listed in custom_deal_properties_needed.",
+    "5. Update this file with real pipeline_id and stage_ids."
+  ],
+  "pipeline_id": "[TO_BE_FILLED_AFTER_HUBSPOT_CREATION]",
+  "stages": [
+    {
+      "order": 1,
+      "name": "New Lead",
+      "internal_name": "new_lead",
+      "stage_id": "[TO_BE_FILLED]",
+      "description": "Lead received from Webflow form. Not yet scored or qualified.",
+      "win_probability": 10,
+      "automated_entry": true,
+      "entry_trigger": "Webflow form submit → HubSpot workflow creates deal here"
+    },
+    {
+      "order": 2,
+      "name": "Qualified",
+      "internal_name": "qualified",
+      "stage_id": "[TO_BE_FILLED]",
+      "description": "Lead passed scoring threshold (60+/100). Ready to route.",
+      "win_probability": 20,
+      "automated_entry": true,
+      "entry_trigger": "lead_score field >= 60 (HubSpot workflow auto-advances)"
+    },
+    {
+      "order": 3,
+      "name": "Scheduled / Delivered to Contractor",
+      "internal_name": "scheduled_delivered_to_contractor",
+      "stage_id": "[TO_BE_FILLED]",
+      "description": "Lead routed to active contractor(s) via email + SMS. Contractor schedules site visit with homeowner.",
+      "win_probability": 30,
+      "automated_entry": true,
+      "entry_trigger": "Lead qualifies (score >= 60) and contractor notifications are sent"
+    },
+    {
+      "order": 4,
+      "name": "Creating Bid",
+      "internal_name": "creating_bid",
+      "stage_id": "[TO_BE_FILLED]",
+      "description": "Contractor has visited site / gathered specs and is actively writing the bid.",
+      "win_probability": 50,
+      "automated_entry": false,
+      "note": "Manual update by contractor (or Jim relaying contractor status). Trigger candidate: 48h reminder if still in this stage."
+    },
+    {
+      "order": 5,
+      "name": "Delivered Bid",
+      "internal_name": "delivered_bid",
+      "stage_id": "[TO_BE_FILLED]",
+      "description": "Contractor has sent written bid to homeowner. Awaiting homeowner decision.",
+      "win_probability": 70,
+      "automated_entry": false,
+      "note": "Manual update by contractor. Trigger candidate: 7-day follow-up reminder if no response."
+    },
+    {
+      "order": 6,
+      "name": "Accepted Bid",
+      "internal_name": "accepted_bid",
+      "stage_id": "[TO_BE_FILLED]",
+      "description": "Homeowner accepted contractor's bid. Revenue event — contractor owes $1,000 referral fee. Invoice trigger.",
+      "win_probability": 90,
+      "automated_entry": false,
+      "note": "Manual update by contractor; triggers invoice workflow."
+    },
+    {
+      "order": 7,
+      "name": "Won - Contractor Payment Received",
+      "internal_name": "won_contractor_payment_received",
+      "stage_id": "[TO_BE_FILLED]",
+      "description": "Referral fee collected ($1,000). Deal closed. Revenue recognized.",
+      "win_probability": 100,
+      "automated_entry": false,
+      "is_closed_won": true,
+      "note": "Manual update by Jim once payment lands."
+    },
+    {
+      "order": 8,
+      "name": "Expired Bid - No Response",
+      "internal_name": "expired_bid_no_response",
+      "stage_id": "[TO_BE_FILLED]",
+      "description": "Bid was delivered but homeowner went cold or said 'still deciding' beyond reasonable window. Not yet truly lost — re-engagement candidate.",
+      "win_probability": 50,
+      "automated_entry": false,
+      "note": "Holding stage for warm-revisit. NOT marked Closed Lost — still resurrectable. NOTE 2026-05-04: 50% win prob is Jim's initial estimate; revisit after first 10 leads land actual conversion data."
+    },
+    {
+      "order": 9,
+      "name": "Lost",
+      "internal_name": "lost",
+      "stage_id": "[TO_BE_FILLED]",
+      "description": "Bid was rejected or lead went cold permanently (no resurrection signal).",
+      "win_probability": 0,
+      "automated_entry": false,
+      "is_closed_lost": true
+    }
+  ],
+  "architecture_note_2026_05_05": "HubSpot forms cannot populate Deal properties — only Contact, Company, and Ticket. Form-fillable lead detail therefore lives on Contact. A Workflow triggered on form submission creates a Deal in this pipeline at New Lead stage and associates it to the Contact. Deal properties below are only deal-lifecycle metadata managed by workflows or manual updates as the deal progresses through stages.",
+  "custom_contact_properties_needed": [
+    {
+      "internal_name": "project_type",
+      "label": "Project Type",
+      "type": "enumeration",
+      "group": "leadinformation",
+      "form_fillable": true,
+      "options": [
+        "New deck build",
+        "Deck replacement",
+        "Deck repair",
+        "Deck addition / expansion",
+        "Not sure yet"
+      ]
+    },
+    {
+      "internal_name": "budget_range",
+      "label": "Budget Range",
+      "type": "enumeration",
+      "group": "leadinformation",
+      "form_fillable": true,
+      "options": [
+        "Under $5,000",
+        "$5,000 – $10,000",
+        "$10,000 – $20,000",
+        "$20,000 – $40,000",
+        "$40,000+"
+      ]
+    },
+    {
+      "internal_name": "project_timeline",
+      "label": "Project Timeline",
+      "type": "enumeration",
+      "group": "leadinformation",
+      "form_fillable": true,
+      "options": [
+        "As soon as possible",
+        "Within 1–3 months",
+        "3–6 months",
+        "Just planning ahead"
+      ]
+    },
+    {
+      "internal_name": "lead_notes",
+      "label": "Lead Notes",
+      "type": "textarea",
+      "group": "leadinformation",
+      "form_fillable": true,
+      "description": "Homeowner's additional project notes from the quote form"
+    },
+    {
+      "internal_name": "owns_property",
+      "label": "Owns Property",
+      "type": "enumeration",
+      "group": "leadinformation",
+      "form_fillable": true,
+      "options": ["Yes", "No", "Not sure"],
+      "description": "Whether homeowner owns the property where deck will be built (qualification field)"
+    },
+    {
+      "internal_name": "source_city",
+      "label": "Source City",
+      "type": "enumeration",
+      "group": "leadinformation",
+      "form_fillable": false,
+      "options": ["Wausau", "Schofield", "Weston", "Mosinee", "Merrill", "Other"],
+      "description": "Auto-derived from form ZIP via workflow"
+    },
+    {
+      "internal_name": "utm_source",
+      "label": "UTM Source",
+      "type": "single_line_text",
+      "group": "leadinformation",
+      "form_fillable": true,
+      "hidden_field": true,
+      "description": "Captured from URL utm_source on form submit (hidden field, populated by JS)"
+    },
+    {
+      "internal_name": "utm_campaign",
+      "label": "UTM Campaign",
+      "type": "single_line_text",
+      "group": "leadinformation",
+      "form_fillable": true,
+      "hidden_field": true,
+      "description": "Captured from URL utm_campaign on form submit (hidden field, populated by JS)"
+    },
+    {
+      "internal_name": "gclid",
+      "label": "GCLID",
+      "type": "single_line_text",
+      "group": "leadinformation",
+      "form_fillable": true,
+      "hidden_field": true,
+      "description": "Google Click ID captured from URL on form submit; required for offline conversion sync"
+    },
+    {
+      "internal_name": "tcpa_consent_given",
+      "label": "TCPA Consent Given",
+      "type": "boolean_checkbox",
+      "group": "leadinformation",
+      "form_fillable": true,
+      "description": "Homeowner consented to TCPA terms (SMS/phone contact)"
+    },
+    {
+      "internal_name": "lead_source_page",
+      "label": "Lead Source Page",
+      "type": "single_line_text",
+      "group": "leadinformation",
+      "form_fillable": true,
+      "hidden_field": true,
+      "description": "Which page the form was submitted from (page_source value)"
+    }
+  ],
+  "custom_deal_properties_needed": [
+    {
+      "internal_name": "lead_score",
+      "label": "Lead Score",
+      "type": "number",
+      "group": "dealinformation",
+      "description": "Qualification score (0-100) assigned by routing logic. Workflow-managed."
+    },
+    {
+      "internal_name": "disqualification_reason",
+      "label": "Disqualification Reason",
+      "type": "single_line_text",
+      "group": "dealinformation",
+      "description": "Reason lead was disqualified. Workflow-managed; populated only on disqualified deals."
+    },
+    {
+      "internal_name": "matched_contractor",
+      "label": "Matched Contractor",
+      "type": "enumeration",
+      "group": "dealinformation",
+      "options": ["Barton Builders LLC", "John Garcia Construction LLC", "Both", "Other"],
+      "description": "Which contractor the lead was routed to. Workflow-managed at routing."
+    },
+    {
+      "internal_name": "routing_sent_at",
+      "label": "Routing Sent At",
+      "type": "datetime",
+      "group": "dealinformation",
+      "description": "Timestamp the lead was sent to contractor. Workflow-managed."
+    },
+    {
+      "internal_name": "first_response_window_hours",
+      "label": "First Response Window Hours",
+      "type": "number",
+      "group": "dealinformation",
+      "description": "Hours between routing and first contractor response (SLA tracking). Workflow-calculated."
+    },
+    {
+      "internal_name": "bid_amount",
+      "label": "Bid Amount",
+      "type": "number",
+      "field_subtype": "currency",
+      "group": "dealinformation",
+      "description": "Contractor bid amount (manually entered when bid created)."
+    },
+    {
+      "internal_name": "referral_fee_invoiced_at",
+      "label": "Referral Fee Invoiced At",
+      "type": "datetime",
+      "group": "dealinformation",
+      "description": "Timestamp invoice was sent for $1000 referral fee. Workflow-managed at Accepted Bid stage."
+    },
+    {
+      "internal_name": "referral_fee_paid_at",
+      "label": "Referral Fee Paid At",
+      "type": "datetime",
+      "group": "dealinformation",
+      "description": "Timestamp $1000 referral payment received. Manual update by Jim at Won stage."
+    }
+  ]
+}

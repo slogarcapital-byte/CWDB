@@ -1,0 +1,53 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/jslog/OneDrive/Desktop/Slogars/CPA/**)",
+      "Read(//c/Users/jslog/OneDrive/Desktop/Slogars/**)",
+      "Bash(python -c \"from PIL import Image; print\\(''Pillow OK''\\); img = Image.open\\(''branding/visual-identity.png''\\); print\\(img.size\\)\")",
+      "Bash(python -c \":*)",
+      "Bash(find /c/Users/jslog/OneDrive/Desktop/Slogars/CPA/Slogar-Capital/Claude/Projects/CWDB -type d ! -path */.git/*)",
+      "WebSearch",
+      "WebFetch(domain:developers.tally.so)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:community.make.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(curl -s https://api.github.com/repos/ambrosius-ai/tally-js/git/trees/main?recursive=1)",
+      "Bash(curl -s https://api.github.com/repos/ambrosius-ai/tally-js/contents/src -H 'Accept: application/vnd.github.v3+json')",
+      "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); print\\(json.dumps\\([f.get\\(''''name'''',''''''''\\) for f in \\(data if isinstance\\(data,list\\) else []\\)], indent=2\\)\\)\")",
+      "mcp__claude_ai_Webflow__data_sites_tool",
+      "mcp__claude_ai_Webflow__de_page_tool",
+      "mcp__claude_ai_Webflow__element_tool",
+      "mcp__claude_ai_Webflow__element_snapshot_tool",
+      "mcp__claude_ai_Webflow__de_component_tool",
+      "mcp__claude_ai_Webflow__style_tool",
+      "mcp__claude_ai_Webflow__element_builder",
+      "Bash(unzip *)",
+      "Bash(mkdir -p \".claude/skills/hormozi-operator\")",
+      "Bash(cp \"/c/Users/jslog/Downloads/SKILL.md\" \".claude/skills/hormozi-operator/SKILL.md\")"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -File templates/scripts/session-start.ps1",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -File templates/scripts/session-end.ps1 > /dev/null 2>&1",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

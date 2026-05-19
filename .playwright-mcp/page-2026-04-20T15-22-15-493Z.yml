@@ -1,0 +1,178 @@
+- generic [active] [ref=e1]:
+  - text: "(function(){var s=document.createElement('style');s.id='cwdb';s.textContent='.header-wrap.scrolled{background-color:#323434!important;border-bottom-color:rgba(255,255,255,.05)!important}.cedar-strip{background-color:#83b2cf!important;background-image:linear-gradient(90deg,#83b2cf 0%,#9cc4db 40%,#83b2cf 70%,#6a9eba 100%)!important}.btn-primary{box-shadow:0 4px 24px rgba(229,76,0,.45)!important}.w-input:focus,.w-select:focus{border-color:#83b2cf!important;box-shadow:0 0 0 3px rgba(131,178,207,.2)!important;outline:none!important}';document.head.appendChild(s);})();"
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - link "Central Wisconsin Deck Builders Logo" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "Central Wisconsin Deck Builders Logo" [ref=e6]
+        - generic [ref=e7]:
+          - link "Our Builders" [ref=e8] [cursor=pointer]:
+            - /url: /our-builders
+          - button "Resources" [ref=e10] [cursor=pointer]:
+            - generic [ref=e11]: Resources
+          - link "About" [ref=e12] [cursor=pointer]:
+            - /url: /about
+        - generic [ref=e13]:
+          - link "(715) 544-7941" [ref=e14] [cursor=pointer]:
+            - /url: tel:+17155447941
+          - link "Start My Quote →" [ref=e15] [cursor=pointer]:
+            - /url: /get-a-quote
+      - text: 
+    - generic [ref=e16]:
+      - paragraph [ref=e17]: Central Wisconsin's Deck Experts
+      - heading "Your Dream Deck Starts with a Free Quote" [level=1] [ref=e18]
+      - generic [ref=e19]:
+        - link "Get Your Free Quote" [ref=e20] [cursor=pointer]:
+          - /url: /get-a-quote
+        - link "See how it works" [ref=e21] [cursor=pointer]:
+          - /url: https://link
+  - generic [ref=e23]:
+    - paragraph [ref=e24]: Legal
+    - heading "Privacy Policy" [level=2] [ref=e25]
+    - generic [ref=e26]:
+      - heading "Heading 1" [level=1] [ref=e27]
+      - heading "Heading 2" [level=2] [ref=e28]
+      - heading "Heading 3" [level=3] [ref=e29]
+      - heading "Heading 4" [level=4] [ref=e30]
+      - heading "Heading 5" [level=5] [ref=e31]
+      - heading "Heading 6" [level=6] [ref=e32]
+      - paragraph [ref=e33]: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+      - blockquote [ref=e34]: Block quote
+      - paragraph [ref=e35]: Ordered list
+      - list [ref=e36]:
+        - listitem [ref=e37]: Item 1
+        - listitem [ref=e38]: Item 2
+        - listitem [ref=e39]: Item 3
+      - paragraph [ref=e40]: Unordered list
+      - list [ref=e41]:
+        - listitem [ref=e42]: Item A
+        - listitem [ref=e43]: Item B
+        - listitem [ref=e44]: Item C
+      - paragraph [ref=e45]:
+        - link "Text link" [ref=e46] [cursor=pointer]:
+          - /url: https://university.webflow.com/lesson/add-and-nest-text-links-in-webflow
+      - paragraph [ref=e47]:
+        - strong [ref=e48]: Bold text
+      - paragraph [ref=e49]:
+        - emphasis [ref=e50]: Emphasis
+      - paragraph [ref=e51]:
+        - superscript [ref=e52]: Superscript
+      - paragraph [ref=e53]:
+        - subscript [ref=e54]: Subscript
+  - generic [ref=e56]:
+    - paragraph [ref=e57]: GET A FREE QUOTE
+    - heading "Ready to Start Your Deck Project?" [level=2] [ref=e58]
+    - paragraph [ref=e59]: Tell us about your project. A trusted local builder will reach out within 24 hours.
+    - form "Quote Request" [ref=e61]:
+      - generic [ref=e62]:
+        - generic [ref=e63]:
+          - generic [ref=e64]: Name*
+          - textbox "Name* Phone Number*" [ref=e65]:
+            - /placeholder: Jane Doe
+        - generic [ref=e66]:
+          - generic [ref=e67]: Phone Number*
+          - textbox "(715) 555-5555" [ref=e68]
+      - generic [ref=e70]:
+        - generic [ref=e71]: Email Address*
+        - textbox "Email Address*" [ref=e72]:
+          - /placeholder: jane.doe@email.com
+      - generic [ref=e74]:
+        - generic [ref=e75]: Property Address*
+        - textbox "Property Address*" [ref=e76]:
+          - /placeholder: 123 Main St. Wausau, WI 54401
+      - generic [ref=e77]:
+        - generic [ref=e78]:
+          - generic [ref=e79]: Property Ownership?*
+          - combobox "Property Ownership?*" [ref=e80]:
+            - option "Select one..." [selected]
+            - option "Own"
+            - option "Rent"
+        - generic [ref=e81]:
+          - generic [ref=e82]: Type of project?*
+          - combobox "Type of project?*" [ref=e83]:
+            - option "Select one..." [selected]
+            - option "Own"
+            - option "Rent"
+      - generic [ref=e84]:
+        - generic [ref=e85]:
+          - generic [ref=e86]: Estimated budget?*
+          - combobox "Estimated budget?*" [ref=e87]:
+            - option "Select one..." [selected]
+            - option "Own"
+            - option "Rent"
+        - generic [ref=e88]:
+          - generic [ref=e89]: When to start?*
+          - combobox "When to start?*" [ref=e90]:
+            - option "Select one..." [selected]
+            - option "Own"
+            - option "Rent"
+      - generic [ref=e92]:
+        - generic [ref=e93]: Anything else we should know? (optional)
+        - textbox "Anything else we should know? (optional)" [ref=e94]:
+          - /placeholder: description, custom requests, dimensions, etc.
+      - generic [ref=e95]:
+        - generic [ref=e96] [cursor=pointer]:
+          - checkbox "I agree to receive calls, text messages, and emails from Central Wisconsin Deck Builders, LLC and its contractor partners about my project request. Consent is not a condition of receiving a quote. Msg & data rates may apply. Reply STOP to opt out." [ref=e97]
+          - generic [ref=e98]: I agree to receive calls, text messages, and emails from Central Wisconsin Deck Builders, LLC and its contractor partners about my project request. Consent is not a condition of receiving a quote. Msg & data rates may apply. Reply STOP to opt out.
+        - paragraph [ref=e99]: By checking the box above and clicking "Get My Free Quote," you provide your prior express written consent for Central Wisconsin Deck Builders, LLC ("CWDB") and its local contractor partners to contact you at the phone number and email address you provided. This may include calls, text messages (including SMS and MMS), and emails regarding your deck project inquiry, quotes, and scheduling. Calls and texts may be made using automated technology or prerecorded messages. Your consent is not a condition of purchasing any goods or services, and you may revoke your consent at any time by replying STOP to any text message, calling (715) XXX-XXXX, or emailing info@cwdeckbuilders.com. Standard message and data rates may apply. Message frequency varies.
+        - link "View our Privacy Policy" [ref=e100] [cursor=pointer]:
+          - /url: /privacy
+      - button "Request a Quote" [ref=e101] [cursor=pointer]
+      - paragraph [ref=e102]: Your info is private. No spam, no obligation.
+  - generic [ref=e105]:
+    - generic [ref=e106]:
+      - img "Central Wisconsin Deck Builders Logo" [ref=e107]
+      - link "(715) 544-7941" [ref=e108] [cursor=pointer]:
+        - /url: tel:+17155447941
+      - generic [ref=e109]:
+        - link "Facebook" [ref=e110] [cursor=pointer]:
+          - /url: https://facebook.com
+          - img "Facebook" [ref=e111]
+        - link "Instagram" [ref=e113] [cursor=pointer]:
+          - /url: https://instagram.com
+          - img "Instagram" [ref=e114]
+        - link "Nextdoor" [ref=e116] [cursor=pointer]:
+          - /url: https://nextdoor.com
+          - img "Nextdoor" [ref=e117]
+    - generic [ref=e119]:
+      - heading "Service Areas" [level=4] [ref=e120]
+      - link "Wausau" [ref=e121] [cursor=pointer]:
+        - /url: /deck-builders-wausau
+      - link "Schofield" [ref=e122] [cursor=pointer]:
+        - /url: /deck-builders-schofield
+      - link "Weston" [ref=e123] [cursor=pointer]:
+        - /url: /deck-builders-weston
+      - link "Mosinee" [ref=e124] [cursor=pointer]:
+        - /url: /deck-builders-mosinee
+      - link "Merrill" [ref=e125] [cursor=pointer]:
+        - /url: /deck-builders-merrill
+    - generic [ref=e126]:
+      - heading "Company" [level=4] [ref=e127]
+      - link "About Us" [ref=e128] [cursor=pointer]:
+        - /url: /about
+      - link "Our Builders" [ref=e129] [cursor=pointer]:
+        - /url: /our-builders
+      - link "Gallery" [ref=e130] [cursor=pointer]:
+        - /url: /gallery
+      - link "FAQ" [ref=e131] [cursor=pointer]:
+        - /url: /faq
+      - link "Blog" [ref=e132] [cursor=pointer]:
+        - /url: /blog
+      - link "Cost Calculator" [ref=e133] [cursor=pointer]:
+        - /url: /cost-calculator
+    - generic [ref=e134]:
+      - heading "Contact" [level=4] [ref=e135]
+      - link "(715) 544-7941" [ref=e136] [cursor=pointer]:
+        - /url: tel:+17155447941
+      - link "Get a Free Quote" [ref=e137] [cursor=pointer]:
+        - /url: /get-a-quote
+      - paragraph [ref=e138]: Central Wisconsin
+      - paragraph [ref=e139]: Mon–Fri 8am–6pm CT
+    - paragraph [ref=e140]: © 2026 Central Wisconsin Deck Builders. All rights reserved.
+    - generic [ref=e141]:
+      - link "Privacy Policy" [ref=e142] [cursor=pointer]:
+        - /url: /privacy
+      - link "Terms of Service" [ref=e143] [cursor=pointer]:
+        - /url: /terms
+  - text: "(function(){var h=document.querySelector('.header-wrap');if(!h)return;window.addEventListener('scroll',function(){h.classList.toggle('scrolled',window.scrollY>80);},{passive:true});})();"

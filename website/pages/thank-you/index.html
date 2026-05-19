@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thank You | Central Wisconsin Deck Builders</title>
+  <meta name="description" content="Your deck quote request has been received. Here's what happens next." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href="https://cwdeckbuilders.com/thank-you" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Thank You | Central Wisconsin Deck Builders" />
+  <meta property="og:description" content="Your deck quote request has been received. Here's what happens next." />
+  <meta property="og:image" content="https://cwdeckbuilders.com/images/og-image.jpg" />
+  <meta property="og:url" content="https://cwdeckbuilders.com/thank-you" />
+  <meta property="og:type" content="website" />
+
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ===== DESIGN SYSTEM TOKENS ===== */
+    :root {
+      --orange:       #e54c00;
+      --orange-hover: #cc4300;
+      --orange-active: #b33a00;
+      --slate:        #323434;
+      --grey:         #646760;
+      --sky:          #83b2cf;
+      --sky-tint:     rgba(131, 178, 207, 0.10);
+      --cedar:        #8B5A2B;
+      --cedar-light:  rgba(139, 90, 43, 0.15);
+      --off-white:    #f8f8f6;
+      --white:        #ffffff;
+      --success:      #2e7d32;
+      --font-heading: 'Barlow Condensed', sans-serif;
+      --font-body:    'Inter', sans-serif;
+      --max-width:    1200px;
+      --content-width: 720px;
+    }
+
+    /* ===== RESET ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--slate);
+      background: var(--white);
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ===== LAYOUT ===== */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .container--narrow {
+      max-width: var(--content-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 72px;
+      z-index: 1000;
+      background: rgba(50, 52, 52, 0.65);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      transition: background 300ms ease;
+    }
+    .header.scrolled {
+      background: rgba(50, 52, 52, 0.97);
+      border-bottom-color: rgba(255, 255, 255, 0.05);
+    }
+    .header__inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header__logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .logo-emblem {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+    .logo-text { display: flex; flex-direction: column; gap: 1px; }
+    .logo-main {
+      font-family: var(--font-heading);
+      font-size: 22px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--white);
+      line-height: 1;
+    }
+    .logo-sub {
+      font-size: 9px;
+      color: var(--sky);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+    .header__nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+    .header__nav a {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: none;
+      transition: color 200ms ease;
+    }
+    .header__nav a:hover { color: var(--sky); }
+
+    /* Mobile header */
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+    }
+
+    /* Mobile menu overlay */
+    .m-menu-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--slate);
+      z-index: 9999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+    }
+    .m-menu-overlay.open { display: flex; }
+    .m-menu-overlay a {
+      font-family: var(--font-heading);
+      font-size: 32px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--white);
+      letter-spacing: 1px;
+    }
+    .m-menu-overlay a:hover { color: var(--sky); }
+    .m-menu-close {
+      position: absolute;
+      top: 20px; right: 24px;
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 32px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    /* ===== CONFIRMATION HERO ===== */
+    .confirm-hero {
+      min-height: 60vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 140px 24px 96px;
+      background: linear-gradient(135deg, #1e2820 0%, #2e2a20 35%, #1c1e20 70%, #16181c 100%);
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+    .confirm-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        180deg,
+        transparent 0px, transparent 34px,
+        rgba(0,0,0,0.06) 34px, rgba(0,0,0,0.06) 36px
+      );
+      opacity: 0.4;
+    }
+    .confirm-hero__content {
+      position: relative;
+      z-index: 1;
+      max-width: 640px;
+    }
+    .confirm-check {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--orange);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      box-shadow: 0 4px 24px rgba(229, 76, 0, 0.45);
+      flex-shrink: 0;
+    }
+    .confirm-check svg {
+      width: 32px;
+      height: 32px;
+    }
+    .confirm-hero h1 {
+      font-family: var(--font-heading);
+      font-size: 52px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      line-height: 1.05;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+    .confirm-hero p {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.82);
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Cedar strip between hero and content */
+    .cedar-strip {
+      height: 6px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--cedar) 0, var(--cedar) 20px,
+        rgba(139, 90, 43, 0.3) 20px, rgba(139, 90, 43, 0.3) 24px
+      );
+      width: 100%;
+    }
+
+    /* ===== WHAT HAPPENS NEXT ===== */
+    .next-section {
+      background: var(--white);
+      padding: 88px 0;
+    }
+    .section__label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--orange);
+      margin-bottom: 12px;
+    }
+    .section__heading {
+      font-family: var(--font-heading);
+      font-size: 40px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--slate);
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+    .section__sub {
+      font-size: 18px;
+      color: var(--grey);
+      max-width: 560px;
+      margin: 0 auto 56px;
+      line-height: 1.6;
+    }
+    .next-section .container--narrow { text-align: center; }
+
+    /* Vertical timeline */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .timeline-step {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      width: 100%;
+      text-align: left;
+    }
+    .timeline-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .step-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--orange);
+      color: var(--white);
+      font-family: var(--font-heading);
+      font-size: 22px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 12px rgba(229, 76, 0, 0.3);
+      flex-shrink: 0;
+    }
+    .step-connector {
+      width: 2px;
+      flex: 1;
+      min-height: 32px;
+      background: linear-gradient(180deg, var(--cedar) 0%, rgba(139, 90, 43, 0.2) 100%);
+      margin-top: 6px;
+    }
+    .timeline-content {
+      padding: 4px 0 40px;
+    }
+    .timeline-step:last-child .timeline-content {
+      padding-bottom: 0;
+    }
+    .step-time {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--orange);
+      background: rgba(229, 76, 0, 0.10);
+      border: 1px solid rgba(229, 76, 0, 0.22);
+      padding: 2px 10px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+    }
+    .step-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--slate);
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+    .step-body {
+      font-size: 15px;
+      color: var(--grey);
+      line-height: 1.6;
+    }
+
+    /* ===== WHILE YOU WAIT ===== */
+    .wait-section {
+      background: var(--off-white);
+      padding: 88px 0;
+    }
+    .wait-section .container--narrow { text-align: center; }
+    .wait-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 48px;
+      text-align: left;
+    }
+    .wait-card {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 20px 24px;
+      border-left: 3px solid var(--sky);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      transition: all 200ms ease;
+      text-decoration: none;
+    }
+    .wait-card:hover {
+      background: var(--white);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+      transform: translateX(4px);
+    }
+    .wait-card__body {}
+    .wait-card__label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--sky);
+      margin-bottom: 6px;
+    }
+    .wait-card__title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--slate);
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .wait-card__desc {
+      font-size: 14px;
+      color: var(--grey);
+      line-height: 1.5;
+    }
+    .wait-card__arrow {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--orange);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ===== CONTACT SECTION ===== */
+    .contact-section {
+      background: var(--white);
+      padding: 88px 0;
+      text-align: center;
+    }
+    .contact-section .section__sub {
+      margin-bottom: 36px;
+    }
+    .contact-methods {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      color: var(--slate);
+    }
+    .contact-item svg {
+      width: 20px;
+      height: 20px;
+      color: var(--sky);
+      flex-shrink: 0;
+    }
+    .contact-item a {
+      color: var(--orange);
+      font-weight: 500;
+      text-decoration: none;
+    }
+    .contact-item a:hover { text-decoration: underline; }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: var(--slate);
+      padding: 64px 0 0;
+      color: var(--white);
+    }
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 48px;
+    }
+    .footer__brand {}
+    .footer__logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      text-decoration: none;
+    }
+    .footer__tagline {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.55);
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+    .footer__socials {
+      display: flex;
+      gap: 10px;
+    }
+    .social-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(131, 178, 207, 0.28);
+      background: rgba(131, 178, 207, 0.07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 200ms ease;
+      color: var(--sky);
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .social-btn:hover {
+      background: rgba(131, 178, 207, 0.18);
+      border-color: var(--sky);
+    }
+    .social-btn svg { width: 18px; height: 18px; }
+    .footer__col-heading {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+    .footer__links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .footer__links a {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      line-height: 2.2;
+      transition: color 200ms ease;
+    }
+    .footer__links a:hover { color: var(--white); }
+    .footer__bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 20px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer__copy {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+    .footer__legal {
+      display: flex;
+      gap: 20px;
+    }
+    .footer__legal a {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.4);
+      text-decoration: none;
+      transition: color 200ms ease;
+    }
+    .footer__legal a:hover { color: rgba(255, 255, 255, 0.8); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 767px) {
+      .header__nav { display: none; }
+      .hamburger { display: flex; }
+
+      .confirm-hero { padding: 120px 24px 72px; }
+      .confirm-hero h1 { font-size: 36px; }
+      .confirm-hero p { font-size: 16px; }
+
+      .next-section, .wait-section, .contact-section { padding: 64px 0; }
+      .section__heading { font-size: 28px; }
+      .section__sub { font-size: 16px; }
+
+      .wait-card { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .wait-card__arrow { align-self: flex-end; }
+
+      .contact-methods { flex-direction: column; align-items: center; gap: 20px; }
+
+      .footer__grid { grid-template-columns: 1fr 1fr; gap: 36px; }
+      .footer__bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
+    }
+
+    @media (max-width: 480px) {
+      .footer__grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- GTM noscript -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<!-- WEBFLOW COMPONENT: header -->
+<!-- ===== HEADER ===== -->
+<header class="header" id="header">
+  <div class="header__inner">
+    <a href="/" class="header__logo">
+      <svg class="logo-emblem" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="36" height="36" rx="8" fill="#323434"/>
+        <!-- Pine tree icon -->
+        <polygon points="18,5 26,20 10,20" fill="#e54c00" opacity="0.95"/>
+        <polygon points="18,11 27,25 9,25" fill="#e54c00" opacity="0.75"/>
+        <rect x="16" y="25" width="4" height="6" fill="#e54c00" opacity="0.6"/>
+      </svg>
+      <div class="logo-text">
+        <span class="logo-main">CWDB</span>
+        <span class="logo-sub">Central Wisconsin Deck Builders</span>
+      </div>
+    </a>
+
+    <ul class="header__nav">
+      <li><a href="/">Home</a></li>
+      <li><a href="/faq">FAQ</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile Menu Overlay -->
+<div class="m-menu-overlay" id="m-menu">
+  <button class="m-menu-close" id="m-menu-close" aria-label="Close menu">&times;</button>
+  <a href="/">Home</a>
+  <a href="/faq">FAQ</a>
+  <a href="/about">About</a>
+  <a href="/get-a-quote">Get a Quote</a>
+</div>
+<!-- /WEBFLOW COMPONENT: header -->
+
+<!-- WEBFLOW COMPONENT: hero-section-confirmation -->
+<!-- ===== CONFIRMATION HERO ===== -->
+<section class="confirm-hero">
+  <div class="confirm-hero__content">
+    <div class="confirm-check">
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6,16 13,23 26,9"/>
+      </svg>
+    </div>
+    <h1>You're All Set — Your Quote Request Is In</h1>
+    <p>Thanks for reaching out. We've received your project details and a vetted local contractor will be in touch soon.</p>
+  </div>
+</section>
+<!-- /WEBFLOW COMPONENT: hero-section-confirmation -->
+
+<!-- WEBFLOW COMPONENT: cedar-strip -->
+<div class="cedar-strip"></div>
+<!-- /WEBFLOW COMPONENT: cedar-strip -->
+
+<!-- WEBFLOW COMPONENT: process-section-vertical -->
+<!-- ===== WHAT HAPPENS NEXT ===== -->
+<section class="next-section">
+  <div class="container--narrow">
+    <p class="section__label">Your timeline</p>
+    <h2 class="section__heading">Here's What to Expect</h2>
+    <p class="section__sub">We've got your project details. Here's exactly what happens from here.</p>
+
+    <div class="timeline">
+
+      <!-- Step 1 -->
+      <div class="timeline-step">
+        <div class="timeline-left">
+          <div class="step-circle">1</div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="timeline-content">
+          <span class="step-time">Right now</span>
+          <div class="step-title">We're Reviewing Your Project</div>
+          <p class="step-body">Our team is looking over your details to match you with the right contractor for your deck project.</p>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="timeline-step">
+        <div class="timeline-left">
+          <div class="step-circle">2</div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="timeline-content">
+          <span class="step-time">Within 24 hours</span>
+          <div class="step-title">A Contractor Will Reach Out</div>
+          <p class="step-body">A licensed, insured deck builder in your area will contact you to discuss your project and provide a detailed quote. Most homeowners hear back the same day.</p>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="timeline-step">
+        <div class="timeline-left">
+          <div class="step-circle">3</div>
+        </div>
+        <div class="timeline-content">
+          <span class="step-time">Whenever you're ready</span>
+          <div class="step-title">You're in Control</div>
+          <p class="step-body">Review the quote on your own time. Ask questions. Compare options. There's no obligation and no pressure — move forward only when it feels right.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+<!-- /WEBFLOW COMPONENT: process-section-vertical -->
+
+<!-- WEBFLOW COMPONENT: links-section-blog -->
+<!-- ===== WHILE YOU WAIT ===== -->
+<section class="wait-section">
+  <div class="container--narrow">
+    <p class="section__label">Recommended reading</p>
+    <h2 class="section__heading">While You Wait</h2>
+    <p class="section__sub">Get a head start on planning your deck project with these guides.</p>
+
+    <div class="wait-cards">
+
+      <a href="/blog/composite-vs-pressure-treated" class="wait-card">
+        <div class="wait-card__body">
+          <div class="wait-card__label">Material Guide</div>
+          <div class="wait-card__title">Composite vs. Pressure-Treated: Which Material Is Right for You?</div>
+          <div class="wait-card__desc">Learn the pros, cons, and costs of the most popular decking materials.</div>
+        </div>
+        <span class="wait-card__arrow">Read →</span>
+      </a>
+
+      <a href="/blog/deck-permits-wisconsin" class="wait-card">
+        <div class="wait-card__body">
+          <div class="wait-card__label">Permits & Rules</div>
+          <div class="wait-card__title">Do You Need a Permit to Build a Deck in Wisconsin?</div>
+          <div class="wait-card__desc">Find out when a permit is required and how the process works.</div>
+        </div>
+        <span class="wait-card__arrow">Read →</span>
+      </a>
+
+      <a href="/blog/deck-cost-central-wisconsin" class="wait-card">
+        <div class="wait-card__body">
+          <div class="wait-card__label">Cost Guide</div>
+          <div class="wait-card__title">How Much Does a Deck Cost in Central Wisconsin?</div>
+          <div class="wait-card__desc">Get realistic price ranges for different deck sizes and materials.</div>
+        </div>
+        <span class="wait-card__arrow">Read →</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+<!-- /WEBFLOW COMPONENT: links-section-blog -->
+
+<!-- WEBFLOW COMPONENT: contact-section-minimal -->
+<!-- ===== CONTACT ===== -->
+<section class="contact-section">
+  <div class="container--narrow">
+    <p class="section__label">We're here</p>
+    <h2 class="section__heading">Questions?</h2>
+    <p class="section__sub">If you need to update your request or have any questions, reach out anytime.</p>
+    <div class="contact-methods">
+      <div class="contact-item">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 3h16v11a2 2 0 01-2 2H4a2 2 0 01-2-2V3z"/>
+          <polyline points="2,3 10,11 18,3"/>
+        </svg>
+        <span><a href="mailto:info@cwdeckbuilders.com">info@cwdeckbuilders.com</a></span>
+      </div>
+      <div class="contact-item">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 4h3l1.5 3.5L8 9a11 11 0 004 4l1.5-1.5L17 13v3a1 1 0 01-1 1A15 15 0 013 4a1 1 0 011-1h1z"/>
+        </svg>
+        <span>Phone coming soon</span>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- /WEBFLOW COMPONENT: contact-section-minimal -->
+
+<!-- WEBFLOW COMPONENT: footer -->
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+
+      <!-- Col 1: Brand -->
+      <div class="footer__brand">
+        <a href="/" class="footer__logo">
+          <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
+            <rect width="36" height="36" rx="8" fill="#3d3f3f"/>
+            <polygon points="18,5 26,20 10,20" fill="#e54c00" opacity="0.95"/>
+            <polygon points="18,11 27,25 9,25" fill="#e54c00" opacity="0.75"/>
+            <rect x="16" y="25" width="4" height="6" fill="#e54c00" opacity="0.6"/>
+          </svg>
+          <div class="logo-text">
+            <span class="logo-main" style="font-size:18px;">CWDB</span>
+            <span class="logo-sub">Central Wisconsin Deck Builders</span>
+          </div>
+        </a>
+        <p class="footer__tagline">Fast Quotes. Trusted Builders.</p>
+        <div class="footer__socials">
+          <a href="#" class="social-btn" aria-label="Facebook">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M17 2H3a1 1 0 00-1 1v14a1 1 0 001 1h7.5v-6H8V9.5h2.5V7.5C10.5 5.6 11.7 4.5 13.4 4.5c.8 0 1.6.06 2.4.17V7h-1.5c-.9 0-1.1.44-1.1 1.09V9.5H16l-.5 2.5h-2V18H17a1 1 0 001-1V3a1 1 0 00-1-1z"/></svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="Instagram">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="14" height="14" rx="4"/>
+              <circle cx="10" cy="10" r="3.5"/>
+              <circle cx="14" cy="6" r="0.5" fill="currentColor"/>
+            </svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="Nextdoor">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 2L3 8v9h5v-5h4v5h5V8L10 2z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Col 2: Quick Links -->
+      <div>
+        <div class="footer__col-heading">Quick Links</div>
+        <ul class="footer__links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/get-a-quote">Get a Quote</a></li>
+          <li><a href="/our-builders">Our Builders</a></li>
+          <li><a href="/gallery">Gallery</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/faq">FAQ</a></li>
+          <li><a href="/blog">Blog</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: Service Areas -->
+      <div>
+        <div class="footer__col-heading">Service Areas</div>
+        <ul class="footer__links">
+          <li><a href="/wausau-deck-builders">Wausau</a></li>
+          <li><a href="/schofield-deck-builders">Schofield</a></li>
+          <li><a href="/weston-deck-builders">Weston</a></li>
+          <li><a href="/mosinee-deck-builders">Mosinee</a></li>
+          <li><a href="/merrill-deck-builders">Merrill</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 4: Contact -->
+      <div>
+        <div class="footer__col-heading">Contact</div>
+        <ul class="footer__links">
+          <li><a href="mailto:info@cwdeckbuilders.com">info@cwdeckbuilders.com</a></li>
+          <li><a href="#">Phone TBD</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer__bottom">
+      <span class="footer__copy">© 2026 Central Wisconsin Deck Builders. All rights reserved.</span>
+      <div class="footer__legal">
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- /WEBFLOW COMPONENT: footer -->
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+  // Header scroll opacity
+  var header = document.getElementById('header');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 60) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  }, { passive: true });
+
+  // Mobile menu
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.getElementById('m-menu').classList.add('open');
+  });
+  document.getElementById('m-menu-close').addEventListener('click', function() {
+    document.getElementById('m-menu').classList.remove('open');
+  });
+
+  // GTM: fire thank-you conversion event
+  if (window.dataLayer) {
+    window.dataLayer.push({
+      event: 'quote_form_submitted',
+      page: 'thank-you'
+    });
+  }
+</script>
+</body>
+</html>

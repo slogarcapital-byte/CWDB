@@ -1,4 +1,13 @@
-# Brand Discovery — Central Wisconsin Deck Builders
+---
+type: reference
+tags:
+  - type/reference
+created: 2026-03-11
+updated: 2026-04-16
+status: active
+---
+
+# Brand Discovery — [[Central Wisconsin Deck Builders LLC|Central Wisconsin Deck Builders]]
 
 Interview conducted: 2026-03-11
 
@@ -68,14 +77,14 @@ Every headline, CTA, and ad should implicitly or explicitly promise speed-to-con
 
 ### Color Palette
 
-| Role | Color | Hex (suggested) |
+| Role | Color Name | Hex |
 |---|---|---|
-| Primary | Charcoal / near-black | `#1C1C1E` |
-| Accent | Burnt orange / red-orange | `#E8521A` |
-| Secondary | Off-white / light gray | `#F5F5F0` |
-| Support | Medium gray | `#6B6B6B` |
+| Primary Accent | Crafted Orange | `#e54c00` |
+| Dark Base | Timber Slate | `#323434` |
+| Secondary Text | Builders Grey | `#646760` |
+| Sky Accent | Wisconsin Sky Blue | `#83b2cf` |
 
-**Rationale:** Milwaukee Tool-inspired. High contrast, trade-credible, pops on mobile ads. Orange signals urgency and action. Charcoal grounds it as professional.
+**Rationale:** Milwaukee Tool-inspired. High contrast, trade-credible, pops on mobile ads. Crafted Orange signals urgency and action. Timber Slate grounds it as professional. Wisconsin Sky Blue adds outdoor depth.
 
 ### Typography (recommended system)
 

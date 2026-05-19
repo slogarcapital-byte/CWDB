@@ -1,0 +1,104 @@
+- generic [ref=e2]:
+  - banner:
+    - generic [ref=e3]:
+      - link "Skip to Content" [ref=e4] [cursor=pointer]:
+        - /url: "#page"
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - link "John Garcia Construction" [ref=e11] [cursor=pointer]:
+            - /url: /
+            - img "John Garcia Construction" [ref=e12]
+          - navigation [ref=e15]:
+            - link "Home" [ref=e17] [cursor=pointer]:
+              - /url: /
+            - link "About" [ref=e19] [cursor=pointer]:
+              - /url: /about
+            - link "Our Process" [ref=e21] [cursor=pointer]:
+              - /url: /our-process
+            - link "Questions" [ref=e23] [cursor=pointer]:
+              - /url: /questions
+            - link "Contact" [ref=e25] [cursor=pointer]:
+              - /url: /contact
+        - link "Inquiries" [ref=e28] [cursor=pointer]:
+          - /url: /contact
+  - main [ref=e29]:
+    - article [ref=e30]:
+      - generic [ref=e37]:
+        - generic:
+          - img
+          - img
+      - generic [ref=e43]:
+        - generic [ref=e48]:
+          - generic [ref=e53]:
+            - heading "A Better Way to Build" [level=3] [ref=e54]
+            - paragraph [ref=e55]: Building or remodeling a home should feel organized, clear, and exciting. Our design-build approach keeps planning, communication, and construction under one roof so you always know what to expect.
+            - paragraph [ref=e56]
+            - paragraph [ref=e57]
+            - paragraph [ref=e58]
+            - paragraph [ref=e59]
+            - paragraph [ref=e60]
+            - paragraph [ref=e61]
+            - paragraph [ref=e62]
+          - paragraph [ref=e76]:
+            - text: Intentional Design
+            - text: Thoughtful planning from the start.
+          - paragraph [ref=e90]:
+            - text: Clear Communication
+            - text: Clear expectations and regular updates.
+          - paragraph [ref=e112]:
+            - text: Exceptional Craftsmanship
+            - text: Quality work built to last.
+        - generic:
+          - img
+          - img
+      - generic [ref=e118]:
+        - generic [ref=e123]:
+          - heading "Homes Designed and Built to Last" [level=3] [ref=e124]
+          - paragraph [ref=e125]: We specialize in custom homes, major renovations, and thoughtfully designed additions throughout Central and Northern Wisconsin.
+        - heading "Custom Homes" [level=4] [ref=e140]
+        - paragraph [ref=e146]: Thoughtfully designed homes built specifically for your property, lifestyle, and vision.
+        - heading "Major Remodels" [level=4] [ref=e161]
+        - paragraph [ref=e167]: Transforming existing homes with intentional design and exceptional craftsmanship.
+        - heading "Additions" [level=4] [ref=e182]
+        - paragraph [ref=e188]: Seamlessly expanding your home while maintaining architectural integrity.
+      - generic [ref=e194]:
+        - generic [ref=e208]:
+          - heading "Our Process" [level=1] [ref=e209]
+          - heading "A clear and organized approach from first conversation to final walkthrough." [level=3] [ref=e210]
+        - generic [ref=e215]:
+          - heading "01 Consultation" [level=4] [ref=e216]
+          - paragraph [ref=e217]: Every project begins with a conversation. During this meeting we discuss your goals, your property, and the vision you have for your home. This helps us determine the best approach and whether the project is a good fit moving forward.
+          - paragraph [ref=e218]
+        - generic [ref=e223]:
+          - heading "02 Pre-Construction" [level=4] [ref=e224]
+          - paragraph [ref=e225]: In the preconstruction phase we develop the design, refine the scope of work, and establish a clear budget. Planning thoroughly at this stage ensures the project moves forward efficiently and minimizes surprises during construction.
+        - generic [ref=e230]:
+          - heading "03 Construction" [level=4] [ref=e231]
+          - paragraph [ref=e232]: Once plans and details are finalized, construction begins. We coordinate the work, manage schedules, and maintain clear communication so you always understand progress and what comes next.
+        - generic [ref=e237]:
+          - heading "04 Post-Construction" [level=4] [ref=e238]
+          - paragraph [ref=e239]: As the project nears completion, we walk through the home together to ensure every detail meets expectations. Even after the project is finished, we remain available to address questions and support your new space.
+      - generic [ref=e245]:
+        - paragraph [ref=e259]: After years managing the construction of custom homes and major remodels throughout Central Wisconsin, John Garcia founded John Garcia Construction to create a more personal, transparent, and organized building experience for homeowners.
+        - heading "Meet John Garcia" [level=2] [ref=e265]
+        - link "Our Story" [ref=e270] [cursor=pointer]:
+          - /url: /about
+  - contentinfo [ref=e271]:
+    - generic [ref=e277]:
+      - generic [ref=e290]:
+        - paragraph [ref=e291]: "Service Area:"
+        - paragraph [ref=e292]: Central Wisconsin
+        - paragraph [ref=e293]: Northern Wisconsin
+      - generic [ref=e298]:
+        - paragraph [ref=e299]: Contact
+        - paragraph [ref=e300]:
+          - text: john@johngarciaconstruction.com
+          - text: (715) 567-0269
+      - paragraph [ref=e306]: Socials
+      - navigation [ref=e312]:
+        - link "Instagram" [ref=e313] [cursor=pointer]:
+          - /url: http://instagram.com/squarespace
+          - img [ref=e315]
+        - link "Facebook" [ref=e318] [cursor=pointer]:
+          - /url: http://facebook.com/squarespace
+          - img [ref=e320]

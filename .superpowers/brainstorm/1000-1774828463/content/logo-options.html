@@ -1,0 +1,142 @@
+<h2>Inverse Logo Options — Dark Header</h2>
+<p class="subtitle">All three versions shown on the actual Timber Slate background (#323434). Click a card to select your preferred direction.</p>
+
+<style>
+  .logo-cards {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .logo-card {
+    flex: 1;
+    min-width: 260px;
+    border: 2px solid #3a3a4a;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s;
+    background: #1e1e2e;
+  }
+  .logo-card:hover { border-color: #6060aa; transform: translateY(-2px); }
+  .logo-card.selected { border-color: #e54c00 !important; box-shadow: 0 0 0 3px rgba(229,76,0,0.3); }
+
+  .header-sim {
+    background: #323434;
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 3px solid #2a2a2a;
+  }
+  .header-sim img {
+    max-height: 70px;
+    width: auto;
+    display: block;
+  }
+  .horiz-logo { max-width: 100%; max-height: 44px !important; }
+
+  .card-footer {
+    padding: 14px 16px;
+  }
+  .card-footer h3 {
+    margin: 0 0 4px;
+    font-size: 15px;
+    color: #eee;
+  }
+  .card-footer p {
+    margin: 0;
+    font-size: 13px;
+    color: #999;
+    line-height: 1.4;
+  }
+  .option-label {
+    display: inline-block;
+    background: #e54c00;
+    color: white;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .divider { border: none; border-top: 1px solid #2a2a2a; margin: 6px 0; }
+  .logo-row { display: flex; gap: 0; }
+  .logo-row .header-sim { flex: 1; }
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #666;
+    margin: 0 0 3px;
+    font-weight: 600;
+  }
+</style>
+
+<div class="logo-cards">
+
+  <!-- OPTION A -->
+  <div class="logo-card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="header-sim">
+      <div>
+        <p class="section-label" style="color:#555;text-align:center">Stacked</p>
+        <img src="logo-primary-a.png" alt="Option A primary" />
+      </div>
+      <div>
+        <p class="section-label" style="color:#555;text-align:center">Horizontal</p>
+        <img src="logo-horizontal-a.png" class="horiz-logo" alt="Option A horizontal" />
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="option-label">A</span>
+      <h3>Full Orange</h3>
+      <p>All elements in Crafted Orange — state shape, text, and icon are unified. Grain lines become white for interior detail. Bold and high-contrast on dark.</p>
+    </div>
+  </div>
+
+  <!-- OPTION B -->
+  <div class="logo-card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="header-sim">
+      <div>
+        <p class="section-label" style="color:#555;text-align:center">Stacked</p>
+        <img src="logo-primary-b.png" alt="Option B primary" />
+      </div>
+      <div>
+        <p class="section-label" style="color:#555;text-align:center">Horizontal</p>
+        <img src="logo-horizontal-b.png" class="horiz-logo" alt="Option B horizontal" />
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="option-label">B</span>
+      <h3>Sky Blue + Orange</h3>
+      <p>State shape and text in Wisconsin Sky Blue (#83b2cf). Grain lines and outline stay Crafted Orange. Two-tone outdoor feel — sky and fire.</p>
+    </div>
+  </div>
+
+  <!-- OPTION C -->
+  <div class="logo-card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="header-sim">
+      <div>
+        <p class="section-label" style="color:#555;text-align:center">Stacked</p>
+        <img src="logo-primary-c.png" alt="Option C primary" />
+      </div>
+      <div>
+        <p class="section-label" style="color:#555;text-align:center">Horizontal</p>
+        <img src="logo-horizontal-c.png" class="horiz-logo" alt="Option C horizontal" />
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="option-label">C</span>
+      <h3>White + Orange Accents</h3>
+      <p>State shape and text in white. Grain lines and outline in Crafted Orange. Clean, premium feel — classic "light version" of the logo for dark backgrounds.</p>
+    </div>
+  </div>
+
+</div>
+
+<p style="margin-top:18px;font-size:13px;color:#666;">
+  <strong style="color:#999">Note:</strong> The source logos use the same color for both the Wisconsin state shape and the text, so they're remapped together. To independently color text vs. icon (e.g., orange text + blue state), we'd need to recreate the logo in SVG — happy to do that if you want that option.
+</p>

@@ -1,4 +1,15 @@
-# Central Wisconsin Deck Builders - Facebook Ad Copy Variants
+---
+type: reference
+tags:
+  - type/reference
+  - dept/marketing
+  - platform/meta-ads
+created: 2026-03-11
+updated: 2026-04-16
+status: active
+---
+
+# [[Central Wisconsin Deck Builders LLC|Central Wisconsin Deck Builders]] - Facebook Ad Copy Variants
 
 **Author:** Manus AI
 **Date:** March 11, 2026
@@ -26,7 +37,7 @@ Facebook/Instagram ads will focus on both **lifestyle** (inspiring homeowners wi
 ### Ad Set 3: Local Expertise & Trust
 
 **Headline:** Local Central WI Deck Pros, Ready to Build!
-**Primary Text:** Support local and get the deck you deserve. We partner with the best deck builders in Wausau, Stevens Point, and surrounding areas. Quality craftsmanship, guaranteed. 
+**Primary Text:** Support local and get the deck you deserve. We partner with the best deck builders in [[Wausau]], Stevens Point, and surrounding areas. Quality craftsmanship, guaranteed. 
 **Call to Action:** Find a Builder
 **Visual Idea:** Image showcasing craftsmanship (e.g., close-up of quality wood, a builder working) or a map pin over Central Wisconsin.
 

@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>CWDB Launch 2026-04 · Problem/Solution · 1920x1080 (16:9)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Staatliches&display=swap">
+  <style>
+    :root {
+      --cwdb-orange:    #e54c00;
+      --cwdb-slate:     #323434;
+      --cwdb-grey:      #646760;
+      --cwdb-off-white: #f8f8f6;
+      --cwdb-white:     #ffffff;
+      --cwdb-font-display: 'Staatliches', sans-serif;
+      --cwdb-font-body:    'Public Sans', sans-serif;
+    }
+    html, body { margin: 0; padding: 0; }
+    body {
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      font-family: var(--cwdb-font-body);
+      background: var(--cwdb-slate);
+      position: relative;
+    }
+    .photo {
+      position: absolute;
+      inset: 0;
+      background-image: url("http://127.0.0.1:8733/website/pages/gallery/project-photos/composite-deck-wittenburg.jpg");
+      background-size: cover;
+      background-position: 65% 45%;
+    }
+    /* Left-anchored vertical scrim — content lives in left 55% */
+    .scrim-left {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg,
+        rgba(50,52,52,0.92) 0%,
+        rgba(50,52,52,0.78) 38%,
+        rgba(50,52,52,0.20) 62%,
+        rgba(50,52,52,0.0) 80%);
+    }
+    .logo-wrap {
+      position: absolute;
+      top: 64px;
+      left: 80px;
+      z-index: 2;
+    }
+    .logo-wrap img {
+      height: 64px;
+      width: auto;
+      display: block;
+    }
+    .content {
+      position: absolute;
+      left: 80px;
+      bottom: 80px;
+      width: 1040px;          /* ~54% of frame */
+      z-index: 2;
+      color: var(--cwdb-white);
+    }
+    .cwdb-hed {
+      font-family: var(--cwdb-font-display);
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 0.92;
+      font-size: 124px;
+      color: var(--cwdb-white);
+      margin: 0 0 28px 0;
+      max-width: 16ch;
+    }
+    .cwdb-sub {
+      font-family: var(--cwdb-font-body);
+      font-weight: 500;
+      font-size: 30px;
+      line-height: 1.34;
+      color: rgba(255,255,255,0.95);
+      margin: 0 0 40px 0;
+      max-width: 36ch;
+    }
+    .footer-row {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+    .cwdb-cta {
+      display: inline-flex;
+      align-items: center;
+      padding: 24px 38px;
+      background: var(--cwdb-orange);
+      color: var(--cwdb-white);
+      font-family: var(--cwdb-font-body);
+      font-weight: 700;
+      font-size: 21px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+    .cwdb-trust-row {
+      font-family: var(--cwdb-font-body);
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.82);
+      white-space: nowrap;
+    }
+    .cwdb-trust-row > span:not(:last-child)::after {
+      content: "·";
+      margin: 0 11px;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="photo" role="img" aria-label="Central Wisconsin composite deck overlooking water"></div>
+  <div class="scrim-left"></div>
+
+  <div class="logo-wrap">
+    <img src="http://127.0.0.1:8733/branding/logos/web/logo-horizontal@2x-white.png" alt="Central Wisconsin Deck Builders">
+  </div>
+
+  <div class="content">
+    <h1 class="cwdb-hed">Tired of contractors who never call back?</h1>
+    <p class="cwdb-sub">One form. One vetted local builder. Real quote in 48 hours.</p>
+    <div class="footer-row">
+      <a class="cwdb-cta" href="#">Get Quote</a>
+      <div class="cwdb-trust-row">
+        <span>Licensed</span><span>Local</span><span>48&#8209;hr&nbsp;Quote</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,12 @@
+Step,Property,Internal Name,Field Type,Group,Description,Options,Notes
+1,Project Type,project_type,Dropdown select (single),Lead information,Type of deck project,"New deck build|Deck replacement|Deck repair|Deck addition / expansion|Not sure yet",Form-fillable on Contact
+2,Budget Range,budget_range,Dropdown select (single),Lead information,Homeowner-stated budget range,"Under $5000|$5000 – $10000|$10000 – $20000|$20000 – $40000|$40000+",Form-fillable on Contact
+3,Project Timeline,project_timeline,Dropdown select (single),Lead information,Homeowner-stated project urgency,"As soon as possible|Within 1–3 months|3–6 months|Just planning ahead",Form-fillable on Contact
+4,Lead Notes,lead_notes,Multi-line text,Lead information,Homeowner additional project notes from quote form,,Form-fillable on Contact
+5,Owns Property,owns_property,Dropdown select (single),Lead information,Whether homeowner owns the property where deck will be built,"Yes|No|Not sure",Form-fillable on Contact (qualification field)
+6,Source City,source_city,Dropdown select (single),Lead information,Service area city captured from form ZIP,"Wausau|Schofield|Weston|Mosinee|Merrill|Other",Form-fillable on Contact (auto-populate from zip via workflow if possible)
+7,UTM Source,utm_source,Single-line text,Lead information,Captured from URL utm_source on form submit,,Hidden form field — populated by JS
+8,UTM Campaign,utm_campaign,Single-line text,Lead information,Captured from URL utm_campaign on form submit,,Hidden form field — populated by JS
+9,GCLID,gclid,Single-line text,Lead information,Google Click ID captured from URL on form submit; required for offline conversion sync,,Hidden form field — populated by JS
+10,TCPA Consent Given,tcpa_consent_given,Single checkbox,Lead information,Homeowner consented to TCPA terms (SMS/phone contact),,Form-fillable on Contact (compliance)
+11,Lead Source Page,lead_source_page,Single-line text,Lead information,Which page the form was submitted from,,Hidden form field — populated by JS (page_source value)

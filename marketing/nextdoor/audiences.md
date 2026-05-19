@@ -1,3 +1,14 @@
+---
+type: reference
+status: active
+created: 2026-03-11
+updated: 2026-04-16
+tags:
+  - type/reference
+  - dept/marketing
+  - platform/nextdoor
+---
+
 PLATFORM: Nextdoor Ads (Local Deals)
 MARKET: Central Wisconsin — Deck Building Leads
 
@@ -16,12 +27,12 @@ Target all 5 cities in the CWDB service area:
 
 | Zip Code | City |
 |----------|------|
-| 54401 | Wausau |
-| 54403 | Wausau (East side) |
-| 54476 | Schofield |
-| 54474 | Weston |
-| 54455 | Mosinee |
-| 54452 | Merrill |
+| 54401 | [[Wausau]] |
+| 54403 | [[Wausau]] (East side) |
+| 54476 | [[Schofield]] |
+| 54474 | [[Weston]] |
+| 54455 | [[Mosinee]] |
+| 54452 | [[Merrill]] |
 
 ---
 
@@ -45,23 +56,23 @@ Target all 5 cities in the CWDB service area:
 
 **Neighborhoods to monitor (within each zip code):**
 
-Wausau (54401, 54403):
-- Wausau
+[[Wausau]] (54401, 54403):
+- [[Wausau]]
 - Marathon City
 - Rib Mountain
 
-Schofield (54476):
-- Schofield
+[[Schofield]] (54476):
+- [[Schofield]]
 - Rothschild
 
-Weston (54474):
-- Weston
+[[Weston]] (54474):
+- [[Weston]]
 
-Mosinee (54455):
-- Mosinee
+[[Mosinee]] (54455):
+- [[Mosinee]]
 
-Merrill (54452):
-- Merrill
+[[Merrill]] (54452):
+- [[Merrill]]
 
 **How to set up monitoring:**
 1. Create a Nextdoor account with a local address in the service area
@@ -84,7 +95,7 @@ Merrill (54452):
 
 ## WHY NEXTDOOR IS PRIORITY
 
-Market research confirms Nextdoor is the primary platform where Central Wisconsin homeowners ask for contractor recommendations. Key advantages vs other platforms:
+Market research confirms Nextdoor is the primary platform where [[Central Wisconsin Deck Builders LLC|Central Wisconsin]] homeowners ask for contractor recommendations. Key advantages vs other platforms:
 
 - **Lower ad competition:** Fewer advertisers than Google or Facebook = lower CPL
 - **Pre-verified homeowners:** Nextdoor verifies home addresses — no renters, no spam

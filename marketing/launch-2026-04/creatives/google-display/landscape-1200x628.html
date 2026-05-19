@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>CWDB Launch 2026-04 · Google Display · 1200x628</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Staatliches&display=swap">
+  <style>
+    :root {
+      --cwdb-orange:    #e54c00;
+      --cwdb-slate:     #323434;
+      --cwdb-grey:      #646760;
+      --cwdb-off-white: #f8f8f6;
+      --cwdb-white:     #ffffff;
+      --cwdb-font-display: 'Staatliches', sans-serif;
+      --cwdb-font-body:    'Public Sans', sans-serif;
+    }
+    html, body { margin: 0; padding: 0; }
+    body {
+      width: 1200px;
+      height: 628px;
+      overflow: hidden;
+      font-family: var(--cwdb-font-body);
+      background: var(--cwdb-off-white);
+      display: flex;
+    }
+    .photo {
+      flex: 0 0 720px;
+      background-image: url("/website/pages/gallery/project-photos/wausau-deck.webp");
+      background-size: cover;
+      background-position: center center;
+      position: relative;
+    }
+    .photo::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 140px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0));
+    }
+    .photo-logo {
+      position: absolute;
+      top: 32px;
+      left: 36px;
+      height: 44px;
+      width: auto;
+    }
+    .type-block {
+      flex: 1;
+      padding: 48px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .cwdb-hed {
+      font-family: var(--cwdb-font-display);
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 0.94;
+      font-size: 64px;
+      color: var(--cwdb-slate);
+      margin: 0 0 14px 0;
+    }
+    .cwdb-sub {
+      font-family: var(--cwdb-font-body);
+      font-weight: 500;
+      font-size: 17px;
+      line-height: 1.4;
+      color: var(--cwdb-grey);
+      margin: 0 0 20px 0;
+      max-width: 30ch;
+    }
+    .cta-row {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .cwdb-cta {
+      display: inline-flex;
+      align-self: flex-start;
+      align-items: center;
+      padding: 16px 28px;
+      background: var(--cwdb-orange);
+      color: var(--cwdb-white);
+      font-family: var(--cwdb-font-body);
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+    .cwdb-trust-row {
+      font-family: var(--cwdb-font-body);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--cwdb-grey);
+    }
+    .cwdb-trust-row > span:not(:last-child)::after {
+      content: "·";
+      margin: 0 8px;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="photo" role="img" aria-label="Central Wisconsin wood deck">
+    <img class="photo-logo" src="/branding/logos/web/logo-horizontal@2x-white.png" alt="Central Wisconsin Deck Builders">
+  </div>
+  <div class="type-block">
+    <div>
+      <h1 class="cwdb-hed">48 hours.<br>Not 48 days.</h1>
+      <p class="cwdb-sub">Licensed local deck builders in Central Wisconsin. Real quote. No phone tag.</p>
+    </div>
+    <div class="cta-row">
+      <a class="cwdb-cta" href="#">Get a Free Quote</a>
+      <div class="cwdb-trust-row">
+        <span>Licensed</span><span>Insured</span><span>Local</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

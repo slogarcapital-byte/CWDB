@@ -1,0 +1,70 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - img "Central Wisconsin Deck Builders logo featuring the state of Wisconsin with wood grain pattern and bold orange text." [ref=e5]
+      - button "menu" [ref=e6] [cursor=pointer]:
+        - generic [ref=e7]: 
+  - generic [ref=e10]:
+    - heading "Thank you for your request" [level=1] [ref=e11]
+    - paragraph [ref=e12]: We’ve received your project details and a vetted local contractor will be in touch soon.
+  - generic [ref=e15]:
+    - generic [ref=e16]:
+      - img "Central Wisconsin Deck Builders Logo" [ref=e17]
+      - generic [ref=e18]:
+        - link "Facebook" [ref=e19] [cursor=pointer]:
+          - /url: https://facebook.com
+          - img "Facebook" [ref=e20]
+        - link "Instagram" [ref=e22] [cursor=pointer]:
+          - /url: https://instagram.com
+          - img "Instagram" [ref=e23]
+        - link "Nextdoor" [ref=e25] [cursor=pointer]:
+          - /url: https://nextdoor.com
+          - img "Nextdoor" [ref=e26]
+    - generic [ref=e28]:
+      - heading "Service Areas" [level=4] [ref=e29]
+      - link "Wausau" [ref=e30] [cursor=pointer]:
+        - /url: /service-area/wausau
+      - link "Schofield" [ref=e31] [cursor=pointer]:
+        - /url: /service-area/schofield
+      - link "Weston" [ref=e32] [cursor=pointer]:
+        - /url: /service-area/weston
+      - link "Mosinee" [ref=e33] [cursor=pointer]:
+        - /url: /service-area/mosinee
+      - link "Merrill" [ref=e34] [cursor=pointer]:
+        - /url: /service-area/merrill
+    - generic [ref=e35]:
+      - heading "Company" [level=4] [ref=e36]
+      - link "About Us" [ref=e37] [cursor=pointer]:
+        - /url: /about
+      - link "Our Builders" [ref=e38] [cursor=pointer]:
+        - /url: /our-builders
+      - link "Gallery" [ref=e39] [cursor=pointer]:
+        - /url: /gallery
+      - link "FAQ" [ref=e40] [cursor=pointer]:
+        - /url: /faq
+      - link "Blog" [ref=e41] [cursor=pointer]:
+        - /url: /blog
+      - link "Cost Calculator" [ref=e42] [cursor=pointer]:
+        - /url: /cost-calculator
+    - generic [ref=e43]:
+      - heading "Contact" [level=4] [ref=e44]
+      - link "(715) 544-7941" [ref=e45] [cursor=pointer]:
+        - /url: tel:+17155447941
+      - link "info@cwdeckbuilders.com" [ref=e46] [cursor=pointer]:
+        - /url: mailto:info@cwdeckbuilders.com
+      - link "Get a Free Quote" [ref=e47] [cursor=pointer]:
+        - /url: /get-a-quote
+      - paragraph [ref=e48]:
+        - text: 906 N 16th Ave
+        - text: Wausau, WI 54401
+      - paragraph [ref=e49]: Mon–Fri 8am–6pm CT
+    - paragraph [ref=e50]: © 2026 Central Wisconsin Deck Builders. All rights reserved.
+    - generic [ref=e51]:
+      - link "Privacy Policy" [ref=e52] [cursor=pointer]:
+        - /url: /privacy
+      - link "Terms of Service" [ref=e53] [cursor=pointer]:
+        - /url: /terms
+  - generic [ref=e54]:
+    - link "GET YOUR FREE QUOTE →" [ref=e55] [cursor=pointer]:
+      - /url: /get-a-quote
+    - button "Dismiss" [ref=e56] [cursor=pointer]: ×

@@ -1,0 +1,150 @@
+- generic [active] [ref=e1]:
+  - text: "(function(){var s=document.createElement('style');s.id='cwdb';s.textContent='.header-wrap.scrolled{background-color:#323434!important;border-bottom-color:rgba(255,255,255,.05)!important}.cedar-strip{background-color:#83b2cf!important;background-image:linear-gradient(90deg,#83b2cf 0%,#9cc4db 40%,#83b2cf 70%,#6a9eba 100%)!important}.btn-primary{box-shadow:0 4px 24px rgba(229,76,0,.45)!important}.w-input:focus,.w-select:focus{border-color:#83b2cf!important;box-shadow:0 0 0 3px rgba(131,178,207,.2)!important;outline:none!important}';document.head.appendChild(s);})();"
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - link "Central Wisconsin Deck Builders Logo" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - img "Central Wisconsin Deck Builders Logo" [ref=e6]
+      - generic [ref=e7]:
+        - link "Our Builders" [ref=e8] [cursor=pointer]:
+          - /url: /our-builders
+        - button "Resources" [ref=e10] [cursor=pointer]:
+          - generic [ref=e11]: Resources
+        - link "About" [ref=e12] [cursor=pointer]:
+          - /url: /about
+      - generic [ref=e13]:
+        - link "(715) 544-7941" [ref=e14] [cursor=pointer]:
+          - /url: tel:+17155447941
+        - link "Start My Quote →" [ref=e15] [cursor=pointer]:
+          - /url: /get-a-quote
+    - text: 
+  - generic [ref=e17]:
+    - paragraph [ref=e18]: Get Your Free Quotes
+    - heading "Ready to start your deck project?" [level=1] [ref=e19]
+    - paragraph [ref=e20]: Fill out the form below and hear from licensed Central Wisconsin deck builders within 24 hours. Free. No obligation.
+  - form "Quote Request" [ref=e24]:
+    - generic [ref=e25]:
+      - generic [ref=e26]:
+        - generic [ref=e27]: Name*
+        - textbox "Name* Phone Number*" [ref=e28]:
+          - /placeholder: Jane Doe
+      - generic [ref=e29]:
+        - generic [ref=e30]: Phone Number*
+        - textbox "(715) 555-5555" [ref=e31]
+    - generic [ref=e33]:
+      - generic [ref=e34]: Email Address*
+      - textbox "Email Address*" [ref=e35]:
+        - /placeholder: jane.doe@email.com
+    - generic [ref=e37]:
+      - generic [ref=e38]: Property Address*
+      - textbox "Property Address*" [ref=e39]:
+        - /placeholder: 123 Main St. Wausau, WI 54401
+    - generic [ref=e40]:
+      - generic [ref=e41]:
+        - generic [ref=e42]: Property Ownership?*
+        - combobox "Property Ownership?*" [ref=e43]:
+          - option "Select one..." [selected]
+          - option "Own"
+          - option "Rent"
+      - generic [ref=e44]:
+        - generic [ref=e45]: Type of project?*
+        - combobox "Type of project?*" [ref=e46]:
+          - option "Select one..." [selected]
+          - option "Custom deck"
+          - option "Renovation or repair"
+          - option "Shed or garage"
+          - option "Screened porch"
+          - option "Pergola"
+          - option "Fence"
+          - option "Roof"
+          - option "Framing"
+          - option "Not sure yet"
+    - generic [ref=e47]:
+      - generic [ref=e48]:
+        - generic [ref=e49]: Estimated budget?*
+        - combobox "Estimated budget?*" [ref=e50]:
+          - option "Select one..." [selected]
+          - option "Under $10K"
+          - option "$10k–$20k"
+          - option "$30k–$50k"
+          - option "$20k–$30k"
+          - option "$50k+"
+          - option "Not sure yet"
+      - generic [ref=e51]:
+        - generic [ref=e52]: When to start?*
+        - combobox "When to start?*" [ref=e53]:
+          - option "Select one..." [selected]
+          - option "ASAP"
+          - option "1–3 months"
+          - option "3–6 months"
+          - option "6–12 months"
+          - option "Just exploring"
+    - generic [ref=e55]:
+      - generic [ref=e56]: Anything else we should know? (optional)
+      - textbox "Anything else we should know? (optional)" [ref=e57]:
+        - /placeholder: description, custom requests, dimensions, etc.
+    - generic [ref=e58]:
+      - generic [ref=e59] [cursor=pointer]:
+        - checkbox "I agree to receive calls, text messages, and emails from Central Wisconsin Deck Builders, LLC and its contractor partners about my project request. Consent is not a condition of receiving a quote. Msg & data rates may apply. Reply STOP to opt out." [ref=e60]
+        - generic [ref=e61]: I agree to receive calls, text messages, and emails from Central Wisconsin Deck Builders, LLC and its contractor partners about my project request. Consent is not a condition of receiving a quote. Msg & data rates may apply. Reply STOP to opt out.
+      - paragraph [ref=e62]: By checking the box above and clicking "Get My Free Quote," you provide your prior express written consent for Central Wisconsin Deck Builders, LLC ("CWDB") and its local contractor partners to contact you at the phone number and email address you provided. This may include calls, text messages (including SMS and MMS), and emails regarding your deck project inquiry, quotes, and scheduling. Calls and texts may be made using automated technology or prerecorded messages. Your consent is not a condition of purchasing any goods or services, and you may revoke your consent at any time by replying STOP to any text message, calling (715) XXX-XXXX, or emailing info@cwdeckbuilders.com. Standard message and data rates may apply. Message frequency varies.
+    - button "Request a Quote" [ref=e63] [cursor=pointer]
+    - paragraph [ref=e64]: Your info is private. No spam, no obligation.
+    - link "View our Privacy Policy" [ref=e65] [cursor=pointer]:
+      - /url: /privacy
+  - generic [ref=e68]:
+    - generic [ref=e69]:
+      - img "Central Wisconsin Deck Builders Logo" [ref=e70]
+      - link "(715) 544-7941" [ref=e71] [cursor=pointer]:
+        - /url: tel:+17155447941
+      - generic [ref=e72]:
+        - link "Facebook" [ref=e73] [cursor=pointer]:
+          - /url: https://facebook.com
+          - img "Facebook" [ref=e74]
+        - link "Instagram" [ref=e76] [cursor=pointer]:
+          - /url: https://instagram.com
+          - img "Instagram" [ref=e77]
+        - link "Nextdoor" [ref=e79] [cursor=pointer]:
+          - /url: https://nextdoor.com
+          - img "Nextdoor" [ref=e80]
+    - generic [ref=e82]:
+      - heading "Service Areas" [level=4] [ref=e83]
+      - link "Wausau" [ref=e84] [cursor=pointer]:
+        - /url: /deck-builders-wausau
+      - link "Schofield" [ref=e85] [cursor=pointer]:
+        - /url: /deck-builders-schofield
+      - link "Weston" [ref=e86] [cursor=pointer]:
+        - /url: /deck-builders-weston
+      - link "Mosinee" [ref=e87] [cursor=pointer]:
+        - /url: /deck-builders-mosinee
+      - link "Merrill" [ref=e88] [cursor=pointer]:
+        - /url: /deck-builders-merrill
+    - generic [ref=e89]:
+      - heading "Company" [level=4] [ref=e90]
+      - link "About Us" [ref=e91] [cursor=pointer]:
+        - /url: /about
+      - link "Our Builders" [ref=e92] [cursor=pointer]:
+        - /url: /our-builders
+      - link "Gallery" [ref=e93] [cursor=pointer]:
+        - /url: /gallery
+      - link "FAQ" [ref=e94] [cursor=pointer]:
+        - /url: /faq
+      - link "Blog" [ref=e95] [cursor=pointer]:
+        - /url: /blog
+      - link "Cost Calculator" [ref=e96] [cursor=pointer]:
+        - /url: /cost-calculator
+    - generic [ref=e97]:
+      - heading "Contact" [level=4] [ref=e98]
+      - link "(715) 544-7941" [ref=e99] [cursor=pointer]:
+        - /url: tel:+17155447941
+      - link "Get a Free Quote" [ref=e100] [cursor=pointer]:
+        - /url: /get-a-quote
+      - paragraph [ref=e101]: Central Wisconsin
+      - paragraph [ref=e102]: Mon–Fri 8am–6pm CT
+    - paragraph [ref=e103]: © 2026 Central Wisconsin Deck Builders. All rights reserved.
+    - generic [ref=e104]:
+      - link "Privacy Policy" [ref=e105] [cursor=pointer]:
+        - /url: /privacy
+      - link "Terms of Service" [ref=e106] [cursor=pointer]:
+        - /url: /terms
+  - text: "(function(){var h=document.querySelector('.header-wrap');if(!h)return;window.addEventListener('scroll',function(){h.classList.toggle('scrolled',window.scrollY>80);},{passive:true});})();"

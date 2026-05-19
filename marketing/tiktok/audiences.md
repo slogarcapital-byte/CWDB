@@ -1,3 +1,14 @@
+---
+type: reference
+status: active
+created: 2026-03-11
+updated: 2026-04-16
+tags:
+  - type/reference
+  - dept/marketing
+  - platform/tiktok
+---
+
 TIKTOK ADS — AUDIENCE TARGETING
 Market: Central Wisconsin
 Last Updated: [DATE]

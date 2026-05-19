@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get a Free Deck Quote | Central Wisconsin Deck Builders</title>
+  <meta name="description" content="Request a free, no-obligation deck quote from vetted contractors in Central Wisconsin. Tell us about your project and hear back within 24 hours." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ======================================================
+       DESIGN TOKENS
+       ====================================================== */
+    :root {
+      --orange:       #e54c00;
+      --orange-hover: #cc4300;
+      --orange-active:#b33a00;
+      --slate:        #323434;
+      --grey:         #646760;
+      --sky:          #83b2cf;
+      --sky-tint:     rgba(131, 178, 207, 0.10);
+      --cedar:        #8B5A2B;
+      --cedar-light:  rgba(139,90,43,0.15);
+      --off-white:    #f8f8f6;
+      --white:        #ffffff;
+      --error:        #d32f2f;
+      --success:      #2e7d32;
+
+      --font-heading: 'Barlow Condensed', sans-serif;
+      --font-body:    'Inter', sans-serif;
+      --max-width:    1200px;
+    }
+
+    /* ======================================================
+       RESET
+       ====================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--slate);
+      background: var(--white);
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ======================================================
+       TYPOGRAPHY
+       ====================================================== */
+    h1 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 56px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      line-height: 1.0;
+    }
+    h2 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 36px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 1.1;
+    }
+    h3 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 26px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 1.1;
+    }
+
+    /* ======================================================
+       LAYOUT
+       ====================================================== */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .container--narrow {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ======================================================
+       BUTTONS
+       ====================================================== */
+    .btn {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 200ms ease;
+      border: none;
+      text-align: center;
+      text-decoration: none;
+    }
+    .btn--primary {
+      background: var(--orange);
+      color: var(--white);
+      padding: 18px 40px;
+      box-shadow: 0 4px 24px rgba(229, 76, 0, 0.45);
+    }
+    .btn--primary:hover {
+      background: var(--orange-hover);
+      transform: scale(1.02);
+      box-shadow: 0 6px 32px rgba(229, 76, 0, 0.6);
+    }
+    .btn--full { width: 100%; display: block; }
+
+    /* ======================================================
+       HEADER — GLASSMORPHISM (simplified for conversion page)
+       ====================================================== */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      background: rgba(50, 52, 52, 0.95);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .header .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    /* Logo */
+    .header__logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-emblem { width: 34px; height: 34px; flex-shrink: 0; }
+    .logo-text { display: flex; flex-direction: column; line-height: 1; }
+    .logo-text__main {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--white);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .logo-text__sub {
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--sky);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* Minimal nav — conversion page keeps only essential links */
+    .header__nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .header__nav a {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.75);
+      transition: color 200ms;
+    }
+    .header__nav a:hover { color: var(--sky); }
+    .header__nav .nav-divider {
+      width: 1px;
+      height: 18px;
+      background: rgba(255,255,255,0.15);
+    }
+
+    /* Header right */
+    .header__right { display: flex; align-items: center; gap: 16px; }
+    .header__phone {
+      color: rgba(255,255,255,0.8);
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 200ms;
+      letter-spacing: 0.3px;
+    }
+    .header__phone:hover { color: var(--white); }
+
+    /* Mobile hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: rgba(255,255,255,0.8);
+      border-radius: 2px;
+    }
+
+    /* ======================================================
+       PAGE HEADER / HERO — SHORT, FOCUSED
+       ====================================================== */
+    .page-hero {
+      padding: 140px 0 64px;
+      background: var(--slate);
+      color: var(--white);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      display: none; /* wood texture overlay removed — unapproved color */
+    }
+    .page-hero .container { position: relative; z-index: 1; }
+
+    .page-hero__label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--orange);
+      margin-bottom: 14px;
+    }
+    .page-hero h1 { color: var(--white); margin-bottom: 16px; }
+    .page-hero h1 em {
+      font-style: normal;
+      color: var(--orange);
+    }
+    .page-hero__sub {
+      font-size: 18px;
+      color: rgba(255,255,255,0.72);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.65;
+    }
+
+    /* Micro trust row in hero */
+    .page-hero__badges {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+    .hero-badge {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.6);
+    }
+    .hero-badge svg { color: var(--sky); flex-shrink: 0; }
+
+    .cedar-strip {
+      height: 6px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--cedar) 0, var(--cedar) 20px,
+        rgba(139,90,43,0.3) 20px, rgba(139,90,43,0.3) 24px
+      );
+    }
+
+    /* ======================================================
+       MAIN CONTENT — 2-COLUMN LAYOUT
+       (Left: form | Right: trust + what happens next)
+       ====================================================== */
+    .quote-layout {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 56px;
+      padding: 72px 0 96px;
+      align-items: start;
+    }
+
+    /* ======================================================
+       FORM COLUMN
+       ====================================================== */
+    .form-card {
+      background: var(--white);
+      border-radius: 14px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.09);
+      border-bottom: 4px solid var(--orange);
+      padding: 40px 40px 36px;
+    }
+    .form-card__title {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 30px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--slate);
+      margin-bottom: 6px;
+    }
+    .form-card__sub {
+      font-size: 14px;
+      color: var(--grey);
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-field {
+      margin-bottom: 16px;
+    }
+    .form-field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--slate);
+      margin-bottom: 6px;
+      letter-spacing: 0.2px;
+    }
+    .form-field label .req { color: var(--orange); margin-left: 2px; }
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      width: 100%;
+      height: 48px;
+      background: var(--white);
+      border: 1.5px solid #d0d0ce;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--slate);
+      padding: 0 14px;
+      outline: none;
+      transition: border-color 200ms, box-shadow 200ms;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      border-color: var(--sky);
+      box-shadow: 0 0 0 3px rgba(131,178,207,0.18);
+    }
+    .form-field input::placeholder,
+    .form-field textarea::placeholder {
+      color: #aaa;
+    }
+    .form-field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23646760' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+    .form-field select option[value=""] { color: #aaa; }
+    .form-field textarea {
+      height: 100px;
+      padding-top: 12px;
+      resize: vertical;
+    }
+
+    .form-field--full { grid-column: span 2; }
+
+    /* Field group label */
+    .form-group-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--orange);
+      margin: 20px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--off-white);
+      grid-column: span 2;
+    }
+
+    .form-submit-wrap {
+      margin-top: 8px;
+    }
+    .form-privacy {
+      font-size: 12px;
+      color: var(--grey);
+      text-align: center;
+      margin-top: 12px;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .form-privacy svg { color: var(--sky); flex-shrink: 0; }
+    .form-privacy a { color: var(--orange); text-decoration: underline; text-underline-offset: 2px; }
+
+    /* TCPA consent block */
+    .tcpa-consent-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+      margin-top: 8px;
+    }
+    .tcpa-checkbox-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      color: #ffffff;
+      font-size: 13px;
+      line-height: 1.5;
+      cursor: pointer;
+    }
+    .tcpa-checkbox-label input[type="checkbox"] {
+      flex-shrink: 0;
+      margin-top: 3px;
+      width: 16px;
+      height: 16px;
+      accent-color: var(--orange);
+      cursor: pointer;
+    }
+    .tcpa-disclosure {
+      color: #646760;
+      font-size: 11px;
+      line-height: 1.5;
+      margin: 0;
+    }
+    .tcpa-privacy-link {
+      color: #83b2cf;
+      font-size: 11px;
+      text-decoration: underline;
+    }
+
+    /* ======================================================
+       RIGHT COLUMN — TRUST + NEXT STEPS
+       ====================================================== */
+    .right-col {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      position: sticky;
+      top: 100px;
+    }
+
+    /* Trust card */
+    .trust-card {
+      background: var(--off-white);
+      border-radius: 12px;
+      padding: 28px 24px;
+    }
+    .trust-card__title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      color: var(--grey);
+      margin-bottom: 20px;
+    }
+    .trust-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .trust-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .trust-item__icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(131,178,207,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--sky);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .trust-item__text strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--slate);
+      margin-bottom: 2px;
+    }
+    .trust-item__text span {
+      font-size: 13px;
+      color: var(--grey);
+      line-height: 1.45;
+    }
+
+    /* Next steps timeline */
+    .next-card {
+      background: var(--slate);
+      border-radius: 12px;
+      padding: 28px 24px;
+      color: var(--white);
+    }
+    .next-card__title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      color: var(--sky);
+      margin-bottom: 22px;
+    }
+    .next-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+    .next-step {
+      display: flex;
+      gap: 14px;
+      padding-bottom: 24px;
+      position: relative;
+    }
+    .next-step:last-child { padding-bottom: 0; }
+    .next-step__left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .next-step__num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--orange);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 18px;
+      box-shadow: 0 2px 12px rgba(229,76,0,0.4);
+      flex-shrink: 0;
+    }
+    .next-step__line {
+      width: 2px;
+      flex: 1;
+      min-height: 16px;
+      background: linear-gradient(180deg, var(--sky) 0%, rgba(131,178,207,0.2) 100%);
+      margin-top: 4px;
+    }
+    .next-step:last-child .next-step__line { display: none; }
+    .next-step__body { padding-top: 4px; }
+    .next-step__time {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--orange);
+      background: rgba(229,76,0,0.12);
+      border: 1px solid rgba(229,76,0,0.25);
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-bottom: 6px;
+    }
+    .next-step__title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .next-step__desc {
+      font-size: 13px;
+      color: rgba(255,255,255,0.58);
+      line-height: 1.5;
+    }
+
+    /* Testimonial mini */
+    .mini-testimonial {
+      background: var(--white);
+      border-radius: 12px;
+      border-left: 4px solid var(--cedar);
+      padding: 20px 20px 18px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+    .mini-testimonial__stars {
+      font-size: 12px;
+      color: var(--orange);
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+    .mini-testimonial__text {
+      font-size: 14px;
+      font-style: italic;
+      color: var(--slate);
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    .mini-testimonial__author {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--grey);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    /* ======================================================
+       BOTTOM SECTION — REASSURANCE
+       ====================================================== */
+    .bottom-bar {
+      background: var(--off-white);
+      border-top: 1px solid rgba(0,0,0,0.06);
+      padding: 40px 0;
+      text-align: center;
+    }
+    .bottom-bar__text {
+      font-size: 15px;
+      color: var(--grey);
+    }
+    .bottom-bar__text a {
+      color: var(--orange);
+      font-weight: 500;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    /* ======================================================
+       FOOTER
+       ====================================================== */
+    .footer {
+      background: var(--slate);
+      padding: 64px 0 0;
+      color: var(--white);
+    }
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 48px;
+    }
+    .footer__brand {}
+    .footer__logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      text-decoration: none;
+    }
+    .footer__tagline {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.55);
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+    .footer__socials {
+      display: flex;
+      gap: 10px;
+    }
+    .social-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(131, 178, 207, 0.28);
+      background: rgba(131, 178, 207, 0.07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 200ms ease;
+      color: var(--sky);
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .social-btn:hover {
+      background: rgba(131, 178, 207, 0.18);
+      border-color: var(--sky);
+    }
+    .social-btn svg { width: 18px; height: 18px; }
+    .footer__col-heading {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+    .footer__links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .footer__links a {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      line-height: 2.2;
+      transition: color 200ms ease;
+    }
+    .footer__links a:hover { color: var(--white); }
+    .footer__bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 20px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer__copy {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+    .footer__legal {
+      display: flex;
+      gap: 20px;
+    }
+    .footer__legal a {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.4);
+      text-decoration: none;
+      transition: color 200ms ease;
+    }
+    .footer__legal a:hover { color: rgba(255, 255, 255, 0.8); }
+
+    /* ======================================================
+       MOBILE STICKY BAR
+       ====================================================== */
+    .mobile-cta-bar {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 999;
+      background: var(--orange);
+      height: 56px;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 -2px 16px rgba(229,76,0,0.5);
+    }
+    .mobile-cta-bar svg { color: var(--white); }
+    .mobile-cta-bar span {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    /* ======================================================
+       RESPONSIVE
+       ====================================================== */
+    @media (max-width: 960px) {
+      .quote-layout {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 48px 0 72px;
+      }
+      .right-col {
+        position: static;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .next-card { grid-column: span 2; }
+    }
+
+    @media (max-width: 767px) {
+      h1 { font-size: 36px; }
+      h2 { font-size: 28px; }
+
+      .header__nav { display: none; }
+      .header__phone span { display: none; }
+      .hamburger { display: flex; }
+
+      .page-hero { padding: 100px 0 48px; }
+      .page-hero__sub { font-size: 15px; }
+      .page-hero__badges { gap: 16px; }
+      .hero-badge { font-size: 12px; }
+
+      .form-card { padding: 28px 20px 24px; }
+      .form-card__title { font-size: 24px; }
+      .form-row { grid-template-columns: 1fr; }
+      .form-field--full { grid-column: span 1; }
+      .form-group-label { grid-column: span 1; }
+
+      .right-col {
+        grid-template-columns: 1fr;
+      }
+      .next-card { grid-column: auto; }
+
+      .mobile-cta-bar { display: flex; }
+
+      .footer__grid { grid-template-columns: 1fr 1fr; gap: 36px; }
+      .footer__bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .quote-layout { padding: 40px 0 100px; }
+    }
+
+    @media (max-width: 480px) {
+      .page-hero__badges { flex-direction: column; align-items: flex-start; gap: 10px; }
+    }
+
+    @media (max-width: 480px) {
+      .footer__grid { grid-template-columns: 1fr; }
+    }
+
+    /* ======================================================
+       PHASE 3 POLISH PASS (2026-04-20)
+       Source of truth: Webflow — mirrored here for reference.
+       Fix 1: form card centered, no orphan right column.
+       Fix 2: nav row side-by-side, buttons auto-width.
+       ====================================================== */
+    .quote-form-wrap {
+      max-width: 640px;      /* was 75% — sprawled on wide viewports */
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .wizard-container {
+      width: 100%;
+      max-width: 560px;
+      margin-left: auto;     /* added — was left-glued inside card */
+      margin-right: auto;
+    }
+    .wizard-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .wizard-nav-end { justify-content: flex-end; }
+    .btn-submit {
+      width: auto;           /* was 100% — caused full-width stretch */
+      min-width: 160px;
+      padding-left: 32px;
+      padding-right: 32px;
+      height: 52px;
+    }
+    @media (max-width: 767px) {
+      .quote-form-wrap { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- WEBFLOW COMPONENT: header -->
+  <!-- ======================================================
+       HEADER
+       ====================================================== -->
+  <header class="header" id="site-header">
+    <div class="container">
+      <!-- Logo -->
+      <a href="/" class="header__logo">
+        <img src="/images/1.2-horizontal-logo-high-res.png" alt="Central Wisconsin Deck Builders" style="height:40px;" />
+      </a>
+
+      <!-- Minimal nav for conversion page -->
+      <nav class="header__nav">
+        <a href="/">Home</a>
+        <div class="nav-divider"></div>
+        <a href="/our-builders">Our Builders</a>
+        <a href="/faq">FAQ</a>
+        <a href="/about">About</a>
+      </nav>
+
+      <!-- Right -->
+      <div class="header__right">
+        <a href="tel:+1" class="header__phone">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6 6l.86-.86a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.5 16z"/>
+          </svg>
+          <span>(715) 555-0100</span>
+        </a>
+        <div class="hamburger" id="hamburger">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </header>
+<!-- /WEBFLOW COMPONENT: header -->
+
+<!-- WEBFLOW COMPONENT: hero-section-quote -->
+  <!-- ======================================================
+       PAGE HERO — SHORT
+       ====================================================== -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="page-hero__label">Free · No Obligation · No Pressure</div>
+      <h1>Get Your <em>Free</em> Deck Quote</h1>
+      <p class="page-hero__sub">Tell us about your project and we'll connect you with a vetted local builder — usually within 24 hours. No cost, no pressure, no obligation.</p>
+      <div class="page-hero__badges">
+        <div class="hero-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Free — always
+        </div>
+        <div class="hero-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Licensed &amp; insured contractors
+        </div>
+        <div class="hero-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Response within 24 hours
+        </div>
+        <div class="hero-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+          No commitment required
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- /WEBFLOW COMPONENT: hero-section-quote -->
+
+<!-- WEBFLOW COMPONENT: cedar-strip -->
+  <!-- Cedar strip -->
+  <div class="cedar-strip"></div>
+<!-- /WEBFLOW COMPONENT: cedar-strip -->
+
+<!-- WEBFLOW COMPONENT: multi-step-form -->
+  <!-- ======================================================
+       MAIN — MULTI-STEP WIZARD + RIGHT COLUMN
+       Phase 3 rebuild 2026-04-20: single-page form replaced with
+       3-step wizard. Option A locked field names — no name, no email.
+       TCPA consent rewritten to SMS/phone-only.
+       ====================================================== -->
+  <main>
+    <div class="container">
+      <div class="quote-layout">
+
+        <!-- ================================================
+             FORM COLUMN — multi-step-form component
+             ================================================ -->
+        <div>
+          <div class="form-card">
+            <form action="/thank-you" method="POST" id="wf-form-Quote-Request" name="wf-form-Quote-Request" data-name="Quote Request" data-redirect="/thank-you" class="quote-form-wrap">
+              <div class="wizard-container" data-form-container>
+
+                <!-- Progress indicator -->
+                <div class="wizard-progress">
+                  <div class="wizard-progress-bar active" data-progress="1"></div>
+                  <div class="wizard-progress-bar" data-progress="2"></div>
+                  <div class="wizard-progress-bar" data-progress="3"></div>
+                </div>
+
+                <!-- Hidden submission-source flag -->
+                <input type="hidden" name="page_source" value="get-a-quote-multistep">
+
+                <!-- STEP 1 -->
+                <div class="wizard-step" data-step="1">
+                  <div class="wizard-step-label">STEP 1 OF 3</div>
+                  <h3 class="wizard-step-heading">Where is the deck going?</h3>
+                  <div class="wizard-field">
+                    <label class="form-label" for="wizard-zip">Zip Code*</label>
+                    <input class="form-input" type="text" name="zip" id="wizard-zip" required pattern="\d{5}" maxlength="5" inputmode="numeric" autocomplete="postal-code">
+                  </div>
+                  <div class="wizard-field">
+                    <label class="form-label" for="wizard-phone">Phone Number*</label>
+                    <input class="form-input" type="tel" name="phone" id="wizard-phone" required autocomplete="tel">
+                  </div>
+                  <div class="wizard-nav wizard-nav-end">
+                    <button type="button" class="btn-submit" data-next="1">Next</button>
+                  </div>
+                </div>
+
+                <!-- STEP 2 -->
+                <div class="wizard-step" data-step="2" style="display:none;">
+                  <div class="wizard-step-label">STEP 2 OF 3</div>
+                  <h3 class="wizard-step-heading">Tell us about the project.</h3>
+                  <div class="wizard-field">
+                    <label class="form-label" for="wizard-project-type">Project Type*</label>
+                    <select class="form-input" name="project_type" id="wizard-project-type" required>
+                      <option value="">Select project type</option>
+                      <option value="new-deck">New deck build</option>
+                      <option value="deck-replacement">Deck replacement / tear-down</option>
+                      <option value="deck-repair">Deck repair</option>
+                      <option value="deck-expansion">Deck expansion / addition</option>
+                      <option value="screen-porch">Screen porch conversion</option>
+                      <option value="pergola">Pergola / shade structure</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div class="wizard-field">
+                    <label class="form-label" for="wizard-address">Property Address*</label>
+                    <input class="form-input" type="text" name="address" id="wizard-address" required autocomplete="street-address">
+                  </div>
+                  <div class="wizard-field">
+                    <label class="form-label" for="wizard-owns-property">Do you own the property?*</label>
+                    <select class="form-input" name="owns_property" id="wizard-owns-property" required>
+                      <option value="">Select one</option>
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                    </select>
+                  </div>
+                  <div class="wizard-nav">
+                    <button type="button" class="wizard-back" data-back="2">&larr; Back</button>
+                    <button type="button" class="btn-submit" data-next="2">Next</button>
+                  </div>
+                </div>
+
+                <!-- STEP 3 -->
+                <div class="wizard-step" data-step="3" style="display:none;">
+                  <div class="wizard-step-label">STEP 3 OF 3</div>
+                  <h3 class="wizard-step-heading">When and how much?</h3>
+                  <div class="wizard-field">
+                    <label class="form-label" for="wizard-budget">Estimated Budget*</label>
+                    <select class="form-input" name="budget" id="wizard-budget" required>
+                      <option value="">Select a range</option>
+                      <option value="under-10k">Under $10,000</option>
+                      <option value="10k-20k">$10,000 - $20,000</option>
+                      <option value="20k-35k">$20,000 - $35,000</option>
+                      <option value="35k-50k">$35,000 - $50,000</option>
+                      <option value="50k-plus">$50,000+</option>
+                      <option value="not-sure">Not sure yet</option>
+                    </select>
+                  </div>
+                  <div class="wizard-field">
+                    <label class="form-label" for="wizard-timeline">Timeline*</label>
+                    <select class="form-input" name="timeline" id="wizard-timeline" required>
+                      <option value="">When do you want to start?</option>
+                      <option value="asap">As soon as possible</option>
+                      <option value="1-3-months">1-3 months</option>
+                      <option value="3-6-months">3-6 months</option>
+                      <option value="6-12-months">6-12 months</option>
+                      <option value="just-researching">Just researching</option>
+                    </select>
+                  </div>
+                  <div class="wizard-field">
+                    <label class="form-label" for="wizard-notes">Anything else we should know? (optional)</label>
+                    <textarea class="form-input form-textarea" name="notes" id="wizard-notes" rows="4"></textarea>
+                  </div>
+                  <div class="tcpa-consent-wrap">
+                    <label class="tcpa-checkbox-label">
+                      <input type="checkbox" name="tcpa_consent" value="yes" required>
+                      <span>By submitting, I agree to receive calls and text messages about my project from Central Wisconsin Deck Builders and matched contractors. Message and data rates may apply. Reply STOP to opt out. Consent is not a condition of purchase.</span>
+                    </label>
+                  </div>
+                  <div class="wizard-nav">
+                    <button type="button" class="wizard-back" data-back="3">&larr; Back</button>
+                    <input type="submit" class="btn-submit" value="Submit" data-wait="Submitting...">
+                  </div>
+                  <p class="form-privacy">Your info is private. No spam, no obligation. <a href="/privacy" class="tcpa-privacy-link">View our Privacy Policy</a></p>
+                </div>
+
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- ================================================
+             RIGHT COLUMN
+             ================================================ -->
+        <div class="right-col">
+
+          <!-- Trust badges card -->
+          <div class="trust-card">
+            <div class="trust-card__title">Why Homeowners Trust Us</div>
+            <div class="trust-list">
+              <div class="trust-item">
+                <div class="trust-item__icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <polyline points="9 12 11 14 15 10"/>
+                  </svg>
+                </div>
+                <div class="trust-item__text">
+                  <strong>Licensed &amp; Insured</strong>
+                  <span>Every contractor in our network is licensed and fully insured before we make an introduction.</span>
+                </div>
+              </div>
+              <div class="trust-item">
+                <div class="trust-item__icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                </div>
+                <div class="trust-item__text">
+                  <strong>Response Within 24 Hours</strong>
+                  <span>Most homeowners hear back the same day. We don't let projects sit in a queue.</span>
+                </div>
+              </div>
+              <div class="trust-item">
+                <div class="trust-item__icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                    <line x1="12" y1="1" x2="12" y2="23"/>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                  </svg>
+                </div>
+                <div class="trust-item__text">
+                  <strong>Free — No Hidden Fees</strong>
+                  <span>Getting a quote costs you nothing. We're paid by our contractor partners, never by homeowners.</span>
+                </div>
+              </div>
+              <div class="trust-item">
+                <div class="trust-item__icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                </div>
+                <div class="trust-item__text">
+                  <strong>Local Wisconsin Builders</strong>
+                  <span>Our contractors live and work in Central Wisconsin — they know the climate, the codes, and the community.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- What happens next timeline -->
+          <div class="next-card">
+            <div class="next-card__title">What Happens After You Submit?</div>
+            <div class="next-steps">
+              <div class="next-step">
+                <div class="next-step__left">
+                  <div class="next-step__num">1</div>
+                  <div class="next-step__line"></div>
+                </div>
+                <div class="next-step__body">
+                  <div class="next-step__time">Within a few hours</div>
+                  <div class="next-step__title">We Review Your Project</div>
+                  <p class="next-step__desc">Our team reviews your project details to understand exactly what you need — size, materials, timeline, and budget.</p>
+                </div>
+              </div>
+              <div class="next-step">
+                <div class="next-step__left">
+                  <div class="next-step__num">2</div>
+                  <div class="next-step__line"></div>
+                </div>
+                <div class="next-step__body">
+                  <div class="next-step__time">Within 24 hours</div>
+                  <div class="next-step__title">You Get Matched</div>
+                  <p class="next-step__desc">We match you with a vetted local contractor who specializes in your project type. Most homeowners hear back the same day.</p>
+                </div>
+              </div>
+              <div class="next-step">
+                <div class="next-step__left">
+                  <div class="next-step__num">3</div>
+                  <div class="next-step__line"></div>
+                </div>
+                <div class="next-step__body">
+                  <div class="next-step__time">On your schedule</div>
+                  <div class="next-step__title">You Decide</div>
+                  <p class="next-step__desc">Review the quote, ask any questions, and move forward only when you're ready. There's never any pressure or commitment.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mini testimonial -->
+          <div class="mini-testimonial">
+            <div class="mini-testimonial__stars">★★★★★</div>
+            <p class="mini-testimonial__text">"We got three quotes within a day of submitting our form. The whole process was painless."</p>
+            <div class="mini-testimonial__author">— Homeowner, Wausau &nbsp;·&nbsp; placeholder</div>
+          </div>
+
+        </div><!-- /.right-col -->
+
+      </div><!-- /.quote-layout -->
+    </div>
+  </main>
+<!-- /WEBFLOW COMPONENT: multi-step-form -->
+
+<!-- WEBFLOW COMPONENT: cta-section-reassurance -->
+  <!-- ======================================================
+       BOTTOM REASSURANCE BAR
+       ====================================================== -->
+  <div class="bottom-bar">
+    <div class="container--narrow">
+      <p class="bottom-bar__text">
+        Still have questions before you submit?
+        Check our <a href="/faq">FAQ page</a> or email us at
+        <a href="mailto:info@cwdeckbuilders.com">info@cwdeckbuilders.com</a>.
+        We're happy to help.
+      </p>
+    </div>
+  </div>
+<!-- /WEBFLOW COMPONENT: cta-section-reassurance -->
+
+<!-- WEBFLOW COMPONENT: footer -->
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+
+      <!-- Col 1: Brand -->
+      <div class="footer__brand">
+        <a href="/" class="footer__logo">
+          <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
+            <rect width="36" height="36" rx="8" fill="#3d3f3f"/>
+            <polygon points="18,5 26,20 10,20" fill="#e54c00" opacity="0.95"/>
+            <polygon points="18,11 27,25 9,25" fill="#e54c00" opacity="0.75"/>
+            <rect x="16" y="25" width="4" height="6" fill="#e54c00" opacity="0.6"/>
+          </svg>
+          <div class="logo-text">
+            <span class="logo-text__main" style="font-size:18px;">CWDB</span>
+            <span class="logo-text__sub">Central Wisconsin Deck Builders</span>
+          </div>
+        </a>
+        <p class="footer__tagline">Fast Quotes. Trusted Builders.</p>
+        <div class="footer__socials">
+          <a href="#" class="social-btn" aria-label="Facebook">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M17 2H3a1 1 0 00-1 1v14a1 1 0 001 1h7.5v-6H8V9.5h2.5V7.5C10.5 5.6 11.7 4.5 13.4 4.5c.8 0 1.6.06 2.4.17V7h-1.5c-.9 0-1.1.44-1.1 1.09V9.5H16l-.5 2.5h-2V18H17a1 1 0 001-1V3a1 1 0 00-1-1z"/></svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="Instagram">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="14" height="14" rx="4"/>
+              <circle cx="10" cy="10" r="3.5"/>
+              <circle cx="14" cy="6" r="0.5" fill="currentColor"/>
+            </svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="Nextdoor">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 2L3 8v9h5v-5h4v5h5V8L10 2z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Col 2: Quick Links -->
+      <div>
+        <div class="footer__col-heading">Quick Links</div>
+        <ul class="footer__links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/get-a-quote">Get a Quote</a></li>
+          <li><a href="/our-builders">Our Builders</a></li>
+          <li><a href="/gallery">Gallery</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/faq">FAQ</a></li>
+          <li><a href="/blog">Blog</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: Service Areas -->
+      <div>
+        <div class="footer__col-heading">Service Areas</div>
+        <ul class="footer__links">
+          <li><a href="/wausau-deck-builders">Wausau</a></li>
+          <li><a href="/schofield-deck-builders">Schofield</a></li>
+          <li><a href="/weston-deck-builders">Weston</a></li>
+          <li><a href="/mosinee-deck-builders">Mosinee</a></li>
+          <li><a href="/merrill-deck-builders">Merrill</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 4: Contact -->
+      <div>
+        <div class="footer__col-heading">Contact</div>
+        <ul class="footer__links">
+          <li><a href="mailto:info@cwdeckbuilders.com">info@cwdeckbuilders.com</a></li>
+          <li><a href="#">Phone TBD</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer__bottom">
+      <span class="footer__copy">© 2026 Central Wisconsin Deck Builders. All rights reserved.</span>
+      <div class="footer__legal">
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- /WEBFLOW COMPONENT: footer -->
+
+<!-- WEBFLOW COMPONENT: mobile-cta-bar -->
+  <!-- Mobile CTA bar -->
+  <div class="mobile-cta-bar">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6 6l.86-.86a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.5 16z"/>
+    </svg>
+    <span>Get a Free Quote — It's Free</span>
+  </div>
+<!-- /WEBFLOW COMPONENT: mobile-cta-bar -->
+
+<!-- WEBFLOW PAGE-SCOPED SCRIPT (Get a Quote only) — registered + applied via data_scripts_tool 2026-04-28
+     Hosted at: https://cdn.prod.website-files.com/.../quote_page_polish-1.0.0.js
+     Purpose:
+       1. Re-applies flex centering to anchor Next buttons (a.btn-submit) ONLY.
+          The .btn-submit.w-button selector covers <input type="submit"> which has the iOS
+          WebKit submit-tap bug — that selector is intentionally NOT matched.
+       2. Pre-fills #zip and #phone inputs from URL params (handoff from homepage hero form).
+-->
+<!-- <script src="quote_page_polish-1.0.0.js" defer></script> -->
+
+</body>
+</html>

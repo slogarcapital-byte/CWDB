@@ -1,3 +1,13 @@
+---
+type: reference
+tags:
+  - type/reference
+  - dept/marketing
+created: 2026-03-11
+updated: 2026-04-16
+status: active
+---
+
 # Central Wisconsin Deck Builders - Brand Style Guide
 
 **Author:** Manus AI
@@ -8,10 +18,10 @@
 ## 1. Brand Overview
 
 ### Mission & Core Promise
-Central Wisconsin Deck Builders (CWDB) is dedicated to connecting homeowners with trusted, local deck contractors quickly and efficiently. Our core promise is to provide **"Fast Quotes. Trusted Builders."**, directly addressing the common frustration of slow contractor responses and unreliable service in the home improvement industry. We aim to be the reliable local expert for deck projects in Central Wisconsin.
+[[Central Wisconsin Deck Builders LLC|Central Wisconsin Deck Builders]] (CWDB) is dedicated to connecting homeowners with trusted, local deck contractors quickly and efficiently. Our core promise is to provide **"Fast Quotes. Trusted Builders."**, directly addressing the common frustration of slow contractor responses and unreliable service in the home improvement industry. We aim to be the reliable local expert for deck projects in Central Wisconsin.
 
 ### Target Audience
-Our primary audience consists of homeowners aged 35-60 in Central Wisconsin (Wausau, Schofield, Weston, Mosinee, Merrill) who are looking for mid-range deck replacements or upgrades (typically $10K–$30K projects). These homeowners value durability, reliability, and a hassle-free experience over simply finding the lowest price. They are family-focused and appreciate local, trustworthy service.
+Our primary audience consists of homeowners aged 35-60 in Central Wisconsin ([[Wausau]], [[Schofield]], [[Weston]], [[Mosinee]], [[Merrill]]) who are looking for mid-range deck replacements or upgrades (typically $10K–$30K projects). These homeowners value durability, reliability, and a hassle-free experience over simply finding the lowest price. They are family-focused and appreciate local, trustworthy service.
 
 ### Anti-Hero Positioning
 We position ourselves against the common pain point: **"It takes forever to get started"** with home improvement projects. Our brand explicitly solves this by promising fast matching with vetted contractors, ensuring homeowners receive quotes within hours, not weeks.
@@ -40,17 +50,22 @@ Our communication is **direct, no-fluff, and confident**, but never arrogant. We
 ### Logo
 The CWDB logo features a simplified, geometric silhouette of the state of Wisconsin as its primary mark. This mark is combined with a wordmark that clearly states "CENTRAL WISCONSIN DECK BUILDERS." The overall style is inspired by the high-contrast, trade-credible aesthetic of brands like Milwaukee Tool, conveying sturdiness and professionalism.
 
-**Logo Lockup Options:**
-*   **Stacked:** The Wisconsin mark positioned above the wordmark.
-*   **Horizontal:** The Wisconsin mark positioned to the left of the wordmark.
-*   **Icon-Only:** The Wisconsin mark used independently for small applications like favicons or social media profiles.
-
-*See `/home/ubuntu/CWDB/assets/logos/` for logo files.*
+**Active Logo Files** (located in `/branding/logos/`):
+*   **Primary (stacked):** `1.1-primary-logo-high-res.png` — Wisconsin mark above wordmark. Use for website hero, print, and large placements.
+*   **Horizontal:** `1.2-horizontal-logo-high-res.png` — Wisconsin mark left of wordmark. Use for email signatures, banners, and constrained-width placements.
 
 ### Color Palette
-Our color palette is designed for high contrast and to evoke a sense of rugged professionalism, with an energetic accent. It combines deep, grounding tones with a vibrant action color.
+Our color palette is designed for high contrast and to evoke a sense of rugged professionalism, with an energetic accent.
 
-*Refer to `/home/ubuntu/CWDB/website/brand/color-palette.md` for detailed HEX codes and usage.*
+| Role | Name | Hex | Usage |
+|---|---|---|---|
+| Primary Accent | Crafted Orange | `#e54c00` | CTAs, highlights, key visual elements |
+| Dark Base | Timber Slate | `#323434` | Backgrounds, primary text, dominant elements |
+| Secondary Text | Builders Grey | `#646760` | Subheadings, secondary info, borders |
+| Sky Accent | Wisconsin Sky Blue | `#83b2cf` | Complementary accent, outdoor/natural feel |
+| Wood Accent | Aged Cedar | `#8B5A2B` | Testimonial borders, city card borders, process connectors, cedar divider strip |
+
+*See `/business-context/brand-discovery/Central Wisconsin Deck Builders - Color Palette.md` for full usage guidelines.*
 
 ### Typography
 

@@ -3,66 +3,724 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>[CITY] Deck Builders | Free Quote</title>
-  <meta name="description" content="Get a free deck quote from trusted [CITY] contractors. Fast, local, reliable." />
+  <title>{{PAGE_TITLE}} | Central Wisconsin Deck Builders</title>
+  <meta name="description" content="{{META_DESCRIPTION}}" />
+  <link rel="canonical" href="https://cwdeckbuilders.com{{PAGE_PATH}}" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="{{OG_TITLE}}" />
+  <meta property="og:description" content="{{OG_DESCRIPTION}}" />
+  <meta property="og:image" content="https://cwdeckbuilders.com/images/og-image.jpg" />
+  <meta property="og:url" content="https://cwdeckbuilders.com{{PAGE_PATH}}" />
+  <meta property="og:type" content="website" />
+
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+
+  <!-- Fonts: Staatliches (display) + Public Sans (body) via Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+        href="https://fonts.gstatic.com/s/staatliches/v13/HI_OiY8KO6hCsQSoAPmtMbectJG9O9PS.woff2" />
+  <link href="https://fonts.googleapis.com/css2?family=Staatliches&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ========== CSS CUSTOM PROPERTIES (Design System Tokens) ========== */
+    :root {
+      --orange: #e54c00;
+      --orange-hover: #cc4300;
+      --orange-active: #b33a00;
+      --slate: #323434;
+      --grey: #646760;
+      --sky: #83b2cf;
+      --cedar: #8B5A2B;
+      --off-white: #f8f8f6;
+      --white: #ffffff;
+      --error: #d32f2f;
+      --success: #2e7d32;
+
+      --font-heading: 'Staatliches', sans-serif;
+      --font-body: 'Public Sans', sans-serif;
+
+      --max-width: 1200px;
+      --content-width: 720px;
+    }
+
+    /* ========== RESET ========== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--slate);
+      background: var(--white);
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ========== TYPOGRAPHY ========== */
+    h1, h2, h3 {
+      font-family: var(--font-heading);
+      font-weight: 400; /* Staatliches ships single-weight */
+      text-transform: uppercase;
+      line-height: 1.05;
+    }
+    h1 { font-size: 72px; letter-spacing: 0.5px; line-height: 0.95; }
+    h2 { font-size: 48px; letter-spacing: 0.5px; }
+    h3 { font-size: 32px; letter-spacing: 0.5px; line-height: 1.1; }
+    h4 { font-family: var(--font-body); font-weight: 600; font-size: 20px; line-height: 1.3; }
+
+    /* ========== CONTAINER ========== */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ========== SECTIONS ========== */
+    .section { padding: 96px 0; }
+    .section--dark { background: var(--slate); color: var(--white); }
+    .section--light { background: var(--white); }
+    .section--alt { background: var(--off-white); }
+    /* .section--accent and .section--cedar removed 2026-04-19 — use --slate/--white/--off-white only */
+
+    /* ========== BUTTONS ========== */
+    .btn {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 200ms ease;
+      border: none;
+      text-align: center;
+    }
+    .btn--primary {
+      background: var(--orange);
+      color: var(--white);
+      padding: 16px 40px;
+      box-shadow: 0 2px 8px rgba(229, 76, 0, 0.3);
+    }
+    .btn--primary:hover { background: var(--orange-hover); transform: scale(1.02); }
+    .btn--primary:active { background: var(--orange-active); }
+
+    .btn--secondary {
+      background: transparent;
+      color: var(--orange);
+      padding: 14px 38px;
+      border: 2px solid var(--orange);
+    }
+    .btn--secondary:hover { background: var(--orange); color: var(--white); }
+
+    /* ========== HEADER ========== */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: var(--slate);
+      height: 72px;
+      display: flex;
+      align-items: center;
+    }
+    .header .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .header__logo img { height: 40px; }
+    .header__nav { display: flex; align-items: center; gap: 32px; }
+    .header__nav a {
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--white);
+      transition: color 200ms;
+    }
+    .header__nav a:hover { color: var(--sky); }
+    .header__right { display: flex; align-items: center; gap: 24px; }
+    .header__phone {
+      color: var(--white);
+      font-weight: 500;
+      font-size: 14px;
+    }
+    .header__phone:hover { color: var(--sky); }
+
+    /* ========== HERO ========== */
+    .hero {
+      position: relative;
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      background: var(--slate);
+      color: var(--white);
+      padding-top: 72px; /* offset for fixed header */
+      overflow: hidden;
+    }
+    .hero__bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0.3;
+    }
+    .hero .container { position: relative; z-index: 1; }
+    .hero h1 { margin-bottom: 16px; }
+    .hero__subtitle {
+      font-size: 18px;
+      line-height: 1.6;
+      max-width: 600px;
+      margin-bottom: 32px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+    .hero__badges {
+      display: flex;
+      gap: 24px;
+      margin-top: 24px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* ========== VALUE PROPS (3 columns) ========== */
+    .value-props {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      text-align: center;
+    }
+    .value-prop__icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 16px;
+      color: var(--sky);
+    }
+    .value-prop h3 { font-size: 24px; margin-bottom: 8px; }
+    .value-prop p { color: var(--grey); max-width: 300px; margin: 0 auto; }
+
+    /* ========== PROCESS TIMELINE ========== */
+    .process {
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      align-items: flex-start;
+    }
+    .process__step { text-align: center; max-width: 240px; }
+    .process__number {
+      width: 48px;
+      height: 48px;
+      background: var(--orange);
+      color: var(--white);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .process__title {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 17px;
+      margin-bottom: 8px;
+    }
+    .process__text { font-size: 15px; color: rgba(255, 255, 255, 0.8); }
+
+    /* ========== CARDS GRID ========== */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 32px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      border-bottom: 3px solid var(--sky);
+      transition: all 200ms ease;
+    }
+    .card:hover { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12); transform: translateY(-2px); }
+
+    /* ========== TRUST BADGES ========== */
+    .trust-badges {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .trust-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .trust-badge__icon { width: 32px; height: 32px; color: var(--sky); }
+    .trust-badge__text {
+      font-weight: 600;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ========== QUOTE FORM ========== */
+    .quote-form {
+      max-width: 600px;
+      margin: 0 auto;
+      background: var(--white);
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+    }
+    .quote-form label {
+      display: block;
+      font-weight: 500;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: var(--slate);
+    }
+    .quote-form input,
+    .quote-form select,
+    .quote-form textarea {
+      width: 100%;
+      height: 48px;
+      border: 1px solid var(--grey);
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-family: var(--font-body);
+      font-size: 16px;
+      margin-bottom: 20px;
+      transition: border-color 200ms, box-shadow 200ms;
+    }
+    .quote-form textarea { min-height: 100px; height: auto; resize: vertical; }
+    .quote-form input:focus,
+    .quote-form select:focus,
+    .quote-form textarea:focus {
+      outline: none;
+      border-color: var(--sky);
+      box-shadow: 0 0 0 3px rgba(131, 178, 207, 0.2);
+    }
+    .quote-form .btn--primary { width: 100%; }
+
+    /* ========== FOOTER ========== */
+    .footer {
+      background: var(--slate);
+      color: var(--white);
+      padding: 64px 0 32px;
+    }
+    .footer a { color: var(--sky); transition: color 200ms; }
+    .footer a:hover { color: var(--white); }
+    .footer__links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin: 24px 0;
+      font-size: 14px;
+    }
+    .footer__social {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .footer__social a { font-size: 24px; color: var(--sky); }
+    .footer__social a:hover { color: var(--white); }
+    .footer__bottom {
+      text-align: center;
+      font-size: 13px;
+      color: var(--grey);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 24px;
+      margin-top: 24px;
+    }
+
+    /* ========== MOBILE STICKY CTA BAR ========== */
+    .mobile-cta {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      background: var(--orange);
+      height: 56px;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .mobile-cta a {
+      color: var(--white);
+      font-weight: 600;
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 1199px) {
+      .section { padding: 64px 0; }
+      h1 { font-size: 56px; }
+      h2 { font-size: 40px; }
+    }
+    @media (max-width: 767px) {
+      .section { padding: 48px 0; }
+      h1 { font-size: 42px; }
+      h2 { font-size: 32px; }
+      h3 { font-size: 24px; }
+
+      .value-props { grid-template-columns: 1fr; gap: 32px; }
+      .process { flex-direction: column; gap: 32px; align-items: center; }
+      .trust-badges { gap: 24px; }
+
+      .header__nav { display: none; } /* hamburger takes over */
+      .header__phone { display: none; } /* phone icon instead */
+      .mobile-cta { display: flex; }
+
+      .quote-form { padding: 24px; }
+
+      body { padding-bottom: 56px; } /* space for sticky CTA */
+    }
+  </style>
 </head>
 <body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-  <!-- SECTION 1: HERO -->
-  <section id="hero">
-    <h1>Get a Free Deck Quote in [CITY]</h1>
-    <p>We connect homeowners with vetted local deck builders. No hassle. No spam. Just fast quotes.</p>
-    <a href="#quote-form">Get My Free Quote</a>
-  </section>
-
-  <!-- SECTION 2: VALUE PROPOSITION -->
-  <section id="value-props">
-    <div>
-      <h3>Local Contractors</h3>
-      <p>All builders are based in [CITY] and surrounding areas.</p>
+  <!-- ===== HEADER ===== -->
+  <header class="header">
+    <div class="container">
+      <a href="/" class="header__logo">
+        <img src="/images/logo-horizontal.png" alt="Central Wisconsin Deck Builders" />
+      </a>
+      <nav class="header__nav">
+        <a href="/our-builders">Our Builders</a>
+        <div class="header__dropdown">
+          <a href="#">Resources</a>
+          <!-- Dropdown: Blog, FAQ, Cost Calculator, Deck Permits Guide -->
+        </div>
+        <a href="/about">About</a>
+      </nav>
+      <div class="header__right">
+        <a href="tel:+1715XXXXXXX" class="header__phone">(715) XXX-XXXX</a>
+        <a href="/get-a-quote" class="btn btn--primary" style="padding: 10px 24px; font-size: 14px;">Get a Quote</a>
+      </div>
     </div>
-    <div>
-      <h3>Free & No Obligation</h3>
-      <p>Your quote request is 100% free. No pressure, ever.</p>
-    </div>
-    <div>
-      <h3>Fast Response</h3>
-      <p>Hear back within 24 hours of submitting your project details.</p>
-    </div>
-  </section>
+  </header>
 
-  <!-- SECTION 3: PROJECT EXAMPLES / SOCIAL PROOF -->
-  <section id="proof">
-    <h2>Decks Built in [CITY]</h2>
-    <!-- Insert project photos here -->
-    <div class="testimonials">
-      <blockquote>"[TESTIMONIAL 1]" — [NAME], [CITY]</blockquote>
-      <blockquote>"[TESTIMONIAL 2]" — [NAME], [CITY]</blockquote>
+  <!-- ===== HERO (customize per page) ===== -->
+  <section class="hero">
+    <div class="hero__bg" style="background-image: url('/images/hero-deck.jpg');"></div>
+    <div class="container">
+      <h1>{{HERO_HEADLINE}}</h1>
+      <p class="hero__subtitle">{{HERO_SUBTEXT}}</p>
+      <a href="/get-a-quote" class="btn btn--primary">Get My Free Quote</a>
+      <div class="hero__badges">
+        <span>&#10003; Free</span>
+        <span>&#10003; No obligation</span>
+        <span>&#10003; Licensed &amp; insured</span>
+      </div>
     </div>
   </section>
 
-  <!-- SECTION 4: TRUST SIGNALS -->
-  <section id="trust">
-    <p>Licensed &amp; Insured Contractors</p>
-    <p>Serving Central Wisconsin Since [YEAR]</p>
-    <p>[X]+ Decks Built</p>
-    <p>★★★★★ Rated on Google</p>
+  <!-- ===== VALUE PROPS ===== -->
+  <section class="section section--light">
+    <div class="container">
+      <div class="value-props">
+        <div class="value-prop">
+          <!-- map-pin icon -->
+          <h3>Local Contractors</h3>
+          <p>Every builder in our network is based right here in Central Wisconsin.</p>
+        </div>
+        <div class="value-prop">
+          <!-- clock icon -->
+          <h3>Fast Quotes</h3>
+          <p>A licensed builder will reach out within 48 hours of your request.</p>
+        </div>
+        <div class="value-prop">
+          <!-- shield icon -->
+          <h3>Licensed &amp; Insured</h3>
+          <p>Every contractor is vetted, licensed, and fully insured.</p>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <!-- SECTION 5: QUOTE FORM (Tally Embed) -->
-  <section id="quote-form">
-    <h2>Get Your Free Deck Quote</h2>
-    <p>Fill out the form below and a local contractor will reach out within 24 hours.</p>
-    <!-- Replace with Tally embed code -->
-    <div data-tally-src="[TALLY_FORM_URL]" data-tally-width="100%" data-tally-emoji-text="👋" data-tally-emoji-animation="wave"></div>
-    <script async src="https://tally.so/widgets/embed.js"></script>
+  <!-- ===== HOW IT WORKS — PROCESS TIMELINE ===== -->
+  <section class="section section--dark">
+    <div class="container">
+      <h2 style="text-align:center; margin-bottom: 48px;">How It Works</h2>
+      <div class="process">
+        <div class="process__step">
+          <div class="process__number">1</div>
+          <div class="process__title">Tell Us About Your Project</div>
+          <p class="process__text">Fill out a quick form with your deck project details.</p>
+        </div>
+        <div class="process__step">
+          <div class="process__number">2</div>
+          <div class="process__title">Get Matched With a Local Builder</div>
+          <p class="process__text">We connect you with a vetted contractor in your area.</p>
+        </div>
+        <div class="process__step">
+          <div class="process__number">3</div>
+          <div class="process__title">Receive Your Free Quote</div>
+          <p class="process__text">Your builder reaches out within 48 hours with a quote.</p>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <!-- SECTION 6: FOOTER -->
-  <footer>
-    <p>&copy; [YEAR] [BRAND NAME] | [CITY], Wisconsin</p>
-    <p><a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p>
+  <!-- ===== SERVICE CITIES ===== -->
+  <section class="section section--light">
+    <div class="container">
+      <h2 style="text-align:center; margin-bottom: 48px;">Serving Central Wisconsin</h2>
+      <div class="card-grid" style="grid-template-columns: repeat(5, 1fr);">
+        <a href="/wausau" class="card" style="text-align:center;">
+          <h3 style="font-size:22px;">Wausau</h3>
+          <p style="color:var(--orange); font-weight:600; font-size:14px;">Get a Quote &rarr;</p>
+        </a>
+        <a href="/schofield" class="card" style="text-align:center;">
+          <h3 style="font-size:22px;">Schofield</h3>
+          <p style="color:var(--orange); font-weight:600; font-size:14px;">Get a Quote &rarr;</p>
+        </a>
+        <a href="/weston" class="card" style="text-align:center;">
+          <h3 style="font-size:22px;">Weston</h3>
+          <p style="color:var(--orange); font-weight:600; font-size:14px;">Get a Quote &rarr;</p>
+        </a>
+        <a href="/mosinee" class="card" style="text-align:center;">
+          <h3 style="font-size:22px;">Mosinee</h3>
+          <p style="color:var(--orange); font-weight:600; font-size:14px;">Get a Quote &rarr;</p>
+        </a>
+        <a href="/merrill" class="card" style="text-align:center;">
+          <h3 style="font-size:22px;">Merrill</h3>
+          <p style="color:var(--orange); font-weight:600; font-size:14px;">Get a Quote &rarr;</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GALLERY PREVIEW ===== -->
+  <section class="section section--alt">
+    <div class="container">
+      <h2 style="text-align:center; margin-bottom: 48px;">Recent Deck Projects</h2>
+      <div class="card-grid">
+        <!-- 4-6 project photo cards -->
+        <div class="card" style="padding:0; overflow:hidden;">
+          <img src="/images/gallery/project-1.jpg" alt="Composite deck in Wausau, WI" loading="lazy" />
+        </div>
+        <!-- repeat for additional images -->
+      </div>
+      <p style="text-align:center; margin-top:32px;">
+        <a href="/gallery" style="color:var(--orange); font-weight:600;">View All Projects &rarr;</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== TRUST BADGES + TESTIMONIAL PLACEHOLDERS ===== -->
+  <section class="section section--light">
+    <div class="container">
+      <div class="trust-badges" style="margin-bottom: 48px;">
+        <div class="trust-badge">
+          <span class="trust-badge__text">Licensed &amp; Insured</span>
+        </div>
+        <div class="trust-badge">
+          <span class="trust-badge__text">Free Quotes</span>
+        </div>
+        <div class="trust-badge">
+          <span class="trust-badge__text">Locally Owned</span>
+        </div>
+        <div class="trust-badge">
+          <span class="trust-badge__text">5 Cities Served</span>
+        </div>
+      </div>
+      <h2 style="text-align:center; margin-bottom: 32px;">What Homeowners Say</h2>
+      <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <!-- Testimonial placeholder cards — replace with real testimonials -->
+        <div class="card">
+          <p style="font-style:italic; color:var(--grey);">"Placeholder — real testimonial coming soon."</p>
+          <p style="font-weight:600; margin-top:12px;">— Homeowner, Wausau</p>
+        </div>
+        <div class="card">
+          <p style="font-style:italic; color:var(--grey);">"Placeholder — real testimonial coming soon."</p>
+          <p style="font-weight:600; margin-top:12px;">— Homeowner, Weston</p>
+        </div>
+        <div class="card">
+          <p style="font-style:italic; color:var(--grey);">"Placeholder — real testimonial coming soon."</p>
+          <p style="font-weight:600; margin-top:12px;">— Homeowner, Schofield</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COST CALCULATOR TEASER ===== -->
+  <section class="section section--accent">
+    <div class="container" style="text-align:center;">
+      <h2>Wondering What a Deck Costs?</h2>
+      <p style="font-size:18px; color:var(--grey); margin: 16px 0 32px; max-width:500px; margin-left:auto; margin-right:auto;">
+        Get a rough estimate for your project with our free deck cost calculator.
+      </p>
+      <a href="/cost-calculator" class="btn btn--secondary">Try the Cost Calculator &rarr;</a>
+    </div>
+  </section>
+
+  <!-- ===== EMBEDDED QUOTE FORM ===== -->
+  <section class="section section--dark" id="quote-form">
+    <div class="container">
+      <h2 style="text-align:center; margin-bottom: 8px;">Ready to Get Started?</h2>
+      <p style="text-align:center; margin-bottom: 40px; color: rgba(255,255,255,0.8);">
+        Fill out the form and a local builder will reach out within 48 hours.
+      </p>
+      <form class="quote-form" action="/thank-you" method="POST" data-name="Quote Request">
+        <label for="name">Full Name *</label>
+        <input type="text" id="name" name="name" required placeholder="Your full name" />
+
+        <label for="phone">Phone Number *</label>
+        <input type="tel" id="phone" name="phone" required placeholder="(715) 555-0000" />
+
+        <label for="email">Email Address *</label>
+        <input type="email" id="email" name="email" required placeholder="you@email.com" />
+
+        <label for="address">Property Address *</label>
+        <input type="text" id="address" name="address" required placeholder="Street address, City, WI ZIP" />
+
+        <label for="owner">Do you own this property? *</label>
+        <select id="owner" name="owner" required>
+          <option value="" disabled selected>Select one</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+
+        <label for="project-type">Project Type *</label>
+        <select id="project-type" name="project_type" required>
+          <option value="" disabled selected>Select one</option>
+          <option value="new-build">New deck build</option>
+          <option value="replacement">Deck replacement</option>
+          <option value="repair">Deck repair</option>
+          <option value="addition">Deck addition / expansion</option>
+          <option value="not-sure">Not sure yet</option>
+        </select>
+
+        <label for="budget">Budget Range *</label>
+        <select id="budget" name="budget" required>
+          <option value="" disabled selected>Select one</option>
+          <option value="under-5k">Under $5,000</option>
+          <option value="5k-10k">$5,000 - $10,000</option>
+          <option value="10k-20k">$10,000 - $20,000</option>
+          <option value="20k-40k">$20,000 - $40,000</option>
+          <option value="40k-plus">$40,000+</option>
+        </select>
+
+        <label for="timeline">When are you looking to start? *</label>
+        <select id="timeline" name="timeline" required>
+          <option value="" disabled selected>Select one</option>
+          <option value="asap">As soon as possible</option>
+          <option value="1-3-months">Within 1-3 months</option>
+          <option value="3-6-months">3-6 months</option>
+          <option value="planning">Just planning ahead</option>
+        </select>
+
+        <label for="notes">Anything else we should know? (optional)</label>
+        <textarea id="notes" name="notes" placeholder="Deck size, materials, special features, etc."></textarea>
+
+        <button type="submit" class="btn btn--primary">Get My Free Quote</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== BLOG PREVIEW ===== -->
+  <section class="section section--light">
+    <div class="container">
+      <h2 style="text-align:center; margin-bottom: 48px;">From the Blog</h2>
+      <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <a href="/blog/deck-cost-wisconsin" class="card">
+          <p style="font-size:12px; text-transform:uppercase; letter-spacing:2px; color:var(--grey); margin-bottom:8px;">Cost Guide</p>
+          <h4>How Much Does a Deck Cost in Wisconsin?</h4>
+        </a>
+        <a href="/blog/composite-vs-wood" class="card">
+          <p style="font-size:12px; text-transform:uppercase; letter-spacing:2px; color:var(--grey); margin-bottom:8px;">Materials</p>
+          <h4>Composite vs. Wood vs. Cedar</h4>
+        </a>
+        <a href="/blog/best-time-build-deck" class="card">
+          <p style="font-size:12px; text-transform:uppercase; letter-spacing:2px; color:var(--grey); margin-bottom:8px;">Planning</p>
+          <h4>Best Time to Build a Deck in Central WI</h4>
+        </a>
+      </div>
+      <p style="text-align:center; margin-top:32px;">
+        <a href="/blog" style="color:var(--orange); font-weight:600;">Read More on the Blog &rarr;</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container" style="text-align:center;">
+      <img src="/images/logo-horizontal-white.png" alt="Central Wisconsin Deck Builders" style="height:36px; margin:0 auto 8px;" />
+      <p style="font-size:14px; color:var(--sky);">Fast Quotes. Trusted Builders.</p>
+
+      <div class="footer__links">
+        <a href="/wausau">Wausau</a>
+        <a href="/schofield">Schofield</a>
+        <a href="/weston">Weston</a>
+        <a href="/mosinee">Mosinee</a>
+        <a href="/merrill">Merrill</a>
+      </div>
+      <div class="footer__links">
+        <a href="/get-a-quote">Get a Quote</a>
+        <a href="/our-builders">Our Builders</a>
+        <a href="/blog">Blog</a>
+        <a href="/faq">FAQ</a>
+        <a href="/cost-calculator">Cost Calculator</a>
+        <a href="/about">About</a>
+      </div>
+
+      <div class="footer__social">
+        <a href="#" aria-label="Facebook">FB</a>
+        <a href="#" aria-label="Instagram">IG</a>
+        <a href="#" aria-label="Nextdoor">ND</a>
+      </div>
+
+      <div class="footer__bottom">
+        <p>&copy; 2026 Central Wisconsin Deck Builders &nbsp;|&nbsp; <a href="/privacy">Privacy</a> &nbsp;|&nbsp; <a href="/terms">Terms</a></p>
+      </div>
+    </div>
   </footer>
 
+  <!-- ===== MOBILE STICKY CTA BAR ===== -->
+  <div class="mobile-cta">
+    <a href="/get-a-quote">Get a Free Quote</a>
+    <a href="tel:+1715XXXXXXX" aria-label="Call us">&#9742;</a>
+  </div>
+
+  <!-- Structured Data: LocalBusiness (customize per page) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Central Wisconsin Deck Builders",
+    "url": "https://cwdeckbuilders.com",
+    "telephone": "+1-715-XXX-XXXX",
+    "description": "Free deck quotes from trusted local contractors in Central Wisconsin.",
+    "areaServed": [
+      {"@type": "City", "name": "Wausau", "containedInPlace": {"@type": "State", "name": "Wisconsin"}},
+      {"@type": "City", "name": "Schofield", "containedInPlace": {"@type": "State", "name": "Wisconsin"}},
+      {"@type": "City", "name": "Weston", "containedInPlace": {"@type": "State", "name": "Wisconsin"}},
+      {"@type": "City", "name": "Mosinee", "containedInPlace": {"@type": "State", "name": "Wisconsin"}},
+      {"@type": "City", "name": "Merrill", "containedInPlace": {"@type": "State", "name": "Wisconsin"}}
+    ],
+    "priceRange": "Free quotes",
+    "serviceType": "Deck Building"
+  }
+  </script>
 </body>
 </html>

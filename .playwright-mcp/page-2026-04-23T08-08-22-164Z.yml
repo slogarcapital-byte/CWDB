@@ -1,0 +1,264 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - link "Central Wisconsin Deck Builders Logo" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Central Wisconsin Deck Builders Logo" [ref=e5]
+      - generic [ref=e6]:
+        - link "Our Builders" [ref=e7] [cursor=pointer]:
+          - /url: /our-builders
+        - button "Resources" [ref=e9] [cursor=pointer]:
+          - generic [ref=e10]: Resources
+        - link "About" [ref=e11] [cursor=pointer]:
+          - /url: /about
+      - generic [ref=e12]:
+        - link "(715) 544-7941" [ref=e13] [cursor=pointer]:
+          - /url: tel:+17155447941
+        - link "Start My Quote →" [ref=e14] [cursor=pointer]:
+          - /url: /get-a-quote
+    - text: 
+  - generic [ref=e17]:
+    - generic [ref=e18]: Service Area
+    - heading "Deck Builders in Wausau, WI" [level=1] [ref=e19]
+    - paragraph [ref=e20]: Get free quotes from licensed, insured deck builders serving Wausau and Marathon County. Hear back within 48 hours.
+  - generic [ref=e22]:
+    - heading "Deck Builders Serving Wausau, Wisconsin" [level=2] [ref=e23]
+    - generic [ref=e25]:
+      - paragraph [ref=e26]: Wausau is the hub of Central Wisconsin — and a great city to build a deck. With long summers, strong demand for outdoor living space, and a growing pool of skilled local contractors, Wausau homeowners have real options when it comes to deck projects.
+      - paragraph [ref=e27]: Central Wisconsin Deck Builders connects Wausau homeowners with vetted, licensed deck contractors who know Marathon County building codes, local permit requirements, and Wisconsin's weather patterns. Whether you want a simple pressure-treated platform deck, composite low-maintenance decking, or a full multi-level outdoor living space with a pergola and built-in seating — we'll match you with the right builder.
+      - paragraph [ref=e28]: Submit your project details and get your first quote within 48 hours. No spam, no pressure, no cost to you.
+  - generic [ref=e30]:
+    - heading "Frequently Asked Questions" [level=2] [ref=e31]
+    - generic [ref=e32]:
+      - generic [ref=e33]:
+        - heading "How much does a deck cost in Wausau, WI?" [level=3] [ref=e34]
+        - paragraph [ref=e35]: Deck costs in Wausau typically range from $8,000 to $30,000+ depending on size, materials, and complexity. A basic pressure-treated platform deck runs $8,000–$14,000. Composite decking adds 20–40% to material costs. Multi-level decks with pergolas or built-in features can exceed $30,000. Get a free quote to see pricing specific to your project.
+      - generic [ref=e36]:
+        - heading "Do I need a permit to build a deck in Wausau?" [level=3] [ref=e37]
+        - paragraph [ref=e38]: Yes. The City of Wausau requires a building permit for most decks over 200 square feet or more than 30 inches above grade. Permits also apply to decks attached to the home. Our contractors are familiar with Marathon County and Wausau permit requirements and handle the process for you.
+      - generic [ref=e39]:
+        - heading "How long does it take to build a deck in Wausau?" [level=3] [ref=e40]
+        - paragraph [ref=e41]: Most residential decks in Wausau take 3–7 days to build once materials are on-site and permits are approved. Permit approval typically takes 1–2 weeks. Larger or more complex projects may take longer. Timing also depends on contractor availability and the Wisconsin building season — most deck projects run May through October.
+      - generic [ref=e42]:
+        - heading "What deck materials work best in Wisconsin winters?" [level=3] [ref=e43]
+        - paragraph [ref=e44]: Composite decking (such as Trex or TimberTech) is the top choice for Wisconsin's freeze-thaw cycles — it won't warp, rot, or splinter and requires minimal maintenance. Pressure-treated lumber is a durable, cost-effective option when properly sealed and maintained. Cedar is a popular mid-range choice. Our contractors will walk you through the tradeoffs for your budget and usage.
+      - generic [ref=e45]:
+        - heading "What areas near Wausau do you serve?" [level=3] [ref=e46]
+        - paragraph [ref=e47]: We serve Wausau and the surrounding Marathon County area including Schofield, Weston, Rothschild, Rib Mountain, Mosinee, and Merrill. If you're unsure whether your address is in our coverage area, submit a quote request and we'll confirm within 48 hours.
+  - generic [ref=e49]:
+    - heading "Trusted by Homeowners Across Central Wisconsin" [level=2] [ref=e50]
+    - generic [ref=e51]:
+      - paragraph [ref=e53]: Licensed Contractors
+      - paragraph [ref=e55]: Insured & Bonded
+      - paragraph [ref=e57]: Free Quotes — No Obligation
+      - paragraph [ref=e59]: Local Wisconsin Builders
+    - generic [ref=e60]:
+      - generic [ref=e61]:
+        - paragraph [ref=e62]: ★★★★★
+        - paragraph [ref=e63]: We had three quotes within two days. The contractor they matched us with was professional, on time, and the deck came out exactly how we imagined.
+        - paragraph [ref=e64]: Sarah M. — Wausau, WI
+      - generic [ref=e65]:
+        - paragraph [ref=e66]: ★★★★★
+        - paragraph [ref=e67]: Didn't realize how easy getting a deck quote could be. Filled out the form on a Tuesday, had a contractor on-site Thursday. Highly recommend.
+        - paragraph [ref=e68]: Mike T. — Wausau, WI
+      - generic [ref=e69]:
+        - paragraph [ref=e70]: ★★★★★
+        - paragraph [ref=e71]: The builder they connected us with knew exactly what permits we needed in Marathon County. Saved us a lot of headaches.
+        - paragraph [ref=e72]: Jennifer K. — Schofield, WI
+  - generic [ref=e74]:
+    - heading "Recent Central Wisconsin builds" [level=2] [ref=e75]
+    - list [ref=e78]:
+      - listitem [ref=e79]:
+        - link "Wooden pergola on a raised cedar platform with a hot tub underneath, surrounded by trees in Weston Wisconsin Cedar Pergola with Hot Tub — Weston, WI Raised cedar platform with attached pergola and built-in hot tub, tucked into the tree line. A defined outdoor living space that gets used year-round." [ref=e80] [cursor=pointer]:
+          - /url: /gallery
+          - img "Wooden pergola on a raised cedar platform with a hot tub underneath, surrounded by trees in Weston Wisconsin" [ref=e82]
+          - generic [ref=e83]:
+            - generic [ref=e84]: Cedar Pergola with Hot Tub — Weston, WI
+            - generic [ref=e85]: Raised cedar platform with attached pergola and built-in hot tub, tucked into the tree line. A defined outdoor living space that gets used year-round.
+      - listitem [ref=e86]:
+        - link "Elevated wooden deck attached to a beige Wausau home with a sloped green roof and fenced backyard Elevated Backyard Deck — Wausau, WI Elevated wood deck with full stair run from the back of a Wausau home down to the yard. Classic pressure-treated build with black metal railing." [ref=e87] [cursor=pointer]:
+          - /url: /gallery
+          - img "Elevated wooden deck attached to a beige Wausau home with a sloped green roof and fenced backyard" [ref=e89]
+          - generic [ref=e90]:
+            - generic [ref=e91]: Elevated Backyard Deck — Wausau, WI
+            - generic [ref=e92]: Elevated wood deck with full stair run from the back of a Wausau home down to the yard. Classic pressure-treated build with black metal railing.
+      - listitem [ref=e93]:
+        - link "Composite wood deck with black metal railing, two wicker chairs and a small table overlooking a backyard in Wittenberg Wisconsin Composite Deck — Wittenberg, WI Low-maintenance composite deck with black metal railing, styled for an outdoor seating area. Built to shrug off Wisconsin winters with almost no upkeep." [ref=e94] [cursor=pointer]:
+          - /url: /gallery
+          - img "Composite wood deck with black metal railing, two wicker chairs and a small table overlooking a backyard in Wittenberg Wisconsin" [ref=e96]
+          - generic [ref=e97]:
+            - generic [ref=e98]: Composite Deck — Wittenberg, WI
+            - generic [ref=e99]: Low-maintenance composite deck with black metal railing, styled for an outdoor seating area. Built to shrug off Wisconsin winters with almost no upkeep.
+  - generic [ref=e101]:
+    - generic [ref=e102]: "YOUR LOCAL BUILDERS:"
+    - generic [ref=e103]:
+      - generic [ref=e104]:
+        - img "Portrait of Ben Barton, Barton Builders LLC" [ref=e105]
+        - generic [ref=e106]:
+          - generic [ref=e107]: Ben Barton
+          - generic [ref=e108]: Wausau, WI · Barton Builders LLC
+      - generic [ref=e109]:
+        - img "Portrait of John Garcia, John Garcia Construction" [ref=e110]
+        - generic [ref=e111]:
+          - generic [ref=e112]: John Garcia
+          - generic [ref=e113]: Merrill, WI · John Garcia Construction
+    - link "Meet the team →" [ref=e114] [cursor=pointer]:
+      - /url: /our-builders
+  - generic [ref=e116]:
+    - generic [ref=e117]: COVERAGE AREA
+    - heading "We serve Central Wisconsin" [level=2] [ref=e118]
+    - generic [ref=e119]:
+      - img "Central Wisconsin coverage map showing Merrill, Wausau, Schofield, Weston, and Mosinee" [ref=e122]:
+        - generic [ref=e127]: MERRILL
+        - generic [ref=e129]: WAUSAU
+        - generic [ref=e131]: SCHOFIELD
+        - generic [ref=e133]: WESTON
+        - generic [ref=e135]: MOSINEE
+      - generic [ref=e137]:
+        - link "WAUSAU →" [ref=e138] [cursor=pointer]:
+          - /url: /service-area/wausau
+          - generic [ref=e139]: WAUSAU
+          - generic [ref=e140]: →
+        - link "SCHOFIELD →" [ref=e141] [cursor=pointer]:
+          - /url: /service-area/schofield
+          - generic [ref=e142]: SCHOFIELD
+          - generic [ref=e143]: →
+        - link "WESTON →" [ref=e144] [cursor=pointer]:
+          - /url: /service-area/weston
+          - generic [ref=e145]: WESTON
+          - generic [ref=e146]: →
+        - link "MOSINEE →" [ref=e147] [cursor=pointer]:
+          - /url: /service-area/mosinee
+          - generic [ref=e148]: MOSINEE
+          - generic [ref=e149]: →
+        - link "MERRILL →" [ref=e150] [cursor=pointer]:
+          - /url: /service-area/merrill
+          - generic [ref=e151]: MERRILL
+          - generic [ref=e152]: →
+  - generic [ref=e154]:
+    - paragraph [ref=e155]: Deck Builders Serving Wausau, Wisconsin
+    - heading "Get Your Free Wausau Deck Quote" [level=2] [ref=e156]
+    - paragraph [ref=e157]: Tell us about your project. A trusted local builder will reach out within 48 hours.
+    - form "Quote Request" [ref=e159]:
+      - generic [ref=e160]:
+        - generic [ref=e161]:
+          - generic [ref=e162]: Name*
+          - textbox "Name* Phone Number*" [ref=e163]:
+            - /placeholder: Jane Doe
+        - generic [ref=e164]:
+          - generic [ref=e165]: Phone Number*
+          - textbox "(715) 555-5555" [ref=e166]
+      - generic [ref=e168]:
+        - generic [ref=e169]: Email Address*
+        - textbox "Email Address*" [ref=e170]:
+          - /placeholder: jane.doe@email.com
+      - generic [ref=e172]:
+        - generic [ref=e173]: Property Address*
+        - textbox "Property Address*" [ref=e174]:
+          - /placeholder: 123 Main St. Wausau, WI 54401
+      - generic [ref=e175]:
+        - generic [ref=e176]:
+          - generic [ref=e177]: Property Ownership?*
+          - combobox "Property Ownership?*" [ref=e178]:
+            - option "Select one..." [selected]
+            - option "Own"
+            - option "Rent"
+        - generic [ref=e179]:
+          - generic [ref=e180]: Type of project?*
+          - combobox "Type of project?*" [ref=e181]:
+            - option "Select one..." [selected]
+            - option "Own"
+            - option "Rent"
+      - generic [ref=e182]:
+        - generic [ref=e183]:
+          - generic [ref=e184]: Estimated budget?*
+          - combobox "Estimated budget?*" [ref=e185]:
+            - option "Select one..." [selected]
+            - option "Own"
+            - option "Rent"
+        - generic [ref=e186]:
+          - generic [ref=e187]: When to start?*
+          - combobox "When to start?*" [ref=e188]:
+            - option "Select one..." [selected]
+            - option "Own"
+            - option "Rent"
+      - generic [ref=e190]:
+        - generic [ref=e191]: Anything else we should know? (optional)
+        - textbox "Anything else we should know? (optional)" [ref=e192]:
+          - /placeholder: description, custom requests, dimensions, etc.
+      - generic [ref=e193]:
+        - generic [ref=e194] [cursor=pointer]:
+          - checkbox "I agree to receive calls, text messages, and emails from Central Wisconsin Deck Builders, LLC and its contractor partners about my project request. Consent is not a condition of receiving a quote. Msg & data rates may apply. Reply STOP to opt out." [ref=e195]
+          - generic [ref=e196]: I agree to receive calls, text messages, and emails from Central Wisconsin Deck Builders, LLC and its contractor partners about my project request. Consent is not a condition of receiving a quote. Msg & data rates may apply. Reply STOP to opt out.
+        - paragraph [ref=e197]: By checking the box above and clicking "Get My Free Quote," you provide your prior express written consent for Central Wisconsin Deck Builders, LLC ("CWDB") and its local contractor partners to contact you at the phone number and email address you provided. This may include calls, text messages (including SMS and MMS), and emails regarding your deck project inquiry, quotes, and scheduling. Calls and texts may be made using automated technology or prerecorded messages. Your consent is not a condition of purchasing any goods or services, and you may revoke your consent at any time by replying STOP to any text message, calling (715) XXX-XXXX, or emailing info@cwdeckbuilders.com. Standard message and data rates may apply. Message frequency varies.
+        - link "View our Privacy Policy" [ref=e198] [cursor=pointer]:
+          - /url: /privacy
+      - button "Request a Quote" [ref=e199] [cursor=pointer]
+      - paragraph [ref=e200]: Your info is private. No spam, no obligation.
+  - generic [ref=e202]:
+    - heading "Start your deck quote. 48-hour response from a local builder." [level=2] [ref=e203]
+    - link "Start My Quote →" [ref=e204] [cursor=pointer]:
+      - /url: /get-a-quote
+  - generic [ref=e207]:
+    - generic [ref=e208]:
+      - img "Central Wisconsin Deck Builders Logo" [ref=e209]
+      - link "(715) 544-7941" [ref=e210] [cursor=pointer]:
+        - /url: tel:+17155447941
+      - generic [ref=e211]:
+        - link "Facebook" [ref=e212] [cursor=pointer]:
+          - /url: https://facebook.com
+          - img "Facebook" [ref=e213]
+        - link "Instagram" [ref=e215] [cursor=pointer]:
+          - /url: https://instagram.com
+          - img "Instagram" [ref=e216]
+        - link "Nextdoor" [ref=e218] [cursor=pointer]:
+          - /url: https://nextdoor.com
+          - img "Nextdoor" [ref=e219]
+    - generic [ref=e221]:
+      - heading "Service Areas" [level=4] [ref=e222]
+      - link "Wausau" [ref=e223] [cursor=pointer]:
+        - /url: /service-area/wausau
+      - link "Schofield" [ref=e224] [cursor=pointer]:
+        - /url: /service-area/schofield
+      - link "Weston" [ref=e225] [cursor=pointer]:
+        - /url: /service-area/weston
+      - link "Mosinee" [ref=e226] [cursor=pointer]:
+        - /url: /service-area/mosinee
+      - link "Merrill" [ref=e227] [cursor=pointer]:
+        - /url: /service-area/merrill
+    - generic [ref=e228]:
+      - heading "Company" [level=4] [ref=e229]
+      - link "About Us" [ref=e230] [cursor=pointer]:
+        - /url: /about
+      - link "Our Builders" [ref=e231] [cursor=pointer]:
+        - /url: /our-builders
+      - link "Gallery" [ref=e232] [cursor=pointer]:
+        - /url: /gallery
+      - link "FAQ" [ref=e233] [cursor=pointer]:
+        - /url: /faq
+      - link "Blog" [ref=e234] [cursor=pointer]:
+        - /url: /blog
+      - link "Cost Calculator" [ref=e235] [cursor=pointer]:
+        - /url: /cost-calculator
+    - generic [ref=e236]:
+      - heading "Contact" [level=4] [ref=e237]
+      - link "(715) 544-7941" [ref=e238] [cursor=pointer]:
+        - /url: tel:+17155447941
+      - link "info@cwdeckbuilders.com" [ref=e239] [cursor=pointer]:
+        - /url: mailto:info@cwdeckbuilders.com
+      - link "Get a Free Quote" [ref=e240] [cursor=pointer]:
+        - /url: /get-a-quote
+      - paragraph [ref=e241]:
+        - text: 906 N 16th Ave
+        - text: Wausau, WI 54401
+      - paragraph [ref=e242]: Mon–Fri 8am–6pm CT
+    - paragraph [ref=e243]: © 2026 Central Wisconsin Deck Builders. All rights reserved.
+    - generic [ref=e244]:
+      - link "Privacy Policy" [ref=e245] [cursor=pointer]:
+        - /url: /privacy
+      - link "Terms of Service" [ref=e246] [cursor=pointer]:
+        - /url: /terms
+  - generic [ref=e247]:
+    - link "GET YOUR FREE QUOTE →" [ref=e248] [cursor=pointer]:
+      - /url: /get-a-quote
+    - button "Dismiss" [ref=e249] [cursor=pointer]: ×

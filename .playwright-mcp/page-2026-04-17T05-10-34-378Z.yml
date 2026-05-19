@@ -1,0 +1,84 @@
+- generic [ref=e2]:
+  - banner:
+    - generic [ref=e3]:
+      - link "Skip to Content" [ref=e4] [cursor=pointer]:
+        - /url: "#page"
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - link "John Garcia Construction" [ref=e11] [cursor=pointer]:
+            - /url: /
+            - img "John Garcia Construction" [ref=e12]
+          - navigation [ref=e15]:
+            - link "Home" [ref=e17] [cursor=pointer]:
+              - /url: /
+            - link "About" [ref=e19] [cursor=pointer]:
+              - /url: /about
+            - link "Our Process" [ref=e21] [cursor=pointer]:
+              - /url: /our-process
+            - link "Questions" [ref=e23] [cursor=pointer]:
+              - /url: /questions
+            - link "Contact" [ref=e25] [cursor=pointer]:
+              - /url: /contact
+        - link "Inquiries" [ref=e28] [cursor=pointer]:
+          - /url: /contact
+  - main [ref=e29]:
+    - article [ref=e30]:
+      - generic [ref=e36]:
+        - generic [ref=e41]:
+          - paragraph [ref=e42]:
+            - text: John Garcia is the founder of
+            - strong [ref=e43]: John Garcia Construction
+            - text: ", a Central Wisconsin design-build company specializing in custom homes, major remodels, and thoughtfully designed additions."
+          - paragraph [ref=e44]:
+            - text: John’s passion for building began early. Growing up in
+            - strong [ref=e45]: Northern Wisconsin
+            - text: ", he started working alongside his uncle, a local contractor, at just twelve years old. Those early days on job sites instilled a deep respect for craftsmanship and the pride that comes from building something meant to last."
+          - paragraph [ref=e46]:
+            - text: He later earned a
+            - strong [ref=e47]: Bachelor’s Degree in Engineering Technology from the University of Wisconsin–Stout
+            - text: ", where he developed a strong technical foundation in construction systems, design, and project management."
+          - paragraph [ref=e48]:
+            - text: John began his professional career as a
+            - strong [ref=e49]: Project Engineer
+            - text: ", managing large-scale commercial construction and automation projects across the United States. Working in that environment taught him how to coordinate complex projects, manage schedules and budgets, and bring together multiple moving parts into a successful outcome."
+          - paragraph [ref=e50]: While that experience was invaluable, John ultimately felt drawn back to residential construction — where the work is personal and the finished product becomes part of someone’s everyday life.
+          - paragraph [ref=e51]: He returned to Central Wisconsin and joined a local construction company where he spent several years leading reconstruction, remodeling, and custom home projects. During that time, he helped grow the company’s construction division by building a strong carpentry team, expanding the subcontractor network, and increasing the overall capacity to deliver high-quality projects.
+          - paragraph [ref=e52]:
+            - text: Today, through
+            - strong [ref=e53]: John Garcia Construction
+            - text: ", John brings together that technical experience and hands-on building background to guide clients through a clear, organized construction process. His approach centers on thoughtful planning, transparent communication, and careful attention to detail — helping homeowners move from initial ideas to a finished home with confidence."
+          - paragraph [ref=e54]:
+            - text: He is also deeply involved in the local building community. John currently serves on the
+            - strong [ref=e55]: Board of Directors for the Wausau Area Builders Association
+            - text: ", where he holds the position of"
+            - strong [ref=e56]: Secretary
+            - text: . Through this role, he works alongside other industry professionals to strengthen the building trades and support the future of construction in Central Wisconsin.
+          - paragraph [ref=e57]: For John, building a home is about more than construction — it’s about creating spaces where families live their lives, gather with friends, and build memories for years to come. His goal is to make the building experience as thoughtful and well-crafted as the finished home itself.
+          - paragraph [ref=e58]
+          - heading "Our Approach" [level=2] [ref=e59]
+          - paragraph [ref=e60]: At John Garcia Construction, we believe great homes start with great planning.
+          - paragraph [ref=e61]: Through a collaborative design-build process, we work closely with our clients from the earliest conversations through the final walk-through. By combining thoughtful design, detailed planning, and quality craftsmanship, we help ensure every project runs smoothly and results in a home that feels both intentional and enduring.
+          - paragraph [ref=e62]:
+            - text: Because the best homes aren’t just built well —
+            - text: they’re
+            - strong [ref=e63]: thoughtfully designed and carefully executed from the very beginning.
+        - heading "About John Garcia" [level=1] [ref=e69]
+  - contentinfo [ref=e87]:
+    - generic [ref=e93]:
+      - generic [ref=e106]:
+        - paragraph [ref=e107]: "Service Area:"
+        - paragraph [ref=e108]: Central Wisconsin
+        - paragraph [ref=e109]: Northern Wisconsin
+      - generic [ref=e114]:
+        - paragraph [ref=e115]: Contact
+        - paragraph [ref=e116]:
+          - text: john@johngarciaconstruction.com
+          - text: (715) 567-0269
+      - paragraph [ref=e122]: Socials
+      - navigation [ref=e128]:
+        - link "Instagram" [ref=e129] [cursor=pointer]:
+          - /url: http://instagram.com/squarespace
+          - img [ref=e131]
+        - link "Facebook" [ref=e134] [cursor=pointer]:
+          - /url: http://facebook.com/squarespace
+          - img [ref=e136]

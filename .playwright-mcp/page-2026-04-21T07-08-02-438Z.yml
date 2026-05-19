@@ -1,0 +1,154 @@
+- generic [active] [ref=e1]:
+  - text: "(function(){var s=document.createElement('style');s.id='cwdb';s.textContent='.header-wrap.scrolled{background-color:#323434!important;border-bottom-color:rgba(255,255,255,.05)!important}.cedar-strip{background-color:#83b2cf!important;background-image:linear-gradient(90deg,#83b2cf 0%,#9cc4db 40%,#83b2cf 70%,#6a9eba 100%)!important}.btn-primary{box-shadow:0 4px 24px rgba(229,76,0,.45)!important}.w-input:focus,.w-select:focus{border-color:#83b2cf!important;box-shadow:0 0 0 3px rgba(131,178,207,.2)!important;outline:none!important}';document.head.appendChild(s);})();"
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - link "Central Wisconsin Deck Builders Logo" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Central Wisconsin Deck Builders Logo" [ref=e5]
+      - generic [ref=e6]:
+        - link "Our Builders" [ref=e7] [cursor=pointer]:
+          - /url: /our-builders
+        - button "Resources" [ref=e9] [cursor=pointer]:
+          - generic [ref=e10]: Resources
+        - link "About" [ref=e11] [cursor=pointer]:
+          - /url: /about
+      - generic [ref=e12]:
+        - link "(715) 544-7941" [ref=e13] [cursor=pointer]:
+          - /url: tel:+17155447941
+        - link "Start My Quote →" [ref=e14] [cursor=pointer]:
+          - /url: /get-a-quote
+    - text: 
+  - generic [ref=e15]:
+    - img "Elevated wooden deck with black metal railing and stairs attached to a gray house under a clear blue sky." [ref=e17]
+    - generic [ref=e18]:
+      - generic [ref=e19]: PROJECTS
+      - heading "Our Deck Projects" [level=1] [ref=e20]
+      - paragraph [ref=e21]: Real decks built by our vetted contractors across Central Wisconsin.
+  - generic [ref=e23]:
+    - list [ref=e25]:
+      - listitem [ref=e26]:
+        - listitem [ref=e27]:
+          - link "open lightbox" [ref=e28] [cursor=pointer]:
+            - /url: "#"
+            - img "TimberTech composite deck in Weston Wisconsin" [ref=e29]
+          - generic [ref=e30]:
+            - heading "TimberTech Deck — Weston, WI" [level=3] [ref=e31]
+            - paragraph [ref=e32]: Low-maintenance TimberTech composite deck with aluminum railing. Built to withstand Wisconsin winters with minimal upkeep.
+      - listitem [ref=e33]:
+        - listitem [ref=e34]:
+          - link "open lightbox" [ref=e35] [cursor=pointer]:
+            - /url: "#"
+            - img "Screened porch in Wausau Wisconsin" [ref=e36]
+          - generic [ref=e37]:
+            - heading "Screened Porch Addition — Wausau, WI" [level=3] [ref=e38]
+            - paragraph [ref=e39]: Screened-in porch addition to existing deck providing bug-free outdoor enjoyment throughout the Wisconsin summer.
+      - listitem [ref=e40]:
+        - listitem [ref=e41]:
+          - link "open lightbox" [ref=e42] [cursor=pointer]:
+            - /url: "#"
+            - img "Wraparound deck in Mosinee Wisconsin" [ref=e43]
+          - generic [ref=e44]:
+            - heading "Wraparound Deck — Mosinee, WI" [level=3] [ref=e45]
+            - paragraph [ref=e46]: L-shaped wraparound deck extending along two sides of the home, maximizing outdoor living space.
+      - listitem [ref=e47]:
+        - listitem [ref=e48]:
+          - link "open lightbox" [ref=e49] [cursor=pointer]:
+            - /url: "#"
+            - img "Wooden pergola on a raised cedar platform with a hot tub underneath, surrounded by trees in Weston Wisconsin" [ref=e50]
+          - generic [ref=e51]:
+            - heading "Cedar Pergola with Hot Tub — Weston, WI" [level=3] [ref=e52]
+            - paragraph [ref=e53]: Raised cedar platform with attached pergola and built-in hot tub, tucked into the tree line. A defined outdoor living space that gets used year-round.
+      - listitem [ref=e54]:
+        - listitem [ref=e55]:
+          - link "open lightbox" [ref=e56] [cursor=pointer]:
+            - /url: "#"
+            - img "Pressure treated deck in Schofield Wisconsin" [ref=e57]
+          - generic [ref=e58]:
+            - heading "Pressure-Treated Deck — Schofield, WI" [level=3] [ref=e59]
+            - paragraph [ref=e60]: Classic 12x16 pressure-treated backyard deck with railing, perfect for outdoor dining and entertaining.
+      - listitem [ref=e61]:
+        - listitem [ref=e62]:
+          - link "open lightbox" [ref=e63] [cursor=pointer]:
+            - /url: "#"
+            - img "Elevated wooden deck attached to a beige Wausau home with a sloped green roof and fenced backyard" [ref=e64]
+          - generic [ref=e65]:
+            - heading "Elevated Backyard Deck — Wausau, WI" [level=3] [ref=e66]
+            - paragraph [ref=e67]: Elevated wood deck with full stair run from the back of a Wausau home down to the yard. Classic pressure-treated build with black metal railing.
+      - listitem [ref=e68]:
+        - listitem [ref=e69]:
+          - link "open lightbox" [ref=e70] [cursor=pointer]:
+            - /url: "#"
+            - img "Composite wood deck with black metal railing, two wicker chairs and a small table overlooking a backyard in Wittenberg Wisconsin" [ref=e71]
+          - generic [ref=e72]:
+            - heading "Composite Deck — Wittenberg, WI" [level=3] [ref=e73]
+            - paragraph [ref=e74]: Low-maintenance composite deck with black metal railing, styled for an outdoor seating area. Built to shrug off Wisconsin winters with almost no upkeep.
+    - generic [ref=e75]:
+      - list [ref=e76]:
+        - listitem [ref=e77]:
+          - link "Deck project" [ref=e78] [cursor=pointer]:
+            - /url: "#"
+            - img "Deck project" [ref=e79]
+          - generic [ref=e80]:
+            - heading "Project Title" [level=3] [ref=e81]
+            - paragraph [ref=e82]: Project description placeholder — bind to Description field in Designer.
+      - generic [ref=e84]: No items found.
+  - generic [ref=e86]:
+    - heading "Start your deck quote. 48-hour response from a local builder." [level=2] [ref=e87]
+    - link "Start My Quote →" [ref=e88] [cursor=pointer]:
+      - /url: /get-a-quote
+  - generic [ref=e91]:
+    - generic [ref=e92]:
+      - img "Central Wisconsin Deck Builders Logo" [ref=e93]
+      - link "(715) 544-7941" [ref=e94] [cursor=pointer]:
+        - /url: tel:+17155447941
+      - generic [ref=e95]:
+        - link "Facebook" [ref=e96] [cursor=pointer]:
+          - /url: https://facebook.com
+          - img "Facebook" [ref=e97]
+        - link "Instagram" [ref=e99] [cursor=pointer]:
+          - /url: https://instagram.com
+          - img "Instagram" [ref=e100]
+        - link "Nextdoor" [ref=e102] [cursor=pointer]:
+          - /url: https://nextdoor.com
+          - img "Nextdoor" [ref=e103]
+    - generic [ref=e105]:
+      - heading "Service Areas" [level=4] [ref=e106]
+      - link "Wausau" [ref=e107] [cursor=pointer]:
+        - /url: /deck-builders-wausau
+      - link "Schofield" [ref=e108] [cursor=pointer]:
+        - /url: /deck-builders-schofield
+      - link "Weston" [ref=e109] [cursor=pointer]:
+        - /url: /deck-builders-weston
+      - link "Mosinee" [ref=e110] [cursor=pointer]:
+        - /url: /deck-builders-mosinee
+      - link "Merrill" [ref=e111] [cursor=pointer]:
+        - /url: /deck-builders-merrill
+    - generic [ref=e112]:
+      - heading "Company" [level=4] [ref=e113]
+      - link "About Us" [ref=e114] [cursor=pointer]:
+        - /url: /about
+      - link "Our Builders" [ref=e115] [cursor=pointer]:
+        - /url: /our-builders
+      - link "Gallery" [ref=e116] [cursor=pointer]:
+        - /url: /gallery
+      - link "FAQ" [ref=e117] [cursor=pointer]:
+        - /url: /faq
+      - link "Blog" [ref=e118] [cursor=pointer]:
+        - /url: /blog
+      - link "Cost Calculator" [ref=e119] [cursor=pointer]:
+        - /url: /cost-calculator
+    - generic [ref=e120]:
+      - heading "Contact" [level=4] [ref=e121]
+      - link "(715) 544-7941" [ref=e122] [cursor=pointer]:
+        - /url: tel:+17155447941
+      - link "Get a Free Quote" [ref=e123] [cursor=pointer]:
+        - /url: /get-a-quote
+      - paragraph [ref=e124]: Central Wisconsin
+      - paragraph [ref=e125]: Mon–Fri 8am–6pm CT
+    - paragraph [ref=e126]: © 2026 Central Wisconsin Deck Builders. All rights reserved.
+    - generic [ref=e127]:
+      - link "Privacy Policy" [ref=e128] [cursor=pointer]:
+        - /url: /privacy
+      - link "Terms of Service" [ref=e129] [cursor=pointer]:
+        - /url: /terms
+  - text: "(function(){var h=document.querySelector('.header-wrap');if(!h)return;window.addEventListener('scroll',function(){h.classList.toggle('scrolled',window.scrollY>80);},{passive:true});})();"

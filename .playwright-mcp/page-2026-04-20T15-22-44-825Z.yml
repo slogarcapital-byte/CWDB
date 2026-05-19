@@ -1,0 +1,5 @@
+- generic [ref=e3]:
+  - generic [ref=e4]: "404"
+  - generic [ref=e5]:
+    - heading "Page not found" [level=1] [ref=e6]: Page not found
+    - paragraph [ref=e7]: The page you are looking for doesn't exist or has been moved.

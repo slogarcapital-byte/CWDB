@@ -1,0 +1,101 @@
+===================================================================
+CWDB — GTM Custom HTML Tag Snippets
+Copy each snippet EXACTLY as-is (straight ASCII quotes only).
+Do not retype — copy from this file to avoid smart-quote corruption.
+===================================================================
+
+
+-------------------------------------------------------------------
+TAG 1: Meta Pixel Base
+  Tag type:   Custom HTML
+  Trigger:    All Pages
+-------------------------------------------------------------------
+<script>
+!function(f,b,e,v,n,t,s){
+  if(f.fbq)return;
+  n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];
+  t=b.createElement(e);t.async=!0;t.src=v;
+  s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s);
+}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");
+fbq("init","1276568654662913");
+fbq("track","PageView");
+</script>
+
+
+-------------------------------------------------------------------
+TAG 2: Nextdoor Pixel Base  (corrected — previous version was wrong)
+  Tag type:   Custom HTML
+  Trigger:    All Pages
+-------------------------------------------------------------------
+<script>
+!function(e,t,n,s,u,a){
+  e.ndp||(s=e.ndp=function(){s.callMethod?s.callMethod.apply(s,arguments):s.queue.push(arguments)},
+  s.version="1.0",s.queue=[],
+  u=t.createElement(n),u.async=!0,u.src="//ads.nextdoor.com/public/pixel/ads.js",
+  a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a));
+}(window,document,"script");
+ndp("init","090fab28-0395-4c7d-8044-6eb1139b5e65");
+ndp("track","PAGE_VIEW");
+</script>
+
+
+-------------------------------------------------------------------
+TAG 3: MS Clarity
+  Tag type:   Custom HTML
+  Trigger:    All Pages
+-------------------------------------------------------------------
+<script>
+(function(c,l,a,r,i,t,y){
+  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+  t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window,document,"clarity","script","wdo8r9av0g");
+</script>
+
+
+-------------------------------------------------------------------
+TAG 4: Meta Pixel — Lead event
+  Tag type:   Custom HTML
+  Trigger:    Thank You Pageview  (Page Path equals /thank-you)
+  Tag sequencing: Fire AFTER "Meta Pixel Base"
+-------------------------------------------------------------------
+<script>
+fbq("track","Lead",{value:300,currency:"USD"});
+</script>
+
+
+-------------------------------------------------------------------
+TAG 5: Nextdoor Pixel — Lead event
+  Tag type:   Custom HTML
+  Trigger:    Thank You Pageview  (Page Path equals /thank-you)
+  Tag sequencing: Fire AFTER "Nextdoor Pixel Base"
+-------------------------------------------------------------------
+<script>
+ndp("track","LEAD",{value:300,currency:"USD"});
+</script>
+
+
+===================================================================
+NON-HTML TAGS (configure via GTM's native tag templates)
+===================================================================
+
+TAG 6: GA4 Configuration
+  Tag type:        Google Analytics: GA4 Configuration
+  Measurement ID:  G-ZQ19JEF9KC
+  Trigger:         All Pages
+
+TAG 7: Google Ads Conversion Linker
+  Tag type:        Conversion Linker
+  Trigger:         All Pages
+  (No configuration needed — just add it)
+
+TAG 8: Google Ads Conversion Tracking
+  Tag type:           Google Ads Conversion Tracking
+  Conversion ID:      18113251301
+  Conversion Label:   PgcJCL_ck6IcEOWPib1D
+  Conversion Value:   300
+  Currency Code:      USD
+  Trigger:            Thank You Pageview

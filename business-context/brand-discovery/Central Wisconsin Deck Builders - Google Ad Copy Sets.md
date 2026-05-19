@@ -1,4 +1,15 @@
-# Central Wisconsin Deck Builders - Google Ad Copy Sets
+---
+type: reference
+tags:
+  - type/reference
+  - dept/marketing
+  - platform/google-ads
+created: 2026-03-11
+updated: 2026-04-16
+status: active
+---
+
+# [[Central Wisconsin Deck Builders LLC|Central Wisconsin Deck Builders]] - Google Ad Copy Sets
 
 **Author:** Manus AI
 **Date:** March 11, 2026
@@ -25,7 +36,7 @@ Google Ads will focus on **intent-based keywords**, targeting homeowners activel
 *   Stop waiting weeks. Connect with top-rated Central WI deck builders in hours.
 *   One simple form. Multiple competitive quotes. Zero hassle for your new deck.
 *   We vet local contractors so you don't have to. Get your free quote today!
-*   Serving Wausau, Schofield, Weston & more. Quality decks, fast service.
+*   Serving [[Wausau]], [[Schofield]], [[Weston]] & more. Quality decks, fast service.
 
 **Call to Action:** Get Quote, Learn More, Contact Us
 

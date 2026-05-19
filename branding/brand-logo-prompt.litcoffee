@@ -2,10 +2,10 @@ Our primary color palette is built for high contrast and to convey a sense of ru
 
 | Role | Color Name | Hex Code | RGB Value | Usage |
 |---|---|---|---|---|
-| **Primary** | Charcoal / Near-Black | `#1C1C1E` | R28 G28 B30 | Dominant background, primary text, strong elements. Represents professionalism, strength, and the Northwoods. |
-| **Accent** | Burnt Orange / Red-Orange | `#E8521A` | R232 G82 B26 | Calls-to-action (CTAs), highlights, key visual elements. Signals urgency, action, and energy. |
-| **Secondary** | Off-White / Light Gray | `#F5F5F0` | R245 G245 B240 | Backgrounds, secondary text, subtle accents. Provides clean contrast and visual breathing room. |
-| **Support** | Medium Gray | `#6B6B6B` | R107 G107 B107 | Subheadings, secondary information, borders, subtle UI elements. |
+| **Primary** | Charcoal / Near-Black | `#323434` | R28 G28 B30 | Dominant background, primary text, strong elements. Represents professionalism, strength, and the Northwoods. |
+| **Accent** | Burnt Orange / Red-Orange | `#e54c00` | R232 G82 B26 | Calls-to-action (CTAs), highlights, key visual elements. Signals urgency, action, and energy. |
+| **Secondary** | Off-White / Light Gray | `#83b2cf` | R245 G245 B240 | Backgrounds, secondary text, subtle accents. Provides clean contrast and visual breathing room. |
+| **Support** | Medium Gray | `#646760` | R107 G107 B107 | Subheadings, secondary information, borders, subtle UI elements. |
 
 ## Usage Guidelines
 

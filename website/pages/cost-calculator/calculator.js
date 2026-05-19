@@ -1,0 +1,244 @@
+/**
+ * CWDB Deck Cost Calculator
+ * Client-side calculator for Webflow custom code embed.
+ *
+ * Embed this in Webflow: Page Settings → Custom Code → Before </body>
+ * Also add the HTML container div in the Webflow page body:
+ *   <div id="cwdb-calculator"></div>
+ *
+ * All UI is built using safe DOM methods (no innerHTML).
+ */
+
+(function () {
+  'use strict';
+
+  // ========== PRICING DATA ==========
+  var MATERIALS = {
+    'pressure-treated': { label: 'Pressure-Treated Wood', low: 15, high: 25 },
+    'cedar':            { label: 'Cedar',                 low: 25, high: 40 },
+    'composite':        { label: 'Composite',             low: 30, high: 60 },
+    'pvc':              { label: 'PVC / Vinyl',           low: 40, high: 70 }
+  };
+
+  var SIZES = [
+    { value: '120',    label: '10\u00d712 (120 sq ft) \u2014 Small',       sqft: 120 },
+    { value: '192',    label: '12\u00d716 (192 sq ft) \u2014 Medium',      sqft: 192 },
+    { value: '280',    label: '14\u00d720 (280 sq ft) \u2014 Large',       sqft: 280 },
+    { value: '384',    label: '16\u00d724 (384 sq ft) \u2014 Extra Large', sqft: 384 },
+    { value: 'custom', label: 'Custom Size',                               sqft: 0 }
+  ];
+
+  var FEATURES = [
+    { key: 'railing', label: 'Railing',          low: 1200, high: 4500 },
+    { key: 'stairs',  label: 'Stairs',           low: 500,  high: 2000 },
+    { key: 'seating', label: 'Built-in Seating', low: 1000, high: 3000 },
+    { key: 'pergola', label: 'Pergola or Cover', low: 3000, high: 8000 }
+  ];
+
+  var CITIES = ['Wausau', 'Schofield', 'Weston', 'Mosinee', 'Merrill'];
+
+  // ========== DOM HELPERS ==========
+  function el(tag, attrs, children) {
+    var node = document.createElement(tag);
+    if (attrs) {
+      Object.keys(attrs).forEach(function (key) {
+        if (key === 'className') {
+          node.className = attrs[key];
+        } else if (key === 'textContent') {
+          node.textContent = attrs[key];
+        } else if (key.indexOf('on') === 0) {
+          node.addEventListener(key.slice(2).toLowerCase(), attrs[key]);
+        } else {
+          node.setAttribute(key, attrs[key]);
+        }
+      });
+    }
+    if (children) {
+      children.forEach(function (child) {
+        if (typeof child === 'string') {
+          node.appendChild(document.createTextNode(child));
+        } else if (child) {
+          node.appendChild(child);
+        }
+      });
+    }
+    return node;
+  }
+
+  function makeOption(value, text) {
+    return el('option', { value: value, textContent: text });
+  }
+
+  function makeField(labelText, inputEl) {
+    var fieldDiv = el('div', { className: 'calc-field' });
+    var lbl = el('label', { textContent: labelText });
+    fieldDiv.appendChild(lbl);
+    fieldDiv.appendChild(inputEl);
+    return fieldDiv;
+  }
+
+  // ========== BUILD UI ==========
+  function buildCalculator() {
+    var container = document.getElementById('cwdb-calculator');
+    if (!container) return;
+    if (container.dataset.cwdbInit) return;
+    container.dataset.cwdbInit = '1';
+
+    var wrapper = el('div', { className: 'calc-wrapper' });
+    var inputsDiv = el('div', { className: 'calc-inputs' });
+
+    // Size select
+    var sizeSelect = el('select', { id: 'calc-size' });
+    SIZES.forEach(function (s) { sizeSelect.appendChild(makeOption(s.value, s.label)); });
+    inputsDiv.appendChild(makeField('Deck Size', sizeSelect));
+
+    // Custom size input (hidden by default)
+    var customDiv = el('div', { className: 'calc-field calc-custom-size', style: 'display:none;' });
+    var customLabel = el('label', { textContent: 'Enter Square Footage', for: 'calc-custom-sqft' });
+    var customInput = el('input', { type: 'number', id: 'calc-custom-sqft', min: '50', max: '2000', placeholder: 'e.g. 300' });
+    customDiv.appendChild(customLabel);
+    customDiv.appendChild(customInput);
+    inputsDiv.appendChild(customDiv);
+
+    sizeSelect.addEventListener('change', function () {
+      customDiv.style.display = sizeSelect.value === 'custom' ? 'block' : 'none';
+    });
+
+    // Material select
+    var matSelect = el('select', { id: 'calc-material' });
+    Object.keys(MATERIALS).forEach(function (key) {
+      var m = MATERIALS[key];
+      matSelect.appendChild(makeOption(key, m.label + ' ($' + m.low + '\u2013$' + m.high + '/sq ft)'));
+    });
+    inputsDiv.appendChild(makeField('Material', matSelect));
+
+    // Features checkboxes
+    var featField = el('div', { className: 'calc-field' });
+    featField.appendChild(el('label', { textContent: 'Features (select all that apply)' }));
+    var checkGrid = el('div', { className: 'calc-checkboxes' });
+    FEATURES.forEach(function (f) {
+      var checkLabel = el('label', { className: 'calc-checkbox' });
+      var checkbox = el('input', { type: 'checkbox', id: 'calc-feat-' + f.key, value: f.key });
+      var span = el('span', { textContent: f.label });
+      checkLabel.appendChild(checkbox);
+      checkLabel.appendChild(span);
+      checkGrid.appendChild(checkLabel);
+    });
+    featField.appendChild(checkGrid);
+    inputsDiv.appendChild(featField);
+
+    // City select
+    var citySelect = el('select', { id: 'calc-city' });
+    CITIES.forEach(function (c) { citySelect.appendChild(makeOption(c.toLowerCase(), c)); });
+    inputsDiv.appendChild(makeField('Your City', citySelect));
+
+    // Calculate button
+    var calcBtn = el('button', { type: 'button', id: 'calc-btn', textContent: 'Calculate My Estimate' });
+    inputsDiv.appendChild(calcBtn);
+
+    wrapper.appendChild(inputsDiv);
+
+    // Result section (hidden until calculated)
+    var resultDiv = el('div', { className: 'calc-result', id: 'calc-result', style: 'display:none;' });
+    var resultLabel = el('p', { className: 'calc-result-label', textContent: 'Estimated Cost Range' });
+    var resultRange = el('p', { className: 'calc-result-range', id: 'calc-range' });
+    var resultDisclaimer = el('p', { className: 'calc-result-disclaimer', textContent: 'This is a rough estimate based on average Central Wisconsin pricing. Actual costs vary based on site conditions, design complexity, and contractor availability.' });
+    var resultCta = el('a', { href: '/get-a-quote', className: 'calc-cta-btn', textContent: 'Get My Exact Quote \u2014 Free' });
+
+    resultDiv.appendChild(resultLabel);
+    resultDiv.appendChild(resultRange);
+    resultDiv.appendChild(resultDisclaimer);
+    resultDiv.appendChild(resultCta);
+    wrapper.appendChild(resultDiv);
+
+    container.appendChild(wrapper);
+
+    // Calculate handler
+    calcBtn.addEventListener('click', function () {
+      var sizeKey = sizeSelect.value;
+      var sqft;
+
+      if (sizeKey === 'custom') {
+        sqft = parseInt(customInput.value, 10);
+        if (!sqft || sqft < 50 || sqft > 2000) {
+          alert('Please enter a square footage between 50 and 2,000.');
+          return;
+        }
+      } else {
+        var sizeObj = SIZES.find(function (s) { return s.value === sizeKey; });
+        sqft = sizeObj ? sizeObj.sqft : 0;
+      }
+
+      var materialKey = matSelect.value;
+      var material = MATERIALS[materialKey];
+
+      var lowTotal = sqft * material.low;
+      var highTotal = sqft * material.high;
+
+      FEATURES.forEach(function (f) {
+        var cb = document.getElementById('calc-feat-' + f.key);
+        if (cb && cb.checked) {
+          lowTotal += f.low;
+          highTotal += f.high;
+        }
+      });
+
+      var formatCurrency = function (num) {
+        return '$' + num.toLocaleString('en-US');
+      };
+
+      resultRange.textContent = formatCurrency(lowTotal) + ' \u2013 ' + formatCurrency(highTotal);
+      resultDiv.style.display = 'block';
+      resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      // Track in GTM dataLayer
+      if (window.dataLayer) {
+        window.dataLayer.push({
+          event: 'calculator_use',
+          calc_size: sqft,
+          calc_material: materialKey,
+          calc_low: lowTotal,
+          calc_high: highTotal
+        });
+      }
+    });
+  }
+
+  // ========== STYLES ==========
+  function injectStyles() {
+    if (document.getElementById('cwdb-calc-styles')) return;
+    var style = document.createElement('style');
+    style.id = 'cwdb-calc-styles';
+    style.textContent = [
+      '.calc-wrapper { max-width: 640px; margin: 0 auto; }',
+      '.calc-field { margin-bottom: 24px; }',
+      '.calc-field label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; color: #323434; }',
+      '.calc-field select, .calc-field input[type="number"] { width: 100%; height: 48px; border: 1px solid #646760; border-radius: 6px; padding: 12px 16px; font-size: 16px; font-family: "Public Sans", sans-serif; background: #fff; }',
+      '.calc-field select:focus, .calc-field input:focus { outline: none; border-color: #83b2cf; box-shadow: 0 0 0 3px rgba(131, 178, 207, 0.2); }',
+      '.calc-checkboxes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }',
+      '.calc-checkbox { display: flex; align-items: center; gap: 8px; font-weight: 400 !important; font-size: 15px !important; cursor: pointer; }',
+      '.calc-checkbox input[type="checkbox"] { width: 20px; height: 20px; accent-color: #e54c00; }',
+      '#calc-btn { width: 100%; padding: 16px 40px; background: #e54c00; color: #fff; border: none; border-radius: 6px; font-family: "Public Sans", sans-serif; font-weight: 600; font-size: 16px; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; transition: background 200ms; box-shadow: 0 2px 8px rgba(229, 76, 0, 0.3); }',
+      '#calc-btn:hover { background: #cc4300; }',
+      '.calc-result { margin-top: 40px; text-align: center; background: #f8f8f6; border-radius: 12px; padding: 40px; border-bottom: 3px solid #83b2cf; }',
+      '.calc-result-label { font-size: 14px; text-transform: uppercase; letter-spacing: 2px; color: #646760; margin-bottom: 8px; }',
+      '.calc-result-range { font-family: "Staatliches", sans-serif; font-weight: 700; font-size: 48px; color: #323434; margin-bottom: 16px; }',
+      '.calc-result-disclaimer { font-size: 14px; color: #646760; max-width: 480px; margin: 0 auto 24px; line-height: 1.5; }',
+      '.calc-cta-btn { display: inline-block; padding: 14px 36px; background: #e54c00; color: #fff !important; border-radius: 6px; font-weight: 600; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; transition: background 200ms; box-shadow: 0 2px 8px rgba(229, 76, 0, 0.3); }',
+      '.calc-cta-btn:hover { background: #cc4300; }',
+      '@media (max-width: 767px) { .calc-checkboxes { grid-template-columns: 1fr; } .calc-result-range { font-size: 36px; } }'
+    ].join('\n');
+    document.head.appendChild(style);
+  }
+
+  // ========== INIT ==========
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      injectStyles();
+      buildCalculator();
+    });
+  } else {
+    injectStyles();
+    buildCalculator();
+  }
+})();

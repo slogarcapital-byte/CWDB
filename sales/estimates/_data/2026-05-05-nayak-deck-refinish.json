@@ -1,0 +1,55 @@
+{
+  "estimate_number": "2026-05-05-001",
+  "date_issued": "May 5, 2026",
+  "valid_days": 14,
+  "client": {
+    "name": "Purnatoya Nayak",
+    "address_line": "3701 Crystal Dr., Wausau, WI 54401",
+    "phone": "(715) 667-2332",
+    "email": "nayak.tapas@protonmail.com"
+  },
+  "project": {
+    "overview": "Two-coat semi-transparent stain refinish on an existing pressure-treated wood deck. The job covers approximately <b>354 sq ft of deck floor</b>, <b>42 linear feet of railing system</b> (top rail, bottom rail, balusters, and posts), and <b>a 14-step staircase</b> (treads and risers). The deck is currently stained with a worn finish in fair condition. Work includes full surface preparation (clean, brighten, sand), application of two coats of premium semi-transparent stain in <b>light oak</b> tone, and complete job-site protection and cleanup. Finish provides color refresh, waterproofing, and UV protection.",
+    "scope": [
+      "Move and protect homeowner furniture, grill, and personal items",
+      "Cover and protect plants, landscaping, and adjacent siding",
+      "Power-wash the entire deck surface, stairs, and railing system",
+      "Apply professional wood cleaner and oxalic-acid-based brightener; rinse and allow to dry",
+      "Light-to-medium sanding of floor boards, all 14 stair treads and risers, and rough railing surfaces (60-grit then 120-grit finish)",
+      "Apply two coats of premium semi-transparent stain in light oak tone with 24-hour dry time between coats",
+      "Coat all visible wood surfaces: deck floor, all 14 stair treads, all 14 stair risers, top rails, bottom rails, balusters, and posts",
+      "Final touch-ups, complete cleanup, and haul-off of all debris"
+    ],
+    "scope_note": "Work covers all visible wood surfaces above the deck floor and on the staircase. Underside of deck framing, joists, support posts below the deck floor, and any structural members hidden from normal view are not included."
+  },
+  "line_items": [
+    ["Surface preparation: clean, brighten, and sand floor, 14 stairs, and railings", 1400],
+    ["Premium materials (stain, sealers, supplies)", 750],
+    ["Application of 2 coats including 14 stairs and full railing system", 2300],
+    ["Job site protection and cleanup", 450]
+  ],
+  "included": [
+    "All materials: premium stain, cleaner, brightener, sandpaper, brushes, pads, rollers, drop cloths, masking",
+    "All labor: two-person crew across approximately three to four working days",
+    "Full job-site protection of furniture, plants, and siding",
+    "Post-job cleanup and debris haul-off",
+    "<b>1-year limited warranty</b> against premature stain failure caused by defects in workmanship (excludes acts of nature, normal wear, and pre-existing structural conditions)"
+  ],
+  "not_included": [
+    "Repair or replacement of damaged or rotted boards (will be quoted separately if discovered during preparation)",
+    "Hardware replacement (screws, nails, joist hangers, fasteners)",
+    "Structural repairs of any kind",
+    "Removal of carpet, outdoor mats, planters, or built-in features",
+    "Re-staining of pergolas, gazebos, or attached fences unless explicitly added to scope in writing",
+    "Site power supply (homeowner provides access to a working exterior 120V outlet)"
+  ],
+  "schedule": {
+    "start": "Mid-June 2026 (week of June 15), weather permitting",
+    "duration": "3 to 4 working days (Day 1: preparation and sanding; Day 2: first coat; Day 3: second coat; Day 4 reserved for weather contingency or final touch-ups). Each coat requires 24-hour dry time before the next phase.",
+    "weather": "Application phases will be rescheduled if rain forecast exceeds 40% during the cure window. A minimum ambient temperature of 50°F day and night is required for proper stain cure."
+  },
+  "payment": {
+    "deposit_pct": 30,
+    "methods": "cash, check, credit or debit card, or digital payment (details provided upon acceptance)"
+  }
+}

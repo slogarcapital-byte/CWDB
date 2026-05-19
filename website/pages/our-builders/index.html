@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<!--
+  Our Builders Page — Central Wisconsin Deck Builders
+  Webflow page ID: 69cff29d53036270250204d6
+  Staging: https://central-wisconsin-deck-builders.webflow.io/our-builders
+  Live: https://cwdeckbuilders.com/our-builders
+  Built: 2026-04-03 (Phase D)
+  Updated: 2026-04-07 — Ben Barton corrected (Barton Builders LLC), John Garcia added
+  Rebuilt: 2026-04-20 — Phase 4 Wave 2 revamp. hero-interior added, legacy page-hero removed,
+           vetting-section restyled zero-decoration, builders-grid rebuilt as CMS-bound skeleton
+           (Path A: CMS has Ben + Garcia published; headshots still null — Jim to upload),
+           cta-section-contractor restyled slate + orange button, cta-final homeowner CTA appended.
+
+  Sections (in order, post-rebuild):
+    1. header (component instance) — Webflow component
+    2. hero-interior (component instance) — Webflow component; defaults leak (eyebrow "Service Area",
+       heading "Heading", subheading generic 24hr line) — DESIGNER HANDOFF to Jim
+    3. Vetting Process — existing section, id="vetting-section", restyled
+       (Staatliches H2, clean list, sky-blue checkmarks, no border stripes or icon wrappers)
+    4. Builders Grid — id="builders-grid", rebuilt DOM:
+         .builders-grid-list  (becomes Collection List in Designer, bound to Our Builders)
+           .builder-card      (repeating card, CMS item link)
+             .builder-card-headshot-wrap > .builder-card-headshot (img, bind to CMS Headshot)
+             .builder-card-name           (h3, bind to Name)
+             .builder-card-company        (p, bind to Business Name)
+             .builder-card-area           (p, bind to Service Area)
+             .builder-card-bio            (div, bind rich text to Bio)
+             .builder-card-specialties    (p with label span + Specialties text)
+             .builder-card-license        (p with label span + License Number)
+       Grid: 2-col desktop/tablet, 1-col mobile. Zero-decoration — no borders, no shadow.
+    5. Contractor CTA — id="cta-section-contractor", KEPT (different audience).
+       Restyled: slate #323434 bg, white Staatliches H2, orange mailto button.
+    6. cta-final (component instance) — homeowner CTA; headline "Start your deck quote.
+       48-hour response from a local builder." → /get-a-quote. Defaults OK.
+    7. footer (component instance) — Webflow component.
+
+  CMS: Our Builders collection (69cff079df8b05e8d3935fdf) — Path A confirmed
+    - Ben Barton (69cff0a989e454afdd3f5788) — Barton Builders LLC, Wausau, WI
+    - John Garcia (69d4b9e6b553503a6618ddbf) — John Garcia Construction, LLC, Edgar, WI
+    - Both items published; Headshot field NULL for both → Jim must upload + bind.
+
+  Known: homepage builders-strip uses these same 2 CMS items (Path A), but headshots on
+  homepage are hardcoded asset refs today because CMS Headshot is empty. Uploading
+  headshots to CMS items + rewiring builders-strip to bind to CMS Headshot is a separate
+  follow-up beyond Wave 2 scope.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Trusted Deck Builders | Central Wisconsin Deck Builders</title>
+  <meta name="description" content="Meet the vetted, licensed deck contractors in our Central Wisconsin network. Every builder is insured, experienced, and committed to quality." />
+  <link rel="canonical" href="https://cwdeckbuilders.com/our-builders" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Our Trusted Deck Builders | Central Wisconsin Deck Builders" />
+  <meta property="og:description" content="Meet the vetted, licensed deck contractors in our Central Wisconsin network. Every builder is insured, experienced, and committed to quality." />
+  <meta property="og:image" content="https://cwdeckbuilders.com/assets/images/og-our-builders.jpg" />
+  <meta property="og:url" content="https://cwdeckbuilders.com/our-builders" />
+  <meta property="og:type" content="website" />
+</head>
+<body>
+
+  <!-- Section 1: Global Nav (Webflow component) -->
+  <!-- component: global-nav (17135213-0f65-1d96-c6af-955d586e2f00) -->
+
+  <!-- Section 2: Hero -->
+  <section class="section-wrap section-dark mobile-margin" id="page-hero">
+    <div class="container-inner mobile">
+      <p class="section-dark-label">Our Network</p>
+      <h1 class="hero-h1">Meet Our Trusted Builders</h1>
+      <p class="hero-sub">Every contractor in our network has been vetted for licensing, insurance, experience, and reputation. We don't work with just anyone — and that's the point.</p>
+    </div>
+  </section>
+
+  <!-- Section 3: Vetting Process -->
+  <section class="section-wrap" id="vetting-section" style="background:#ffffff;">
+    <div class="container-inner" style="max-width:760px; padding-top:64px; padding-bottom:64px;">
+      <h2 style="color:#323434; font-size:1.75rem; font-weight:700; margin-bottom:16px;">How We Choose Our Contractors</h2>
+      <p style="color:#646760; font-size:1rem; line-height:1.7; margin-bottom:24px;">Not every contractor makes the cut. Before a builder joins the CWDB network, we verify:</p>
+      <ul style="list-style:none; padding:0; margin:0;">
+        <li style="display:flex; align-items:flex-start; gap:12px; padding:12px 0; border-bottom:1px solid #f0f0f0;">
+          <span style="color:#e54c00; font-weight:700; font-size:1.1rem; flex-shrink:0;">&#10003;</span>
+          <div><strong style="color:#323434;">Active state license</strong><span style="color:#646760;"> — Confirmed with the Wisconsin Department of Safety and Professional Services</span></div>
+        </li>
+        <li style="display:flex; align-items:flex-start; gap:12px; padding:12px 0; border-bottom:1px solid #f0f0f0;">
+          <span style="color:#e54c00; font-weight:700; font-size:1.1rem; flex-shrink:0;">&#10003;</span>
+          <div><strong style="color:#323434;">General liability insurance</strong><span style="color:#646760;"> — Minimum coverage to protect your property and investment</span></div>
+        </li>
+        <li style="display:flex; align-items:flex-start; gap:12px; padding:12px 0; border-bottom:1px solid #f0f0f0;">
+          <span style="color:#e54c00; font-weight:700; font-size:1.1rem; flex-shrink:0;">&#10003;</span>
+          <div><strong style="color:#323434;">Workers' compensation</strong><span style="color:#646760;"> — Coverage for every crew member on your job site</span></div>
+        </li>
+        <li style="display:flex; align-items:flex-start; gap:12px; padding:12px 0; border-bottom:1px solid #f0f0f0;">
+          <span style="color:#e54c00; font-weight:700; font-size:1.1rem; flex-shrink:0;">&#10003;</span>
+          <div><strong style="color:#323434;">Track record</strong><span style="color:#646760;"> — Proven history of completed residential deck projects in Central Wisconsin</span></div>
+        </li>
+        <li style="display:flex; align-items:flex-start; gap:12px; padding:12px 0;">
+          <span style="color:#e54c00; font-weight:700; font-size:1.1rem; flex-shrink:0;">&#10003;</span>
+          <div><strong style="color:#323434;">Customer references</strong><span style="color:#646760;"> — Verified feedback from past homeowners</span></div>
+        </li>
+      </ul>
+      <p style="color:#646760; font-size:0.95rem; margin-top:24px; font-style:italic;">We check these credentials before a builder joins — and we continue to monitor them over time. If a contractor doesn't meet our standards, they don't stay in the network.</p>
+    </div>
+  </section>
+
+  <!-- Section 4: Builder Card Grid (CMS-bound in Webflow — Our Builders collection) -->
+  <!-- CMS: Our Builders collection (69cff079df8b05e8d3935fdf) -->
+  <!-- WEBFLOW COMPONENT: builders-grid -->
+  <section class="section-wrap" id="builders-grid" style="background:#f8f8f7; padding-top:64px; padding-bottom:64px;">
+    <div class="container-inner">
+      <h2 style="color:#323434; font-size:1.75rem; font-weight:700; margin-bottom:8px; text-align:center;">Our Builder Network</h2>
+      <p style="color:#646760; text-align:center; margin-bottom:48px;">Vetted, licensed deck contractors ready to serve your project.</p>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:32px;">
+
+        <!-- CMS item: Ben Barton (69cff0a989e454afdd3f5788) -->
+        <div style="background:#ffffff; border-radius:8px; padding:32px; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+          <div style="width:80px; height:80px; background:#e0e8ef; border-radius:50%; margin-bottom:20px; display:flex; align-items:center; justify-content:center;">
+            <span style="color:#83b2cf; font-size:2rem;">&#128736;</span>
+          </div>
+          <h3 style="color:#323434; font-size:1.2rem; font-weight:700; margin-bottom:4px;">Ben Barton</h3>
+          <p style="color:#e54c00; font-weight:600; margin-bottom:16px; font-size:0.9rem;">Barton Builders LLC</p>
+          <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+            <div style="display:flex; gap:8px;"><span style="color:#646760; font-size:0.85rem; min-width:120px;">Service Area:</span><span style="color:#323434; font-size:0.85rem;">Wausau, WI</span></div>
+            <div style="display:flex; gap:8px;"><span style="color:#646760; font-size:0.85rem; min-width:120px;">Years in Business:</span><span style="color:#323434; font-size:0.85rem;">10+</span></div>
+            <div style="display:flex; gap:8px;"><span style="color:#646760; font-size:0.85rem; min-width:120px;">License:</span><span style="color:#323434; font-size:0.85rem;">Verified</span></div>
+            <div style="display:flex; gap:8px;"><span style="color:#646760; font-size:0.85rem; min-width:120px;">Specialties:</span><span style="color:#323434; font-size:0.85rem;">[To be filled in — contact contractor]</span></div>
+          </div>
+          <p style="color:#646760; font-size:0.9rem; line-height:1.6;">Ben Barton is the owner of Barton Builders LLC, a trusted deck contractor serving the Wausau, WI area. [Bio pending — to be updated with contractor-provided copy.]</p>
+        </div>
+
+        <!-- CMS item: John Garcia (69d4b9e6b553503a6618ddbf) -->
+        <div style="background:#ffffff; border-radius:8px; padding:32px; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+          <div style="width:80px; height:80px; background:#e0e8ef; border-radius:50%; margin-bottom:20px; display:flex; align-items:center; justify-content:center;">
+            <span style="color:#83b2cf; font-size:2rem;">&#128736;</span>
+          </div>
+          <h3 style="color:#323434; font-size:1.2rem; font-weight:700; margin-bottom:4px;">John Garcia</h3>
+          <p style="color:#e54c00; font-weight:600; margin-bottom:16px; font-size:0.9rem;">John Garcia Construction, LLC</p>
+          <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+            <div style="display:flex; gap:8px;"><span style="color:#646760; font-size:0.85rem; min-width:120px;">Service Area:</span><span style="color:#323434; font-size:0.85rem;">Edgar, WI and surrounding Central Wisconsin</span></div>
+            <div style="display:flex; gap:8px;"><span style="color:#646760; font-size:0.85rem; min-width:120px;">License:</span><span style="color:#323434; font-size:0.85rem;">Licensed</span></div>
+            <div style="display:flex; gap:8px;"><span style="color:#646760; font-size:0.85rem; min-width:120px;">Specialties:</span><span style="color:#323434; font-size:0.85rem;">[To be filled in — contact contractor]</span></div>
+          </div>
+          <p style="color:#646760; font-size:0.9rem; line-height:1.6;">John Garcia is the owner of John Garcia Construction, LLC, a licensed contractor serving Central Wisconsin. [Bio pending — to be updated with contractor-provided copy.]</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  <!-- /WEBFLOW COMPONENT: builders-grid -->
+
+  <!-- Section 5: Contractor CTA -->
+  <section class="section-wrap section-dark" id="cta-section-contractor">
+    <div class="container-inner" style="text-align:center; padding-top:64px; padding-bottom:64px;">
+      <h2 style="color:#ffffff; font-size:2rem; font-weight:700; margin-bottom:16px;">Are You a Deck Contractor in Central Wisconsin?</h2>
+      <p style="color:#c8d0d2; font-size:1.1rem; margin-bottom:32px; max-width:580px; margin-left:auto; margin-right:auto;">We're building a network of trusted builders and connecting them with homeowners who are ready to start their deck projects. If you're licensed, insured, and looking for quality leads — we should talk.</p>
+      <a href="mailto:info@cwdeckbuilders.com?subject=Interested%20in%20joining%20CWDB%20builder%20network" style="display:inline-block; background-color:#e54c00; color:#ffffff; font-weight:700; font-size:1rem; padding:16px 32px; border-radius:4px; text-decoration:none;">Join Our Builder Network</a>
+    </div>
+  </section>
+
+  <!-- Section 6: Global Footer (Webflow component) -->
+  <!-- component: global-footer (16ed2b41-9560-24aa-44d6-089f1ffb26d7) -->
+
+</body>
+</html>

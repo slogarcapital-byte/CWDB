@@ -1,20 +1,25 @@
 {
   "form": {
-    "platform": "Tally",
+    "platform": "Webflow Native Forms",
+    "previous_platform": "Tally (superseded 2026-03-29)",
     "name": "CWDB Deck Quote Request",
-    "description": "Homeowner intake form embedded on landing pages. Triggers Make webhook on submission.",
+    "description": "Homeowner intake form built with Webflow native forms, embedded on homepage, city pages, and /get-a-quote. Triggers Make webhook on submission.",
+    "webflow_form_name": "Quote Request",
+    "redirect_on_submit": "/thank-you",
     "fields": [
       {
         "id": 1,
         "label": "Full Name",
-        "type": "short_text",
+        "name": "name",
+        "type": "text",
         "required": true,
         "placeholder": "Your full name"
       },
       {
         "id": 2,
         "label": "Phone Number",
-        "type": "phone",
+        "name": "phone",
+        "type": "tel",
         "required": true,
         "placeholder": "(715) 555-0000",
         "validation": "US phone format"
@@ -22,6 +27,7 @@
       {
         "id": 3,
         "label": "Email Address",
+        "name": "email",
         "type": "email",
         "required": true,
         "placeholder": "you@email.com"
@@ -29,21 +35,24 @@
       {
         "id": 4,
         "label": "Property Address",
-        "type": "short_text",
+        "name": "address",
+        "type": "text",
         "required": true,
         "placeholder": "Street address, City, WI ZIP"
       },
       {
         "id": 5,
         "label": "Do you own this property?",
-        "type": "multiple_choice",
+        "name": "owner",
+        "type": "select",
         "required": true,
-        "options": ["Yes, I own this home", "No, I rent"]
+        "options": ["Yes", "No"]
       },
       {
         "id": 6,
         "label": "What type of project is this?",
-        "type": "multiple_choice",
+        "name": "project_type",
+        "type": "select",
         "required": true,
         "options": [
           "New deck build",
@@ -56,7 +65,8 @@
       {
         "id": 7,
         "label": "What is your estimated budget?",
-        "type": "multiple_choice",
+        "name": "budget",
+        "type": "select",
         "required": true,
         "options": [
           "Under $5,000",
@@ -69,7 +79,8 @@
       {
         "id": 8,
         "label": "When are you looking to start?",
-        "type": "multiple_choice",
+        "name": "timeline",
+        "type": "select",
         "required": true,
         "options": [
           "As soon as possible",
@@ -81,15 +92,30 @@
       {
         "id": 9,
         "label": "Anything else we should know about your project?",
-        "type": "long_text",
+        "name": "notes",
+        "type": "textarea",
         "required": false,
         "placeholder": "Deck size, materials, special features, etc."
+      },
+      {
+        "id": 10,
+        "label": "TCPA Consent",
+        "name": "tcpa_consent",
+        "type": "checkbox",
+        "required": true,
+        "placement": "below-fields-above-submit",
+        "text": "I agree to receive calls, text messages, and emails from Central Wisconsin Deck Builders, LLC and its contractor partners about my project request. Consent is not a condition of receiving a quote. Msg & data rates may apply. Reply STOP to opt out."
       }
     ],
+    "legal_blockers": {
+      "tcpa_consent_checkbox": "RESOLVED 2026-04-07 — finalized consent language deployed to field id 10",
+      "privacy_policy_page": "Must be published at /privacy before ads run or forms go live"
+    },
     "post_submit": {
-      "message": "Thanks! A local contractor will reach out within 24 hours.",
+      "redirect": "/thank-you",
       "webhook_trigger": true,
-      "webhook_destination": "/operations/make/webhooks.json"
+      "webhook_destination": "/operations/make/webhooks.json",
+      "note": "Webflow form submission triggers a Make webhook. Configure the webhook URL in Webflow Project Settings → Integrations → Webhooks."
     }
   }
 }

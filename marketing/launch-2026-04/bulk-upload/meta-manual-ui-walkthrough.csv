@@ -1,0 +1,148 @@
+Step,Section,Action / Field,Value to Paste,Notes
+1,Campaign,Click green + Create (top-left of Campaigns tab),,
+2,Campaign,Select campaign objective,Leads,Click Continue after selecting
+3,Campaign,Campaign name (paste into name field),CWDB — Leads — Launch 2026-04,Preserve em-dashes exactly
+4,Campaign,Special ad categories,,Leave ALL UNCHECKED — not credit/housing/employment/political
+5,Campaign,Buying type,Auction,Should be default
+6,Campaign,Campaign Budget Optimization toggle,OFF,Also shown as 'Advantage campaign budget' — must be OFF (we use ad-set budgets)
+7,Campaign,Click Next to advance to Ad Set,,
+8,AS1 Ad Set,Ad set name,AS1 — Manual Core — Homeowner 35-65,
+9,AS1 Ad Set,Conversion location,Website,
+10,AS1 Ad Set,Pixel,CWDB,Pixel ID 1207759804531749 — select from dropdown
+11,AS1 Ad Set,Conversion event,Lead,Should show as recently firing (since Phase F)
+12,AS1 Ad Set,Performance goal,Maximize number of conversions,
+13,AS1 Ad Set,Cost per result goal,,Leave BLANK — no bid cap at launch
+14,AS1 Ad Set,Attribution setting,7-day click or 1-day view,DEFAULT — do not change
+15,AS1 Ad Set,Budget type,Daily budget,
+16,AS1 Ad Set,Daily budget amount,10,10 dollars per day
+17,AS1 Ad Set,Schedule — start date,Today,Default
+18,AS1 Ad Set,Schedule — end date,,Leave BLANK — no end date
+19,AS1 Ad Set,Location — type,"Wausau, Wisconsin","Paste in Location search box, set radius = +20 miles"
+20,AS1 Ad Set,Location — add ZIP (bulk),54401,"Add in Locations > Add in bulk, or as individual ZIPs"
+21,AS1 Ad Set,Location — add ZIP (bulk),54403,
+22,AS1 Ad Set,Location — add ZIP (bulk),54474,
+23,AS1 Ad Set,Location — add ZIP (bulk),54476,
+24,AS1 Ad Set,Location — add ZIP (bulk),54455,
+25,AS1 Ad Set,Location — add ZIP (bulk),54452,
+26,AS1 Ad Set,Location type,People living in or recently in this location,NOT 'Interest' — must be presence-based
+27,AS1 Ad Set,Age min,35,
+28,AS1 Ad Set,Age max,65,
+29,AS1 Ad Set,Gender,All,
+30,AS1 Ad Set,Detailed Targeting INCLUDE — add interest,Home improvement,"Type in Detailed Targeting search box, pick top match (usually Interest)"
+31,AS1 Ad Set,Detailed Targeting INCLUDE — add interest,Home & garden,
+32,AS1 Ad Set,Detailed Targeting INCLUDE — add interest,Patio,
+33,AS1 Ad Set,Detailed Targeting INCLUDE — add interest,Backyard,
+34,AS1 Ad Set,Detailed Targeting INCLUDE — add interest,Outdoor living,
+35,AS1 Ad Set,Detailed Targeting INCLUDE — add interest,Landscaping,
+36,AS1 Ad Set,Detailed Targeting INCLUDE — add interest,HGTV,
+37,AS1 Ad Set,Detailed Targeting INCLUDE — add interest,The Home Depot,
+38,AS1 Ad Set,Detailed Targeting INCLUDE — add interest,Lowe's,
+39,AS1 Ad Set,Detailed Targeting INCLUDE — add interest,DIY,
+40,AS1 Ad Set,Click 'Narrow audience' — add behavior,Engaged Shoppers,AND logic — narrows the INCLUDE block above
+41,AS1 Ad Set,Narrow audience — add behavior,Likely Movers,Inside same narrow block — OR with Engaged Shoppers
+42,AS1 Ad Set,Click 'Narrow audience' again — add demographic,Homeowners,Second narrow — layers AND
+43,AS1 Ad Set,Narrow audience — add demographic,Household income: top 50% of ZIP codes,Same narrow as Homeowners
+44,AS1 Ad Set,Click 'Exclude people' — add exclusion,Renters,
+45,AS1 Ad Set,Advantage detailed targeting toggle,OFF,Strict manual core — do not let Meta expand
+46,AS1 Ad Set,Languages,,Leave BLANK — any language
+47,AS1 Ad Set,Placements,Advantage+ placements,Automatic/recommended — do not manually pick
+48,AS1 Ad Set,Click Next to advance to Ad creation,,
+49,AS1 Ad 1 (Problem/Solution),Ad name,AS1 — Problem Solution — v1 — problem,
+50,AS1 Ad 1,Identity — Facebook Page,Central Wisconsin Deck Builders,Select your CWDB FB page
+51,AS1 Ad 1,Identity — Instagram account,,Select linked IG account or 'Use Facebook Page' if not linked
+52,AS1 Ad 1,Format,Single image or video,
+53,AS1 Ad 1,Media — upload square,problem-solution-1080x1080.png,From marketing/launch-2026-04/creatives/meta/
+54,AS1 Ad 1,Media — upload portrait,problem-solution-1080x1350.png,Use 'multiple aspect ratios' option — portrait for Reels/Stories
+55,AS1 Ad 1,Primary text (paste into Primary Text field),Tired of deck contractors who never call back? One form. One vetted local builder. Real quote in 48 hours.,
+56,AS1 Ad 1,Headline (paste into Headline field),One form. Real local builder.,
+57,AS1 Ad 1,Description (paste into Description field),48-hour quote. No phone tag.,
+58,AS1 Ad 1,Website URL (paste full URL into Website URL field),https://www.cwdeckbuilders.com/get-a-quote?utm_source=meta&utm_medium=cpc&utm_campaign=launch-2026-04&utm_content=m-as1-v1-problem,UTM content = m-as1-v1-problem
+59,AS1 Ad 1,Display link,,Leave blank — Meta auto-shows cwdeckbuilders.com
+60,AS1 Ad 1,Call to action,Get Quote,Select from dropdown
+61,AS1 Ad 1,URL parameters,,Leave BLANK — params already in URL
+62,AS1 Ad 1,Ad status toggle (top of ad),Off,Toggle to OFF before publishing — creates in paused state
+63,AS1 Ad 1,Click Publish (with status Off),,Creates ad in Off state — safe
+64,AS1 Ad 2 (Process Proof),Click + Create Ad inside AS1,,
+65,AS1 Ad 2,Ad name,AS1 — Process Proof — v1 — process,
+66,AS1 Ad 2,Identity — FB Page,Central Wisconsin Deck Builders,Same as Ad 1
+67,AS1 Ad 2,Identity — IG account,,Same as Ad 1
+68,AS1 Ad 2,Format,Single image or video,
+69,AS1 Ad 2,Media — upload square,process-proof-1080x1080.png,
+70,AS1 Ad 2,Media — upload portrait,process-proof-1080x1350.png,
+71,AS1 Ad 2,Primary text,Licensed. Insured. Local to Central Wisconsin. Your deck quote hits your inbox in 48 hours — not 48 days.,Preserve em-dash
+72,AS1 Ad 2,Headline,"48 hours, not 48 days.",
+73,AS1 Ad 2,Description,Licensed local builders.,
+74,AS1 Ad 2,Website URL,https://www.cwdeckbuilders.com/get-a-quote?utm_source=meta&utm_medium=cpc&utm_campaign=launch-2026-04&utm_content=m-as1-v2-process,UTM content = m-as1-v2-process
+75,AS1 Ad 2,Call to action,Get Quote,
+76,AS1 Ad 2,Ad status toggle,Off,
+77,AS1 Ad 2,Click Publish,,Off state
+78,AS2 Ad Set,Inside campaign → click + Create Ad Set,,
+79,AS2 Ad Set,Ad set name,AS2 — Advantage+ — Homeowner 35-65,
+80,AS2 Ad Set,Conversion location,Website,Same as AS1
+81,AS2 Ad Set,Pixel,CWDB,Pixel ID 1207759804531749
+82,AS2 Ad Set,Conversion event,Lead,
+83,AS2 Ad Set,Performance goal,Maximize number of conversions,
+84,AS2 Ad Set,Cost per result goal,,Leave BLANK
+85,AS2 Ad Set,Attribution setting,7-day click or 1-day view,
+86,AS2 Ad Set,Budget type,Daily budget,
+87,AS2 Ad Set,Daily budget amount,10,10 dollars per day — same as AS1
+88,AS2 Ad Set,Location — type,"Wausau, Wisconsin",Same as AS1 — +20 miles
+89,AS2 Ad Set,Location — ZIP,54401,
+90,AS2 Ad Set,Location — ZIP,54403,
+91,AS2 Ad Set,Location — ZIP,54474,
+92,AS2 Ad Set,Location — ZIP,54476,
+93,AS2 Ad Set,Location — ZIP,54455,
+94,AS2 Ad Set,Location — ZIP,54452,
+95,AS2 Ad Set,Location type,People living in or recently in this location,
+96,AS2 Ad Set,Age min,35,
+97,AS2 Ad Set,Age max,65,
+98,AS2 Ad Set,Gender,All,
+99,AS2 Ad Set,Advantage+ audience toggle,ON,THIS IS THE KEY DIFFERENCE vs AS1 — let Meta optimize targeting
+100,AS2 Ad Set,Detailed targeting INCLUDE,,Leave BLANK — Advantage+ uses its own signal
+101,AS2 Ad Set,Exclusions — click Exclude people,Renters,ONE hard constraint — add Renters only
+102,AS2 Ad Set,Languages,,Leave BLANK
+103,AS2 Ad Set,Placements,Advantage+ placements,
+104,AS2 Ad Set,Click Next to advance to Ad creation,,
+105,AS2 Ad 1 (CONTROL — identical to AS1 Ad 1),Ad name,AS2 — Problem Solution — v1 — problem,Control ad — must match AS1 Ad 1 exactly except URL
+106,AS2 Ad 1,Identity — FB Page,Central Wisconsin Deck Builders,
+107,AS2 Ad 1,Identity — IG account,,Same as AS1
+108,AS2 Ad 1,Format,Single image or video,
+109,AS2 Ad 1,Media — upload square (SAME IMAGE as AS1 Ad 1),problem-solution-1080x1080.png,MUST be same file — do not use a different version
+110,AS2 Ad 1,Media — upload portrait,problem-solution-1080x1350.png,Same portrait as AS1 Ad 1
+111,AS2 Ad 1,Primary text (IDENTICAL to AS1 Ad 1),Tired of deck contractors who never call back? One form. One vetted local builder. Real quote in 48 hours.,
+112,AS2 Ad 1,Headline (IDENTICAL),One form. Real local builder.,
+113,AS2 Ad 1,Description (IDENTICAL),48-hour quote. No phone tag.,
+114,AS2 Ad 1,Website URL (ONLY this differs from AS1 Ad 1),https://www.cwdeckbuilders.com/get-a-quote?utm_source=meta&utm_medium=cpc&utm_campaign=launch-2026-04&utm_content=m-as2-v1-problem,UTM content = m-as2-v1-problem — the attribution switch
+115,AS2 Ad 1,Call to action,Get Quote,
+116,AS2 Ad 1,Ad status toggle,Off,
+117,AS2 Ad 1,Click Publish,,Off state
+118,AS2 Ad 2 (Seasonal Urgency),Click + Create Ad inside AS2,,
+119,AS2 Ad 2,Ad name,AS2 — Seasonal Urgency — v1 — urgency,
+120,AS2 Ad 2,Identity — FB Page,Central Wisconsin Deck Builders,
+121,AS2 Ad 2,Identity — IG account,,
+122,AS2 Ad 2,Format,Single image or video,
+123,AS2 Ad 2,Media — upload square,seasonal-urgency-1080x1080.png,
+124,AS2 Ad 2,Media — upload portrait,seasonal-urgency-1080x1350.png,
+125,AS2 Ad 2,Primary text,Wisconsin summer is short. The good deck builders book up by May. Free quote from a local builder in 48 hours.,
+126,AS2 Ad 2,Headline,Book before May fills up.,
+127,AS2 Ad 2,Description,Lock your summer deck build.,
+128,AS2 Ad 2,Website URL,https://www.cwdeckbuilders.com/get-a-quote?utm_source=meta&utm_medium=cpc&utm_campaign=launch-2026-04&utm_content=m-as2-v2-urgency,UTM content = m-as2-v2-urgency
+129,AS2 Ad 2,Call to action,Get Quote,
+130,AS2 Ad 2,Ad status toggle,Off,
+131,AS2 Ad 2,Click Publish,,Off state
+132,Verify Build,Go to Campaigns tab → click into CWDB — Leads — Launch 2026-04,,
+133,Verify Build,Confirm campaign exists,CWDB — Leads — Launch 2026-04 (Off),
+134,Verify Build,Confirm ad set 1 exists,AS1 — Manual Core — Homeowner 35-65 (Off) — 10/day,
+135,Verify Build,Confirm ad set 2 exists,AS2 — Advantage+ — Homeowner 35-65 (Off) — 10/day,
+136,Verify Build,"Confirm 4 ads exist, all Off","AS1 Problem+Process, AS2 Problem(control)+Urgency",Each shows correct image thumbnail
+137,Verify Build,Click into any ad → use Preview pane (right side),,Check Feed / Reels / Stories previews all render
+138,Verify Build,Click preview URL → confirm UTMs land correctly,,e.g. AS1 Ad 1 preview should load ?utm_content=m-as1-v1-problem
+139,UTM Test,Open incognito browser tab,,Fresh cookie state
+140,UTM Test,Paste this URL and submit one test lead,https://www.cwdeckbuilders.com/get-a-quote?utm_source=meta&utm_medium=cpc&utm_campaign=launch-2026-04&utm_content=m-as1-v1-problem,"Use test data — name 'TEST META 2026-04-23', real phone you control"
+141,UTM Test,Check Meta Events Manager → CWDB Pixel → Test Events,Lead event fires within 60 sec,Confirms Pixel attribution works
+142,UTM Test,Check GA4 DebugView,form_submit_quote with utm_source=meta,Confirms GA4 attribution works
+143,UTM Test,Check email inbox,Lead email at slogarjw@gmail.com,Confirms form-to-email path works for Meta too
+144,Go Live,Flip all 4 ads from Off to On,,Bulk-select ads + toggle all at once if possible
+145,Go Live,Flip AS1 ad set from Off to On,,
+146,Go Live,Flip AS2 ad set from Off to On,,
+147,Go Live,Flip campaign from Off to On,,Meta is live — log timestamp

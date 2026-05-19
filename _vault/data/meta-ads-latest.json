@@ -1,0 +1,6 @@
+﻿{
+    "pulled_at":  "2026-05-12T01:43:31.4372246Z",
+    "source":  "meta-ads",
+    "data":  null,
+    "error":  "Missing required env vars: META_ACCESS_TOKEN, META_AD_ACCOUNT_ID. See operations/automation/api-credentials/README.md"
+}

@@ -1,0 +1,117 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - link "Central Wisconsin Deck Builders Logo" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Central Wisconsin Deck Builders Logo" [ref=e5]
+      - generic [ref=e6]:
+        - link "Our Builders" [ref=e7] [cursor=pointer]:
+          - /url: /our-builders
+        - button "Resources" [ref=e9] [cursor=pointer]:
+          - generic [ref=e10]: Resources
+        - link "About" [ref=e11] [cursor=pointer]:
+          - /url: /about
+      - generic [ref=e12]:
+        - link "(715) 544-7941" [ref=e13] [cursor=pointer]:
+          - /url: tel:+17155447941
+        - link "Start My Quote →" [ref=e14] [cursor=pointer]:
+          - /url: /get-a-quote
+    - text: 
+  - generic [ref=e16]:
+    - paragraph [ref=e17]: Get Your Free Quotes
+    - heading "Ready to start your deck project?" [level=1] [ref=e18]
+    - paragraph [ref=e19]: Fill out the form below and hear from licensed Central Wisconsin deck builders within 24 hours. Free. No obligation.
+  - form "Quote Request" [ref=e23]:
+    - generic [ref=e85]:
+      - generic [ref=e86]: STEP 3 OF 3
+      - heading "When and how much?" [level=3] [ref=e87]
+      - generic [ref=e88]:
+        - generic [ref=e89]: Estimated Budget*
+        - combobox [ref=e90]:
+          - option "Select a range" [selected]
+          - option "Under $10,000"
+          - option "$10,000 - $20,000"
+          - option "$20,000 - $35,000"
+          - option "$35,000 - $50,000"
+          - option "$50,000+"
+          - option "Not sure yet"
+      - generic [ref=e91]:
+        - generic [ref=e92]: Timeline*
+        - combobox [ref=e93]:
+          - option "When do you want to start?" [selected]
+          - option "As soon as possible"
+          - option "1-3 months"
+          - option "3-6 months"
+          - option "6-12 months"
+          - option "Just researching"
+      - generic [ref=e94]:
+        - generic [ref=e95]: Anything else we should know? (optional)
+        - textbox "Example text" [ref=e96]
+      - generic [ref=e98] [cursor=pointer]:
+        - generic [ref=e99]:
+          - checkbox "tcpa_consent" [ref=e100]
+          - generic [ref=e101]: tcpa_consent
+        - generic [ref=e102]: By submitting, I agree to receive calls and text messages about my project from Central Wisconsin Deck Builders and matched contractors. Message and data rates may apply. Reply STOP to opt out. Consent is not a condition of purchase.
+      - generic [ref=e103]:
+        - link "← Back" [ref=e104] [cursor=pointer]:
+          - /url: "#"
+        - button "Submit" [ref=e105] [cursor=pointer]
+      - paragraph [ref=e106]:
+        - text: Your info is private. No spam, no obligation.
+        - link "View our Privacy Policy" [ref=e107] [cursor=pointer]:
+          - /url: /privacy
+  - generic [ref=e46]:
+    - generic [ref=e47]:
+      - img "Central Wisconsin Deck Builders Logo" [ref=e48]
+      - link "(715) 544-7941" [ref=e49] [cursor=pointer]:
+        - /url: tel:+17155447941
+      - generic [ref=e50]:
+        - link "Facebook" [ref=e51] [cursor=pointer]:
+          - /url: https://facebook.com
+          - img "Facebook" [ref=e52]
+        - link "Instagram" [ref=e54] [cursor=pointer]:
+          - /url: https://instagram.com
+          - img "Instagram" [ref=e55]
+        - link "Nextdoor" [ref=e57] [cursor=pointer]:
+          - /url: https://nextdoor.com
+          - img "Nextdoor" [ref=e58]
+    - generic [ref=e60]:
+      - heading "Service Areas" [level=4] [ref=e61]
+      - link "Wausau" [ref=e62] [cursor=pointer]:
+        - /url: /deck-builders-wausau
+      - link "Schofield" [ref=e63] [cursor=pointer]:
+        - /url: /deck-builders-schofield
+      - link "Weston" [ref=e64] [cursor=pointer]:
+        - /url: /deck-builders-weston
+      - link "Mosinee" [ref=e65] [cursor=pointer]:
+        - /url: /deck-builders-mosinee
+      - link "Merrill" [ref=e66] [cursor=pointer]:
+        - /url: /deck-builders-merrill
+    - generic [ref=e67]:
+      - heading "Company" [level=4] [ref=e68]
+      - link "About Us" [ref=e69] [cursor=pointer]:
+        - /url: /about
+      - link "Our Builders" [ref=e70] [cursor=pointer]:
+        - /url: /our-builders
+      - link "Gallery" [ref=e71] [cursor=pointer]:
+        - /url: /gallery
+      - link "FAQ" [ref=e72] [cursor=pointer]:
+        - /url: /faq
+      - link "Blog" [ref=e73] [cursor=pointer]:
+        - /url: /blog
+      - link "Cost Calculator" [ref=e74] [cursor=pointer]:
+        - /url: /cost-calculator
+    - generic [ref=e75]:
+      - heading "Contact" [level=4] [ref=e76]
+      - link "(715) 544-7941" [ref=e77] [cursor=pointer]:
+        - /url: tel:+17155447941
+      - link "Get a Free Quote" [ref=e78] [cursor=pointer]:
+        - /url: /get-a-quote
+      - paragraph [ref=e79]: Central Wisconsin
+      - paragraph [ref=e80]: Mon–Fri 8am–6pm CT
+    - paragraph [ref=e81]: © 2026 Central Wisconsin Deck Builders. All rights reserved.
+    - generic [ref=e82]:
+      - link "Privacy Policy" [ref=e83] [cursor=pointer]:
+        - /url: /privacy
+      - link "Terms of Service" [ref=e84] [cursor=pointer]:
+        - /url: /terms

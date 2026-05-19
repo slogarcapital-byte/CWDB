@@ -1,0 +1,6 @@
+﻿[2026-05-06T07:25:30.7917837-05:00] meta-ads pull FAILED: Missing required env vars: META_ACCESS_TOKEN, META_AD_ACCOUNT_ID. See operations/automation/api-credentials/README.md
+[2026-05-07T07:25:18.3791920-05:00] meta-ads pull FAILED: Missing required env vars: META_ACCESS_TOKEN, META_AD_ACCOUNT_ID. See operations/automation/api-credentials/README.md
+[2026-05-08T07:25:23.3150873-05:00] meta-ads pull FAILED: Missing required env vars: META_ACCESS_TOKEN, META_AD_ACCOUNT_ID. See operations/automation/api-credentials/README.md
+[2026-05-09T07:25:11.8351032-05:00] meta-ads pull FAILED: Missing required env vars: META_ACCESS_TOKEN, META_AD_ACCOUNT_ID. See operations/automation/api-credentials/README.md
+[2026-05-10T07:56:21.3304768-05:00] meta-ads pull FAILED: Missing required env vars: META_ACCESS_TOKEN, META_AD_ACCOUNT_ID. See operations/automation/api-credentials/README.md
+[2026-05-11T20:43:31.4274465-05:00] meta-ads pull FAILED: Missing required env vars: META_ACCESS_TOKEN, META_AD_ACCOUNT_ID. See operations/automation/api-credentials/README.md

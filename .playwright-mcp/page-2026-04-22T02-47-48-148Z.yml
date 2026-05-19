@@ -1,0 +1,12 @@
+- generic [active] [ref=e1]:
+  - img "Central Wisconsin cedar deck" [ref=e2]
+  - img "Central Wisconsin Deck Builders" [ref=e5]
+  - generic [ref=e6]:
+    - heading "Tired of contractors who never call back?" [level=1] [ref=e7]:
+      - text: Tired of contractors
+      - text: who never call back?
+    - paragraph [ref=e8]: One form. One vetted local builder. Real quote in 48 hours.
+    - generic [ref=e9]:
+      - link "Get Quote" [ref=e10] [cursor=pointer]:
+        - /url: "#"
+      - generic [ref=e11]: Licensed·Local·48‑hr Quote

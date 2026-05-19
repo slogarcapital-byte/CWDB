@@ -1,0 +1,135 @@
+<h2>Blog Index Page Layout</h2>
+<p class="subtitle">The /blog page that displays all 4 article cards. Which grid style fits CWDB best?</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="font-family:system-ui;padding:12px;background:#f8f8f6;border-radius:6px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div style="background:white;border-radius:4px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.08)">
+            <div style="background:#323434;height:60px;display:flex;align-items:flex-end;padding:8px">
+              <div style="font-size:9px;color:white;font-weight:700;line-height:1.2">HOW MUCH DOES A DECK COST IN WISCONSIN?</div>
+            </div>
+            <div style="padding:8px">
+              <div style="font-size:8px;color:#e54c00;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Cost Guide</div>
+              <div style="font-size:8px;color:#646760;line-height:1.4">Deck prices in WI range from $15–$70/sq ft depending on material...</div>
+            </div>
+          </div>
+          <div style="background:white;border-radius:4px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.08)">
+            <div style="background:#323434;height:60px;display:flex;align-items:flex-end;padding:8px">
+              <div style="font-size:9px;color:white;font-weight:700;line-height:1.2">COMPOSITE VS. WOOD VS. CEDAR</div>
+            </div>
+            <div style="padding:8px">
+              <div style="font-size:8px;color:#e54c00;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Materials</div>
+              <div style="font-size:8px;color:#646760;line-height:1.4">Wisconsin freeze-thaw cycles punish the wrong deck material...</div>
+            </div>
+          </div>
+          <div style="background:white;border-radius:4px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.08)">
+            <div style="background:#323434;height:60px;display:flex;align-items:flex-end;padding:8px">
+              <div style="font-size:9px;color:white;font-weight:700;line-height:1.2">DO YOU NEED A PERMIT TO BUILD A DECK IN WAUSAU?</div>
+            </div>
+            <div style="padding:8px">
+              <div style="font-size:8px;color:#e54c00;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Permits</div>
+              <div style="font-size:8px;color:#646760;line-height:1.4">Most deck projects in Wausau require a building permit...</div>
+            </div>
+          </div>
+          <div style="background:white;border-radius:4px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.08)">
+            <div style="background:#323434;height:60px;display:flex;align-items:flex-end;padding:8px">
+              <div style="font-size:9px;color:white;font-weight:700;line-height:1.2">BEST TIME TO BUILD A DECK IN CENTRAL WISCONSIN</div>
+            </div>
+            <div style="padding:8px">
+              <div style="font-size:8px;color:#e54c00;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Planning</div>
+              <div style="font-size:8px;color:#646760;line-height:1.4">Wisconsin's short building season means timing matters...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — 2×2 Even Grid</h3>
+      <p>4 equal-sized cards in a 2-column grid. All articles get equal weight. Scales to 8+ articles cleanly. Simple and balanced.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="font-family:system-ui;padding:12px;background:#f8f8f6;border-radius:6px">
+        <div style="background:white;border-radius:4px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.08);margin-bottom:8px">
+          <div style="background:#323434;height:80px;display:flex;align-items:flex-end;padding:10px;position:relative">
+            <div style="position:absolute;top:8px;left:10px;background:#e54c00;border-radius:2px;padding:2px 6px;font-size:8px;color:white;font-weight:700;text-transform:uppercase;letter-spacing:1px">Featured</div>
+            <div style="font-size:12px;color:white;font-weight:700;line-height:1.2">HOW MUCH DOES A DECK COST IN WISCONSIN? (2026 GUIDE)</div>
+          </div>
+          <div style="padding:8px;display:flex;gap:8px;align-items:center">
+            <div style="flex:1;font-size:8px;color:#646760;line-height:1.4">Deck prices in WI range from $15–$70/sq ft depending on material, size, and site conditions. We break down real costs...</div>
+            <div style="font-size:8px;color:#e54c00;font-weight:600;white-space:nowrap">Read →</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+          <div style="background:white;border-radius:4px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.06)">
+            <div style="background:#646760;height:40px;"></div>
+            <div style="padding:6px"><div style="font-size:8px;color:#e54c00;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px">Materials</div><div style="font-size:7px;color:#323434;font-weight:600;line-height:1.3">Composite vs. Wood vs. Cedar</div></div>
+          </div>
+          <div style="background:white;border-radius:4px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.06)">
+            <div style="background:#646760;height:40px;"></div>
+            <div style="padding:6px"><div style="font-size:8px;color:#e54c00;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px">Permits</div><div style="font-size:7px;color:#323434;font-weight:600;line-height:1.3">Deck Permits in Wausau, WI</div></div>
+          </div>
+          <div style="background:white;border-radius:4px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.06)">
+            <div style="background:#646760;height:40px;"></div>
+            <div style="padding:6px"><div style="font-size:8px;color:#e54c00;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px">Planning</div><div style="font-size:7px;color:#323434;font-weight:600;line-height:1.3">Best Time to Build a Deck</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Featured Hero + 3 Small Cards</h3>
+      <p>Cost guide article gets a large featured hero treatment. The other 3 sit below in a 3-column row. Gives editorial hierarchy — best if the cost guide is your top SEO priority.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="font-family:system-ui;padding:12px;background:#f8f8f6;border-radius:6px">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="background:white;border-radius:4px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.08);display:flex;gap:0">
+            <div style="background:#323434;width:80px;flex-shrink:0"></div>
+            <div style="padding:8px;flex:1">
+              <div style="font-size:8px;color:#e54c00;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px">Cost Guide · 8 min</div>
+              <div style="font-size:9px;color:#323434;font-weight:700;line-height:1.2;margin-bottom:3px">How Much Does a Deck Cost in Wisconsin?</div>
+              <div style="font-size:7px;color:#646760;line-height:1.3">Deck prices in WI range from $15–$70/sq ft...</div>
+            </div>
+          </div>
+          <div style="background:white;border-radius:4px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.08);display:flex">
+            <div style="background:#646760;width:80px;flex-shrink:0"></div>
+            <div style="padding:8px;flex:1">
+              <div style="font-size:8px;color:#e54c00;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px">Materials · 6 min</div>
+              <div style="font-size:9px;color:#323434;font-weight:700;line-height:1.2;margin-bottom:3px">Composite vs. Wood vs. Cedar</div>
+              <div style="font-size:7px;color:#646760;line-height:1.3">Wisconsin freeze-thaw cycles punish the wrong material...</div>
+            </div>
+          </div>
+          <div style="background:white;border-radius:4px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.08);display:flex">
+            <div style="background:#646760;width:80px;flex-shrink:0"></div>
+            <div style="padding:8px;flex:1">
+              <div style="font-size:8px;color:#e54c00;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px">Permits · 5 min</div>
+              <div style="font-size:9px;color:#323434;font-weight:700;line-height:1.2;margin-bottom:3px">Do You Need a Permit in Wausau?</div>
+              <div style="font-size:7px;color:#646760;line-height:1.3">Most deck projects in Wausau require a permit...</div>
+            </div>
+          </div>
+          <div style="background:white;border-radius:4px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.08);display:flex">
+            <div style="background:#646760;width:80px;flex-shrink:0"></div>
+            <div style="padding:8px;flex:1">
+              <div style="font-size:8px;color:#e54c00;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px">Planning · 5 min</div>
+              <div style="font-size:9px;color:#323434;font-weight:700;line-height:1.2;margin-bottom:3px">Best Time to Build a Deck in Central WI</div>
+              <div style="font-size:7px;color:#646760;line-height:1.3">Wisconsin's short building season means timing matters...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Editorial List (image left, text right)</h3>
+      <p>4 horizontal rows — thumbnail image on the left, category + title + excerpt on the right. Magazine/editorial style. Shows more excerpt text, easier to scan. Great if you plan to grow the blog significantly.</p>
+    </div>
+  </div>
+
+</div>

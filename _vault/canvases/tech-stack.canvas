@@ -1,0 +1,173 @@
+{
+  "nodes": [
+    {
+      "id": "f100000000000000",
+      "type": "text",
+      "x": 350,
+      "y": -100,
+      "width": 400,
+      "height": 60,
+      "color": "#e54c00",
+      "text": "# CWDB Tech Stack"
+    },
+    {
+      "id": "f1000000grp_web",
+      "type": "group",
+      "x": 0,
+      "y": 0,
+      "width": 300,
+      "height": 200,
+      "color": "5",
+      "label": "Website"
+    },
+    {
+      "id": "f100000000000001",
+      "type": "file",
+      "x": 40,
+      "y": 60,
+      "width": 220,
+      "height": 100,
+      "file": "_vault/platforms/Webflow.md"
+    },
+    {
+      "id": "f1000000grp_auto",
+      "type": "group",
+      "x": 400,
+      "y": 0,
+      "width": 300,
+      "height": 350,
+      "color": "6",
+      "label": "Automation & CRM"
+    },
+    {
+      "id": "f100000000000002",
+      "type": "file",
+      "x": 440,
+      "y": 60,
+      "width": 220,
+      "height": 100,
+      "file": "_vault/platforms/Make.md"
+    },
+    {
+      "id": "f100000000000003",
+      "type": "file",
+      "x": 440,
+      "y": 200,
+      "width": 220,
+      "height": 100,
+      "file": "_vault/platforms/HubSpot.md"
+    },
+    {
+      "id": "f1000000grp_ads",
+      "type": "group",
+      "x": 800,
+      "y": 0,
+      "width": 550,
+      "height": 350,
+      "color": "2",
+      "label": "Advertising"
+    },
+    {
+      "id": "f100000000000004",
+      "type": "file",
+      "x": 840,
+      "y": 60,
+      "width": 220,
+      "height": 100,
+      "file": "_vault/platforms/Google Ads.md"
+    },
+    {
+      "id": "f100000000000005",
+      "type": "file",
+      "x": 1090,
+      "y": 60,
+      "width": 220,
+      "height": 100,
+      "file": "_vault/platforms/Meta Ads.md"
+    },
+    {
+      "id": "f100000000000006",
+      "type": "file",
+      "x": 840,
+      "y": 200,
+      "width": 220,
+      "height": 100,
+      "file": "_vault/platforms/Nextdoor.md"
+    },
+    {
+      "id": "f100000000000007",
+      "type": "file",
+      "x": 1090,
+      "y": 200,
+      "width": 220,
+      "height": 100,
+      "file": "_vault/platforms/TikTok.md"
+    },
+    {
+      "id": "f1000000grp_cont",
+      "type": "group",
+      "x": 0,
+      "y": 280,
+      "width": 300,
+      "height": 200,
+      "color": "1",
+      "label": "Contracts"
+    },
+    {
+      "id": "f100000000000008",
+      "type": "file",
+      "x": 40,
+      "y": 340,
+      "width": 220,
+      "height": 100,
+      "file": "_vault/platforms/DocuSign.md"
+    }
+  ],
+  "edges": [
+    {
+      "id": "fe10000000000001",
+      "fromNode": "f100000000000001",
+      "fromSide": "right",
+      "toNode": "f100000000000002",
+      "toSide": "left",
+      "toEnd": "arrow",
+      "label": "form webhook"
+    },
+    {
+      "id": "fe10000000000002",
+      "fromNode": "f100000000000002",
+      "fromSide": "bottom",
+      "toNode": "f100000000000003",
+      "toSide": "top",
+      "toEnd": "arrow",
+      "label": "CRM update"
+    },
+    {
+      "id": "fe10000000000003",
+      "fromNode": "f100000000000004",
+      "fromSide": "left",
+      "toNode": "f100000000000001",
+      "toSide": "right",
+      "toEnd": "arrow",
+      "label": "drives traffic"
+    },
+    {
+      "id": "fe10000000000004",
+      "fromNode": "f100000000000005",
+      "fromSide": "left",
+      "toNode": "f100000000000001",
+      "toSide": "right",
+      "toEnd": "arrow",
+      "label": "drives traffic"
+    },
+    {
+      "id": "fe10000000000005",
+      "fromNode": "f100000000000008",
+      "fromSide": "right",
+      "toNode": "f100000000000003",
+      "toSide": "bottom",
+      "toEnd": "arrow",
+      "label": "signed status"
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!--
+  Gallery Page — Central Wisconsin Deck Builders
+  Webflow page ID: 69cff2a36004fc5dff348ad5
+  Staging: https://central-wisconsin-deck-builders.webflow.io/gallery
+  Live: https://cwdeckbuilders.com/gallery
+  Built: 2026-04-03 (Phase D)
+  Rebuilt: 2026-04-20 (Phase 4 Wave 2) — replaced page-hero + static grid + bespoke CTA
+           with hero-interior, CMS-bound gallery-grid-section, and cta-final
+
+  Sections (in order):
+    1. header (component: 17135213-0f65-1d96-c6af-955d586e2f00)
+    2. hero-interior (component: ec0fc950-6cea-2755-d848-50ade4f2af3c)
+       — Designer handoff: override eyebrow, heading, subheading (Data API
+         can't override per-instance props on single-locale sites; renders
+         city-template defaults until Jim toggles in Designer)
+    3. gallery-grid-section (WHTML, id="gallery-grid") — Collection List
+       skeleton with display:contents wrapper+list for grid layout
+       — Designer handoff: convert the placeholder div structure to a real
+         Webflow Collection List bound to Gallery Photos
+         (collection_id: 69cff077a56c28009f3df538); bind image, title, slug
+         (description optional). 3/2/1 col responsive grid already styled.
+    4. cta-final (component: 89566b0c-08a5-612a-25f7-1452a65d719d)
+       — Renders default headline "Start your deck quote. 48-hour response
+         from a local builder." and orange CTA to /get-a-quote. Acceptable
+         default for gallery page.
+    5. footer (component: 16ed2b41-9560-24aa-44d6-089f1ffb26d7)
+
+  CMS: Gallery Photos collection (69cff077a56c28009f3df538) — 7 items
+    - 3 real Wisconsin deck photos (Cedar Pergola Weston, Elevated Backyard
+      Wausau, Composite Deck Wittenberg) — flagged featured-on-homepage=true
+    - 4 stock unsplash placeholders (TimberTech Weston, Screened Porch
+      Wausau, Wraparound Mosinee, Pressure-Treated Schofield)
+      — flagged for replacement with real photos
+
+  Notes on the Collection List conversion (Designer-only):
+    - whtml_builder strips Webflow-internal w-dyn-list / w-dyn-items /
+      w-dyn-item classes on insert. The placeholder div has the custom
+      classes in place; the inner div structure must be rebuilt as a
+      real Collection List in Designer so the dynamic source and
+      DynamoWrapper/DynamoList classes get applied.
+    - display:contents is already set on .gallery-dyno-wrapper and
+      .gallery-dyno-list so the DynamoWrapper + DynamoList don't break
+      the CSS grid on the Collection Items.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deck Project Gallery | Central Wisconsin Deck Builders</title>
+  <meta name="description" content="Browse completed deck projects in Central Wisconsin. See composite decks, multi-level builds, and more from our vetted local contractors." />
+  <link rel="canonical" href="https://cwdeckbuilders.com/gallery" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Deck Project Gallery | Central Wisconsin Deck Builders" />
+  <meta property="og:description" content="Browse completed deck projects in Central Wisconsin. See composite decks, multi-level builds, and more from our vetted local contractors." />
+  <meta property="og:image" content="https://cwdeckbuilders.com/assets/images/og-gallery.jpg" />
+  <meta property="og:url" content="https://cwdeckbuilders.com/gallery" />
+  <meta property="og:type" content="website" />
+</head>
+<body>
+
+  <!-- WEBFLOW COMPONENT: header -->
+  <!-- component: header (17135213-0f65-1d96-c6af-955d586e2f00) -->
+  <!-- /WEBFLOW COMPONENT: header -->
+
+  <!-- WEBFLOW COMPONENT: hero-interior -->
+  <!-- component: hero-interior (ec0fc950-6cea-2755-d848-50ade4f2af3c) -->
+  <!-- Instance id: 4f001bef-3c32-4022-fbaa-f385d500aeee -->
+  <!-- Designer handoff: eyebrow=PROJECTS · heading=Our Deck Projects · -->
+  <!-- subheading=Real decks built by our vetted contractors across Central Wisconsin. -->
+  <!-- /WEBFLOW COMPONENT: hero-interior -->
+
+  <!-- WEBFLOW COMPONENT: gallery-grid-section -->
+  <section class="section-wrap gallery-grid-section" id="gallery-grid">
+    <div class="container-inner gallery-grid-inner">
+      <!-- TO CONVERT IN DESIGNER: wrap below as Collection List bound to Gallery Photos -->
+      <div class="w-dyn-list gallery-dyno-wrapper">
+        <div role="list" class="w-dyn-items gallery-dyno-list">
+          <div role="listitem" class="w-dyn-item gallery-card">
+            <a href="#" class="gallery-card-link w-inline-block">
+              <img class="gallery-card-image" alt="Deck project" src="" loading="lazy" />
+            </a>
+            <div class="gallery-card-caption">
+              <h3 class="gallery-card-title">Project Title</h3>
+              <p class="gallery-card-description">Project description placeholder.</p>
+            </div>
+          </div>
+        </div>
+        <div class="w-dyn-empty gallery-dyno-empty"><div>No items found.</div></div>
+      </div>
+    </div>
+  </section>
+  <!-- /WEBFLOW COMPONENT: gallery-grid-section -->
+
+  <!-- WEBFLOW COMPONENT: cta-final -->
+  <!-- component: cta-final (89566b0c-08a5-612a-25f7-1452a65d719d) -->
+  <!-- Instance id: b18ed919-bc82-974e-9a9b-c3a3930f4228 -->
+  <!-- Renders default: "Start your deck quote. 48-hour response from a local builder." -->
+  <!-- /WEBFLOW COMPONENT: cta-final -->
+
+  <!-- WEBFLOW COMPONENT: footer -->
+  <!-- component: footer (16ed2b41-9560-24aa-44d6-089f1ffb26d7) -->
+  <!-- /WEBFLOW COMPONENT: footer -->
+
+</body>
+</html>

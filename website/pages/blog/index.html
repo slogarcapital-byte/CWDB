@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!--
+  Blog Index Page — Central Wisconsin Deck Builders
+  Webflow page ID: 69d04373a1cf39d4f6680755
+  Staging: https://central-wisconsin-deck-builders.webflow.io/blog
+  Live:    https://cwdeckbuilders.com/blog
+
+  Phase 4 Wave 1-gamma rebuild (2026-04-20):
+    - Legacy blog-cards component instance REMOVED (hard-coded 4 articles with /blog/{slug} 404 links)
+    - Legacy quote-block component instance REMOVED ("Ready to Start Your Project?")
+    - hero-interior component instance INSERTED after header (element 97a0e69f-78d4-a43c-bce9-c4c3a15d7fda)
+    - blog-index-grid-section REBUILT as net-new CMS-ready scaffolding (element 3c92403e-461e-68d6-5547-406a6426a7d1)
+        • Webflow renamed classes with suffixes because base names already existed:
+          - wrapper list class:  blog-index-grid-1 (has display:grid 3-col desktop, 2-col tablet, 1-col mobile)
+          - card link class:     blog-card-1-2    (clean block, hover translateY, no border/shadow — zero-decoration per design-system.md)
+        • Section class (clean): blog-index-grid-section (padding 80px/48px, bg #ffffff)
+    - cta-final component instance REPLACES quote-block (element d8e98eab-b894-8edb-5ba7-6ea52aeaa05e)
+    - footer re-appended after cta-final (element 3be69d08-186a-8ae5-e306-9a676dc7d219)
+    - No cedar-strip anywhere (confirmed absent on staging)
+
+  Final DOM order:
+    header → hero-interior → blog-index-grid-section → cta-final → footer
+
+  Component inventory used:
+    - header            (17135213-0f65-1d96-c6af-955d586e2f00)
+    - hero-interior     (ec0fc950-6cea-2755-d848-50ade4f2af3c)  ← props defaulted; Designer override needed
+    - cta-final         (89566b0c-08a5-612a-25f7-1452a65d719d)
+    - footer            (16ed2b41-9560-24aa-44d6-089f1ffb26d7)
+
+  CMS: Blog Posts collection (69d043662f0a55d546c1f597) — 4 articles seeded.
+       Collection List bind is a Designer-only action pending Jim's handoff.
+
+  Pending Designer handoff for Jim (queue after /faq handoff):
+    1. Blog page → hero-interior instance → Properties panel:
+       eyebrow    = "RESOURCES"
+       heading    = "Deck Building Blog"
+       subheading = "Wisconsin-specific guides, pricing deep dives, and project how-tos."
+       bg_image   = hero-wausau.webp (asset 69cfed9c625f03047942b757) or any wide Wisconsin deck photo.
+
+    2. Collection List wrapper div (role="list", class blog-index-grid-1) → Settings:
+       Source         = Blog Posts
+       Items per page = 12
+       Sort           = Published Date (desc)
+
+    3. Collection Item template (inner role="listitem" div) — bind each element:
+       • <a class="blog-card-1-2"> outer link → Get URL From: Current Item
+       • <img> in .blog-card-image       → src from: Hero Image · alt from: Name
+       • .blog-card-category text        → Get Text From: Category
+       • .blog-card-date text            → Get Text From: Published Date (format "MMM D, YYYY")
+       • <h3 class="blog-card-title-1-2"> → Get Text From: Name
+       • <p class="blog-card-excerpt-1"> → Get Text From: Excerpt
+       • .blog-card-readmore             → keep static "Read more →" (no bind)
+
+    4. Publish staging.
+
+  Wave 4 (separate dispatch) will build the /blog-post/{slug} article template so
+  card links auto-resolve. Until then, Collection List binds to Current Item URL
+  will generate correct paths that 404 only because template is not yet created.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deck Building Blog | Central Wisconsin Deck Builders</title>
+  <meta name="description" content="Wisconsin-specific deck building guides, pricing deep dives, permit explainers, and project how-tos for Central Wisconsin homeowners." />
+  <link rel="canonical" href="https://cwdeckbuilders.com/blog" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Deck Building Blog | Central Wisconsin Deck Builders" />
+  <meta property="og:description" content="Wisconsin-specific deck building guides, pricing deep dives, permit explainers, and project how-tos for Central Wisconsin homeowners." />
+  <meta property="og:image" content="https://cwdeckbuilders.com/assets/images/og-blog.jpg" />
+  <meta property="og:url" content="https://cwdeckbuilders.com/blog" />
+  <meta property="og:type" content="website" />
+</head>
+<body>
+
+  <!-- WEBFLOW COMPONENT: header -->
+  <!-- component: header (17135213-0f65-1d96-c6af-955d586e2f00) -->
+  <!-- /WEBFLOW COMPONENT: header -->
+
+  <!-- WEBFLOW COMPONENT: hero-interior -->
+  <!-- component: hero-interior (ec0fc950-6cea-2755-d848-50ade4f2af3c) -->
+  <!-- Currently renders component defaults: eyebrow="Service Area", heading="Heading",
+       subheading="Expert deck builders serving your city in Central Wisconsin. Free quotes within 24 hours."
+       Per memory webflow-mcp-component-bool-props.md, per-instance Text overrides are Designer-only on
+       single-locale sites. Pending Designer overrides:
+         eyebrow    = "RESOURCES"
+         heading    = "Deck Building Blog"
+         subheading = "Wisconsin-specific guides, pricing deep dives, and project how-tos."
+         bg_image   = hero-wausau.webp (asset 69cfed9c625f03047942b757) -->
+  <!-- /WEBFLOW COMPONENT: hero-interior -->
+
+  <!-- WEBFLOW COMPONENT: blog-index-grid-section -->
+  <section class="blog-index-grid-section">
+    <!--
+      Light white (#ffffff) background. Padding 80px/5% desktop, 48px/5% mobile.
+      Contains the Collection List scaffolding (div wrapper → role="list" grid → role="listitem" card).
+
+      Grid wrapper (role="list", class="blog-index-grid-1"):
+        display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; max-width: 1200px; margin: 0 auto;
+        @tablet (≤991px): 2-col  ·  @mobile (≤767px): 1-col, gap 24px
+
+      Placeholder Collection Item template (role="listitem") — one card, to be bound to CMS in Designer:
+
+        <a class="blog-card-1-2">                    ← outer link (href → Current Item URL)
+          <div class="blog-card-image">
+            <img ...>                                ← src from Hero Image · alt from Name
+          </div>
+          <div class="blog-card-meta">
+            <span class="blog-card-category">Guides</span>   ← Get Text From: Category (sky color)
+            <span class="blog-card-date">Apr 3, 2026</span>  ← Get Text From: Published Date
+          </div>
+          <h3 class="blog-card-title-1-2">...</h3>           ← Get Text From: Name (Staatliches)
+          <p class="blog-card-excerpt-1">...</p>             ← Get Text From: Excerpt (Public Sans)
+          <span class="blog-card-readmore">Read more →</span> ← static (sky)
+        </a>
+
+      Typography: Staatliches titles, Public Sans body/meta/readmore.
+      Colors: slate (#323434) titles · grey (#646760) excerpts · sky (#83b2cf) meta + readmore.
+      Zero-decoration per /design-system.md — no border radius on images, no card borders.
+    -->
+  </section>
+  <!-- /WEBFLOW COMPONENT: blog-index-grid-section -->
+
+  <!-- WEBFLOW COMPONENT: cta-final -->
+  <!-- component: cta-final (89566b0c-08a5-612a-25f7-1452a65d719d) -->
+  <!-- Renders component defaults:
+         headline  = "Start your deck quote. 48-hour response from a local builder."
+         cta_label = "Start My Quote →"
+         cta_href  = /get-a-quote
+       Brief suggested copy ("Ready for your deck project? Get a quote.") was not applied because
+       per-instance text overrides require Designer on single-locale sites. Defaults are semantically
+       aligned; Jim can override in Designer if desired. -->
+  <!-- /WEBFLOW COMPONENT: cta-final -->
+
+  <!-- WEBFLOW COMPONENT: footer -->
+  <!-- component: footer (16ed2b41-9560-24aa-44d6-089f1ffb26d7) -->
+  <!-- /WEBFLOW COMPONENT: footer -->
+
+</body>
+</html>

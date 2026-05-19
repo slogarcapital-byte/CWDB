@@ -1,0 +1,2 @@
+cd "C:\Users\jslog\OneDrive\Desktop\Slogars\CPA\Slogar-Capital\Claude\Projects\CWDB\operations\leads"
+.\create-tally-form.ps1 -ApiKey "tly-tzpcxLTYy1YXZUqVWgVY6gerUzIKE3hN"

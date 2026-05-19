@@ -1,0 +1,220 @@
+{
+  "nodes": [
+    {
+      "id": "b1000000000center",
+      "type": "text",
+      "x": 400,
+      "y": 300,
+      "width": 200,
+      "height": 100,
+      "color": "#FFD700",
+      "text": "## [[Jim Slogar]]\nOwner & Operator\n[[Central Wisconsin Deck Builders LLC|CWDB]]"
+    },
+    {
+      "id": "b1000000grp_mktg",
+      "type": "group",
+      "x": -200,
+      "y": -200,
+      "width": 550,
+      "height": 350,
+      "color": "2",
+      "label": "Marketing"
+    },
+    {
+      "id": "b100000000000001",
+      "type": "file",
+      "x": -150,
+      "y": -140,
+      "width": 220,
+      "height": 100,
+      "file": "_vault/agents/Market Research Agent.md"
+    },
+    {
+      "id": "b100000000000002",
+      "type": "file",
+      "x": 100,
+      "y": -140,
+      "width": 220,
+      "height": 100,
+      "file": "_vault/agents/Ad Campaign Agent.md"
+    },
+    {
+      "id": "b100000000000003",
+      "type": "file",
+      "x": -30,
+      "y": 0,
+      "width": 220,
+      "height": 100,
+      "file": "_vault/agents/Content Writer Agent.md"
+    },
+    {
+      "id": "b1000000grp_web",
+      "type": "group",
+      "x": 500,
+      "y": -200,
+      "width": 300,
+      "height": 200,
+      "color": "5",
+      "label": "Website"
+    },
+    {
+      "id": "b100000000000004",
+      "type": "file",
+      "x": 540,
+      "y": -140,
+      "width": 220,
+      "height": 100,
+      "file": "_vault/agents/Web Dev Agent.md"
+    },
+    {
+      "id": "b1000000grp_ops",
+      "type": "group",
+      "x": 850,
+      "y": -50,
+      "width": 550,
+      "height": 350,
+      "color": "4",
+      "label": "Operations"
+    },
+    {
+      "id": "b100000000000005",
+      "type": "file",
+      "x": 900,
+      "y": 10,
+      "width": 220,
+      "height": 100,
+      "file": "_vault/agents/Lead Qualification Agent.md"
+    },
+    {
+      "id": "b100000000000006",
+      "type": "file",
+      "x": 1150,
+      "y": 10,
+      "width": 220,
+      "height": 100,
+      "file": "_vault/agents/Lead Routing Agent.md"
+    },
+    {
+      "id": "b1000000grp_sale",
+      "type": "group",
+      "x": 850,
+      "y": 400,
+      "width": 300,
+      "height": 200,
+      "color": "3",
+      "label": "Sales"
+    },
+    {
+      "id": "b100000000000007",
+      "type": "file",
+      "x": 890,
+      "y": 460,
+      "width": 220,
+      "height": 100,
+      "file": "_vault/agents/Contractor Sales Agent.md"
+    },
+    {
+      "id": "b1000000grp_fin",
+      "type": "group",
+      "x": -200,
+      "y": 300,
+      "width": 550,
+      "height": 350,
+      "color": "6",
+      "label": "Finance"
+    },
+    {
+      "id": "b100000000000008",
+      "type": "file",
+      "x": -150,
+      "y": 360,
+      "width": 220,
+      "height": 100,
+      "file": "_vault/agents/Revenue Optimization Agent.md"
+    },
+    {
+      "id": "b100000000000009",
+      "type": "file",
+      "x": 100,
+      "y": 360,
+      "width": 220,
+      "height": 100,
+      "file": "_vault/agents/Accounting Agent.md"
+    },
+    {
+      "id": "b10000000000000a",
+      "type": "file",
+      "x": -30,
+      "y": 500,
+      "width": 220,
+      "height": 100,
+      "file": "_vault/agents/Analytics Agent.md"
+    },
+    {
+      "id": "b1000000grp_legl",
+      "type": "group",
+      "x": 500,
+      "y": 550,
+      "width": 300,
+      "height": 200,
+      "color": "1",
+      "label": "Legal"
+    },
+    {
+      "id": "b10000000000000b",
+      "type": "file",
+      "x": 540,
+      "y": 610,
+      "width": 220,
+      "height": 100,
+      "file": "_vault/agents/Legal Compliance Agent.md"
+    }
+  ],
+  "edges": [
+    {
+      "id": "be10000000000001",
+      "fromNode": "b100000000000002",
+      "fromSide": "bottom",
+      "toNode": "b10000000000000a",
+      "toSide": "top",
+      "toEnd": "arrow",
+      "label": "performance data"
+    },
+    {
+      "id": "be10000000000002",
+      "fromNode": "b100000000000005",
+      "fromSide": "right",
+      "toNode": "b100000000000006",
+      "toSide": "left",
+      "toEnd": "arrow",
+      "label": "qualified leads"
+    },
+    {
+      "id": "be10000000000003",
+      "fromNode": "b100000000000006",
+      "fromSide": "bottom",
+      "toNode": "b100000000000007",
+      "toSide": "top",
+      "toEnd": "arrow",
+      "label": "delivered leads"
+    },
+    {
+      "id": "be10000000000004",
+      "fromNode": "b100000000000007",
+      "fromSide": "left",
+      "toNode": "b100000000000009",
+      "toSide": "right",
+      "toEnd": "arrow",
+      "label": "billing data"
+    },
+    {
+      "id": "be10000000000005",
+      "fromNode": "b100000000000003",
+      "fromSide": "right",
+      "toNode": "b100000000000004",
+      "toSide": "left",
+      "toEnd": "arrow",
+      "label": "page copy"
+    }
+  ]
+}

@@ -1,56 +1,107 @@
 {
   "platform": "Make (formerly Integromat)",
-  "description": "Webhook and scenario configs for automating lead flow from Tally form to contractor delivery",
+  "description": "Webhook configuration for automating lead flow from Webflow form to contractor delivery. Make is the authoritative orchestration platform for CWDB lead routing.",
+  "change_log": [
+    {
+      "date": "2026-04-15",
+      "change": "Pivoted to Claude RemoteTrigger (no Make account).",
+      "status": "REVERSED"
+    },
+    {
+      "date": "2026-04-18",
+      "change": "Restored Make-based architecture. RemoteTrigger pivot reversed by James per reliability decision — lost notifications = lost $1,000 bids; Make's enterprise-grade uptime wins over RemoteTrigger's dependency on Anthropic availability.",
+      "status": "ACTIVE",
+      "decided_by": "Jim Slogar",
+      "decision_ref": "_vault/state-of-cwdb.md §Decisions Needed from Jim, P4"
+    }
+  ],
   "scenarios": [
     {
       "scenario_id": "sc-001",
-      "name": "Tally Form → Lead Qualification → Contractor Notification",
-      "trigger": "Tally form submission webhook",
+      "name": "Webflow Form → Lead Qualification → HubSpot → Contractor Notification",
+      "trigger": "Make Webhooks module (Custom webhook endpoint — Webflow Project Settings → Integrations → Webhooks → form_submission posts to this URL)",
       "steps": [
         {
           "step": 1,
-          "action": "Receive Tally webhook payload",
-          "tool": "Make Webhooks (Custom)"
+          "action": "Receive Webflow form_submission webhook payload",
+          "module": "gateway:CustomWebHook (Make Webhooks)",
+          "notes": "Parses 10 fields: name, phone, email, address, owner, project_type, budget, timeline, notes, tcpa_consent"
         },
         {
           "step": 2,
-          "action": "Parse form fields (name, phone, address, budget, timeline)",
-          "tool": "Make Data Parser"
+          "action": "Run lead qualification scoring per /operations/leads/scoring-rules.json (pass threshold: 60/100)",
+          "module": "util:SetVariables / Router (Make built-in)",
+          "notes": "Hard disqualifiers: renter, outside territory (zip not in 54401/54403/54476/54474/54452), invalid US phone, no TCPA consent. Route splits qualified vs disqualified paths."
         },
         {
           "step": 3,
-          "action": "Run qualification scoring against /operations/leads/scoring-rules.json",
-          "tool": "Make Router / Filter"
+          "action": "Look up active contractors from HubSpot (lifecyclestage=customer)",
+          "module": "HubSpot CRM → Search CRM Objects (contacts)",
+          "notes": "Returns Ben Barton + John Garcia (and future active contractors). Pull email + phone + company + firstname."
         },
         {
           "step": 4,
-          "action": "If qualified: look up contractor by territory from routing-rules.json",
-          "tool": "Make Router"
+          "action": "[QUALIFIED PATH] Create HubSpot contact (homeowner) with deal",
+          "module": "HubSpot CRM → Create a Contact + Create a Deal",
+          "notes": "Contact properties: name, phone, email, address, project_type, budget, timeline, notes, tcpa_consent=true, lifecyclestage=lead. Deal: Homeowner Leads pipeline (TBD), stage=New Lead, amount=0, dealname='[City] — [project_type] — [name]'."
+        },
+        {
+          "step": 4,
+          "action": "[DISQUALIFIED PATH] Create HubSpot contact with tag and stop",
+          "module": "HubSpot CRM → Create a Contact",
+          "notes": "Properties: lifecyclestage=lead, hs_lead_status=UNQUALIFIED, add note with disqualify_reason. Send admin alert only — do not notify contractors."
         },
         {
           "step": 5,
-          "action": "Send email notification to contractor",
-          "tool": "Make Email (Gmail or SMTP)"
+          "action": "Iterator — loop over each active contractor from step 3",
+          "module": "flow:Iterator (Make built-in)"
         },
         {
           "step": 6,
-          "action": "Send SMS notification to contractor",
-          "tool": "Make SMS (Twilio or similar)"
+          "action": "Send email notification to each active contractor",
+          "module": "Gmail → Send an Email (or Email → Send Email via SMTP)",
+          "template": "/sales/outreach/contractor-lead-delivery-email.md (to be authored)",
+          "subject": "New deck lead — [City] — [project_type] — [name]"
         },
         {
           "step": 7,
-          "action": "Create deal record in HubSpot CRM",
-          "tool": "Make HubSpot module"
+          "action": "Send SMS notification to each active contractor",
+          "module": "Twilio → Create a Message",
+          "body_template": "New CWDB deck lead: [name] · [city] · [project_type] · Budget [budget] · Timeline [timeline] · [phone]. View in HubSpot: [deal_url]"
         },
         {
           "step": 8,
-          "action": "If not qualified: log disqualification reason and notify admin",
-          "tool": "Make Email"
+          "action": "Send admin summary email to slogarjw@gmail.com",
+          "module": "Gmail → Send an Email",
+          "subject": "[CWDB] Lead routed — [name] — score [score]/100",
+          "body": "Qualification result, score, contractors notified, HubSpot deal link."
         }
       ],
-      "webhook_url": "[MAKE_WEBHOOK_URL — fill after scenario creation]",
-      "status": "not_built"
+      "webhook_url": "https://hook.us2.make.com/p4cbbf1lq3bl6lpew6c3odahnrhoc1m4",
+      "make_scenario_id": 4792854,
+      "make_scenario_url": "https://us2.make.com/2073972/scenarios/4792854/edit",
+      "make_hook_id": 2183206,
+      "make_team_id": 2073972,
+      "make_organization_id": 7086579,
+      "make_folder_id": 231872,
+      "credential_request_url": "https://us2.make.com/2073972/credentials-requests/inbox?requestId=2cf06b68-55cd-447d-b329-9d459300d7ff",
+      "status": "BUILT 2026-04-18 — scenario inactive pending: (1) Jim authorizes HubSpot + Gmail + Twilio connections via credential-request URL, (2) webhook URL pasted into Webflow Project Settings → Integrations → Webhooks, (3) end-to-end test submission verified, (4) scenario activated manually in Make UI",
+      "connections_required": [
+        { "app": "HubSpot", "scopes": ["crm.objects.contacts.write", "crm.objects.deals.write", "crm.objects.contacts.read"] },
+        { "app": "Gmail", "scopes": ["gmail.send"] },
+        { "app": "Twilio", "credentials": ["TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "TWILIO_FROM_NUMBER"] }
+      ],
+      "manual_setup_steps": [
+        "1. Build scenario in Make (team ID TBD)",
+        "2. Copy webhook URL from Make Webhooks module",
+        "3. In Webflow: Project Settings → Integrations → Webhooks → Add Webhook → Event: form_submission → paste URL",
+        "4. Verify HubSpot 'Contractor Sales' + 'Homeowner Leads' pipelines exist (see /sales/crm/pipeline-stages.json)",
+        "5. Verify Ben Barton + John Garcia in HubSpot have lifecyclestage=customer, valid email + phone",
+        "6. Connect Gmail + Twilio in Make → Connections",
+        "7. Run test submission from Webflow staging → verify full flow end-to-end",
+        "8. Activate scenario"
+      ]
     }
   ],
-  "notes": "Build scenario sc-001 in Make before running first ad campaign. Test with sample Tally submission before going live."
+  "notes": "Make orchestrates the entire lead delivery flow. HubSpot MCP, Gmail MCP, and Claude RemoteTrigger are no longer the primary orchestration path. They may still be used by specialist agents for one-off CRM tasks or admin work — not for production lead routing."
 }

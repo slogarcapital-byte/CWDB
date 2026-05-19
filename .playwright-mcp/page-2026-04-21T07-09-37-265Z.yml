@@ -1,0 +1,112 @@
+- generic [active] [ref=e1]:
+  - text: "(function(){var s=document.createElement('style');s.id='cwdb';s.textContent='.header-wrap.scrolled{background-color:#323434!important;border-bottom-color:rgba(255,255,255,.05)!important}.cedar-strip{background-color:#83b2cf!important;background-image:linear-gradient(90deg,#83b2cf 0%,#9cc4db 40%,#83b2cf 70%,#6a9eba 100%)!important}.btn-primary{box-shadow:0 4px 24px rgba(229,76,0,.45)!important}.w-input:focus,.w-select:focus{border-color:#83b2cf!important;box-shadow:0 0 0 3px rgba(131,178,207,.2)!important;outline:none!important}';document.head.appendChild(s);})();"
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - link "Central Wisconsin Deck Builders Logo" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Central Wisconsin Deck Builders Logo" [ref=e5]
+      - generic [ref=e6]:
+        - link "Our Builders" [ref=e7] [cursor=pointer]:
+          - /url: /our-builders
+        - button "Resources" [ref=e9] [cursor=pointer]:
+          - generic [ref=e10]: Resources
+        - link "About" [ref=e11] [cursor=pointer]:
+          - /url: /about
+      - generic [ref=e12]:
+        - link "(715) 544-7941" [ref=e13] [cursor=pointer]:
+          - /url: tel:+17155447941
+        - link "Start My Quote →" [ref=e14] [cursor=pointer]:
+          - /url: /get-a-quote
+    - text: 
+  - generic [ref=e17]:
+    - generic [ref=e18]: Service Area
+    - heading "Heading" [level=1] [ref=e19]
+    - paragraph [ref=e20]: Expert deck builders serving your city in Central Wisconsin. Free quotes within 24 hours.
+  - generic [ref=e22]:
+    - navigation "Breadcrumb" [ref=e23]:
+      - link "Home" [ref=e24] [cursor=pointer]:
+        - /url: /
+      - generic [ref=e25]: /
+      - link "Blog" [ref=e26] [cursor=pointer]:
+        - /url: /blog
+      - generic [ref=e27]: /
+      - generic [ref=e28]: Article
+    - generic [ref=e29]:
+      - paragraph [ref=e30]:
+        - text: Article body placeholder — bind this Rich Text element to the
+        - strong [ref=e31]: Body
+        - text: field of the Blog Posts collection in the Webflow Designer.
+      - heading "Example H2 heading" [level=2] [ref=e32]
+      - paragraph [ref=e33]: This paragraph demonstrates how body copy will render once the CMS body field is connected. Paragraphs use Public Sans at 17px with generous 1.7 line-height, optimized for reading long-form articles on the 720px measure.
+      - heading "Example H3 subheading" [level=3] [ref=e34]
+      - paragraph [ref=e35]:
+        - text: Links within the body
+        - link "render in Wisconsin Sky Blue with an underline" [ref=e36] [cursor=pointer]:
+          - /url: "#"
+        - text: . Code inline looks like
+        - code [ref=e37]: this snippet
+        - text: .
+      - list [ref=e38]:
+        - listitem [ref=e39]: Unordered list item one
+        - listitem [ref=e40]: Unordered list item two
+      - blockquote [ref=e41]: Pull quotes and block quotes pick up a 3px sky-blue left rule and italic styling to stand apart from body copy.
+  - generic [ref=e43]:
+    - heading "Start your deck quote. 48-hour response from a local builder." [level=2] [ref=e44]
+    - link "Start My Quote →" [ref=e45] [cursor=pointer]:
+      - /url: /get-a-quote
+  - generic [ref=e48]:
+    - generic [ref=e49]:
+      - img "Central Wisconsin Deck Builders Logo" [ref=e50]
+      - link "(715) 544-7941" [ref=e51] [cursor=pointer]:
+        - /url: tel:+17155447941
+      - generic [ref=e52]:
+        - link "Facebook" [ref=e53] [cursor=pointer]:
+          - /url: https://facebook.com
+          - img "Facebook" [ref=e54]
+        - link "Instagram" [ref=e56] [cursor=pointer]:
+          - /url: https://instagram.com
+          - img "Instagram" [ref=e57]
+        - link "Nextdoor" [ref=e59] [cursor=pointer]:
+          - /url: https://nextdoor.com
+          - img "Nextdoor" [ref=e60]
+    - generic [ref=e62]:
+      - heading "Service Areas" [level=4] [ref=e63]
+      - link "Wausau" [ref=e64] [cursor=pointer]:
+        - /url: /deck-builders-wausau
+      - link "Schofield" [ref=e65] [cursor=pointer]:
+        - /url: /deck-builders-schofield
+      - link "Weston" [ref=e66] [cursor=pointer]:
+        - /url: /deck-builders-weston
+      - link "Mosinee" [ref=e67] [cursor=pointer]:
+        - /url: /deck-builders-mosinee
+      - link "Merrill" [ref=e68] [cursor=pointer]:
+        - /url: /deck-builders-merrill
+    - generic [ref=e69]:
+      - heading "Company" [level=4] [ref=e70]
+      - link "About Us" [ref=e71] [cursor=pointer]:
+        - /url: /about
+      - link "Our Builders" [ref=e72] [cursor=pointer]:
+        - /url: /our-builders
+      - link "Gallery" [ref=e73] [cursor=pointer]:
+        - /url: /gallery
+      - link "FAQ" [ref=e74] [cursor=pointer]:
+        - /url: /faq
+      - link "Blog" [ref=e75] [cursor=pointer]:
+        - /url: /blog
+      - link "Cost Calculator" [ref=e76] [cursor=pointer]:
+        - /url: /cost-calculator
+    - generic [ref=e77]:
+      - heading "Contact" [level=4] [ref=e78]
+      - link "(715) 544-7941" [ref=e79] [cursor=pointer]:
+        - /url: tel:+17155447941
+      - link "Get a Free Quote" [ref=e80] [cursor=pointer]:
+        - /url: /get-a-quote
+      - paragraph [ref=e81]: Central Wisconsin
+      - paragraph [ref=e82]: Mon–Fri 8am–6pm CT
+    - paragraph [ref=e83]: © 2026 Central Wisconsin Deck Builders. All rights reserved.
+    - generic [ref=e84]:
+      - link "Privacy Policy" [ref=e85] [cursor=pointer]:
+        - /url: /privacy
+      - link "Terms of Service" [ref=e86] [cursor=pointer]:
+        - /url: /terms
+  - text: "(function(){var h=document.querySelector('.header-wrap');if(!h)return;window.addEventListener('scroll',function(){h.classList.toggle('scrolled',window.scrollY>80);},{passive:true});})();"

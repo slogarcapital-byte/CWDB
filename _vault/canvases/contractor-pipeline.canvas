@@ -1,0 +1,81 @@
+{
+  "nodes": [
+    {
+      "id": "d100000000000000",
+      "type": "text",
+      "x": 200,
+      "y": -80,
+      "width": 600,
+      "height": 60,
+      "color": "#e54c00",
+      "text": "# Contractor Pipeline — [[Central Wisconsin Deck Builders LLC|CWDB]]"
+    },
+    {
+      "id": "d1000000grp_sent",
+      "type": "group",
+      "x": 0,
+      "y": 20,
+      "width": 480,
+      "height": 300,
+      "color": "3",
+      "label": "Agreement Sent (awaiting signature)"
+    },
+    {
+      "id": "d100000000000001",
+      "type": "file",
+      "x": 20,
+      "y": 80,
+      "width": 210,
+      "height": 120,
+      "file": "_vault/people/Ben Barton.md"
+    },
+    {
+      "id": "d100000000000002",
+      "type": "file",
+      "x": 250,
+      "y": 80,
+      "width": 210,
+      "height": 120,
+      "file": "_vault/people/John Garcia.md"
+    },
+    {
+      "id": "d100000000000003",
+      "type": "text",
+      "x": 20,
+      "y": 220,
+      "width": 440,
+      "height": 80,
+      "text": "Both sent via [[DocuSign]] on 2026-04-07\n$1,000 per accepted bid\nCovers: [[Wausau]], [[Schofield]], [[Weston]], [[Mosinee]], [[Merrill]]"
+    },
+    {
+      "id": "d1000000grp_pros",
+      "type": "group",
+      "x": 540,
+      "y": 20,
+      "width": 300,
+      "height": 300,
+      "color": "3",
+      "label": "Prospecting (8-18 needed)"
+    },
+    {
+      "id": "d100000000000004",
+      "type": "text",
+      "x": 560,
+      "y": 80,
+      "width": 260,
+      "height": 220,
+      "text": "## Target: 10-20 contractors\n\nCurrent: 2 contacted\nRemaining: 8-18\n\n**Outreach channels:**\n- Google search\n- [[Nextdoor]] posts\n- Facebook groups\n- BBB listings\n- Angi/Thumbtack profiles"
+    }
+  ],
+  "edges": [
+    {
+      "id": "de10000000000001",
+      "fromNode": "d1000000grp_pros",
+      "fromSide": "left",
+      "toNode": "d1000000grp_sent",
+      "toSide": "right",
+      "toEnd": "arrow",
+      "label": "signs agreement"
+    }
+  ]
+}

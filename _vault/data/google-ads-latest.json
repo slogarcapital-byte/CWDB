@@ -1,0 +1,6 @@
+﻿{
+    "pulled_at":  "2026-05-12T01:43:30.9794768Z",
+    "source":  "google-ads",
+    "data":  null,
+    "error":  "Missing required env vars: GOOGLE_ADS_DEVELOPER_TOKEN, GOOGLE_ADS_CLIENT_ID, GOOGLE_ADS_CLIENT_SECRET, GOOGLE_ADS_REFRESH_TOKEN. See operations/automation/api-credentials/README.md"
+}

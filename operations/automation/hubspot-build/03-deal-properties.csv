@@ -1,0 +1,9 @@
+Step,Property,Internal Name,Field Type,Group,Description,Options,Notes
+1,Lead Score,lead_score,Number,Deal information,Qualification score 0-100 assigned by routing logic,,Workflow-managed; not form-fillable
+2,Disqualification Reason,disqualification_reason,Single-line text,Deal information,Reason lead was disqualified,,Workflow-managed; populated only on disqualified deals
+3,Matched Contractor,matched_contractor,Single-line text,Deal information,Which contractor (Ben Barton or John Garcia) the lead was routed to,"Barton Builders LLC|John Garcia Construction LLC|Both|Other",Workflow-managed at routing
+4,Routing Sent At,routing_sent_at,Date & time,Deal information,Timestamp the lead was sent to contractor,,Workflow-managed
+5,First Response Window Hours,first_response_window_hours,Number,Deal information,Hours between routing and first contractor response (SLA tracking),,Workflow-calculated
+6,Bid Amount,bid_amount,Number (currency),Deal information,Contractor bid amount (manually entered when bid created),,Manual update by contractor or Jim
+7,Referral Fee Invoiced At,referral_fee_invoiced_at,Date & time,Deal information,Timestamp invoice was sent for $1000 referral fee,,Workflow-managed at Accepted Bid stage
+8,Referral Fee Paid At,referral_fee_paid_at,Date & time,Deal information,Timestamp $1000 referral payment received,,Manual update by Jim at Won stage

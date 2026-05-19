@@ -1,3 +1,13 @@
+---
+type: reference
+status: active
+created: 2026-03-11
+updated: 2026-04-16
+tags:
+  - type/reference
+  - dept/sales
+---
+
 CONTRACTOR SALES CALL SCRIPT
 Use for: Cold and warm calls to deck contractors
 Last Updated: [DATE]
@@ -7,7 +17,7 @@ OPENER
 =====================================
 "Hi, is this [NAME]?
 
-Great — my name is [YOUR NAME]. I'll be quick. I run a lead generation service for deck contractors in Central Wisconsin and I'm looking for one local contractor to work with in your area. Do you have 2 minutes?"
+Great — my name is [YOUR NAME]. I'll be quick. I run a lead generation service for deck contractors in [[Central Wisconsin Deck Builders LLC|Central Wisconsin]] and I'm looking for one local contractor to work with in your area. Do you have 2 minutes?"
 
 [If yes → continue]
 [If busy → "No problem. When's a better time to call back? I have something you might like."]
@@ -17,7 +27,7 @@ PITCH (keep under 60 seconds)
 =====================================
 "We generate homeowner leads — people who are actively looking to get a deck built or replaced. They fill out a quote form on our website, we verify the information, and we send the lead straight to you by text and email.
 
-Right now we're getting leads from Wausau, Schofield, Weston, and a few surrounding cities.
+Right now we're getting leads from [[Wausau]], [[Schofield]], [[Weston]], and a few surrounding cities.
 
 We work with one contractor per territory — so whoever I partner with gets all the leads exclusively.
 
@@ -66,7 +76,7 @@ CLOSE
 =====================================
 NEXT STEPS AFTER CALL
 =====================================
-- Log contractor in HubSpot → /sales/crm/
+- Log contractor in [[HubSpot]] → /sales/crm/
 - Send follow-up email with terms
 - Send trial lead if agreed
 - Add to onboarding flow → /sales/onboarding/

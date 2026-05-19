@@ -1,3 +1,13 @@
+---
+type: reference
+tags:
+  - type/reference
+  - phase/1-validation
+created: 2026-03-11
+updated: 2026-04-16
+status: active
+---
+
 # Phase 1 Planning Document — CWDB Lead Generation
 **Prepared for:** CEO Review
 **Date:** March 11, 2026
@@ -34,7 +44,7 @@ We do NOT start running ads until we have a contractor lined up who will pay for
 | Lead form questions | Done — schema defined |
 | Automation workflow | Done — on paper, not built yet |
 | Contractor outreach scripts | Done — call + email scripts ready |
-| Tools (HubSpot, Webflow, etc.) | NOT SET UP |
+| Tools ([[HubSpot]], [[Webflow]], etc.) | DONE ✅ |
 | Contractors contacted | 1 COMMITTED ✅ ($1,000/accepted bid) |
 | Money spent | ZERO |
 
@@ -46,19 +56,19 @@ We do NOT start running ads until we have a contractor lined up who will pay for
 
 **Available budget:** $1,500–$5,000
 **Available time:** 5–15 hours/week
-**Brand name:** TBD (placeholder needed before building website)
+**Brand name:** [[Central Wisconsin Deck Builders LLC|Central Wisconsin Deck Builders]] | **Domain:** cwdeckbuilders.com (GoDaddy) ✅
 
 **Recommended budget allocation:**
 | Item | Estimated Cost |
 |---|---|
 | Webflow Starter plan | ~$14/mo |
-| Make (free tier to start) | $0 |
-| HubSpot (free tier) | $0 |
+| [[Make]] (free tier to start) | $0 |
+| [[HubSpot]] (free tier) | $0 |
 | Tally (free) | $0 |
 | Google Ads — test campaign | $300–$500 |
 | Facebook Ads — test campaign | $200–$400 |
 | Nextdoor Ads — test campaign | $100–$200 |
-| Domain name | ~$15 |
+| Domain name | ~$15 ✅ cwdeckbuilders.com (GoDaddy) |
 | Misc (Twilio SMS, etc.) | ~$20/mo |
 | **Total to launch** | **~$700–$1,200** |
 
@@ -89,28 +99,24 @@ Think of this like setting up the office before opening a store. We need the sof
 
 ### Tasks
 
-**1.1 — Pick a brand name**
-- The website, domain, and all materials need a name.
-- Examples: `CentralWiDecks.com`, `WisconsinDeckQuotes.com`, `DeckLeadsWI.com`
-- Keep it simple. Homeowners need to trust it. Contractors need to recognize it's local.
-- Decision needed before any other setup.
+**1.1 — Pick a brand name** ✅ DONE
+- **Brand name:** Central Wisconsin Deck Builders (CWDB internally)
 
-**1.2 — Register a domain**
-- Buy a `.com` domain through Google Domains, Namecheap, or GoDaddy (~$15/year)
-- Pick something that matches the brand name
+**1.2 — Register a domain** ✅ DONE
+- **Domain:** cwdeckbuilders.com — registered on GoDaddy
 
-**1.3 — Create accounts**
+**1.3 — Create accounts** ✅ DONE
 - HubSpot (free): `hubspot.com` → free CRM to track contractors and leads
 - Webflow (Starter ~$14/mo): `webflow.com` → website/landing page builder
 - Tally (free): `tally.so` → lead capture form
 - Make (free): `make.com` → automation (connects form to CRM and sends lead alerts)
 
-**1.4 — Set up HubSpot pipeline**
-- Create 8 deal stages in HubSpot (the configs already exist in `/sales/crm/pipeline-stages.json`)
-- This is where we'll track every contractor we contact
+**1.4 — Set up HubSpot pipeline** ✅ DONE
+- Created 8 deal stages in HubSpot (from `/sales/crm/pipeline-stages.json`)
+- First committed contractor entered as "Closed — Active" deal
 
-### Success Criteria
-All 4 accounts created. Domain registered. Brand name decided.
+### Success Criteria ✅ COMPLETE
+All 4 accounts created. Domain registered. Brand name decided. HubSpot pipeline configured.
 
 ---
 
@@ -125,7 +131,7 @@ Before we spend a single dollar on ads, we need to confirm that a real contracto
 Think of it like testing if people want your product before opening a restaurant. You ask first. Then you cook.
 
 ### Where to Find Contractors
-1. Google search: "deck builders Wausau WI" — call everyone on the first 2 pages
+1. Google search: "deck builders [[Wausau]] WI" — call everyone on the first 2 pages
 2. Google Maps: Search "deck contractor" near Wausau — look at every pin
 3. Yelp and Angi listings for deck builders in Central WI
 4. Facebook: Search "deck builder Wausau" — local groups and pages
@@ -180,42 +186,74 @@ This is building the actual machinery:
 
 Think of it like a vending machine. The landing page is the front panel. The form is the button they press. The automation is the mechanism that delivers the product.
 
-### 3A: Build the Tally Form
+### 3A: Build the Tally Form ✅ DONE (2026-03-28)
+**Form ID:** 81GbEO
+**Share URL:** https://tally.so/r/81GbEO
 **What it is:** A simple online form homeowners fill out to request a deck quote
 **Where:** tally.so (free account)
-**Fields (from `/operations/leads/quote-form-fields.json`):**
+**Note:** Post-submit message requires Tally Pro. Using Webflow redirect to `cwdeckbuilders.com/thank-you` instead.
+
+**To run:**
+1. Get your Tally API key: tally.so → Account Settings → API Keys
+2. Open PowerShell and run:
+   ```powershell
+   cd "...\CWDB\operations\leads"
+   .\create-tally-form.ps1 -ApiKey "YOUR_API_KEY"
+   ```
+3. Copy the Share URL and Embed code from the output.
+
+Script location: `/operations/leads/create-tally-form.ps1`
+Form ID (after running): `/operations/leads/tally-form-id.txt`
+
+**Fields created by the script:**
 1. Full name
-2. Phone number
+2. Phone number (US format)
 3. Email address
 4. Property address
-5. Do you own this property? (Yes/No — if no, disqualified)
+5. Do you own this property? (Yes/No — renter filtering handled by Make in 3C)
 6. Project type (new build, replacement, repair, addition, not sure)
-7. Budget range ($5K–$10K / $10K–$20K / $20K–$40K / $40K+)
+7. Budget range (Under $5K / $5K–$10K / $10K–$20K / $20K–$40K / $40K+)
 8. Timeline (ASAP / 1–3 months / 3–6 months / just planning)
 9. Additional notes (optional)
 
-After submit, show: "Thanks! A local contractor will reach out within 24 hours."
+**Time estimate:** ~15 minutes (get API key + run script + verify in browser)
 
-**Time estimate:** 1–2 hours
-
-### 3B: Build the Webflow Landing Page
-**What it is:** The webpage homeowners see before filling out the form
+### 3B: Build the Full CWDB Website ← EXPANDED (2026-03-29)
+**What it is:** A complete 21-page website replacing the original single landing page.
 **Where:** webflow.com
-**Template already exists** at `/website/templates/base.html` and a Wausau version at `/website/pages/wausau-deck/index.html`
+**Full plan:** `/business-context/website-plan.md`
+**Design system:** `/website/design-system.md`
+**Site architecture:** `/website/site-architecture.md`
 
-Page structure:
-1. **Headline:** "Get a Free Deck Quote in Wausau" (above the fold, first thing they see)
-2. **Value props:** Fast response, local contractors, free quotes
-3. **Project photos:** Stock deck photos or real project images
-4. **Trust signals:** Licensed & insured, local, 5-star rating
-5. **The form:** Embed the Tally form here (or link to it)
+**Key tech stack change:** Webflow native forms replace Tally (confirmed 2026-03-29). The existing Tally form (ID: 81GbEO) is superseded.
+
+The website serves as both a high-converting lead gen machine AND a local authority site for organic SEO growth.
+
+**Pages at launch (21 total):**
+- Homepage, Get a Quote, Thank You (core conversion)
+- 5 city pages: Wausau, [[Schofield]], [[Weston]], [[Mosinee]], [[Merrill]] (SEO)
+- Our Builders, About, Gallery, FAQ (trust & authority)
+- Deck Cost Calculator (interactive engagement)
+- Blog + 4 articles (organic traffic)
+- Privacy, Terms (legal)
+
+**Form tool:** Webflow native form (9 fields, same as original Tally spec)
+**Form flow:** Webflow form → Make webhook → lead scoring → contractor notification
 
 Key rules:
-- One clear call to action: "Get My Free Quote"
-- Mobile must look good — most traffic will be on phones
-- Keep it simple. Don't clutter it.
+- Dark & bold visual design (Timber Slate dominant, Wisconsin Sky Blue accent)
+- Mobile-first with sticky CTA bar and click-to-call
+- Full analytics from day one: GA4, GTM, Meta Pixel, Nextdoor Pixel, Clarity
+- Fully unique content on all 5 city pages (no templates)
 
-**Time estimate:** 3–5 hours
+**Build sequence:** Design system → Core pages → City pages → Authority pages → Interactive + blog → SEO/analytics → Mobile QA
+
+**Reference files:**
+- All page content: `/website/pages/*/content.md`
+- Base HTML template: `/website/templates/base.html`
+- Cost calculator JS: `/website/pages/cost-calculator/calculator.js`
+
+**Time estimate:** 15–25 hours (expanded scope from original 3–5 hours)
 
 ### 3C: Build the Make Automation
 **What it is:** The behind-the-scenes workflow that fires every time someone submits the form
@@ -391,13 +429,15 @@ Everything after this is Phase 2: scaling to 20–50 leads/month.
 
 ---
 
-## Next Steps After This Document is Approved
+## Next Steps
 
-1. **Decide on brand name** (blocking task — everything else waits on this)
-2. **Register domain**
-3. **Create all 4 accounts** (HubSpot, Webflow, Tally, Make)
-4. **Start contractor calls this week** — use the script at `/sales/outreach/call-script.md`
-5. Begin building Tally form in parallel
+~~1. Decide on brand name~~ ✅ Central Wisconsin Deck Builders
+~~2. Register domain~~ ✅ cwdeckbuilders.com (GoDaddy)
+~~3. **Create all 4 accounts** (HubSpot, Webflow, Tally, Make)~~ ✅ Done
+~~4. **Set up HubSpot pipeline**~~ ✅ Done — 8 stages configured, first contractor entered
+5. **Sub-Phase 1 complete — move to Sub-Phases 2 + 3 in parallel:**
+   - Continue contractor outreach — script at `/sales/outreach/call-script.md`
+   - Build Tally form — fields at `/operations/leads/quote-form-fields.json`
 
 ---
 

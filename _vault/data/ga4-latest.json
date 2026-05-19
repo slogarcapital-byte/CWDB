@@ -1,0 +1,6 @@
+﻿{
+    "pulled_at":  "2026-05-12T01:43:31.8006113Z",
+    "source":  "ga4",
+    "data":  null,
+    "error":  "Missing required env var: GA4_SERVICE_ACCOUNT_JSON. See operations/automation/api-credentials/README.md"
+}

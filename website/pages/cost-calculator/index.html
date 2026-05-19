@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<!--
+  LOCAL REFERENCE FILE — Webflow is the source of truth.
+  This file reflects the live Webflow page structure for /cost-calculator.
+  Page ID: 69d04360b87483b9bbc76b04
+  Staging: https://central-wisconsin-deck-builders.webflow.io/cost-calculator
+
+  STATUS (Phase 4 Wave 2): Workstream A (chrome rebuild) COMPLETE on staging (2026-04-20).
+  Workstream B (calculator.js font refactor) file-complete — Jim must paste the updated
+  calculator.js into Webflow Page Settings → Custom Code → Before </body> for fonts to
+  render on staging. Per-instance text overrides on hero-interior are Designer-only on
+  single-locale sites — defaults leak until Jim updates them in the Designer.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deck Cost Calculator — Central Wisconsin | CWDB</title>
+  <meta name="description" content="Estimate your deck project cost in Central Wisconsin. Choose your size, material, and features for a free instant estimate.">
+</head>
+<body>
+
+  <!-- WEBFLOW COMPONENT: header -->
+  <section class="site-header">
+    <!-- Shared header component (instance id 0cf0be61-ad75-724d-34de-e96ece4e437c on page) -->
+  </section>
+  <!-- /WEBFLOW COMPONENT: header -->
+
+  <!-- WEBFLOW COMPONENT: hero-interior -->
+  <section class="hero-interior">
+    <!--
+      Replaces legacy #page-hero. Component ID: ec0fc950-6cea-2755-d848-50ade4f2af3c.
+      Instance ID on page: c1679aa4-5847-987f-4fa8-ab703bf1d34e.
+
+      DESIGNER HANDOFF — Jim must set these per-instance overrides in Webflow Designer:
+        eyebrow     = "RESOURCES"
+        heading     = "Deck Cost Calculator"
+        subheading  = "Size, material, features — get a ballpark in 60 seconds."
+        bg_image    = optional deck photo (slate overlay handled by component)
+
+      Defaults currently leaking on staging:
+        eyebrow    = "Service Area"
+        heading    = "Heading"
+        subheading = "Expert deck builders serving your city in Central Wisconsin. Free quotes within 24 hours."
+      (Webflow MCP cannot write per-instance text props on single-locale sites — see memory webflow-mcp-component-bool-props.md.)
+    -->
+  </section>
+  <!-- /WEBFLOW COMPONENT: hero-interior -->
+
+  <!-- WEBFLOW COMPONENT: calculator-section -->
+  <section class="calculator-section" id="calculator-section">
+    <!--
+      Section wrap id preserved on the live page (id="calculator-section").
+      White background (#ffffff); no decoration to strip — already clean.
+      Calculator container div: <div id="cwdb-calculator"></div>
+      Calculator UI rendered by calculator.js pasted in Page Settings > Custom Code > Before </body>.
+
+      FONT REFACTOR (Workstream B, 2026-04-20):
+        calc-field inputs/selects  : Inter            → Public Sans
+        #calc-btn                   : Inter            → Public Sans
+        .calc-result-range          : Barlow Condensed → Staatliches
+      Source file: /website/pages/cost-calculator/calculator.js
+      MANUAL STEP: Jim must re-paste the updated calculator.js into Webflow Page
+      Settings → Custom Code → Before </body> (replaces the existing inline block).
+    -->
+  </section>
+  <!-- /WEBFLOW COMPONENT: calculator-section -->
+
+  <!-- WEBFLOW COMPONENT: material-table-section -->
+  <section class="material-table-section" id="material-table">
+    <!--
+      Decoration stripped 2026-04-20:
+        - material-table-section background: #f8f8f6 → #ffffff (pure white)
+      Static HTML table preserved: Material Quick Reference header + 4 rows
+        (Pressure-Treated, Cedar, Composite, PVC / Vinyl) with cost/sqft, lifespan,
+        maintenance, best-for columns.
+      Inline table links retained: /blog/composite-vs-wood, /blog/deck-cost-wisconsin.
+    -->
+  </section>
+  <!-- /WEBFLOW COMPONENT: material-table-section -->
+
+  <!-- WEBFLOW COMPONENT: cta-final -->
+  <section class="cta-final">
+    <!--
+      Replaces legacy bespoke #cta-section ("Get Your Exact Quote — Free").
+      Component ID: 89566b0c-08a5-612a-25f7-1452a65d719d.
+      Instance ID on page: d2522a6f-63d3-1820-a726-902b3f0b9477.
+      Defaults OK on this page (matches homepage and Wave 1/2 pages):
+        headline   = "Start your deck quote. 48-hour response from a local builder."
+        cta_label  = "Start My Quote →"
+        cta_href   = /get-a-quote
+    -->
+  </section>
+  <!-- /WEBFLOW COMPONENT: cta-final -->
+
+  <!-- WEBFLOW COMPONENT: footer -->
+  <section class="site-footer">
+    <!-- Shared footer component (instance id 012f1cbe-3729-82a0-1df1-1a0f81d88eca on page) -->
+  </section>
+  <!-- /WEBFLOW COMPONENT: footer -->
+
+</body>
+</html>

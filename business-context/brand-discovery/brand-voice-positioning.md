@@ -1,3 +1,13 @@
+---
+type: reference
+tags:
+  - type/reference
+  - dept/marketing
+created: 2026-03-12
+updated: 2026-04-16
+status: active
+---
+
 # CWDB Brand Voice & Positioning
 
 **Status:** Approved — March 12, 2026
@@ -10,7 +20,7 @@ This document covers *how we sound* and *why we sound that way*. The style guide
 
 ## 1. Positioning Statement
 
-Central Wisconsin Deck Builders is the fastest, most reliable way for Central Wisconsin homeowners to get connected with a vetted local deck contractor — without the research, guesswork, or waiting. We exist for the homeowner who doesn't want to spend three weeks chasing contractors. We do that work so they don't have to.
+[[Central Wisconsin Deck Builders LLC|Central Wisconsin Deck Builders]] is the fastest, most reliable way for Central Wisconsin homeowners to get connected with a vetted local deck contractor — without the research, guesswork, or waiting. We exist for the homeowner who doesn't want to spend three weeks chasing contractors. We do that work so they don't have to.
 
 We are not a contractor. We are not a directory. We are the trusted middleman who makes the process simple and certain.
 
@@ -19,7 +29,7 @@ We are not a contractor. We are not a directory. We are the trusted middleman wh
 ## 2. The Core Customer: The Stressed Delegator
 
 **Who they are:**
-A homeowner in the Wausau area, 35–60, who wants a deck built or replaced but dreads the contractor search. They've probably heard horror stories — contractors who ghost you, bids that never arrive, no-shows. They have a budget. They have a timeline. They just want someone reliable to show up.
+A homeowner in the [[Wausau]] area, 35–60, who wants a deck built or replaced but dreads the contractor search. They've probably heard horror stories — contractors who ghost you, bids that never arrive, no-shows. They have a budget. They have a timeline. They just want someone reliable to show up.
 
 **What they fear:**
 - Getting ripped off
@@ -176,6 +186,6 @@ Short rewrites showing the principles applied.
 Not all touchpoints are equal right now. Design energy should go here first:
 
 1. **Contractor outreach materials** (`/sales/outreach/`) — Phase 1 validation requires a paying contractor before ad spend begins. These materials must work.
-2. **The Webflow landing page** (`/website/`) — Once a contractor is signed, this is where homeowner trust gets built and leads get captured.
+2. **The [[Webflow]] landing page** (`/website/`) — Once a contractor is signed, this is where homeowner trust gets built and leads get captured.
 
 Ads are third priority. Don't spend on traffic until the landing page converts.
