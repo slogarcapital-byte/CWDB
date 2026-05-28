@@ -22,3 +22,16 @@ node_modules/
 # Generated reports and P&L outputs (optional — uncomment to exclude)
 # finance/pl/*.xlsx
 # finance/reports/**/*.xlsx
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+
+# Customer PII — date-prefixed estimate JSONs contain real homeowner info
+# (test-inputs-*.json fixtures stay versioned)
+sales/estimates/_data/[0-9]*.json
+sales/estimates/*.pdf
+
+# Streamlit secrets (defense-in-depth; streamlit_app/.gitignore also covers this)
+**/.streamlit/secrets.toml

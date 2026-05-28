@@ -1,0 +1,337 @@
+{
+  "schema_version": "1.0",
+  "as_of": "2026-05-28",
+  "currency": "USD",
+  "company": "Central Wisconsin Deck Builders, LLC",
+  "market": "Central Wisconsin (Wausau / Schofield / Weston / Mosinee / Merrill)",
+  "notes": "Single source of truth for the deck estimator. Edit values here and regenerate the workbook with build_estimator_workbook.py. Review prices quarterly. Cedar pricing is volatile due to 2025-2026 BC mill closures - revisit before major quotes.",
+  "research_source": "sales/estimating/pricing-research-2026-05.md",
+  "next_review_date": "2026-08-28",
+  "open_verification_items": [
+    "Menards SKU 1110669 (AC2 5/4x6x16 PT decking) - fallback price used; verify in-person",
+    "Menards SKU 1072752 (Cedar 2x4x8 S4S) - fallback price used; verify in-person"
+  ],
+
+  "decking_materials": [
+    {
+      "key": "pt_pine",
+      "name": "Pressure-Treated Pine",
+      "sell_per_sf": 4.50,
+      "material_per_sf": 1.25,
+      "waste_pct": 0.10,
+      "description": "Budget tier. AC2 5/4x6x16 PT decking (Menards SKU 1110669). 8-12 yr life with stain maintenance.",
+      "source": "Menards Wausau 2026-05 (fallback - verify in-person)"
+    },
+    {
+      "key": "cedar",
+      "name": "Cedar",
+      "sell_per_sf": 12.00,
+      "material_per_sf": 4.85,
+      "waste_pct": 0.10,
+      "description": "Mid wood tier. Red Cedar 5/4x6x16 (Menards SKU 1072723 - $35.59 rebate). Natural rot resistance. 15-20 yr life.",
+      "source": "Menards Wausau 2026-05 (confirmed)"
+    },
+    {
+      "key": "trex_enhance",
+      "name": "Trex Enhance",
+      "sell_per_sf": 22,
+      "material_per_sf": 7.50,
+      "waste_pct": 0.08,
+      "description": "Entry composite. 25-yr warranty. Budget-friendly composite option.",
+      "source": "John Garcia spreadsheet (verified 2026-05)"
+    },
+    {
+      "key": "trex_select",
+      "name": "Trex Select",
+      "sell_per_sf": 30,
+      "material_per_sf": 10.50,
+      "waste_pct": 0.08,
+      "description": "Mid-tier composite. 35-yr warranty. Most common composite upgrade.",
+      "source": "John Garcia spreadsheet (verified 2026-05)"
+    },
+    {
+      "key": "trex_transcend",
+      "name": "Trex Transcend",
+      "sell_per_sf": 42,
+      "material_per_sf": 16.00,
+      "waste_pct": 0.10,
+      "description": "Premium composite. Full grain, deep colors. 50-yr warranty.",
+      "source": "John Garcia spreadsheet (verified 2026-05)"
+    }
+  ],
+
+  "railing_materials": [
+    {
+      "key": "pt_wood",
+      "name": "Pressure-Treated Wood Rail",
+      "sell_per_lf": 40,
+      "material_per_lf": 11,
+      "description": "PT 2x4 top/bottom rail (Menards SKU 1110818) with PT 2x2 balusters and 4x4 posts. Budget tier.",
+      "source": "Menards Wausau 2026-05 (confirmed for 2x4)"
+    },
+    {
+      "key": "cedar_wood",
+      "name": "Cedar Wood Rail",
+      "sell_per_lf": 60,
+      "material_per_lf": 18,
+      "description": "Cedar 2x4 top/bottom rail (Menards SKU 1072752 - fallback) with cedar balusters. Mid wood tier.",
+      "source": "Menards Wausau 2026-05 (fallback - verify in-person)"
+    },
+    {
+      "key": "trex_aluminum",
+      "name": "Trex Aluminum",
+      "sell_per_lf": 165,
+      "material_per_lf": 65,
+      "description": "Trex Signature aluminum rail system. Black/bronze. Lifetime warranty.",
+      "source": "John Garcia spreadsheet (verified 2026-05)"
+    },
+    {
+      "key": "cable",
+      "name": "Cable Railing",
+      "sell_per_lf": 110,
+      "material_per_lf": 45,
+      "description": "Feeney CableRail (Menards SKU 6310-PKG) on PT/cedar posts. Full system with top+bot rail. Modern look, view preservation.",
+      "source": "Dunn Lumber + Menards 2026-05 (corroborated)"
+    },
+    {
+      "key": "glass_panel",
+      "name": "Glass Panel",
+      "sell_per_lf": 275,
+      "material_per_lf": 180,
+      "description": "Tempered glass panel railing with aluminum posts. Premium tier - $60K+ projects only.",
+      "source": "Angi + HomeGuide + Viewrail (industry avg 2026-05)"
+    }
+  ],
+
+  "framing_materials": [
+    {
+      "key": "kdat_pt",
+      "name": "KDAT Pressure-Treated",
+      "sell_per_sf": 38,
+      "material_per_sf": 12,
+      "description": "Kiln-dried-after-treatment PT lumber. Code-compliant for ground contact. CWDB standard.",
+      "source": "John Garcia spreadsheet (verified 2026-05)"
+    },
+    {
+      "key": "steel",
+      "name": "Steel (Fortress Evolution)",
+      "sell_per_sf": 52,
+      "material_per_sf": 28,
+      "description": "Galvanized steel deck framing. Premium tier - rare residential WI. Sell on warranty + fire resistance + no rot. Special order through Fortress dealer.",
+      "source": "HomeAdvisor + Fortress BP 2026-05 (industry avg)"
+    }
+  ],
+
+  "demo_rates_per_sf": {
+    "stain_only": 0,
+    "stain_repairs": 0,
+    "resurface": 3,
+    "frame_deck_rebuild": 6,
+    "full_tearout": 8
+  },
+
+  "stain_rates_per_sf": [
+    { "type": "Transparent", "coats": 1, "per_sf": 2.75 },
+    { "type": "Transparent", "coats": 2, "per_sf": 4.40 },
+    { "type": "Semi-Transparent", "coats": 1, "per_sf": 3.25 },
+    { "type": "Semi-Transparent", "coats": 2, "per_sf": 5.20 },
+    { "type": "Solid / Paint-and-Sealer", "coats": 1, "per_sf": 3.75 },
+    { "type": "Solid / Paint-and-Sealer", "coats": 2, "per_sf": 6.00 }
+  ],
+
+  "repair_rates": {
+    "board_replacement_per_board": 60,
+    "joist_repair_per_lf": 32,
+    "hardware_allowance": 450,
+    "inspection_only_allowance": 275
+  },
+
+  "condition_multipliers": {
+    "height": [
+      { "value": "1 Story / Low", "multiplier": 1.00 },
+      { "value": "2 Story / Elevated", "multiplier": 1.22 }
+    ],
+    "grade": [
+      { "value": "Flat / Normal Access", "multiplier": 1.00 },
+      { "value": "Mild Slope", "multiplier": 1.10 },
+      { "value": "Steep Slope", "multiplier": 1.22 }
+    ],
+    "complexity": [
+      { "value": "Simple Rectangle", "multiplier": 1.00 },
+      { "value": "Bump Outs / Angles", "multiplier": 1.12 },
+      { "value": "Multi-Level / Complex", "multiplier": 1.25 }
+    ],
+    "market_load": [
+      { "value": "Normal Schedule", "multiplier": 1.00 },
+      { "value": "Busy Season", "multiplier": 1.08 },
+      { "value": "Winter / Difficult Timing", "multiplier": 1.15 }
+    ]
+  },
+
+  "stair_pricing": {
+    "base_setup": 1800,
+    "per_tread": 275,
+    "per_landing": 1800,
+    "wraparound_premium": 1500,
+    "double_border_per_tread": 45
+  },
+
+  "border_pricing": {
+    "pencil_per_sf": 0,
+    "double_per_sf": 7
+  },
+
+  "fascia_per_lf": 38,
+  "skirting_per_sf": 45,
+
+  "adders": [
+    { "key": "lighting", "name": "Deck Lighting", "unit": "Fixture", "price": 225 },
+    { "key": "bench", "name": "Built-In Bench", "unit": "Each", "price": 1200 },
+    { "key": "privacy_screen", "name": "Privacy Screen", "unit": "LF", "price": 175 },
+    { "key": "hot_tub", "name": "Hot Tub Structural Upgrade", "unit": "Allowance", "price": 2500 },
+    { "key": "underdeck_drainage", "name": "Underdeck Drainage", "unit": "SF", "price": 18 }
+  ],
+
+  "allowances": {
+    "permit_engineering_default": 750,
+    "dumpster_cleanup_default": 950,
+    "mobilization_minimum_default": 2500,
+    "misc_default": 0
+  },
+
+  "allowances_by_project_type": [
+    { "name": "Stain Only",                            "permit": 0,   "dumpster": 250, "mobilization": 500 },
+    { "name": "Stain + Minor Repairs",                 "permit": 0,   "dumpster": 350, "mobilization": 750 },
+    { "name": "Resurface (Boards Only)",               "permit": 250, "dumpster": 600, "mobilization": 1500 },
+    { "name": "Frame + Deck Rebuild (Keep Footings)",  "permit": 500, "dumpster": 950, "mobilization": 2500 },
+    { "name": "Full Tear-Out + New Build",             "permit": 750, "dumpster": 950, "mobilization": 2500 }
+  ],
+
+  "margin_and_contingency": {
+    "default_margin": 0.20,
+    "default_contingency": 0.08,
+    "notes": "Margin = Cost / (1 - margin_pct), not markup. Contingency creates a low/high range around the sell price."
+  },
+
+  "project_types": [
+    {
+      "key": "stain_only",
+      "name": "Stain Only",
+      "matrix": {
+        "demo": "N",
+        "frame": "N",
+        "deck": "N",
+        "rail": "N",
+        "stair": "N",
+        "footing": "N",
+        "stain": "Y",
+        "multipliers": "N"
+      },
+      "description": "Refinish-only job. Wash, sand, set fasteners, stain. No structural work."
+    },
+    {
+      "key": "stain_repairs",
+      "name": "Stain + Minor Repairs",
+      "matrix": {
+        "demo": "N",
+        "frame": "N",
+        "deck": "N",
+        "rail": "N",
+        "stair": "N",
+        "footing": "N",
+        "stain": "Y",
+        "multipliers": "Light"
+      },
+      "description": "Stain plus targeted repairs - board swap, joist sister, hardware. Use Repair Bucket for repair scope. For new rail/stair systems, use Resurface or Frame Rebuild."
+    },
+    {
+      "key": "resurface",
+      "name": "Resurface (Boards Only)",
+      "matrix": {
+        "demo": "Y",
+        "frame": "Inspect",
+        "deck": "Y",
+        "rail": "OPT",
+        "stair": "OPT",
+        "footing": "N",
+        "stain": "N",
+        "multipliers": "Y"
+      },
+      "description": "Pull old boards, inspect frame, install new boards. Optional railing + stair refresh - zero out Railing LF / Stair Runs if not in scope."
+    },
+    {
+      "key": "frame_deck_rebuild",
+      "name": "Frame + Deck Rebuild (Keep Footings)",
+      "matrix": {
+        "demo": "Y",
+        "frame": "Y",
+        "deck": "Y",
+        "rail": "Y",
+        "stair": "Y",
+        "footing": "N",
+        "stain": "N",
+        "multipliers": "Y"
+      },
+      "description": "Tear out frame and deck down to footings. Build new frame + deck + rails + stairs. Reuse footings."
+    },
+    {
+      "key": "full_tearout",
+      "name": "Full Tear-Out + New Build",
+      "matrix": {
+        "demo": "Y",
+        "frame": "Y",
+        "deck": "Y",
+        "rail": "Y",
+        "stair": "Y",
+        "footing": "Y",
+        "stain": "N",
+        "multipliers": "Y"
+      },
+      "description": "Complete demolition including footings. New build from grade up."
+    }
+  ],
+
+  "border_options": [
+    "Pencil Border",
+    "Double Border"
+  ],
+
+  "yes_no_options": ["Yes", "No"],
+
+  "materials_unit_costs": [
+    { "key": "joist_hanger_2x10",       "description": "Joist hanger (Simpson LUS28 or equiv) for 2x10 joist", "unit": "each", "price": 1.79,  "source": "Simpson Strong-Tie - Menards est" },
+    { "key": "hurricane_tie",           "description": "Hurricane tie (Simpson H1)",                            "unit": "each", "price": 0.79,  "source": "Menards est" },
+    { "key": "ledger_lag_screw",        "description": "1/2\" x 4\" hex lag screw (ledger to rim)",            "unit": "each", "price": 0.89,  "source": "Menards est" },
+    { "key": "deck_screw_box_5lb",      "description": "3\" stainless deck screws, 5 lb box (approx 350 ct)",   "unit": "box",  "price": 32.99, "source": "Menards est" },
+    { "key": "hidden_fastener_box",     "description": "Hidden deck fasteners (Trex CONNECT or equiv) 50 ct",   "unit": "box",  "price": 29.99, "source": "Menards est" },
+    { "key": "construction_adhesive",   "description": "Construction adhesive (PL Premium 10 oz tube)",         "unit": "tube", "price": 5.49,  "source": "Menards est" },
+
+    { "key": "kdat_2x10x16",            "description": "KDAT PT 2x10x16 (joist/beam/ledger)",                   "unit": "each", "price": 28.99, "source": "Menards est" },
+    { "key": "kdat_2x8x16",             "description": "KDAT PT 2x8x16 (joist for smaller decks)",              "unit": "each", "price": 22.99, "source": "Menards est" },
+    { "key": "kdat_6x6x8",              "description": "KDAT PT 6x6x8 (post)",                                  "unit": "each", "price": 39.99, "source": "Menards est" },
+    { "key": "kdat_4x4x8",              "description": "KDAT PT 4x4x8 (light-duty post / rail post)",           "unit": "each", "price": 14.99, "source": "Menards est" },
+    { "key": "pt_2x4x8",                "description": "AC2 PT 2x4x8 (railing top/bottom rail)",                "unit": "each", "price": 6.39,  "source": "Menards SKU 1110818" },
+    { "key": "cedar_2x4x8",             "description": "Cedar 2x4x8 (railing top/bottom rail)",                 "unit": "each", "price": 11.99, "source": "Menards SKU 1072752 (fallback)" },
+    { "key": "pt_2x2x42",               "description": "PT 2x2x42 baluster",                                    "unit": "each", "price": 3.99,  "source": "Menards est" },
+    { "key": "cedar_2x2x42",            "description": "Cedar 2x2x42 baluster",                                 "unit": "each", "price": 7.99,  "source": "Menards est" },
+
+    { "key": "concrete_tube_12x48",     "description": "Concrete tube form 12\" x 48\" (frost-line footing)",   "unit": "each", "price": 12.99, "source": "QUIK-TUBE Menards" },
+    { "key": "concrete_bag_60lb",       "description": "Concrete mix 60 lb bag (QUIKRETE or equiv)",            "unit": "bag",  "price": 4.79,  "source": "Menards est" },
+    { "key": "rebar_half_x_4ft",        "description": "Rebar 1/2\" x 4 ft",                                    "unit": "each", "price": 3.99,  "source": "Menards est" },
+
+    { "key": "trex_alum_rail_6ft",      "description": "Trex Signature aluminum railing section, 6 ft kit",     "unit": "kit",  "price": 219,   "source": "Trex dealer est" },
+    { "key": "trex_alum_post_kit",      "description": "Trex Signature aluminum post + base kit",               "unit": "kit",  "price": 149,   "source": "Trex dealer est" },
+    { "key": "cable_rail_kit_10ft",     "description": "Feeney CableRail 10 ft kit (cable + tensioners)",       "unit": "kit",  "price": 48.88, "source": "Menards SKU 6310-PKG / Dunn Lumber" },
+    { "key": "glass_panel_36x42",       "description": "Tempered glass railing panel 36\" x 42\"",              "unit": "panel","price": 285,   "source": "industry est" },
+    { "key": "alum_glass_post",         "description": "Aluminum glass railing post + glass clamp set",         "unit": "kit",  "price": 165,   "source": "industry est" },
+
+    { "key": "stain_transparent_gal",   "description": "Transparent stain (Ready Seal or equiv) 1 gal",         "unit": "gal",  "price": 39.99, "source": "Menards est" },
+    { "key": "stain_semi_gal",          "description": "Semi-transparent stain (Cabot or equiv) 1 gal",         "unit": "gal",  "price": 49.99, "source": "Menards est" },
+    { "key": "stain_solid_gal",         "description": "Solid stain / paint-and-sealer 1 gal",                  "unit": "gal",  "price": 59.99, "source": "Menards est" },
+    { "key": "stain_supplies_set",      "description": "Stain supplies set (brushes, rollers, pads, drop)",     "unit": "set",  "price": 75,    "source": "Menards est" },
+
+    { "key": "steel_framing_per_sf",    "description": "Fortress Evolution steel framing system",               "unit": "SF",   "price": 28.00, "source": "Fortress dealer est" },
+
+    { "key": "dumpster_rental",         "description": "10-yard roll-off dumpster (1 week)",                    "unit": "rental","price": 425,  "source": "Wausau local est" }
+  ]
+}
