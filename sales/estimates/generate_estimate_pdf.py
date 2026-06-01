@@ -270,7 +270,8 @@ def generate_pdf(estimate, output_path):
     # ── SCHEDULE ────────────────────────────────────────────────────────────
     s.append(Paragraph('Schedule', h2))
     sched = estimate['schedule']
-    s.append(Paragraph(f"<b>Estimated start:</b> {sched['start']}", body))
+    start_label = sched.get('start_label', 'Estimated start')
+    s.append(Paragraph(f"<b>{start_label}:</b> {sched['start']}", body))
     s.append(Paragraph(f"<b>Estimated duration:</b> {sched['duration']}", body))
     s.append(Paragraph(f"<b>Weather contingency:</b> {sched['weather']}", body))
 
