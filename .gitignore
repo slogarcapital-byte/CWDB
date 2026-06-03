@@ -5,6 +5,15 @@
 .env
 .env.local
 *.env
+env.local
+**/env.local
+
+# Data warehouse output artifacts (pull script snapshots + logs + cron logs)
+_vault/data/*-warehouse-*.json
+_vault/data/*-warehouse-*.log
+_vault/data/hubspot-latest.json
+_vault/data/hubspot-error.log
+_vault/data/cron-runs.log
 
 # OS files
 .DS_Store
