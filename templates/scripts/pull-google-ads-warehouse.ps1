@@ -380,13 +380,35 @@ WHERE segments.date BETWEEN '$startDate' AND '$endDate'
     exit 0
 }
 catch {
+    # Extract the response body — Google Ads returns the actionable error
+    # there (DEVELOPER_TOKEN_NOT_APPROVED, CUSTOMER_NOT_FOUND, etc.).
+    # Invoke-RestMethod's Exception.Message only surfaces the HTTP status.
+    $bodyText = $null
+    try {
+        if ($_.ErrorDetails -and $_.ErrorDetails.Message) {
+            $bodyText = $_.ErrorDetails.Message
+        } elseif ($_.Exception.Response -and $_.Exception.Response.GetResponseStream) {
+            $stream = $_.Exception.Response.GetResponseStream()
+            $stream.Position = 0
+            $reader = New-Object System.IO.StreamReader($stream)
+            $bodyText = $reader.ReadToEnd()
+            $reader.Close(); $stream.Close()
+        }
+    } catch {}
+
+    $shortBody = if ($bodyText) { ($bodyText -replace "[`r`n`t]+", " ") } else { $null }
     $msg = "google-ads warehouse pull FAILED: $($_.Exception.Message)"
+    if ($shortBody) {
+        $truncated = if ($shortBody.Length -gt 800) { $shortBody.Substring(0, 800) + "..." } else { $shortBody }
+        $msg += " | body=$truncated"
+    }
     Write-ErrorLog -Message $msg
     $stub = [ordered]@{
-        pulled_at = (Get-Date).ToUniversalTime().ToString("o")
-        source    = "google-ads-warehouse"
-        data      = $null
-        error     = $_.Exception.Message
+        pulled_at  = (Get-Date).ToUniversalTime().ToString("o")
+        source     = "google-ads-warehouse"
+        data       = $null
+        error      = $_.Exception.Message
+        error_body = $bodyText
     } | ConvertTo-Json -Depth 5
     try { $stub | Out-File -FilePath $OutFile -Encoding utf8 -Force } catch {}
     Write-Error $msg

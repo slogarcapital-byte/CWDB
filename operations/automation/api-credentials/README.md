@@ -43,11 +43,12 @@ The agent has already scaffolded the three pull scripts, the cron job, the brief
    - Scopes: skip / save and continue.
    - Test users: add your Google identity.
    - Save.
-5. Left nav -> APIs & Services -> Credentials -> **+ Create Credentials** -> **OAuth client ID**.
+5. **CRITICAL: Push the app to "In production".** After the consent screen is created, the Publishing status defaults to "Testing", which silently caps refresh tokens at **7 days** even though every guide assumes "refresh tokens never expire." Click **PUBLISH APP** -> CONFIRM. Status should read "In production." For the single-user `adwords` (sensitive) scope, Google does not require verification; users see a one-time "App isn't verified" interstitial during consent that you click through via Advanced -> "Go to <app name> (unsafe)." Skipping this step is the #1 cause of `invalid_grant: Token has been expired or revoked` failures a week after setup.
+6. Left nav -> APIs & Services -> Credentials -> **+ Create Credentials** -> **OAuth client ID**.
    - Application type: **Desktop app**.
    - Name: `cwdb-ads-pull-desktop`.
    - Create.
-6. The dialog shows Client ID and Client Secret. Paste both into `.env.local`:
+7. The dialog shows Client ID and Client Secret. Paste both into `.env.local`:
    ```
    GOOGLE_ADS_CLIENT_ID=...
    GOOGLE_ADS_CLIENT_SECRET=...
@@ -205,6 +206,7 @@ A CronCreate task fires at 6:55 AM Central daily and runs all three scripts. The
 |---|---|
 | Google Ads: `DEVELOPER_TOKEN_NOT_APPROVED` | Wait for the 24-72h Standard access review, or run against the test account first. |
 | Google Ads: `USER_PERMISSION_DENIED` | The OAuth identity doesn't have access to customer 7129910870. Re-do §1c with the right Google identity. |
+| Google Ads: `(400) Bad Request` with body `{"error":"invalid_grant","error_description":"Token has been expired or revoked."}` | OAuth refresh token expired. If consent screen is still in "Testing" mode, do §1b step 5 (publish app) first or it will expire again in 7 days. Then re-run §1c to mint a fresh refresh token. |
 | Meta: `(#100) Object does not exist` | Wrong `META_AD_ACCOUNT_ID`. Drop the `act_` prefix — the script adds it. |
 | GA4: `PERMISSION_DENIED` | The service-account `client_email` is not added as Viewer on property 533582902. Re-do §3d. |
 | Brief flags `WARNING STALE` | The cron didn't run (laptop was off / asleep at 6:55 AM) OR a token expired. Check `_vault/data/<source>-error.log`. |
