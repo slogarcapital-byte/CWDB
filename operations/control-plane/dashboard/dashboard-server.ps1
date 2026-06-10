@@ -49,6 +49,11 @@ if ($SelfTest) {
         $html = Invoke-WebRequest "http://127.0.0.1:$Port/" -UseBasicParsing
         if ($html.Content -notmatch 'CWDB Mission Control') { throw "static index.html not served" }
         Write-Host "PASS: static index served"
+        foreach ($asset in 'style.css','app.js') {
+            $r = Invoke-WebRequest "http://127.0.0.1:$Port/$asset" -UseBasicParsing
+            if ($r.StatusCode -ne 200) { throw "static $asset not served" }
+            Write-Host "PASS: static $asset served"
+        }
         Write-Host "`nSELF-TEST PASSED"
         exit 0
     } finally {

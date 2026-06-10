@@ -1,4 +1,122 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><title>CWDB Mission Control</title>
-<link rel="stylesheet" href="/style.css"></head>
-<body><div id="app">loading…</div><script src="/app.js"></script></body></html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CWDB Mission Control</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="toast"></div>
+
+  <!-- status strip -->
+  <header class="glass strip">
+    <span id="mode-pill" class="pill">…</span>
+    <span id="gate-text" class="dim">…</span>
+    <span class="grow"></span>
+    <button id="btn-refresh" class="btn ghost">⟳ refresh</button>
+    <button id="btn-tick" class="btn ghost">⚙ run tick</button>
+    <button id="btn-warehouse" class="btn ghost">⛁ warehouse</button>
+    <button id="btn-power" class="btn ghost">⏸ pause</button>
+  </header>
+
+  <!-- KPI row -->
+  <section class="kpis">
+    <div class="glass kpi">
+      <div class="label">VALIDATION GATE · <span id="kpi-days">…</span> DAYS LEFT</div>
+      <div class="big" id="kpi-gate">…</div>
+      <div class="bar"><i id="bar-qualified"></i></div>
+      <div class="bar thin"><i id="bar-accepted"></i></div>
+      <div class="dim small" id="kpi-streak">…</div>
+    </div>
+    <div class="glass kpi">
+      <div class="label">MODEL SPEND</div>
+      <div class="big" id="kpi-spend">…</div>
+      <div class="bar"><i id="bar-spend"></i></div>
+      <div class="dim small" id="kpi-project">…</div>
+    </div>
+    <div class="glass kpi">
+      <div class="label">QUEUE</div>
+      <div class="big" id="kpi-queue">…</div>
+      <div class="dim small" id="kpi-freshness">…</div>
+    </div>
+  </section>
+
+  <!-- main split -->
+  <main class="split">
+    <section class="glass col" id="col-approvals">
+      <h2>⚡ Approvals <span id="badge-pending" class="badge">0</span></h2>
+      <div id="approvals"></div>
+      <h3 class="dim">decided</h3>
+      <div id="decided" class="dim"></div>
+    </section>
+    <section class="glass col">
+      <h2>◉ Activity</h2>
+      <div id="events"></div>
+      <h3 class="dim">tasks</h3>
+      <div id="tasks"></div>
+    </section>
+  </main>
+
+  <!-- steer dock -->
+  <footer class="glass dock">
+    <div class="row">
+      <input id="directive-input" class="input grow" placeholder="🎯 standing directive for the orchestrator… (e.g. 'prioritize routing the 2 real leads')">
+      <button id="btn-directive" class="btn primary">send</button>
+      <button id="btn-inject" class="btn ghost">+ task</button>
+      <button id="btn-config" class="btn ghost">⚙ dials</button>
+    </div>
+    <div id="directives" class="row wrap"></div>
+  </footer>
+
+  <!-- modals -->
+  <dialog id="dlg-decide" class="glass-dialog">
+    <h3 id="dlg-decide-title">Decide</h3>
+    <p id="dlg-decide-summary" class="dim"></p>
+    <textarea id="decide-note" class="input" rows="3" placeholder="optional note — on 'request changes' this is fed back to the worker verbatim"></textarea>
+    <div class="row">
+      <button class="btn ok"     onclick="decide('approve')">✓ approve</button>
+      <button class="btn accent" onclick="decide('request_changes')">✎ request changes</button>
+      <button class="btn danger" onclick="decide('reject')">✕ reject</button>
+      <button class="btn ghost"  onclick="dlg('dlg-decide').close()">cancel</button>
+    </div>
+  </dialog>
+
+  <dialog id="dlg-power" class="glass-dialog">
+    <h3>Pause the loop</h3>
+    <input id="pause-reason" class="input" placeholder="reason">
+    <input id="pause-until"  class="input" placeholder="auto-resume (optional) — e.g. 2026-06-15 or 2026-06-15 14:00 (Central)">
+    <div class="row">
+      <button class="btn danger" onclick="power('pause')">⏸ pause</button>
+      <button class="btn ghost"  onclick="dlg('dlg-power').close()">cancel</button>
+    </div>
+  </dialog>
+
+  <dialog id="dlg-inject" class="glass-dialog">
+    <h3>Inject a task</h3>
+    <input id="inj-title" class="input" placeholder="title">
+    <input id="inj-type"  class="input" placeholder="type — e.g. routing.build_scenario">
+    <div class="row">
+      <select id="inj-agent" class="input grow"></select>
+      <input id="inj-priority" class="input" type="number" value="50" style="width:90px" title="priority (lower = sooner)">
+    </div>
+    <textarea id="inj-dod" class="input" rows="3" placeholder="definition of done — one item per line"></textarea>
+    <div class="row">
+      <button class="btn primary" onclick="injectTask()">queue it</button>
+      <button class="btn ghost"   onclick="dlg('dlg-inject').close()">cancel</button>
+    </div>
+  </dialog>
+
+  <dialog id="dlg-config" class="glass-dialog">
+    <h3>Safety dials <span class="badge danger">these are the rails</span></h3>
+    <div class="grid2" id="config-fields"></div>
+    <div class="row">
+      <button class="btn danger" onclick="saveConfig()">apply (writes control-config.json)</button>
+      <button class="btn ghost"  onclick="dlg('dlg-config').close()">cancel</button>
+    </div>
+  </dialog>
+
+  <script src="/app.js"></script>
+</body>
+</html>
