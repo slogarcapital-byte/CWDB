@@ -339,8 +339,13 @@ while ($listener.IsListening) {
             }
             $name = $Matches[1]
             if (-not $allow.ContainsKey($name)) { Send-Json $ctx @{ error = "script not allowed: $name" } 400; continue }
-            $out = & pwsh -NoProfile -File $allow[$name] 2>&1 | Out-String
-            $code = $LASTEXITCODE
+            $code = -1; $out = ""
+            try {
+                $out = & pwsh -NoProfile -File $allow[$name] 2>&1 | Out-String
+                $code = $LASTEXITCODE
+            } catch {
+                $out = "launch failed: $($_.Exception.Message)"
+            }
             $tail = ($out -split "`r?`n" | Where-Object { $_ } | Select-Object -Last 15) -join "`n"
             Write-ControlEvent -Actor 'human' -EventType 'script_run' -Severity $(if ($code -eq 0) {'info'} else {'error'}) -Detail @{ script = $name; exit = $code; via = 'dashboard' }
             Send-Json $ctx @{ ok = ($code -eq 0); exit = $code; tail = $tail }
