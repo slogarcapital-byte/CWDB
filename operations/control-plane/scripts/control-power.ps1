@@ -42,18 +42,6 @@ Initialize-ControlDb
 
 $who = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 
-function ConvertTo-UtcIsoFromCentral {
-    param([string] $Text)
-    $tz = [System.TimeZoneInfo]::FindSystemTimeZoneById("Central Standard Time")
-    # Date-only -> default to 06:00 (start of the active window).
-    $parsed = [DateTime]::Parse($Text, [System.Globalization.CultureInfo]::InvariantCulture)
-    if ($parsed.TimeOfDay.TotalSeconds -eq 0 -and $Text -notmatch '[:T]') {
-        $parsed = $parsed.Date.AddHours(6)
-    }
-    $utc = [System.TimeZoneInfo]::ConvertTimeToUtc([DateTime]::SpecifyKind($parsed, 'Unspecified'), $tz)
-    return $utc.ToString("o")
-}
-
 function Show-Status {
     $rows = Invoke-SupabaseSelect -Table "v_control_status" -Select "*"
     if (-not $rows -or @($rows).Count -eq 0) { Write-Host "v_control_status returned no rows."; return }
@@ -90,19 +78,8 @@ switch ($Command) {
         $state = Get-ControlState
         if ($state.run_mode -eq 'paused') { Write-Host "Already paused (since $($state.paused_at))."; Show-Status; break }
 
-        $set = @{
-            run_mode      = 'paused'
-            paused_at     = (Get-UtcIso)
-            paused_by     = $who
-            paused_reason = $(if ($Reason) { $Reason } else { $null })
-            gate_open     = $false
-            gate_reason   = 'paused_by_human'
-        }
-        if ($Until) { $set["resume_at"] = (ConvertTo-UtcIsoFromCentral $Until) }
-        Set-ControlState -Set $set
-        Write-ControlEvent -Actor 'human' -EventType 'paused' -Severity 'info' -Detail @{
-            paused_by = $who; reason = $Reason; resume_at = $set["resume_at"]
-        }
+        $untilIso = $(if ($Until) { ConvertTo-UtcIsoFromCentral $Until } else { $null })
+        Invoke-LoopPause -Reason $Reason -UntilUtcIso $untilIso -By $who
         Write-Host ""
         Write-Host "  Control loop PAUSED. No reasoning ticks, no model spend until you turn it back on."
         if ($Until) { Write-Host "  Auto-resume scheduled for $Until (Central)." }
@@ -114,48 +91,10 @@ switch ($Command) {
         $state = Get-ControlState
         if ($state.run_mode -eq 'running') { Write-Host "Already running."; Show-Status; break }
 
-        # Pause duration (for expiry push + logging).
-        $pauseSeconds = 0
-        if ($state.paused_at) {
-            $pausedAt = [DateTime]::Parse($state.paused_at, $null, [System.Globalization.DateTimeStyles]::RoundtripKind)
-            $pauseSeconds = [int]([DateTime]::UtcNow - $pausedAt.ToUniversalTime()).TotalSeconds
-        }
-
-        # Resume reconciliation: re-anchor time-windowed breakers, clear pause/halt fields.
-        Set-ControlState -Set @{
-            run_mode                 = 'running'
-            paused_at                = $null
-            paused_by                = $null
-            paused_reason            = $null
-            resume_at                = $null
-            halted_reason            = $null
-            gate_reason              = 'resumed_awaiting_next_control_tick'
-            consecutive_critic_fails = 0
-            ticks_since_progress     = 0
-            last_progress_at         = (Get-UtcIso)
-        }
-
-        # Push pending approval expiries forward by the gap so nothing silently expired.
-        $pushed = 0
-        if ($pauseSeconds -gt 0) {
-            $pending = Invoke-SupabaseSelect -Table "approval_queue" -Select "approval_id,expires_at" -Filter "status=eq.pending"
-            foreach ($a in @($pending)) {
-                if ($a.expires_at) {
-                    $exp = [DateTime]::Parse($a.expires_at, $null, [System.Globalization.DateTimeStyles]::RoundtripKind)
-                    $newExp = $exp.ToUniversalTime().AddSeconds($pauseSeconds).ToString("o")
-                    Invoke-SupabasePatch -Table "approval_queue" -Filter "approval_id=eq.$($a.approval_id)" -Set @{ expires_at = $newExp; updated_at = (Get-UtcIso) }
-                    $pushed++
-                }
-            }
-        }
-
-        Write-ControlEvent -Actor 'human' -EventType 'resumed' -Severity 'info' -Detail @{
-            resumed_by = $who; pause_seconds = $pauseSeconds; approvals_extended = $pushed
-            note = 'breaker windows re-anchored; first orchestrator tick will re-baseline the funnel'
-        }
+        $r = Invoke-LoopResume -By $who
         Write-Host ""
-        Write-Host ("  Control loop RESUMED (was off ~{0:n1}h). Picks up the next queued task." -f ($pauseSeconds / 3600.0))
-        if ($pushed -gt 0) { Write-Host ("  Extended {0} pending approval expiry(ies) by the pause duration." -f $pushed) }
+        Write-Host ("  Control loop RESUMED (was off ~{0:n1}h). Picks up the next queued task." -f ($r.pause_seconds / 3600.0))
+        if ($r.approvals_extended -gt 0) { Write-Host ("  Extended {0} pending approval expiry(ies) by the pause duration." -f $r.approvals_extended) }
         Write-Host "  The next control tick (<=30 min) opens the gate. Run it now with:"
         Write-Host ("    pwsh `"{0}`"" -f (Join-Path $PSScriptRoot 'control-tick.ps1'))
         Write-Host ""

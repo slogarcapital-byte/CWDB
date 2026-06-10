@@ -173,6 +173,80 @@ function Test-WarehouseFresh {
     return (([DateTime]::UtcNow - $ts.ToUniversalTime()).TotalHours -le $MaxAgeHours)
 }
 
+# ---- central-time parsing ---------------------------------------------------
+function ConvertTo-UtcIsoFromCentral {
+    <# .SYNOPSIS  "2026-06-15" (-> 06:00 CT) or any datetime text, Central -> UTC ISO. #>
+    [CmdletBinding()] param([Parameter(Mandatory)][string] $Text)
+    $tz = [System.TimeZoneInfo]::FindSystemTimeZoneById("Central Standard Time")
+    $parsed = [DateTime]::Parse($Text, [System.Globalization.CultureInfo]::InvariantCulture)
+    if ($parsed.TimeOfDay.TotalSeconds -eq 0 -and $Text -notmatch '[:T]') {
+        $parsed = $parsed.Date.AddHours(6)
+    }
+    $utc = [System.TimeZoneInfo]::ConvertTimeToUtc([DateTime]::SpecifyKind($parsed, 'Unspecified'), $tz)
+    return $utc.ToString("o")
+}
+
+# ---- pause / resume (single implementation: control-power.ps1 + dashboard) --
+function Invoke-LoopPause {
+    <# .SYNOPSIS  Pause the loop: mode+reason+optional until, close gate, event row. #>
+    [CmdletBinding()]
+    param([string] $Reason, [string] $UntilUtcIso, [Parameter(Mandatory)][string] $By)
+    $set = @{
+        run_mode      = 'paused'
+        paused_at     = (Get-UtcIso)
+        paused_by     = $By
+        paused_reason = $(if ($Reason) { $Reason } else { $null })
+        gate_open     = $false
+        gate_reason   = 'paused_by_human'
+    }
+    if ($UntilUtcIso) { $set["resume_at"] = $UntilUtcIso }
+    Set-ControlState -Set $set
+    Write-ControlEvent -Actor 'human' -EventType 'paused' -Severity 'info' -Detail @{
+        paused_by = $By; reason = $Reason; resume_at = $set["resume_at"]
+    }
+}
+
+function Invoke-LoopResume {
+    <# .SYNOPSIS  Resume: clear pause/halt, re-anchor breakers, extend pending approval
+                  expiries by the pause duration. Returns @{pause_seconds; approvals_extended}. #>
+    [CmdletBinding()] param([Parameter(Mandatory)][string] $By)
+    $state = Get-ControlState
+    $pauseSeconds = 0
+    if ($state.paused_at) {
+        $pausedAt = [DateTime]::Parse($state.paused_at, $null, [System.Globalization.DateTimeStyles]::RoundtripKind)
+        $pauseSeconds = [int]([DateTime]::UtcNow - $pausedAt.ToUniversalTime()).TotalSeconds
+    }
+    Set-ControlState -Set @{
+        run_mode                 = 'running'
+        paused_at                = $null
+        paused_by                = $null
+        paused_reason            = $null
+        resume_at                = $null
+        halted_reason            = $null
+        gate_reason              = 'resumed_awaiting_next_control_tick'
+        consecutive_critic_fails = 0
+        ticks_since_progress     = 0
+        last_progress_at         = (Get-UtcIso)
+    }
+    $pushed = 0
+    if ($pauseSeconds -gt 0) {
+        $pending = Invoke-SupabaseSelect -Table "approval_queue" -Select "approval_id,expires_at" -Filter "status=eq.pending"
+        foreach ($a in @($pending)) {
+            if ($a.expires_at) {
+                $exp = [DateTime]::Parse($a.expires_at, $null, [System.Globalization.DateTimeStyles]::RoundtripKind)
+                $newExp = $exp.ToUniversalTime().AddSeconds($pauseSeconds).ToString("o")
+                Invoke-SupabasePatch -Table "approval_queue" -Filter "approval_id=eq.$($a.approval_id)" -Set @{ expires_at = $newExp; updated_at = (Get-UtcIso) }
+                $pushed++
+            }
+        }
+    }
+    Write-ControlEvent -Actor 'human' -EventType 'resumed' -Severity 'info' -Detail @{
+        resumed_by = $By; pause_seconds = $pauseSeconds; approvals_extended = $pushed
+        note = 'breaker windows re-anchored; first orchestrator tick will re-baseline the funnel'
+    }
+    return @{ pause_seconds = $pauseSeconds; approvals_extended = $pushed }
+}
+
 # ---- daily digest ----------------------------------------------------------
 function Write-DigestIfDue {
     <#
