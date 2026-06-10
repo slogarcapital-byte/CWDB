@@ -199,14 +199,28 @@ while ($listener.IsListening) {
             $action = $(if ($body -and $body.PSObject.Properties['action']) { "$($body.action)" } else { "" })
             switch ($action) {
                 'pause' {
-                    $reason = $(if ($body.PSObject.Properties['reason']) { "$($body.reason)" } else { "" })
-                    $untilIso = $(if ($body.PSObject.Properties['until'] -and $body.until) { ConvertTo-UtcIsoFromCentral "$($body.until)" } else { $null })
-                    Invoke-LoopPause -By 'jim-dashboard' -Reason $reason -UntilUtcIso $untilIso
-                    Send-Json $ctx @{ ok = $true; run_mode = 'paused' }
+                    $reason   = $(if ($body -and $body.PSObject.Properties['reason']) { "$($body.reason)" } else { "" })
+                    $untilIso = $null
+                    if ($body -and $body.PSObject.Properties['until'] -and $body.until) {
+                        try { $untilIso = ConvertTo-UtcIsoFromCentral "$($body.until)" }
+                        catch { Send-Json $ctx @{ error = "bad until value: $($_.Exception.Message)" } 400; continue }
+                    }
+                    $current = Get-ControlState
+                    if ($current.run_mode -eq 'paused') {
+                        Send-Json $ctx @{ ok = $true; run_mode = 'paused'; note = 'already paused' }
+                    } else {
+                        Invoke-LoopPause -By 'jim-dashboard' -Reason $reason -UntilUtcIso $untilIso
+                        Send-Json $ctx @{ ok = $true; run_mode = 'paused' }
+                    }
                 }
                 'resume' {
-                    $r = Invoke-LoopResume -By 'jim-dashboard'
-                    Send-Json $ctx @{ ok = $true; run_mode = 'running'; pause_seconds = $r.pause_seconds; approvals_extended = $r.approvals_extended }
+                    $current = Get-ControlState
+                    if ($current.run_mode -eq 'running') {
+                        Send-Json $ctx @{ ok = $true; run_mode = 'running'; note = 'already running' }
+                    } else {
+                        $r = Invoke-LoopResume -By 'jim-dashboard'
+                        Send-Json $ctx @{ ok = $true; run_mode = 'running'; pause_seconds = $r.pause_seconds; approvals_extended = $r.approvals_extended }
+                    }
                 }
                 default { Send-Json $ctx @{ error = "bad action: $action" } 400 }
             }
