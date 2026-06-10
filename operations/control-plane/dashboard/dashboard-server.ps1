@@ -143,6 +143,8 @@ while ($listener.IsListening) {
             $decision = $(if ($body -and $body.PSObject.Properties['decision']) { "$($body.decision)" } else { "" })
             $note     = $(if ($body -and $body.PSObject.Properties['note'])     { "$($body.note)"     } else { "" })
             if ($decision -notin 'approve','reject','request_changes') { Send-Json $ctx @{ error = "bad decision: $decision" } 400; continue }
+            # F3: note required for request_changes
+            if ($decision -eq 'request_changes' -and -not $note) { Send-Json $ctx @{ error = "note required for request_changes" } 400; continue }
 
             $newStatus = $(if ($decision -eq 'approve') { 'approved' } else { 'rejected' })
             $set = @{ status = $newStatus; decided_by = 'jim-dashboard'; decided_at = (Get-UtcIso); updated_at = (Get-UtcIso) }
@@ -154,23 +156,41 @@ while ($listener.IsListening) {
             $appr = $rows[0]
 
             # linked-task consequence (same mechanics the critic uses)
+            # F1: race guard — only apply if task is still in needs_approval
             if ($appr.task_id) {
                 if ($decision -eq 'reject') {
-                    Invoke-SupabasePatch -Table "task" -Filter "task_id=eq.$($appr.task_id)" -Set @{ status = 'failed'; updated_at = (Get-UtcIso) }
+                    $taskRows = @(Invoke-SupabasePatchReturning -Table "task" -Filter "task_id=eq.$($appr.task_id)&status=eq.needs_approval" -Set @{ status = 'failed'; updated_at = (Get-UtcIso) })
+                    if ($taskRows.Count -eq 0) {
+                        Write-ControlEvent -Actor 'human' -EventType 'approval_task_skipped' -Severity 'warn' -TaskId $appr.task_id -Detail @{
+                            approval_id = $id; decision = $decision; reason = 'task no longer in needs_approval'
+                        }
+                    }
                 } elseif ($decision -eq 'request_changes') {
-                    $t = @(Invoke-SupabaseSelect -Table "task" -Select "payload" -Filter "task_id=eq.$($appr.task_id)")[0]
-                    $payload = $t.payload
-                    $fb = @()
-                    if ($payload.PSObject.Properties['feedback']) { $fb = @($payload.feedback) }
-                    $fb += "[jim-dashboard $(Get-UtcIso)] $note"
-                    $payload | Add-Member -NotePropertyName feedback -NotePropertyValue $fb -Force
-                    Invoke-SupabasePatch -Table "task" -Filter "task_id=eq.$($appr.task_id)" -Set @{ status = 'queued'; payload = $payload; updated_at = (Get-UtcIso) }
+                    $t = @(Invoke-SupabaseSelect -Table "task" -Select "task_id,status,payload" -Filter "task_id=eq.$($appr.task_id)")[0]
+                    if ($t -and $t.status -eq 'needs_approval') {
+                        $payload = $t.payload
+                        $fb = @()
+                        if ($payload.PSObject.Properties['feedback']) { $fb = @($payload.feedback) }
+                        $fb += "[jim-dashboard $(Get-UtcIso)] $note"
+                        $payload | Add-Member -NotePropertyName feedback -NotePropertyValue $fb -Force
+                        $taskRows = @(Invoke-SupabasePatchReturning -Table "task" -Filter "task_id=eq.$($appr.task_id)&status=eq.needs_approval" -Set @{ status = 'queued'; payload = $payload; updated_at = (Get-UtcIso) })
+                        if ($taskRows.Count -eq 0) {
+                            Write-ControlEvent -Actor 'human' -EventType 'approval_task_skipped' -Severity 'warn' -TaskId $appr.task_id -Detail @{
+                                approval_id = $id; decision = $decision; reason = 'task no longer in needs_approval'
+                            }
+                        }
+                    } else {
+                        Write-ControlEvent -Actor 'human' -EventType 'approval_task_skipped' -Severity 'warn' -TaskId $appr.task_id -Detail @{
+                            approval_id = $id; decision = $decision; reason = 'task no longer in needs_approval'
+                        }
+                    }
                 }
             }
             Write-ControlEvent -Actor 'human' -EventType 'approval_decided' -Severity 'info' -TaskId $appr.task_id -Detail @{
                 approval_id = $id; decision = $decision; note = $note; via = 'dashboard'
             }
-            Send-Json $ctx @{ ok = $true; approval_id = $id; status = $newStatus }
+            # F2: echo decision token in response
+            Send-Json $ctx @{ ok = $true; approval_id = $id; status = $newStatus; decision = $decision }
             continue
         }
 
