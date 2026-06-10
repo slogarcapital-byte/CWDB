@@ -194,7 +194,26 @@ while ($listener.IsListening) {
             continue
         }
 
-        # POST routes for Tasks 6-9 are added between this comment and the 404.
+        if ($method -eq 'POST' -and $path -eq '/api/power') {
+            $body = Read-Body $ctx
+            $action = $(if ($body -and $body.PSObject.Properties['action']) { "$($body.action)" } else { "" })
+            switch ($action) {
+                'pause' {
+                    $reason = $(if ($body.PSObject.Properties['reason']) { "$($body.reason)" } else { "" })
+                    $untilIso = $(if ($body.PSObject.Properties['until'] -and $body.until) { ConvertTo-UtcIsoFromCentral "$($body.until)" } else { $null })
+                    Invoke-LoopPause -By 'jim-dashboard' -Reason $reason -UntilUtcIso $untilIso
+                    Send-Json $ctx @{ ok = $true; run_mode = 'paused' }
+                }
+                'resume' {
+                    $r = Invoke-LoopResume -By 'jim-dashboard'
+                    Send-Json $ctx @{ ok = $true; run_mode = 'running'; pause_seconds = $r.pause_seconds; approvals_extended = $r.approvals_extended }
+                }
+                default { Send-Json $ctx @{ error = "bad action: $action" } 400 }
+            }
+            continue
+        }
+
+        # POST routes for Tasks 7-9 are added between this comment and the 404.
 
         Send-Json $ctx @{ error = "no route: $method $path" } 404
     } catch {
