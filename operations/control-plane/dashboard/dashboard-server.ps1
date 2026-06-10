@@ -332,7 +332,20 @@ while ($listener.IsListening) {
             continue
         }
 
-        # POST route for Task 9 is added between this comment and the 404.
+        if ($method -eq 'POST' -and $path -match '^/api/run/([a-z-]+)$') {
+            $allow = @{
+                'control-tick'    = (Join-Path $repo "operations\control-plane\scripts\control-tick.ps1")
+                'warehouse-daily' = (Join-Path $repo "operations\data-warehouse\scripts\run-daily.ps1")
+            }
+            $name = $Matches[1]
+            if (-not $allow.ContainsKey($name)) { Send-Json $ctx @{ error = "script not allowed: $name" } 400; continue }
+            $out = & pwsh -NoProfile -File $allow[$name] 2>&1 | Out-String
+            $code = $LASTEXITCODE
+            $tail = ($out -split "`r?`n" | Where-Object { $_ } | Select-Object -Last 15) -join "`n"
+            Write-ControlEvent -Actor 'human' -EventType 'script_run' -Severity $(if ($code -eq 0) {'info'} else {'error'}) -Detail @{ script = $name; exit = $code; via = 'dashboard' }
+            Send-Json $ctx @{ ok = ($code -eq 0); exit = $code; tail = $tail }
+            continue
+        }
 
         Send-Json $ctx @{ error = "no route: $method $path" } 404
     } catch {
