@@ -291,7 +291,10 @@ while ($listener.IsListening) {
             if ($body -and $body.PSObject.Properties['budget']) {
                 foreach ($p in $body.budget.PSObject.Properties) {
                     if ($p.Name -notin $allowedBudget) { $badKey = "budget.$($p.Name)"; break }
-                    if ("$($cfg.budget.($p.Name))" -ne "$($p.Value)") {
+                    $oldV = $cfg.budget.($p.Name)
+                    $isNum = ($oldV -is [double] -or $oldV -is [int] -or $oldV -is [long] -or $p.Value -is [double] -or $p.Value -is [int] -or $p.Value -is [long])
+                    $changed = $(if ($isNum) { [double]$oldV -ne [double]$p.Value } else { "$oldV" -ne "$($p.Value)" })
+                    if ($changed) {
                         $diff["budget.$($p.Name)"] = @{ from = $cfg.budget.($p.Name); to = $p.Value }
                         $cfg.budget.($p.Name) = $p.Value
                     }
@@ -300,7 +303,10 @@ while ($listener.IsListening) {
             if (-not $badKey -and $body -and $body.PSObject.Properties['rollout']) {
                 foreach ($p in $body.rollout.PSObject.Properties) {
                     if ($p.Name -notin $allowedRollout) { $badKey = "rollout.$($p.Name)"; break }
-                    if ("$($cfg.rollout.($p.Name))" -ne "$($p.Value)") {
+                    $oldV = $cfg.rollout.($p.Name)
+                    $isNum = ($oldV -is [double] -or $oldV -is [int] -or $oldV -is [long] -or $p.Value -is [double] -or $p.Value -is [int] -or $p.Value -is [long])
+                    $changed = $(if ($isNum) { [double]$oldV -ne [double]$p.Value } else { "$oldV" -ne "$($p.Value)" })
+                    if ($changed) {
                         $diff["rollout.$($p.Name)"] = @{ from = $cfg.rollout.($p.Name); to = $p.Value }
                         $cfg.rollout.($p.Name) = $p.Value
                     }
