@@ -280,6 +280,7 @@ while ($listener.IsListening) {
             if ($newStatus -notin 'done','dismissed') { Send-Json $ctx @{ error = "bad status: $newStatus" } 400; continue }
             $rows = @(Invoke-SupabasePatchReturning -Table "directive" -Filter "directive_id=eq.$id" -Set @{ status = $newStatus; updated_at = (Get-UtcIso) })
             if ($rows.Count -eq 0) { Send-Json $ctx @{ error = "directive $id not found" } 404; continue }
+            Write-ControlEvent -Actor 'human' -EventType 'directive_status_changed' -Severity 'info' -Detail @{ directive_id = $id; status = $newStatus; via = 'dashboard' }
             Send-Json $ctx @{ ok = $true }
             continue
         }
