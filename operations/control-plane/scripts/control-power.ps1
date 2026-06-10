@@ -43,9 +43,9 @@ Initialize-ControlDb
 $who = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 
 function Show-Status {
-    $rows = Invoke-SupabaseSelect -Table "v_control_status" -Select "*"
-    if (-not $rows -or @($rows).Count -eq 0) { Write-Host "v_control_status returned no rows."; return }
-    $s = @($rows)[0]
+    $rows = @(Get-SupabaseRows -Table "v_control_status" -Select "*")
+    if ($rows.Count -eq 0) { Write-Host "v_control_status returned no rows."; return }
+    $s = $rows[0]
     $mode = $s.run_mode.ToUpper()
     $marker = switch ($s.run_mode) { 'running' { 'ON ' } 'paused' { 'OFF' } 'halted' { '!! ' } default { '?  ' } }
 

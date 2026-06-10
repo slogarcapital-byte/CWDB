@@ -27,6 +27,28 @@ function Initialize-ControlDb {
     Initialize-SupabaseClient
 }
 
+function Get-SupabaseRows {
+    <#
+    .SYNOPSIS  Normalized SELECT: ALWAYS emits one pipeline object per row (zero for empty).
+               Invoke-RestMethod returns a JSON array as a single un-enumerated Object[] item,
+               so @(Invoke-SupabaseSelect ...) at a call boundary NESTS (outer count is always 1,
+               even for empty results) and .Count lies. All control-plane reads go through this
+               wrapper instead: wrap call sites with @(Get-SupabaseRows ...) for honest shapes.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][string] $Table,
+        [string] $Select = "*",
+        [string] $Filter = $null
+    )
+    $resp = Invoke-SupabaseSelect -Table $Table -Select $Select -Filter $Filter
+    if ($null -eq $resp) { return }
+    # Assignment (not a pipeline boundary) captured the row array FLAT, so @($resp) is a no-op
+    # copy: foreach iterates actual rows, zero times for an empty result. Emitting $row row-by-row
+    # re-enumerates on this function's output, which callers re-collect flat with @(...).
+    foreach ($row in @($resp)) { $row }
+}
+
 # ---- time helpers ----------------------------------------------------------
 function Get-UtcIso { (Get-Date).ToUniversalTime().ToString("o") }
 
@@ -193,9 +215,9 @@ function Invoke-SupabasePatchReturning {
 
 # ---- typed wrappers over the 006 tables ------------------------------------
 function Get-ControlState {
-    $rows = Invoke-SupabaseSelect -Table "control_state" -Filter "id=eq.1"
-    if (-not $rows -or @($rows).Count -eq 0) { throw "control_state row id=1 missing. Apply schema/006 + INSERT default." }
-    return @($rows)[0]
+    $rows = @(Get-SupabaseRows -Table "control_state" -Filter "id=eq.1")
+    if ($rows.Count -eq 0) { throw "control_state row id=1 missing. Apply schema/006 + INSERT default." }
+    return $rows[0]
 }
 
 function Set-ControlState {
@@ -312,8 +334,8 @@ function Invoke-LoopResume {
     # NOTE: gate_open stays false on purpose - the next control tick opens the gate.
     $pushed = 0
     if ($pauseSeconds -gt 0) {
-        $pending = Invoke-SupabaseSelect -Table "approval_queue" -Select "approval_id,expires_at" -Filter "status=eq.pending"
-        foreach ($a in @($pending)) {
+        $pending = @(Get-SupabaseRows -Table "approval_queue" -Select "approval_id,expires_at" -Filter "status=eq.pending")
+        foreach ($a in $pending) {
             if ($a.expires_at) {
                 $exp = [DateTime]::Parse($a.expires_at, $null, [System.Globalization.DateTimeStyles]::RoundtripKind)
                 $newExp = $exp.ToUniversalTime().AddSeconds($pauseSeconds).ToString("o")
@@ -347,10 +369,10 @@ function Write-DigestIfDue {
     $md = Join-Path $dir "digest-$date.md"
     if (Test-Path $md) { return }   # already written today
 
-    $s = @(Invoke-SupabaseSelect -Table "v_control_status" -Select "*")[0]
+    $s = @(Get-SupabaseRows -Table "v_control_status" -Select "*")[0]
     $since   = [DateTime]::UtcNow.AddHours(-24).ToString("o")
-    $events  = @(Invoke-SupabaseSelect -Table "event_log" -Select "created_at,actor,event_type,severity,detail" -Filter "severity=in.(warn,error,critical)&created_at=gt.$since&order=created_at.desc&limit=25")
-    $pending = @(Invoke-SupabaseSelect -Table "approval_queue" -Select "approval_id,action_kind,summary,recommended,rollback_plan,created_at" -Filter "status=eq.pending&order=created_at.asc")
+    $events  = @(Get-SupabaseRows -Table "event_log" -Select "created_at,actor,event_type,severity,detail" -Filter "severity=in.(warn,error,critical)&created_at=gt.$since&order=created_at.desc&limit=25")
+    $pending = @(Get-SupabaseRows -Table "approval_queue" -Select "approval_id,action_kind,summary,recommended,rollback_plan,created_at" -Filter "status=eq.pending&order=created_at.asc")
 
     $sb = New-Object System.Text.StringBuilder
     [void]$sb.AppendLine("# CWDB Control Loop - Digest $date")

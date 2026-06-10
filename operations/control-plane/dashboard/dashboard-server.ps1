@@ -99,16 +99,16 @@ function Send-Static {
 }
 
 function Get-StateBundle {
-    $status   = @(Invoke-SupabaseSelect -Table "v_control_status" -Select "*")[0]
-    $pending  = @(Invoke-SupabaseSelect -Table "approval_queue" -Select "approval_id,task_id,action_kind,summary,recommended,rollback_plan,status,decided_by,decided_at,decision_note,expires_at,created_at,updated_at" -Filter "status=eq.pending&order=created_at.asc")
-    $decided  = @(Invoke-SupabaseSelect -Table "approval_queue" -Select "approval_id,task_id,action_kind,summary,recommended,rollback_plan,status,decided_by,decided_at,decision_note,expires_at,created_at,updated_at" -Filter "status=neq.pending&order=updated_at.desc&limit=20")
-    $tasks    = @(Invoke-SupabaseSelect -Table "task" -Select "task_id,type,title,status,priority,assigned_agent,permission_tier,attempts,max_attempts,updated_at" -Filter "order=priority.asc,created_at.asc&limit=50")
-    $events   = @(Invoke-SupabaseSelect -Table "event_log" -Select "event_id,actor,event_type,severity,detail,created_at" -Filter "order=created_at.desc&limit=50")
-    $gate     = @(Invoke-SupabaseSelect -Table "v_validation_gate" -Select "*")[0]
-    $funnel   = @(Invoke-SupabaseSelect -Table "v_lead_funnel" -Select "*" -Filter "order=month.desc&limit=3")
-    $cac      = @(Invoke-SupabaseSelect -Table "v_cac_by_channel" -Select "*")
-    $dirs     = @(Invoke-SupabaseSelect -Table "directive" -Select "*" -Filter "status=eq.active&order=created_at.asc")
-    $agents   = @(Invoke-SupabaseSelect -Table "agent_registry" -Select "agent_name,task_types,is_active" -Filter "is_active=eq.true")
+    $status   = @(Get-SupabaseRows -Table "v_control_status" -Select "*")[0]
+    $pending  = @(Get-SupabaseRows -Table "approval_queue" -Select "approval_id,task_id,action_kind,summary,recommended,rollback_plan,status,decided_by,decided_at,decision_note,expires_at,created_at,updated_at" -Filter "status=eq.pending&order=created_at.asc")
+    $decided  = @(Get-SupabaseRows -Table "approval_queue" -Select "approval_id,task_id,action_kind,summary,recommended,rollback_plan,status,decided_by,decided_at,decision_note,expires_at,created_at,updated_at" -Filter "status=neq.pending&order=updated_at.desc&limit=20")
+    $tasks    = @(Get-SupabaseRows -Table "task" -Select "task_id,type,title,status,priority,assigned_agent,permission_tier,attempts,max_attempts,updated_at" -Filter "order=priority.asc,created_at.asc&limit=50")
+    $events   = @(Get-SupabaseRows -Table "event_log" -Select "event_id,actor,event_type,severity,detail,created_at" -Filter "order=created_at.desc&limit=50")
+    $gate     = @(Get-SupabaseRows -Table "v_validation_gate" -Select "*")[0]
+    $funnel   = @(Get-SupabaseRows -Table "v_lead_funnel" -Select "*" -Filter "order=month.desc&limit=3")
+    $cac      = @(Get-SupabaseRows -Table "v_cac_by_channel" -Select "*")
+    $dirs     = @(Get-SupabaseRows -Table "directive" -Select "*" -Filter "status=eq.active&order=created_at.asc")
+    $agents   = @(Get-SupabaseRows -Table "agent_registry" -Select "agent_name,task_types,is_active" -Filter "is_active=eq.true")
     return @{
         status            = $status
         approvals_pending = $pending
@@ -166,7 +166,7 @@ while ($listener.IsListening) {
                         }
                     }
                 } elseif ($decision -eq 'request_changes') {
-                    $t = @(Invoke-SupabaseSelect -Table "task" -Select "task_id,status,payload" -Filter "task_id=eq.$($appr.task_id)")[0]
+                    $t = @(Get-SupabaseRows -Table "task" -Select "task_id,status,payload" -Filter "task_id=eq.$($appr.task_id)")[0]
                     if ($t -and $t.status -eq 'needs_approval') {
                         $payload = $t.payload
                         $fb = @()
@@ -244,9 +244,9 @@ while ($listener.IsListening) {
                         if (-not ($body.PSObject.Properties[$req] -and "$($body.$req)".Trim())) { $missing += $req }
                     }
                     if ($missing.Count -gt 0) { Send-Json $ctx @{ error = "missing field: $($missing[0])" } 400; continue }
-                    $agentOk = Invoke-SupabaseSelect -Table "agent_registry" -Select "agent_name" -Filter "agent_name=eq.$($body.assigned_agent)&is_active=eq.true"
-                    if (-not $agentOk -or @($agentOk).Count -eq 0) { Send-Json $ctx @{ error = "unknown or inactive agent: $($body.assigned_agent)" } 400; continue }
-                    $obj = Invoke-SupabaseSelect -Table "objective" -Select "objective_id" -Filter "status=eq.open&order=priority.asc&limit=1"
+                    $agentOk = @(Get-SupabaseRows -Table "agent_registry" -Select "agent_name" -Filter "agent_name=eq.$($body.assigned_agent)&is_active=eq.true")
+                    if ($agentOk.Count -eq 0) { Send-Json $ctx @{ error = "unknown or inactive agent: $($body.assigned_agent)" } 400; continue }
+                    $obj = @(Get-SupabaseRows -Table "objective" -Select "objective_id" -Filter "status=eq.open&order=priority.asc&limit=1")
                     # Dashboard-injected tasks never get tier 0 (auto-execute); Jim can set tier 0 via SQL if ever truly needed.
                     $tier = $(if ($body.PSObject.Properties['permission_tier']) { [Math]::Max(1, [Math]::Min(3, [int]$body.permission_tier)) } else { 2 })
                     $rec = @{

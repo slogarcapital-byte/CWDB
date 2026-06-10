@@ -47,8 +47,8 @@ function Invoke-ResumeReconciliation {
         $pauseSeconds = [int]($nowUtc - $pausedAt.ToUniversalTime()).TotalSeconds
     }
     if ($pauseSeconds -gt 0) {
-        $pending = Invoke-SupabaseSelect -Table "approval_queue" -Select "approval_id,expires_at" -Filter "status=eq.pending"
-        foreach ($a in @($pending)) {
+        $pending = @(Get-SupabaseRows -Table "approval_queue" -Select "approval_id,expires_at" -Filter "status=eq.pending")
+        foreach ($a in $pending) {
             if ($a.expires_at) {
                 $exp = [DateTime]::Parse($a.expires_at, $null, [System.Globalization.DateTimeStyles]::RoundtripKind)
                 $newExp = $exp.ToUniversalTime().AddSeconds($pauseSeconds).ToString("o")
@@ -63,7 +63,7 @@ try {
     $state = Get-ControlState
 
     # ---- 1. budget roll-up (always) -----------------------------------------
-    $roll = @(Invoke-SupabaseSelect -Table "v_budget_rollup" -Select "*")[0]
+    $roll = @(Get-SupabaseRows -Table "v_budget_rollup" -Select "*")[0]
     $patch["day_tokens_spent"]   = [long]$roll.day_tokens
     $patch["day_cents_spent"]    = [long]$roll.day_cents
     $patch["total_tokens_spent"] = [long]$roll.total_tokens
@@ -100,8 +100,8 @@ try {
     }
 
     # ---- 4. reaper: requeue tasks whose lease expired (crash recovery) -------
-    $expired = Invoke-SupabaseSelect -Table "task" -Select "task_id,attempts,type" -Filter "status=eq.active&lease_until=lt.$nowIso"
-    foreach ($t in @($expired)) {
+    $expired = @(Get-SupabaseRows -Table "task" -Select "task_id,attempts,type" -Filter "status=eq.active&lease_until=lt.$nowIso")
+    foreach ($t in $expired) {
         Invoke-SupabasePatch -Table "task" -Filter "task_id=eq.$($t.task_id)" -Set @{
             status = 'queued'; attempts = ([int]$t.attempts + 1); lease_until = $null; updated_at = $nowIso
         }
@@ -127,8 +127,8 @@ try {
     } else {
         # error-rate spike: error/critical events within the rolling window.
         $cutoff = $nowUtc.AddHours(-1 * [double]$b.error_rate_window_hours).ToString("o")
-        $errs = Invoke-SupabaseSelect -Table "event_log" -Select "event_id" -Filter "severity=in.(error,critical)&created_at=gt.$cutoff"
-        if (@($errs).Count -ge [int]$b.error_rate_threshold) { $tripped = "error_rate_spike" }
+        $errs = @(Get-SupabaseRows -Table "event_log" -Select "event_id" -Filter "severity=in.(error,critical)&created_at=gt.$cutoff")
+        if ($errs.Count -ge [int]$b.error_rate_threshold) { $tripped = "error_rate_spike" }
     }
     # NOTE: loop-detection + cost-per-progress breakers are tuned in Inc 5 (need ledger/event
     # history math); their thresholds are pre-staged in control-config.json.
@@ -157,9 +157,9 @@ try {
     $degraded  = ([long]$patch["day_cents_spent"] -ge $softCents) -or ([long]$patch["day_tokens_spent"] -ge [long]$cfg.budget.day_soft_tokens)
 
     # Is there anything worth waking the orchestrator for?
-    $queued    = @(Invoke-SupabaseSelect -Table "task" -Select "task_id" -Filter "status=eq.queued&limit=1")
-    $openObj   = @(Invoke-SupabaseSelect -Table "objective" -Select "objective_id" -Filter "status=eq.open&limit=1")
-    $approved  = @(Invoke-SupabaseSelect -Table "approval_queue" -Select "approval_id" -Filter "status=eq.approved&limit=1")
+    $queued    = @(Get-SupabaseRows -Table "task" -Select "task_id" -Filter "status=eq.queued&limit=1")
+    $openObj   = @(Get-SupabaseRows -Table "objective" -Select "objective_id" -Filter "status=eq.open&limit=1")
+    $approved  = @(Get-SupabaseRows -Table "approval_queue" -Select "approval_id" -Filter "status=eq.approved&limit=1")
     $workAvail = ($queued.Count -gt 0) -or ($openObj.Count -gt 0) -or ($approved.Count -gt 0)
 
     if (-not $fresh) {
@@ -182,7 +182,7 @@ try {
     }
     Write-DigestIfDue
     Write-Host ("control-tick: gate_open={0} reason={1} day=`${2} reaped={3}" -f `
-        $patch["gate_open"], $patch["gate_reason"], ([long]$patch["day_cents_spent"] / 100.0), @($expired).Count)
+        $patch["gate_open"], $patch["gate_reason"], ([long]$patch["day_cents_spent"] / 100.0), $expired.Count)
 }
 catch {
     # A failing control tick must never silently strand the loop. Log loudly; leave state as-is.
