@@ -137,7 +137,44 @@ while ($listener.IsListening) {
         if ($method -eq 'GET' -and $path -eq '/api/state')   { Send-Json $ctx (Get-StateBundle); continue }
         if ($method -eq 'GET' -and $path -eq '/api/config')  { Send-Json $ctx (Get-ControlConfig); continue }
 
-        # POST routes are added in Tasks 5-9 between this comment and the 404.
+        if ($method -eq 'POST' -and $path -match '^/api/approval/(\d+)/decide$') {
+            $id       = [long]$Matches[1]
+            $body     = Read-Body $ctx
+            $decision = $(if ($body -and $body.PSObject.Properties['decision']) { "$($body.decision)" } else { "" })
+            $note     = $(if ($body -and $body.PSObject.Properties['note'])     { "$($body.note)"     } else { "" })
+            if ($decision -notin 'approve','reject','request_changes') { Send-Json $ctx @{ error = "bad decision: $decision" } 400; continue }
+
+            $newStatus = $(if ($decision -eq 'approve') { 'approved' } else { 'rejected' })
+            $set = @{ status = $newStatus; decided_by = 'jim-dashboard'; decided_at = (Get-UtcIso); updated_at = (Get-UtcIso) }
+            if ($note) { $set["decision_note"] = $note }
+
+            # optimistic lock: only flips if still pending
+            $rows = @(Invoke-SupabasePatchReturning -Table "approval_queue" -Filter "approval_id=eq.$id&status=eq.pending" -Set $set)
+            if ($rows.Count -eq 0) { Send-Json $ctx @{ error = "already decided or expired" } 409; continue }
+            $appr = $rows[0]
+
+            # linked-task consequence (same mechanics the critic uses)
+            if ($appr.task_id) {
+                if ($decision -eq 'reject') {
+                    Invoke-SupabasePatch -Table "task" -Filter "task_id=eq.$($appr.task_id)" -Set @{ status = 'failed'; updated_at = (Get-UtcIso) }
+                } elseif ($decision -eq 'request_changes') {
+                    $t = @(Invoke-SupabaseSelect -Table "task" -Select "payload" -Filter "task_id=eq.$($appr.task_id)")[0]
+                    $payload = $t.payload
+                    $fb = @()
+                    if ($payload.PSObject.Properties['feedback']) { $fb = @($payload.feedback) }
+                    $fb += "[jim-dashboard $(Get-UtcIso)] $note"
+                    $payload | Add-Member -NotePropertyName feedback -NotePropertyValue $fb -Force
+                    Invoke-SupabasePatch -Table "task" -Filter "task_id=eq.$($appr.task_id)" -Set @{ status = 'queued'; payload = $payload; updated_at = (Get-UtcIso) }
+                }
+            }
+            Write-ControlEvent -Actor 'human' -EventType 'approval_decided' -Severity 'info' -TaskId $appr.task_id -Detail @{
+                approval_id = $id; decision = $decision; note = $note; via = 'dashboard'
+            }
+            Send-Json $ctx @{ ok = $true; approval_id = $id; status = $newStatus }
+            continue
+        }
+
+        # POST routes for Tasks 6-9 are added between this comment and the 404.
 
         Send-Json $ctx @{ error = "no route: $method $path" } 404
     } catch {
