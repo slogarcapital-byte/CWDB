@@ -12,7 +12,7 @@
   - API: GET `/api/state` (full bundle), POST `/api/approval/{id}/decide`, POST `/api/power`, POST `/api/directive`, POST `/api/config`, POST `/api/run/{script}`
   - Self-test: `pwsh dashboard-server.ps1 -SelfTest` (15 PASS, exit 0); write-path suite: `tests/test-writes.ps1` (41 PASS)
   - Launcher: `start-dashboard.ps1` (opens browser to `http://127.0.0.1:7717`)
-  - Rollback: stop the process (`Stop-Process -Id <PID>`); no schema changes (uses existing control tables).
+  - Rollback: stop the process (`Stop-Process -Id <PID>`); schema additions are additive and idempotent (migration 007: directive table + approval_queue.decision_note).
 
 ## 2026-05-11
 
