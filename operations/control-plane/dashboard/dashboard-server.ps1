@@ -279,7 +279,54 @@ while ($listener.IsListening) {
             continue
         }
 
-        # POST routes for Tasks 8-9 are added between this comment and the 404.
+        if ($method -eq 'POST' -and $path -eq '/api/config') {
+            $body = Read-Body $ctx
+            $cfgPath = Join-Path $repo "operations\control-plane\config\control-config.json"
+            $raw  = Get-Content $cfgPath -Raw
+            $cfg  = $raw | ConvertFrom-Json
+            $allowedBudget  = 'day_soft_dollars','day_hard_dollars','project_cap_dollars','day_soft_tokens','day_hard_tokens'
+            $allowedRollout = 'dry_run','auto_execute_max_tier','council_enabled','tier2_execution_enabled'
+            $diff = @{}
+            $badKey = $null
+            if ($body -and $body.PSObject.Properties['budget']) {
+                foreach ($p in $body.budget.PSObject.Properties) {
+                    if ($p.Name -notin $allowedBudget) { $badKey = "budget.$($p.Name)"; break }
+                    if ("$($cfg.budget.($p.Name))" -ne "$($p.Value)") {
+                        $diff["budget.$($p.Name)"] = @{ from = $cfg.budget.($p.Name); to = $p.Value }
+                        $cfg.budget.($p.Name) = $p.Value
+                    }
+                }
+            }
+            if (-not $badKey -and $body -and $body.PSObject.Properties['rollout']) {
+                foreach ($p in $body.rollout.PSObject.Properties) {
+                    if ($p.Name -notin $allowedRollout) { $badKey = "rollout.$($p.Name)"; break }
+                    if ("$($cfg.rollout.($p.Name))" -ne "$($p.Value)") {
+                        $diff["rollout.$($p.Name)"] = @{ from = $cfg.rollout.($p.Name); to = $p.Value }
+                        $cfg.rollout.($p.Name) = $p.Value
+                    }
+                }
+            }
+            if ($badKey) { Send-Json $ctx @{ error = "key not allowed: $badKey" } 400; continue }
+            if ($diff.Count -eq 0) { Send-Json $ctx @{ error = "nothing to change" } 400; continue }
+
+            $stamp  = (Get-Date).ToString("yyyyMMdd-HHmmss")
+            $backup = "$cfgPath.bak-$stamp"
+            Copy-Item $cfgPath $backup
+            try {
+                $newJson = $cfg | ConvertTo-Json -Depth 16
+                $null = $newJson | ConvertFrom-Json   # round-trip validation
+                Set-Content -Path $cfgPath -Value $newJson -Encoding utf8
+            } catch {
+                Copy-Item $backup $cfgPath -Force
+                Send-Json $ctx @{ error = "config write failed, backup restored: $($_.Exception.Message)" } 500
+                continue
+            }
+            Write-ControlEvent -Actor 'human' -EventType 'config_changed' -Severity 'warn' -Detail @{ diff = $diff; backup = (Split-Path $backup -Leaf); via = 'dashboard' }
+            Send-Json $ctx @{ ok = $true; diff = $diff; backup = (Split-Path $backup -Leaf) }
+            continue
+        }
+
+        # POST route for Task 9 is added between this comment and the 404.
 
         Send-Json $ctx @{ error = "no route: $method $path" } 404
     } catch {
