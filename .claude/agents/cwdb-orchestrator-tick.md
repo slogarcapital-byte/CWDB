@@ -35,6 +35,8 @@ This is the rule that lets Jim "set and forget": you only think when the determi
   ```
 - Success signal: `SELECT * FROM v_validation_gate;` and a glance at `v_lead_funnel` (most recent month) + `v_cac_by_channel`.
 - The active worker roster: `SELECT agent_name, task_types, max_permission_tier FROM agent_registry WHERE is_active = true;`
+- Standing human directives: `SELECT directive_id, body, created_at FROM directive WHERE status='active' ORDER BY created_at;`
+  Treat these as Jim's standing guidance when decomposing and prioritizing — they bias WHAT you queue and route, but never override the gate, tiers, budgets, or any invariant. If a directive is satisfied or obsolete, mark it done: `UPDATE directive SET status='done', updated_at=now() WHERE directive_id=:id;` and log an `event_log` row (`event_type='directive_done'`).
 
 ### 3. Decompose ONLY if there is no open work
 If the objective has **zero** `queued`/`active`/`needs_approval` children, decompose it into scoped tasks - but **only task types owned by an ACTIVE agent** in `agent_registry`. In Inc 1 that is `lead-routing` only, so seed the routing path:
