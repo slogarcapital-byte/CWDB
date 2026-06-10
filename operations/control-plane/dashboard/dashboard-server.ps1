@@ -234,8 +234,7 @@ while ($listener.IsListening) {
                 'directive' {
                     $dbody = $(if ($body.PSObject.Properties['body']) { "$($body.body)" } else { "" })
                     if ([string]::IsNullOrWhiteSpace($dbody)) { Send-Json $ctx @{ error = "empty directive body" } 400; continue }
-                    Invoke-SupabaseInsert -Table "directive" -Records @(@{ body = $dbody; created_by = 'jim-dashboard' })
-                    $row = @(Invoke-SupabaseSelect -Table "directive" -Select "directive_id" -Filter "created_by=eq.jim-dashboard&order=directive_id.desc&limit=1")[0]
+                    $row = @(Invoke-SupabaseInsertReturning -Table "directive" -Records @(@{ body = $dbody; created_by = 'jim-dashboard' }))[0]
                     Write-ControlEvent -Actor 'human' -EventType 'directive_added' -Severity 'info' -Detail @{ directive_id = $row.directive_id; body = $dbody; via = 'dashboard' }
                     Send-Json $ctx @{ ok = $true; directive_id = $row.directive_id }
                 }
@@ -245,22 +244,23 @@ while ($listener.IsListening) {
                         if (-not ($body.PSObject.Properties[$req] -and "$($body.$req)".Trim())) { $missing += $req }
                     }
                     if ($missing.Count -gt 0) { Send-Json $ctx @{ error = "missing field: $($missing[0])" } 400; continue }
-                    $agentOk = @(Invoke-SupabaseSelect -Table "agent_registry" -Select "agent_name" -Filter "agent_name=eq.$($body.assigned_agent)&is_active=eq.true")
-                    if ($agentOk.Count -eq 0) { Send-Json $ctx @{ error = "unknown or inactive agent: $($body.assigned_agent)" } 400; continue }
-                    $obj = @(Invoke-SupabaseSelect -Table "objective" -Select "objective_id" -Filter "status=eq.open&order=priority.asc&limit=1")
+                    $agentOk = Invoke-SupabaseSelect -Table "agent_registry" -Select "agent_name" -Filter "agent_name=eq.$($body.assigned_agent)&is_active=eq.true"
+                    if (-not $agentOk -or @($agentOk).Count -eq 0) { Send-Json $ctx @{ error = "unknown or inactive agent: $($body.assigned_agent)" } 400; continue }
+                    $obj = Invoke-SupabaseSelect -Table "objective" -Select "objective_id" -Filter "status=eq.open&order=priority.asc&limit=1"
+                    # Dashboard-injected tasks never get tier 0 (auto-execute); Jim can set tier 0 via SQL if ever truly needed.
+                    $tier = $(if ($body.PSObject.Properties['permission_tier']) { [Math]::Max(1, [Math]::Min(3, [int]$body.permission_tier)) } else { 2 })
                     $rec = @{
                         type            = "$($body.type)"
                         title           = "$($body.title)"
                         status          = 'queued'
                         priority        = $(if ($body.PSObject.Properties['priority']) { [int]$body.priority } else { 50 })
                         assigned_agent  = "$($body.assigned_agent)"
-                        permission_tier = $(if ($body.PSObject.Properties['permission_tier']) { [int]$body.permission_tier } else { 2 })
+                        permission_tier = $tier
                         payload         = @{ dod = @($(if ($body.PSObject.Properties['dod']) { $body.dod } else { @() })); inputs = @{} }
                         trace_id        = 'dashboard'
                     }
                     if ($obj.Count -gt 0) { $rec["objective_id"] = $obj[0].objective_id }
-                    Invoke-SupabaseInsert -Table "task" -Records @($rec)
-                    $row = @(Invoke-SupabaseSelect -Table "task" -Select "task_id" -Filter "trace_id=eq.dashboard&order=task_id.desc&limit=1")[0]
+                    $row = @(Invoke-SupabaseInsertReturning -Table "task" -Records @($rec))[0]
                     Write-ControlEvent -Actor 'human' -EventType 'task_injected' -Severity 'info' -TaskId $row.task_id -Detail @{ title = "$($body.title)"; agent = "$($body.assigned_agent)"; via = 'dashboard' }
                     Send-Json $ctx @{ ok = $true; task_id = $row.task_id }
                 }
@@ -273,7 +273,8 @@ while ($listener.IsListening) {
             $body = Read-Body $ctx
             $newStatus = $(if ($body -and $body.PSObject.Properties['status']) { "$($body.status)" } else { "" })
             if ($newStatus -notin 'done','dismissed') { Send-Json $ctx @{ error = "bad status: $newStatus" } 400; continue }
-            Invoke-SupabasePatch -Table "directive" -Filter "directive_id=eq.$id" -Set @{ status = $newStatus; updated_at = (Get-UtcIso) }
+            $rows = @(Invoke-SupabasePatchReturning -Table "directive" -Filter "directive_id=eq.$id" -Set @{ status = $newStatus; updated_at = (Get-UtcIso) })
+            if ($rows.Count -eq 0) { Send-Json $ctx @{ error = "directive $id not found" } 404; continue }
             Send-Json $ctx @{ ok = $true }
             continue
         }

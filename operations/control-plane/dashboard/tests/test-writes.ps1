@@ -227,6 +227,39 @@ try {
             -Body (@{ kind = 'directive'; body = '  ' } | ConvertTo-Json)
     } catch { if ($_.Exception.Response.StatusCode.value__ -eq 400) { $bad = $true } }
     Assert $bad "empty directive body returns 400"
+
+    # F5: negative-path tests
+    # kind='task' missing title -> 400
+    $got400MissingTitle = $false
+    try {
+        Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:7717/api/directive" -ContentType 'application/json' `
+            -Body (@{ kind = 'task'; type = 'dashboard.selftest'; assigned_agent = 'lead-routing' } | ConvertTo-Json)
+    } catch { if ($_.Exception.Response.StatusCode.value__ -eq 400) { $got400MissingTitle = $true } }
+    Assert $got400MissingTitle "kind=task missing title returns 400"
+
+    # kind='task' with unknown agent -> 400
+    $got400BadAgent = $false
+    try {
+        Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:7717/api/directive" -ContentType 'application/json' `
+            -Body (@{ kind = 'task'; type = 'dashboard.selftest'; title = 'neg test'; assigned_agent = 'no-such-agent' } | ConvertTo-Json)
+    } catch { if ($_.Exception.Response.StatusCode.value__ -eq 400) { $got400BadAgent = $true } }
+    Assert $got400BadAgent "kind=task with unknown assigned_agent returns 400"
+
+    # kind='bogus' -> 400
+    $got400BadKind = $false
+    try {
+        Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:7717/api/directive" -ContentType 'application/json' `
+            -Body (@{ kind = 'bogus'; body = 'whatever' } | ConvertTo-Json)
+    } catch { if ($_.Exception.Response.StatusCode.value__ -eq 400) { $got400BadKind = $true } }
+    Assert $got400BadKind "kind=bogus returns 400"
+
+    # POST /api/directive/{ghost-id} -> 404
+    $got404Ghost = $false
+    try {
+        Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:7717/api/directive/99999999" -ContentType 'application/json' `
+            -Body (@{ status = 'done' } | ConvertTo-Json)
+    } catch { if ($_.Exception.Response.StatusCode.value__ -eq 404) { $got404Ghost = $true } }
+    Assert $got404Ghost "PATCH ghost directive_id returns 404"
 } finally {
     try {
         if ($d -and $d.directive_id) {

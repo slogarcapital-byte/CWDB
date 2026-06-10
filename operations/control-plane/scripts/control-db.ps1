@@ -5,7 +5,8 @@
 .DESCRIPTION
     Builds on the warehouse helper templates/scripts/load-supabase.ps1 (UPSERT + SELECT) and
     adds what the control loop needs: PATCH-by-filter (the warehouse upsert can't partial-update
-    NOT-NULL rows), idempotent INSERT, and typed convenience wrappers over the 006 tables.
+    NOT-NULL rows), idempotent INSERT, INSERT-with-returning, and typed convenience wrappers
+    over the 006 tables.
 
     The warehouse helper is reused as-is and never modified.
 
@@ -109,6 +110,47 @@ function Invoke-SupabaseInsert {
             }
         } catch { }
         throw "INSERT $Table failed: $($_.Exception.Message)`n$errBody"
+    }
+}
+
+function Invoke-SupabaseInsertReturning {
+    <#
+    .SYNOPSIS  INSERT with Prefer: return=representation. Returns the array of inserted rows.
+               Unlike Invoke-SupabaseInsert this does NOT swallow 409s - callers want the row
+               or an error (use this when you need the generated PK immediately after insert).
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][string] $Table,
+        [Parameter(Mandatory)][object[]] $Records
+    )
+    $url  = "$($Script:SupabaseUrl)/rest/v1/$Table"
+    if ($Records.Count -eq 1) {
+        $body = "[" + ($Records[0] | ConvertTo-Json -Depth 32 -Compress) + "]"
+    } else {
+        $body = $Records | ConvertTo-Json -Depth 32 -Compress
+    }
+    $headers = @{
+        "apikey"        = $Script:SupabaseKey
+        "Authorization" = "Bearer $($Script:SupabaseKey)"
+        "Content-Type"  = "application/json"
+        "Prefer"        = "return=representation"
+    }
+    try {
+        $resp = Invoke-RestMethod -Method Post -Uri $url -Headers $headers -Body $body -ErrorAction Stop
+        # PostgREST returns [] for 0 inserts -> @() ; a single insert -> single object -> @(obj) = 1-element array.
+        # $null happens only on a genuine empty body; guard kept for safety.
+        if ($null -eq $resp) { return @() }
+        return @($resp)
+    } catch {
+        $errBody = ""
+        try {
+            if ($_.Exception.Response) {
+                $reader = New-Object System.IO.StreamReader($_.Exception.Response.GetResponseStream())
+                $errBody = $reader.ReadToEnd()
+            }
+        } catch { }
+        throw "INSERT(returning) $Table failed: $($_.Exception.Message)`n$errBody"
     }
 }
 
