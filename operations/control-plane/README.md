@@ -35,6 +35,7 @@ operations/control-plane/
     control-config.json       # budgets, breakers, cadence, tier boundary, rollout flags
   sql/
     001_seed.sql              # objective + agent_registry seed
+  dashboard/                  # Mission Control web UI (local-only) - see start-dashboard.ps1
 operations/data-warehouse/
   schema/006_operational_tables.sql   # the 8 control tables (state, objective, task, event_log, ...)
   views/002_control_views.sql         # v_validation_gate, v_control_status, v_budget_rollup
@@ -60,6 +61,7 @@ The system boots paused, so these steps are safe; the loop will not act until yo
 pwsh operations/control-plane/scripts/control-power.ps1 status              # one-screen health
 pwsh operations/control-plane/scripts/control-power.ps1 on                  # turn the loop ON
 pwsh operations/control-plane/scripts/control-power.ps1 off -Until 2026-06-15 -Reason "out of town"
+pwsh operations/control-plane/dashboard/start-dashboard.ps1   # Mission Control dashboard (approvals, steer, dials)
 ```
 
 - **Off** is quiet: no reasoning, no spend, in-flight work frozen, no alerts. **On** resumes exactly where it left off (re-anchors breaker windows, extends pending approval expiries, re-baselines the funnel). `-Until` auto-resumes.
