@@ -112,6 +112,41 @@ function Invoke-SupabaseInsert {
     }
 }
 
+function Invoke-SupabasePatchReturning {
+    <#
+    .SYNOPSIS  PATCH with Prefer: return=representation. Returns the array of rows actually
+               updated - the optimistic-lock primitive (0 rows = the WHERE no longer matched).
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][string] $Table,
+        [Parameter(Mandatory)][string] $Filter,
+        [Parameter(Mandatory)][hashtable] $Set
+    )
+    $url  = "$($Script:SupabaseUrl)/rest/v1/$Table" + "?$Filter"
+    $body = $Set | ConvertTo-Json -Depth 32 -Compress
+    $headers = @{
+        "apikey"        = $Script:SupabaseKey
+        "Authorization" = "Bearer $($Script:SupabaseKey)"
+        "Content-Type"  = "application/json"
+        "Prefer"        = "return=representation"
+    }
+    try {
+        $resp = Invoke-RestMethod -Method Patch -Uri $url -Headers $headers -Body $body -ErrorAction Stop
+        if ($null -eq $resp) { return @() }
+        return @($resp)
+    } catch {
+        $errBody = ""
+        try {
+            if ($_.Exception.Response) {
+                $reader = New-Object System.IO.StreamReader($_.Exception.Response.GetResponseStream())
+                $errBody = $reader.ReadToEnd()
+            }
+        } catch { }
+        throw "PATCH(returning) $Table ($Filter) failed: $($_.Exception.Message)`n$errBody"
+    }
+}
+
 # ---- typed wrappers over the 006 tables ------------------------------------
 function Get-ControlState {
     $rows = Invoke-SupabaseSelect -Table "control_state" -Filter "id=eq.1"
