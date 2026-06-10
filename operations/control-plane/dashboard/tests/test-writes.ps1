@@ -197,4 +197,48 @@ try {
         Write-Warning "Some cleanup steps failed (synthetic rows may remain): $($cleanErrors -join '; ')"
     }
 }
+# --- /api/directive: directive insert, task injection, status update ---
+$duid = New-Uid
+$d = $null; $inj = $null
+try {
+    $d = Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:7717/api/directive" -ContentType 'application/json' `
+        -Body (@{ kind = 'directive'; body = "selftest directive $duid" } | ConvertTo-Json)
+    Assert ($d.ok -eq $true -and $d.directive_id -gt 0) "directive inserted"
+    $drow = @(Invoke-SupabaseSelect -Table "directive" -Select "*" -Filter "directive_id=eq.$($d.directive_id)")[0]
+    Assert ($drow.status -eq 'active' -and $drow.created_by -eq 'jim-dashboard') "directive row correct"
+
+    $inj = Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:7717/api/directive" -ContentType 'application/json' `
+        -Body (@{ kind = 'task'; type = 'dashboard.selftest'; title = "injected task $duid"; priority = 999; assigned_agent = 'lead-routing'; dod = @('a','b') } | ConvertTo-Json)
+    Assert ($inj.ok -eq $true -and $inj.task_id -gt 0) "task injected"
+    $trow = @(Invoke-SupabaseSelect -Table "task" -Select "status,priority,assigned_agent,payload,trace_id" -Filter "task_id=eq.$($inj.task_id)")[0]
+    Assert ($trow.status -eq 'queued' -and $trow.trace_id -eq 'dashboard') "injected task queued with trace_id=dashboard"
+    Assert (@($trow.payload.dod).Count -eq 2) "DoD lines in payload"
+
+    $upd = Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:7717/api/directive/$($d.directive_id)" -ContentType 'application/json' `
+        -Body (@{ status = 'dismissed' } | ConvertTo-Json)
+    Assert ($upd.ok -eq $true) "directive status update ok"
+    $drow2 = @(Invoke-SupabaseSelect -Table "directive" -Select "status" -Filter "directive_id=eq.$($d.directive_id)")[0]
+    Assert ($drow2.status -eq 'dismissed') "directive dismissed"
+
+    # validation: empty directive body -> 400
+    $bad = $false
+    try {
+        Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:7717/api/directive" -ContentType 'application/json' `
+            -Body (@{ kind = 'directive'; body = '  ' } | ConvertTo-Json)
+    } catch { if ($_.Exception.Response.StatusCode.value__ -eq 400) { $bad = $true } }
+    Assert $bad "empty directive body returns 400"
+} finally {
+    try {
+        if ($d -and $d.directive_id) {
+            Invoke-RestMethod -Method Delete -Uri "$($Script:SupabaseUrl)/rest/v1/directive?directive_id=eq.$($d.directive_id)" `
+                -Headers @{ apikey = $Script:SupabaseKey; Authorization = "Bearer $($Script:SupabaseKey)" } | Out-Null
+        }
+        if ($inj -and $inj.task_id) {
+            Invoke-RestMethod -Method Delete -Uri "$($Script:SupabaseUrl)/rest/v1/task?task_id=eq.$($inj.task_id)" `
+                -Headers @{ apikey = $Script:SupabaseKey; Authorization = "Bearer $($Script:SupabaseKey)" } | Out-Null
+        }
+        Write-Host "PASS: directive cleanup"
+    } catch { Write-Warning "directive cleanup failed: $_" }
+}
+
 Write-Host "`nALL WRITE-PATH TESTS PASSED"
