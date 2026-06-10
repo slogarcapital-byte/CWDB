@@ -173,12 +173,13 @@ function Test-WarehouseFresh {
     return (([DateTime]::UtcNow - $ts.ToUniversalTime()).TotalHours -le $MaxAgeHours)
 }
 
-# ---- central-time parsing ---------------------------------------------------
+# ---- central-time parsing --------------------------------------------------
 function ConvertTo-UtcIsoFromCentral {
     <# .SYNOPSIS  "2026-06-15" (-> 06:00 CT) or any datetime text, Central -> UTC ISO. #>
     [CmdletBinding()] param([Parameter(Mandatory)][string] $Text)
     $tz = [System.TimeZoneInfo]::FindSystemTimeZoneById("Central Standard Time")
     $parsed = [DateTime]::Parse($Text, [System.Globalization.CultureInfo]::InvariantCulture)
+    # Date-only -> default to 06:00 (start of the active window).
     if ($parsed.TimeOfDay.TotalSeconds -eq 0 -and $Text -notmatch '[:T]') {
         $parsed = $parsed.Date.AddHours(6)
     }
@@ -186,11 +187,11 @@ function ConvertTo-UtcIsoFromCentral {
     return $utc.ToString("o")
 }
 
-# ---- pause / resume (single implementation: control-power.ps1 + dashboard) --
+# ---- pause / resume (single implementation: control-power.ps1 + dashboard) -
 function Invoke-LoopPause {
     <# .SYNOPSIS  Pause the loop: mode+reason+optional until, close gate, event row. #>
     [CmdletBinding()]
-    param([string] $Reason, [string] $UntilUtcIso, [Parameter(Mandatory)][string] $By)
+    param([Parameter(Mandatory)][string] $By, [string] $Reason, [string] $UntilUtcIso)
     $set = @{
         run_mode      = 'paused'
         paused_at     = (Get-UtcIso)
@@ -216,6 +217,7 @@ function Invoke-LoopResume {
         $pausedAt = [DateTime]::Parse($state.paused_at, $null, [System.Globalization.DateTimeStyles]::RoundtripKind)
         $pauseSeconds = [int]([DateTime]::UtcNow - $pausedAt.ToUniversalTime()).TotalSeconds
     }
+    # Resume reconciliation: re-anchor time-windowed breakers, clear pause/halt fields.
     Set-ControlState -Set @{
         run_mode                 = 'running'
         paused_at                = $null
@@ -228,6 +230,7 @@ function Invoke-LoopResume {
         ticks_since_progress     = 0
         last_progress_at         = (Get-UtcIso)
     }
+    # NOTE: gate_open stays false on purpose - the next control tick opens the gate.
     $pushed = 0
     if ($pauseSeconds -gt 0) {
         $pending = Invoke-SupabaseSelect -Table "approval_queue" -Select "approval_id,expires_at" -Filter "status=eq.pending"
