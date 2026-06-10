@@ -88,6 +88,7 @@ function render() {
 function openDecide(id) {
   decideId = id;
   const a = S.approvals_pending.find(x => x.approval_id === id);
+  if (!a) { toast(`approval #${id} no longer pending — refresh`, true); return; }
   $('dlg-decide-title').textContent = `Decide #${id} — ${a.action_kind}`;
   $('dlg-decide-summary').textContent = a.summary;
   $('decide-note').value = '';
