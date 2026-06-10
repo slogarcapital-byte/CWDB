@@ -133,6 +133,8 @@ function Invoke-SupabasePatchReturning {
     }
     try {
         $resp = Invoke-RestMethod -Method Patch -Uri $url -Headers $headers -Body $body -ErrorAction Stop
+        # PostgREST returns [] for 0 matches -> @() ; a single match -> single object -> @(obj) = 1-element array.
+        # $null happens only on a genuine empty body; guard kept for safety.
         if ($null -eq $resp) { return @() }
         return @($resp)
     } catch {

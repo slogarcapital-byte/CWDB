@@ -32,10 +32,11 @@ try {
     Assert ($second.Count -eq 0) "lost race returns 0 rows (status no longer pending)"
 }
 finally {
-    # Delete by action_kind+summary so cleanup works even if $row resolution failed
-    Invoke-RestMethod -Method Delete `
-        -Uri "$($Script:SupabaseUrl)/rest/v1/approval_queue?action_kind=eq.dashboard-selftest&summary=eq.patch-returning test $uid" `
-        -Headers @{ apikey = $Script:SupabaseKey; Authorization = "Bearer $($Script:SupabaseKey)" } | Out-Null
-    Write-Host "PASS: cleanup"
+    try {
+        Invoke-RestMethod -Method Delete `
+            -Uri "$($Script:SupabaseUrl)/rest/v1/approval_queue?action_kind=eq.dashboard-selftest&summary=eq.patch-returning test $uid" `
+            -Headers @{ apikey = $Script:SupabaseKey; Authorization = "Bearer $($Script:SupabaseKey)" } | Out-Null
+        Write-Host "PASS: cleanup"
+    } catch { Write-Warning "cleanup failed (synthetic row may remain): $_" }
 }
 Write-Host "`nALL WRITE-PATH TESTS PASSED"
