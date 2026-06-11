@@ -173,6 +173,53 @@ Executed by: lead-routing agent (EXECUTE-APPROVED mode, approval_id 60 decided b
 
 ---
 
+## 11. Attempt 2 Execution Log
+
+**2026-06-11T22:14 UTC — attempt 2 smoke test PASS (approval_id 60, attempt 2 of 2)**
+
+Executed by: lead-routing agent (EXECUTE-APPROVED mode, approval_id 60).
+
+### Idempotency findings
+
+Scenario 5361099 was already ACTIVE with the fully correct v2 blueprint (10-field interface, null-email abort gate, on_conflict=email with Prefer: resolution=merge-duplicates, no fact_bids module, no HubSpot modules, Gmail notify-Jim branch). All Steps 1-9 were already complete from attempt 1. Attempt 2 skipped re-applying those steps per the idempotency rules and went directly to Step 10 smoke test.
+
+Scenario 4792854: INACTIVE, no new executions today.
+
+### Step 8 — Webflow webhook
+
+No WEBFLOW_API_TOKEN found in the execution environment. Make has no Webflow connector. Webflow webhook remains PENDING — Jim must add manually (see Remaining Manual Steps below, unchanged from attempt 1).
+
+### Step 10 — Smoke test (attempt 2)
+
+| Check | Result |
+|---|---|
+| Prior smoke-test row cleanup | No prior row found — clean slate |
+| Webhook POST to `https://hook.us2.make.com/j1794cbx29uv6al9gbqkpjdvugutmcpc` | HTTP 200 Accepted |
+| Execution id | `64d2f00baecd446db0594899adfa74d0` |
+| Execution status | SUCCESS (status=1, 3 ops, 933ms) |
+| fact_leads row created | lead_id=124, full_name="Smoke Test User", email=test-routing-smoke-20260611@cwdeckbuilders.com, phone=7155551234, property_address="123 Test St, Wausau, WI 54401", project_type=new_deck, budget_range=10000-20000, project_timeline=this_summer, tcpa_consent_given=true, lead_channel=webform |
+| fact_bids rows for lead_id=124 | 0 (confirmed) |
+| Scenario 4792854 new executions | 0 (confirmed) |
+| Jim email sent | Yes (Gmail connection 8444800, subject: "New qualified lead — Smoke Test User") |
+| Jim SMS sent | No Twilio connection — email only (unchanged blocker from attempt 1) |
+| Smoke-test row deleted | lead_id=124 deleted, 0 remaining |
+
+Smoke test type: **direct webhook call** (not full form submission — Webflow webhook still pending Jim manual action).
+
+### Decisions confirmed (same as attempt 1)
+
+- D1: Jim-only notification (email). SMS deferred pending Twilio setup.
+- D2: No fact_bids auto-insert.
+- D3: No HubSpot write modules.
+- D4: 2026-04-19 parking decision superseded per approval_id 60.
+
+### Remaining manual steps (unchanged)
+
+1. **Webflow webhook (STEP 8 — REQUIRED to go fully live):** Jim adds in Webflow Project Settings > Integrations > Webhooks. Event: `form_submission`. URL: `https://hook.us2.make.com/j1794cbx29uv6al9gbqkpjdvugutmcpc`. Scenario is ACTIVE and will process immediately upon Webflow webhook addition.
+2. **Twilio SMS:** Connect Twilio in Make team 2073972, add SMS module to scenario for Jim-notify.
+
+---
+
 ## 9. References
 
 - Approved TEST build plan: Supabase `approval_queue` approval_id 1 (`proposed_action` jsonb), project iabiwsbmnbxmkjvkgfhg
