@@ -44,3 +44,5 @@ sales/estimates/*.pdf
 
 # Streamlit secrets (defense-in-depth; streamlit_app/.gitignore also covers this)
 **/.streamlit/secrets.toml
+finance/invoices/_data/*.json
+finance/invoices/*.pdf

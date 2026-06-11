@@ -10,8 +10,16 @@ Usage:
 
 The PDF is written next to sales/estimates/ (one level up from _data/) with
 the same stem and a .pdf extension.
+
+Fulfillment lanes (ATCP 110 disclosure): every estimate JSON should carry
+    "fulfillment": {"lane": "cwdb"}                      CWDB self-performs
+    "fulfillment": {"lane": "builder",
+                    "builder_name": "Barton Builders LLC"}   partner builds
+The "builder" lane prints the required disclosure naming the contractor who
+will sign and perform the work; never issue a build estimate without it.
 """
 
+import sys
 from pathlib import Path
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import ParagraphStyle
@@ -68,6 +76,60 @@ sig       = ParagraphStyle('sig', fontName='Helvetica', fontSize=10.5, leading=1
                            textColor=SLATE, spaceAfter=2, alignment=TA_LEFT)
 lien      = ParagraphStyle('lien', fontName='Helvetica', fontSize=9.5, leading=13,
                            textColor=GREY, spaceAfter=4, alignment=TA_LEFT)
+builder_m = ParagraphStyle('builder_m', fontName='Helvetica-Bold', fontSize=10, leading=13,
+                           textColor=SLATE, spaceAfter=4, alignment=TA_CENTER)
+disc_h    = ParagraphStyle('disc_h', fontName='Helvetica-Bold', fontSize=11, leading=14,
+                           textColor=ORANGE, spaceAfter=4, alignment=TA_LEFT)
+disc_b    = ParagraphStyle('disc_b', fontName='Helvetica', fontSize=10, leading=14,
+                           textColor=SLATE, spaceAfter=0, alignment=TA_LEFT)
+
+
+def _fulfillment(estimate):
+    """Return (lane, builder_name) for the job's fulfillment lane.
+
+    lane 'cwdb'    = CWDB self-performs (stain/resurface work orders).
+    lane 'builder' = an independent licensed contractor signs the homeowner
+                     and performs the work; the estimate must carry the
+                     ATCP 110 disclosure naming that builder.
+    """
+    f = estimate.get('fulfillment') or {}
+    lane = f.get('lane')
+    if lane not in ('builder', 'cwdb'):
+        print('WARNING: fulfillment.lane missing or invalid; defaulting to '
+              '"cwdb" (CWDB self-perform). Any job a partner contractor will '
+              'build MUST set fulfillment.lane="builder" with builder_name '
+              'so the required disclosure prints.', file=sys.stderr)
+        lane = 'cwdb'
+    builder_name = f.get('builder_name')
+    if lane == 'builder' and not builder_name:
+        raise ValueError('fulfillment.lane is "builder" but '
+                         'fulfillment.builder_name is missing')
+    return lane, builder_name
+
+
+def _disclosure_box(builder_name):
+    inner = [
+        Paragraph('Who Performs Your Work', disc_h),
+        Paragraph(
+            f'Central Wisconsin Deck Builders, LLC sources your project and '
+            f'prepares this estimate. The construction described here will be '
+            f'performed and contracted by <b>{builder_name}</b>, an '
+            f'independent licensed Wisconsin dwelling contractor. You will '
+            f'sign your construction contract directly with that builder. '
+            f'Central Wisconsin Deck Builders, LLC is not the builder and '
+            f'does not perform deck construction.', disc_b),
+    ]
+    t = Table([[inner]], colWidths=[6.2 * inch])
+    t.setStyle(TableStyle([
+        ('VALIGN',        (0, 0), (-1, -1), 'TOP'),
+        ('BACKGROUND',    (0, 0), (-1, -1), LIGHT_BG),
+        ('LINEBEFORE',    (0, 0), (0, -1),  3, ORANGE),
+        ('TOPPADDING',    (0, 0), (-1, -1), 10),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
+        ('LEFTPADDING',   (0, 0), (-1, -1), 12),
+        ('RIGHTPADDING',  (0, 0), (-1, -1), 12),
+    ]))
+    return t
 
 
 def _logo_flowable(target_width_in=2.8):
@@ -117,12 +179,12 @@ def _itemized_table(line_items, total_amount):
     return t
 
 
-def _payment_table(deposit, balance, total_amount):
+def _payment_table(deposit, balance, total_amount, deposit_pct):
     rows = [
         [Paragraph('Stage', table_h), Paragraph('Amount', table_h_r)],
-        [Paragraph('Deposit due on signed acceptance (30%)', table_c),
+        [Paragraph(f'Deposit due on signed acceptance ({deposit_pct}%)', table_c),
          Paragraph(_money(deposit), table_c_r)],
-        [Paragraph('Balance due on completion and walkthrough (70%)', table_c),
+        [Paragraph(f'Balance due on completion and walkthrough ({100 - deposit_pct}%)', table_c),
          Paragraph(_money(balance), table_c_r)],
         [Paragraph('Total', total), Paragraph(_money(total_amount), total_r)],
     ]
@@ -213,6 +275,7 @@ def generate_pdf(estimate, output_path):
 
     s = []
     sp = lambda n=0.1: Spacer(1, n * inch)
+    lane, builder_name = _fulfillment(estimate)
 
     # ── HEADER: logo + NAP ──────────────────────────────────────────────────
     s.append(_logo_flowable(target_width_in=2.8))
@@ -230,11 +293,20 @@ def generate_pdf(estimate, output_path):
         f"PROJECT ESTIMATE  ·  #{estimate['estimate_number']}  ·  "
         f"Issued {estimate['date_issued']}  ·  Valid {estimate['valid_days']} days",
         meta))
+    if lane == 'builder':
+        s.append(Paragraph(
+            f'Construction by: {builder_name}, independent licensed '
+            f'Wisconsin dwelling contractor', builder_m))
     s.append(sp(0.1))
 
     # ── CLIENT BLOCK ────────────────────────────────────────────────────────
     s.append(_client_block(estimate['client']))
     s.append(_hr(color=GREY, thickness=0.5, space_after=10, space_before=12))
+
+    # ── ATCP 110 FULFILLMENT DISCLOSURE (builder lane only) ─────────────────
+    if lane == 'builder':
+        s.append(_disclosure_box(builder_name))
+        s.append(sp(0.12))
 
     # ── PROJECT OVERVIEW ────────────────────────────────────────────────────
     s.append(Paragraph('Project Overview', h2))
@@ -276,25 +348,46 @@ def generate_pdf(estimate, output_path):
     s.append(Paragraph(f"<b>Weather contingency:</b> {sched['weather']}", body))
 
     # ── PAYMENT TERMS ───────────────────────────────────────────────────────
-    deposit = round(total_amount * estimate['payment']['deposit_pct'] / 100)
+    deposit_pct = estimate['payment']['deposit_pct']
+    deposit = round(total_amount * deposit_pct / 100)
     balance = total_amount - deposit
-    s.append(KeepTogether([
+    payment_block = [
         Paragraph('Payment Terms', h2),
-        _payment_table(deposit, balance, total_amount),
+        _payment_table(deposit, balance, total_amount, deposit_pct),
         sp(0.05),
         Paragraph(
             f"<i>Accepted forms of payment: {estimate['payment']['methods']}</i>",
             note),
-    ]))
+    ]
+    if lane == 'builder':
+        payment_block.append(Paragraph(
+            f'<i>The deposit and all construction payments are payable to '
+            f'{builder_name} under your construction contract, not to '
+            f'Central Wisconsin Deck Builders, LLC.</i>', note))
+    s.append(KeepTogether(payment_block))
 
     # ── ACCEPTANCE ──────────────────────────────────────────────────────────
+    if lane == 'builder':
+        acceptance_text = (
+            f"Acceptance of this estimate is subject to execution of a "
+            f"written construction contract directly with "
+            f"<b>{builder_name}</b>, which will carry the {deposit_pct}% "
+            f"deposit terms and the required consumer notices. This estimate "
+            f"is not itself a binding contract. Estimate is valid for "
+            f"<b>{estimate['valid_days']} days</b> from the date issued "
+            f"({estimate['date_issued']}).")
+    else:
+        acceptance_text = (
+            f"Acceptance of this estimate is subject to execution of CWDB's "
+            f"signed Home Improvement Contract (or Staining Work Order), which "
+            f"will carry the {deposit_pct}% deposit "
+            f"terms and required consumer notices. This estimate is not itself "
+            f"a binding contract. Estimate is valid for "
+            f"<b>{estimate['valid_days']} days</b> from the date issued "
+            f"({estimate['date_issued']}).")
     s.append(KeepTogether([
         Paragraph('Acceptance', h2),
-        Paragraph(
-            f"This estimate becomes a binding work order upon homeowner "
-            f"signature and receipt of the {estimate['payment']['deposit_pct']}% "
-            f"deposit. Estimate is valid for <b>{estimate['valid_days']} days</b> "
-            f"from the date issued ({estimate['date_issued']}).", body),
+        Paragraph(acceptance_text, body),
         sp(0.15),
         _signature_block(),
     ]))

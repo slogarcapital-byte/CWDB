@@ -1,0 +1,95 @@
+{
+  "estimate_number": "2026-05-28-001",
+  "date_issued": "May 28, 2026",
+  "valid_days": 14,
+  "client": {
+    "name": "Sarah and Mike Henderson",
+    "address_line": "1234 Maple Street, Wausau, WI 54401",
+    "phone": "(715) 555-0123",
+    "email": "henderson@example.com"
+  },
+  "project": {
+    "overview": "Complete tear-out and new deck build at the project address. The job covers approximately <b>300 sq ft of new deck floor</b> (20 ft x 15 ft) with <b>40 linear feet</b> of railing system, a staircase (1 run, 6 total treads). The new deck features <b>Trex Select</b> decking, <b>Trex Aluminum</b> railings, and <b>kiln-dried pressure-treated lumber</b> framing built to current Wisconsin residential code. Work includes complete site protection, code-compliant structure, and final homeowner walkthrough.",
+    "scope": [
+      "Site survey, layout, and homeowner walkthrough of staked footprint before any demo",
+      "Move and protect homeowner furniture, grill, plants, and adjacent landscaping",
+      "Cover and protect siding, windows, doors, and any nearby paved surfaces",
+      "Demolish and remove the existing deck structure (boards, railings, stairs, footings, and concrete posts)",
+      "Haul all demo debris to the on-site dumpster; full disposal at completion",
+      "Excavate and pour new code-compliant footings (12 in tube forms \u00d7 48 in deep for WI frost line) at code-required spacing",
+      "Frame the new deck per WI residential code: kiln-dried pressure-treated lumber, ledger lag-bolted and flashed to house rim, code-compliant joist spacing on 16 in centers",
+      "Install Trex Select decking boards with hidden fasteners (composite) or 3-inch stainless deck screws (wood), maintaining manufacturer-specified gap spacing",
+      "Install matching Trex Select fascia on exposed rim (70 LF)",
+      "Install Trex Aluminum railing system (40 LF) with code-compliant baluster spacing and structural post anchoring",
+      "Install staircase: 1 run, 6 composite or matching-material treads, code-compliant rise/run",
+      "Final touch-ups, complete cleanup, and removal of all debris and dumpster",
+      "Final homeowner walkthrough and punch-list resolution"
+    ],
+    "scope_note": "The scope above assumes standard residential site access (driveway accessible to delivery truck and dumpster), no underground utilities within the deck footprint, and existing house siding/framing in sound condition at the ledger location. Any discoveries during demo (rot at ledger, inadequate footings, undisclosed utilities) will be discussed before continuing work, and any change order will be priced separately and added in writing."
+  },
+  "line_items": [
+    [
+      "Demolition and disposal of existing deck",
+      4188
+    ],
+    [
+      "Deck construction including KDAT Pressure-Treated framing, Trex Select decking (300 sq ft), matching fascia (70 LF)",
+      29725
+    ],
+    [
+      "Trex Aluminum railing system (40 LF)",
+      8250
+    ],
+    [
+      "Staircase: 1 run, 6 treads",
+      4312
+    ],
+    [
+      "Upgrades: 2 deck lights",
+      562
+    ],
+    [
+      "Permits, site protection, mobilization, and final cleanup",
+      4063
+    ]
+  ],
+  "included": [
+    "All materials: kiln-dried pressure-treated lumber framing, Trex Select decking, Trex Aluminum railings, hardware (joist hangers, hurricane ties, lag bolts, fasteners), code-compliant flashing",
+    "All new footings: concrete tube forms, concrete mix, rebar, and excavation",
+    "All labor for demo, framing, decking, railing, and stairs",
+    "Permit and engineering allowance (homeowner is named as homeowner on permit)",
+    "On-site dumpster for the duration of work",
+    "Final job-site cleanup and haul-off of all debris",
+    "<b>10-year limited workmanship warranty</b> on framing and structural connections",
+    "Manufacturer warranties pass through on decking (Trex Select) and railing (Trex Aluminum)"
+  ],
+  "not_included": [
+    "Landscape restoration beyond the immediate deck footprint (sod replacement, planting bed restoration, irrigation repair)",
+    "Electrical, plumbing, gas, or hot tub utility hookups (separate trade required)",
+    "Pergolas, screens, outdoor kitchens, or other built-ins unless added to scope in writing",
+    "Structural modifications to the house itself (door replacement, header changes, siding alterations beyond the ledger flashing detail)",
+    "Site grading, drainage modifications, or retaining wall work",
+    "Any work required to remediate discoveries (rot, hidden utilities, code violations at ledger attachment): quoted separately if found",
+    "Painting or staining of new decking (Trex composite does not need staining; wood decking can be quoted as an add-on for first-year finish)",
+    "Snow removal during winter installs"
+  ],
+  "schedule": {
+    "start": "Within 3-4 weeks of signed acceptance and deposit",
+    "duration": "7-10 working days",
+    "weather": "Work will be rescheduled if rain forecast exceeds 60% during exterior framing days. Winter installs may extend the duration by 2-4 days due to weather windows. Concrete pours require ambient temperatures above 40 F for 48 hours after placement."
+  },
+  "payment": {
+    "deposit_pct": 30,
+    "methods": "cash, check, credit or debit card, or digital payment (details provided upon acceptance)"
+  },
+  "_meta": {
+    "computed_sell_price": 51100,
+    "computed_subtotal_cost": 40880,
+    "computed_margin": 0.2,
+    "engine_version": "v1.1"
+  },
+  "fulfillment": {
+    "lane": "builder",
+    "builder_name": "Barton Builders LLC"
+  }
+}
