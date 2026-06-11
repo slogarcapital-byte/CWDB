@@ -78,6 +78,8 @@ Invoice push script reads a per-item taxable flag from its JSON input so the fli
 - `Payment` (record receipt, apply to invoice)
 - Maybe later: `Estimate` (mirror of our PDF estimates; low priority, PDFs work) and `CreditMemo` (cancellation-window refunds, Section 4.1).
 
+**Customer Hub evaluation note (2026-06-11).** Evaluated QBO Customer Hub (Estimates/Proposals/Contracts/e-sign) vs our document stack: see `finance/invoices/qbo-customer-hub-evaluation.md`. Endpoint impact: NONE. Contracts/Proposals are not exposed in the v3 Accounting API (no contract-signed webhook), so the minimal set above stands and no Estimates API is needed. If Jim adopts the recommended hybrid (our combined PDF e-signed via QBO contract builder), invoice creation at signing remains this design's `push-qbo-invoice.ps1` path, manually triggered at signature until Phase 3. Side effect on Section 7 item 1: contract builder requires Plus, which may pull the Plus upgrade forward ahead of Option B (and gives us class tracking early).
+
 **Scripts** live in `templates/scripts/`, named to match the existing `pull-*.ps1` family:
 - `push-qbo-invoice.ps1` (JSON in, Customer find-or-create + Invoice create out; same JSON the PDF generator consumes from `finance/invoices/_data/`)
 - `pull-qbo-status.ps1` (Phase 3: invoice/payment status -> Supabase for `v_pl_monthly`)
