@@ -159,8 +159,42 @@ try {
         $errs = @(Get-SupabaseRows -Table "event_log" -Select "event_id" -Filter "severity=in.(error,critical)&created_at=gt.$cutoff")
         if ($errs.Count -ge [int]$b.error_rate_threshold) { $tripped = "error_rate_spike" }
     }
-    # NOTE: loop-detection + cost-per-progress breakers are tuned in Inc 5 (need ledger/event
-    # history math); their thresholds are pre-staged in control-config.json.
+
+    # loop detection (Inc 5): the orchestrator re-creating the SAME work across tasks.
+    # Fingerprint = type + SHA1(canonical dod). Trip when >= loop_detection_repeats live
+    # tasks share a fingerprint with zero 'done' siblings in the 48h window.
+    # 'needs_approval' is excluded: waiting on Jim is not looping.
+    if (-not $tripped) {
+        $cutoff48 = $nowUtc.AddHours(-48).ToString("o")
+        $recent = @(Get-SupabaseRows -Table "task" -Select "task_id,type,status,payload,created_at" -Filter "created_at=gt.$cutoff48")
+        if ($recent.Count -gt 0) {
+            $sha = [System.Security.Cryptography.SHA1]::Create()
+            $groups = $recent | Group-Object {
+                $dod = ConvertTo-Json @($_.payload.dod) -Compress
+                [BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes("$($_.type)|$dod")))
+            }
+            foreach ($g in $groups) {
+                $live = @($g.Group | Where-Object { $_.status -in 'queued','active','failed' })
+                $done = @($g.Group | Where-Object { $_.status -eq 'done' })
+                if ($live.Count -ge [int]$b.loop_detection_repeats -and $done.Count -eq 0) { $tripped = 'loop_detected'; break }
+            }
+            $sha.Dispose()
+        }
+    }
+
+    # cost-per-progress (Inc 5): spend keeps accumulating while the funnel sits flat.
+    # Trip when last_progress_at is older than cost_per_progress_flat_days AND the
+    # ledger spend since that watermark >= cost_per_progress_spend_multiple x daily
+    # soft budget. Resume re-anchors last_progress_at, so pauses cannot false-trip.
+    if (-not $tripped -and $state.last_progress_at) {
+        $lp = [DateTime]::Parse($state.last_progress_at, $null, [System.Globalization.DateTimeStyles]::RoundtripKind).ToUniversalTime()
+        if (($nowUtc - $lp).TotalDays -ge [double]$b.cost_per_progress_flat_days) {
+            $led = @(Get-SupabaseRows -Table "budget_ledger" -Select "cents" -Filter "created_at=gt.$($lp.ToString('o'))")
+            $spentSince = [long](($led | Measure-Object -Property cents -Sum).Sum)
+            $threshold  = [long]([double]$b.cost_per_progress_spend_multiple * [double]$cfg.budget.day_soft_dollars * 100)
+            if ($spentSince -ge $threshold) { $tripped = 'cost_per_progress' }
+        }
+    }
 
     if ($tripped) {
         $patch["run_mode"]      = 'halted'

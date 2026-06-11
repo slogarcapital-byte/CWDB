@@ -158,7 +158,14 @@ $('btn-config').onclick = () => {
     <div><label>project cap $</label><input class="input" id="cf-cap" type="number" value="${c.budget.project_cap_dollars}"></div>
     <div><label>auto-execute max tier</label><input class="input" id="cf-tier" type="number" min="0" max="3" value="${c.rollout.auto_execute_max_tier}"></div>
     <div><label>dry_run</label><select class="input" id="cf-dry"><option ${c.rollout.dry_run ? 'selected' : ''}>true</option><option ${!c.rollout.dry_run ? 'selected' : ''}>false</option></select></div>
-    <div><label>tier2_execution_enabled</label><select class="input" id="cf-t2"><option ${c.rollout.tier2_execution_enabled ? 'selected' : ''}>true</option><option ${!c.rollout.tier2_execution_enabled ? 'selected' : ''}>false</option></select></div>`;
+    <div><label>tier2_execution_enabled</label><select class="input" id="cf-t2"><option ${c.rollout.tier2_execution_enabled ? 'selected' : ''}>true</option><option ${!c.rollout.tier2_execution_enabled ? 'selected' : ''}>false</option></select></div>
+    <div><label>critic fails breaker</label><input class="input" id="cf-bk-fails" type="number" min="1" value="${c.breakers.consecutive_critic_fails}"></div>
+    <div><label>error-rate threshold</label><input class="input" id="cf-bk-err" type="number" min="1" value="${c.breakers.error_rate_threshold}"></div>
+    <div><label>deadman warn ticks</label><input class="input" id="cf-bk-dmw" type="number" min="1" value="${c.breakers.deadman_warn_ticks}"></div>
+    <div><label>deadman trip ticks</label><input class="input" id="cf-bk-dmt" type="number" min="1" value="${c.breakers.deadman_ticks_since_progress}"></div>
+    <div><label>loop-detect repeats</label><input class="input" id="cf-bk-loop" type="number" min="2" value="${c.breakers.loop_detection_repeats}"></div>
+    <div><label>cost/progress flat days</label><input class="input" id="cf-bk-cpd" type="number" min="1" step="0.5" value="${c.breakers.cost_per_progress_flat_days}"></div>
+    <div><label>cost/progress spend ×</label><input class="input" id="cf-bk-cpx" type="number" min="1" step="0.5" value="${c.breakers.cost_per_progress_spend_multiple}"></div>`;
   dlg('dlg-config').showModal();
 };
 async function saveConfig() {
@@ -174,6 +181,15 @@ async function saveConfig() {
         dry_run: $('cf-dry').value === 'true',
         auto_execute_max_tier: parseInt($('cf-tier').value, 10),
         tier2_execution_enabled: $('cf-t2').value === 'true'
+      },
+      breakers: {
+        consecutive_critic_fails: parseInt($('cf-bk-fails').value, 10),
+        error_rate_threshold: parseInt($('cf-bk-err').value, 10),
+        deadman_warn_ticks: parseInt($('cf-bk-dmw').value, 10),
+        deadman_ticks_since_progress: parseInt($('cf-bk-dmt').value, 10),
+        loop_detection_repeats: parseInt($('cf-bk-loop').value, 10),
+        cost_per_progress_flat_days: parseFloat($('cf-bk-cpd').value),
+        cost_per_progress_spend_multiple: parseFloat($('cf-bk-cpx').value)
       }
     });
     dlg('dlg-config').close();

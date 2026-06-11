@@ -14,7 +14,7 @@
       POST /api/directive             {kind: directive, body} | {kind: task, type, title, priority, assigned_agent, dod[]}
       POST /api/directive/{id}        {status: done|dismissed}
       GET  /api/config                current control-config.json
-      POST /api/config                partial: {budget:{...}, rollout:{...}} - allowlisted keys only
+      POST /api/config                partial: {budget:{...}, rollout:{...}, breakers:{...}} - allowlisted keys only
       POST /api/run/{script}          script in {control-tick, warehouse-daily}
 
 .NOTES
@@ -290,8 +290,9 @@ while ($listener.IsListening) {
             $cfgPath = Join-Path $repo "operations\control-plane\config\control-config.json"
             $raw  = Get-Content $cfgPath -Raw
             $cfg  = $raw | ConvertFrom-Json
-            $allowedBudget  = 'day_soft_dollars','day_hard_dollars','project_cap_dollars','day_soft_tokens','day_hard_tokens'
-            $allowedRollout = 'dry_run','auto_execute_max_tier','council_enabled','tier2_execution_enabled'
+            $allowedBudget   = 'day_soft_dollars','day_hard_dollars','project_cap_dollars','day_soft_tokens','day_hard_tokens'
+            $allowedRollout  = 'dry_run','auto_execute_max_tier','council_enabled','tier2_execution_enabled'
+            $allowedBreakers = 'consecutive_critic_fails','error_rate_threshold','deadman_warn_ticks','deadman_ticks_since_progress','loop_detection_repeats','cost_per_progress_flat_days','cost_per_progress_spend_multiple'
             $diff = @{}
             $badKey = $null
             if ($body -and $body.PSObject.Properties['budget']) {
@@ -315,6 +316,18 @@ while ($listener.IsListening) {
                     if ($changed) {
                         $diff["rollout.$($p.Name)"] = @{ from = $cfg.rollout.($p.Name); to = $p.Value }
                         $cfg.rollout.($p.Name) = $p.Value
+                    }
+                }
+            }
+            if (-not $badKey -and $body -and $body.PSObject.Properties['breakers']) {
+                foreach ($p in $body.breakers.PSObject.Properties) {
+                    if ($p.Name -notin $allowedBreakers) { $badKey = "breakers.$($p.Name)"; break }
+                    $oldV = $cfg.breakers.($p.Name)
+                    $isNum = ($oldV -is [double] -or $oldV -is [int] -or $oldV -is [long] -or $p.Value -is [double] -or $p.Value -is [int] -or $p.Value -is [long])
+                    $changed = $(if ($isNum) { [double]$oldV -ne [double]$p.Value } else { "$oldV" -ne "$($p.Value)" })
+                    if ($changed) {
+                        $diff["breakers.$($p.Name)"] = @{ from = $cfg.breakers.($p.Name); to = $p.Value }
+                        $cfg.breakers.($p.Name) = $p.Value
                     }
                 }
             }
