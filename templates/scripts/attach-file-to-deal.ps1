@@ -58,7 +58,10 @@ if (-not (Test-Path $file)) { throw "File not found: $FilePath" }
 $uploadHeaders = @{ Authorization = "Bearer $token" }
 $form = @{
     file       = Get-Item $file
-    options    = '{"access":"HIDDEN_PRIVATE"}'
+    # PRIVATE = signed-URL access only. The HIDDEN_* values need the extra
+    # files.ui_hidden.write scope and fail with a misleading "Invalid JSON
+    # for options input" error without it.
+    options    = '{"access":"PRIVATE"}'
     folderPath = '/cwdb-deal-attachments'
 }
 $uploaded = Invoke-RestMethod -Method Post -Uri 'https://api.hubapi.com/files/v3/files' `

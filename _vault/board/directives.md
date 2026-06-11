@@ -30,7 +30,8 @@
   - Acceptance: site-wide grep of Webflow copy for licensed/insured claims; each instance either removed, attributed to the named builder, or made true (post-licensing)
   - Ship type: build
 
-- [WB-016] HubSpot private app scopes: schema write + files + objects write
+- [WB-016] HubSpot private app scopes: schema write + files + objects write — **RESOLVED 2026-06-11**
+  - Resolution: Jim added the scopes; properties created (lead_channel, tcpa_consent_source, cwdb_job_number, walkthrough_datetime); Sjoberg/Darlene (phone) + Nayak/Keuler (manual) tagged and ingested; Overbeck estimate + INV-2026-001 attached to deal 324817992387; Overbeck deal stamped CWDB-2026-001. Note: files API access must be PRIVATE (HIDDEN_* needs files.ui_hidden.write).
   - Created: 2026-06-10
   - Source: phone-lead channel tracking, cwdb_job_number property, estimate-PDF deal attachments (all blocked on scopes)
   - Issue: Jim: direct link https://app-na2.hubspot.com/private-apps/245712220 (portal 245712220, NA2; the app exists, the token works for reads). If the link 404s, confirm the portal ID shown in the HubSpot URL bar matches 245712220 (wrong-account login is the usual cause). Open the app > Scopes tab, add these four, save (2 minutes):
