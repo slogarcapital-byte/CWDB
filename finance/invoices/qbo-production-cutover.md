@@ -14,27 +14,46 @@ sandbox connection survives untouched for future testing.
    the production questionnaire / compliance form first, do it (app purpose:
    internal accounting automation for our own QBO company; no third-party
    users; scope com.intuit.quickbooks.accounting only).
-3. Confirm the redirect URI `http://localhost:8000/callback` is listed for
-   the app (production uses the same redirect list).
+3. **Redirect URI (production differs from sandbox).** Production rejects
+   `http://localhost` - it requires a public HTTPS URL that is not an IP. On
+   the **Production** tab register exactly (no trailing slash):
+   `https://cwdeckbuilders.com/qbo-callback`
+   The page may 404; that is fine, the OAuth code arrives in the address bar.
+   (Leave `http://localhost:8000/callback` on the **Development** tab - sandbox
+   still uses it.)
 4. Copy the **Production** Client ID and Client Secret into `.env.local` at
    the repo root as two new lines (never commit this file):
    - `QBO_PRODUCTION_CLIENT_ID=...`
    - `QBO_PRODUCTION_CLIENT_SECRET=...`
 
-## Step 2: One-time authorization against the LIVE company (with Claude, ~3 min)
+## Step 2: One-time authorization against the LIVE company (with Claude, ~5 min)
 
-Run:
+Production has no local listener (the redirect is a public HTTPS URL), so it is
+a two-step manual exchange:
 
 ```powershell
+# Step 2a - print the consent URL:
 pwsh templates/scripts/qbo-authorize.ps1 -Environment production
 ```
 
 Open the printed URL, sign in, and on the consent screen pick the REAL
-company: **Central Wisconsin Deck Builders** (realm 9341457249522270), NOT
-the sandbox company. The script writes `QBO_PRODUCTION_REFRESH_TOKEN` +
-`QBO_PRODUCTION_REALM_ID` and verifies with a CompanyInfo read; success looks
-like `CONNECTED: Central Wisconsin Deck Builders (realm 9341457249522270,
-env production)`.
+company: **Central Wisconsin Deck Builders** (realm 9341457249522270), NOT the
+sandbox company. The browser lands on
+`https://cwdeckbuilders.com/qbo-callback?code=...&realmId=...&state=...` (the
+page may 404). Copy the `code` and `realmId` values out of the address bar,
+then:
+
+```powershell
+# Step 2b - exchange the copied values for tokens:
+pwsh templates/scripts/qbo-authorize.ps1 -Environment production -Code <code> -RealmId <realmId>
+```
+
+That writes `QBO_PRODUCTION_REFRESH_TOKEN` + `QBO_PRODUCTION_REALM_ID` and
+verifies with a CompanyInfo read; success looks like
+`CONNECTED: Central Wisconsin Deck Builders (realm 9341457249522270,
+env production)`. If `/qbo-callback` ever redirects and drops the code, re-run
+2a/2b adding `-RedirectUri https://cwdeckbuilders.com/` (the homepage works
+identically) and register that URL instead.
 
 ## Step 3: Flip the switch
 
