@@ -7,6 +7,36 @@
 
 ## Active directives
 
+- [WB-018] Legal/compliance punch list from fulfillment-pivot opinion (2026-06-10)
+  - Created: 2026-06-10
+  - Source: legal-compliance-counsel memo on Option A (CWDB estimates, builder contracts) vs Option B (CWDB primes, subs out)
+  - Issue: Jim-required external verifications before the pivot is fully de-risked, in priority order:
+    1. URGENT: WI DOR determination on staining/resurfacing sales-tax characterization (taxable repair service vs exempt improvement). Money moving on Overbeck INV-2026-001; resolve before the FINAL invoice. Working paper: `finance/invoices/INV-2026-001-tax-position-note.md`
+    2. Bind GL insurance NOW (covers walk-throughs + staining today; uninsured-operations gap on Overbeck until bound)
+    3. WI DOR confirmation lead-fee sales-tax exemption (before first $1,000 contractor invoice)
+    4. DSPS filings: Qualifier 12-hour course + entity Dwelling Contractor Certification (insurance binds first)
+    5. City of Wausau / Marathon County: cosmetic-vs-structural permit line + any local bond/registration
+    6. One-time WI attorney review: estimate disclosure language, staining work order, home improvement contract, subcontractor agreement, amendment, side letter (`docs/legal/templates/side-letter-accepted-bid-definition.md`)
+  - Suggested owner: Jim (external calls) + legal-compliance-counsel (document prep done)
+  - Acceptance: each item checked off with date + outcome noted here
+  - Ship type: artifact-prod (compliance)
+
+- [WB-017] Scrub "licensed and insured" claims sitewide (pre-license ATCP 110.02 exposure)
+  - Created: 2026-06-10
+  - Source: legal-compliance-counsel memo, Option A disclosure requirements
+  - Issue: until CWDB holds the DSPS cert + GL insurance, no site/ad/estimate copy may imply CWDB itself is a licensed builder. CWDB self-describes as a deck project and estimating service on Option-A jobs; the named builder carries the licensed/insured claim.
+  - Suggested owner: web-dev agent (site copy) + content-writer (ad copy review)
+  - Acceptance: site-wide grep of Webflow copy for licensed/insured claims; each instance either removed, attributed to the named builder, or made true (post-licensing)
+  - Ship type: build
+
+- [WB-016] HubSpot private app scopes: contacts + deals schema write
+  - Created: 2026-06-10
+  - Source: phone-lead channel tracking build (blocked) + cwdb_job_number property (blocked since 2026-06-10)
+  - Issue: private app token lacks `crm.schemas.contacts.write` and `crm.schemas.deals.write`. Jim: HubSpot > Settings > Integrations > Private Apps > (the cwdb app) > Scopes, add both, save. Then Claude creates `lead_channel` + `tcpa_consent_source` contact properties, `cwdb_job_number` + `walkthrough_datetime` deal properties, and tags the 4 skipped contacts (Sjoberg and Darlene are real phone leads waiting to count toward the funnel).
+  - Suggested owner: Jim (2 minutes) then cwdb-ceo-operator
+  - Acceptance: properties exist; Sjoberg + Darlene flow into fact_leads on next warehouse pull
+  - Ship type: build
+
 - [WB-015] WB-002 GMB park default-ship trigger 2026-05-11
   - Created: 2026-05-10
   - Source: 24h default-ship rule; Day 10 carry on WB-002

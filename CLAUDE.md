@@ -1,529 +1,192 @@
-# Trades Lead Generation AI Operating System
+# Central Wisconsin Deck Builders (CWDB) Operating System
 
-## Daily Operating System (read first each session)
+## Source of Truth
 
-- **Today's brief:** `_vault/briefs/<today>.md` (auto-generated 7:03 AM Central via in-session cron + SessionStart check)
-- **Yesterday's brief:** `_vault/briefs/<yesterday>.md` — sealed; carries Jim's `[x]` marks + `%...%` comments forward into today's
-- **Project board:** `_vault/board/{directives,in-flight,shipped,killed}.md` — Kanban; ship-type tags `build` / `artifact-prod` / `scheduled-recurring-automation`
-- **Brief INDEX:** `_vault/briefs/INDEX.md` · **Board INDEX:** `_vault/board/INDEX.md` (next WB-NNN)
-- **Singleton DEPRECATED:** `_vault/state-of-cwdb.md` — read-only historical reference; do not write
-- **Migration plan:** `C:\Users\jslog\.claude\plans\cwdb-ceo-operator-agent-once-again-hazy-shamir.md`
+**Live business state lives in the Supabase data warehouse, not vault files.** Query Supabase first; treat briefs / state-archive / MEMORY.md as derived, not authoritative.
+
+- **Supabase project:** `iabiwsbmnbxmkjvkgfhg` (`https://iabiwsbmnbxmkjvkgfhg.supabase.co`)
+- **Schema:** `operations/data-warehouse/schema/` (12 tables, 6 analytical views)
+- **Daily refresh:** Task Scheduler `\CWDB\CWDB-Warehouse-Daily` at 06:55 Central runs `operations/data-warehouse/scripts/run-daily.ps1`; pulls HubSpot + Google Ads + Meta Ads + GA4
+- **Last-run log:** `_vault/data/cron-runs.log` (TSV; non-zero exit = failure)
+
+### Daily Read (in order)
+
+1. **Lead funnel:** query `v_lead_funnel` for submitted → qualified → delivered → bid-sent → accepted → paid counts
+2. **CAC by channel:** query `v_cac_by_channel` for spend, leads, cost per lead by platform
+3. **Attribution gap:** query `v_meta_attribution_gap` (UTM black hole diagnostic; flags Meta-vs-GA4 disagreement)
+4. **Contractor scorecard:** query `v_contractor_scorecard` (win-rate, response time, fees earned)
+5. **P&L:** query `v_pl_monthly` (ad spend vs. accepted-bid revenue)
+
+The Supabase MCP tool is authorized; pull live numbers before claiming any business-state fact.
+
+## Validation Gate (active)
+
+- **Deadline:** 2026-06-18
+- **Pass criteria:** `v_lead_funnel.qualified_count >= 3` since 2026-06-04 OR `v_lead_funnel.accepted_count >= 1` lifetime
+- **Miss verdict:** call the pay-per-accepted-bid model unproven. Decide between pivot (pay-per-lead, marketplace) or sunset. Do not extend the gate a third time.
+- **Why this matters:** 0 accepted bids since project start (2026-03-12). 0 new qualified leads in the 28 days from Debbie Overlook (2026-05-08) through today. OAuth refresh-token fix shipped 2026-06-04 was the last suspected funnel blocker; the gate measures whether the funnel actually works once unblocked.
+
+## Operating Rhythm
+
+- **Session start:** SessionStart hook creates `_vault/sessions/<today>-NNN.md`, scans `_vault/data/cron-runs.log` for last-24h failures, surfaces env-var gaps and continuity context. Read those before doing anything else.
+- **Brief (optional, troubleshooting):** `/brief` skill generates `_vault/briefs/<today>.md` from Supabase + checkboxes. Useful when planning the day. Not the source of truth.
+- **State (optional, troubleshooting):** `/state` skill patches live data tables into today's brief without rebuild.
+- **Session end:** `/session-end` writes Work Done + Decisions + Memory Updates into today's session note. Hookify enforces non-empty Work Done.
+- **Project board:** `_vault/board/{directives,in-flight,shipped,killed}.md` for Kanban; ship-type tags `build` / `artifact-prod` / `scheduled-recurring-automation`.
+
+## Memory Map
+
+- **CLAUDE.md (this file):** how to navigate. Stable; rewrite quarterly or on architectural change.
+- **`~/.claude/projects/.../memory/MEMORY.md`:** auto-loaded standing rules + key decisions (~80 lines). Detail files in same dir keyed by `[[name]]`.
+- **`~/.claude/agent-memory/<agent>/MEMORY.md`:** per-agent learned constraints (platform quirks, gotchas). Read by that agent only.
+- **`_vault/sessions/<date>-NNN.md`:** per-session log of work, decisions, open items. Chained via `previous-session` frontmatter.
+- **`_vault/state-archive/state-<sessionId>.md`:** point-in-time snapshots written by `/session-end`. Historical record, not live state.
+- **Supabase warehouse:** all live business state (leads, deals, ad spend, traffic). Query, don't cache.
 
 ## Default Delegation Hierarchy (CEO behavior)
 
-Every Top-3 daily brief item must be classified by tier:
-1. **Tier 1 — Recipe (default):** Specialty agents own execution. CEO orchestrates only.
-2. **Tier 2 — Hybrid:** Mostly automated, minimal Jim touch.
-3. **Tier 3 — User-driven:** Jim must do this manually. Requires written justification.
+Top-3 daily items classified by tier:
+1. **Tier 1 (Recipe, default):** Specialty agent owns execution. CEO orchestrates.
+2. **Tier 2 (Hybrid):** Mostly automated, minimal Jim touch.
+3. **Tier 3 (User-driven):** Jim does this manually. Requires written justification.
 
-When Agent tool unavailable: CEO diagnoses + attempts fix first; if still blocked, BLOCK + FLAG affected items. Never silently fall back to direct execution.
+When Agent tool is unavailable, CEO diagnoses + attempts fix first; if still blocked, BLOCK + FLAG. No silent fallback to direct execution.
 
-24h default-ship rule: CEO ships autonomously at deadline, then writes a "Shipped Without Asking" entry in the brief listing what + where + how to roll back.
+**24h default-ship rule:** CEO ships autonomously at deadline, then writes a "Shipped Without Asking" entry in the brief listing what + where + how to roll back.
+
+---
 
 ## Mission
 
-Build and operate a scalable lead generation engine that generates homeowner project leads and sells them to contractors.
+Scalable lead-gen engine. Generate homeowner deck project leads in Central Wisconsin; sell them to contractors. Initial: deck builders, Wausau / Schofield / Weston / Mosinee / Merrill. Expansion (only after Phase 1 passes): Eau Claire, Appleton, Green Bay, Stevens Point, Madison, Minneapolis suburbs.
 
-Initial focus is **deck building leads in Central Wisconsin** with the potential to expand into additional trades and territories.
+## Business Model
 
-The system is designed to operate with minimal human intervention using AI agents and automation.
+Revenue: **pay per accepted bid at $1,000** (contractor pays when homeowner accepts their bid sourced from a CWDB lead) **plus direct construction-services revenue** on jobs CWDB self-performs. Secondary models (territory licensing, multi-contractor marketplace) deferred to Phase 4+. Target margin: ~$700 per accepted bid.
 
-Primary objective:
+### Fulfillment Model (pivot 2026-06-10)
 
-Generate profitable contractor leads and scale across markets.
+Ben/John are busy building and cannot meet the 48-hour quote promise, so **Jim owns all lead follow-up, walk-through booking, walk-throughs, and estimates** (Streamlit estimator + `sales/estimates/generate_estimate_pdf.py`). Phased hybrid per legal-compliance-counsel opinion:
 
----
+- **Phase 0 (now, pre-license).** Hand-off at the estimate. Two lanes, set via `fulfillment.lane` in the estimate JSON:
+  - `cwdb`: cosmetic stain/resurface (no permit) — CWDB self-performs under the interim staining work order and takes the deposit.
+  - `builder`: any build/repair/structural job — CWDB issues the estimate WITH the named-builder disclosure; the contractor signs the homeowner, takes the deposit, pulls the permit; CWDB collects $1,000 on acceptance. CWDB must NOT sign as prime or take a build deposit pre-license.
+- **Phase 1 (after DSPS Dwelling Contractor cert + GL insurance).** Option B unlocks per-job: CWDB primes the Home Improvement Contract and subs to Ben/John under the subcontractor agreement. A and B run side by side; choose per job.
+- Legal punch list and gating items: board directive WB-018.
 
-# Business Model
+### Leads count from EVERY channel
 
-Homeowners request quotes for construction projects.
+Phone calls arrive at the same volume as webform submissions and count identically toward the funnel and validation gate. All leads live in HubSpot; `fact_leads.lead_channel` (webform | phone | manual | other) + `tcpa_consent_source` (form | verbal | assumed) track arrival and consent. Phone leads may lack an email. Never treat "lead" as synonymous with "webform submission."
 
-The system captures the lead and sells it to contractors.
+## Operating Principles
 
-Revenue models:
+1. **Own the lead asset.** Contractors are replaceable. The lead flow is the asset.
+2. **Validate demand before building infrastructure.** Do not build complex systems until contractors confirm willingness to pay. *(Active reminder: see Validation Gate above.)*
+3. **Focus on one niche first.** Deck builders only until Phase 1 passes.
+4. **Replicate profitable systems.** Clone the funnel into a new city only after the current city is profitable.
+5. **Automation first.** Every repeatable operational task should eventually be automated.
 
-1. Pay per accepted bid (primary — contractor pays $1,000 when they win a job from our lead)
-2. Territory licensing (secondary)
-3. Multi contractor lead marketplace
+## Tech Stack (current)
 
-Example economics:
+- **Site:** Webflow (21-page authority site at cwdeckbuilders.com, GoDaddy DNS)
+- **Forms:** Webflow native → HubSpot Forms API relay JS
+- **CRM:** HubSpot Starter ($15/mo); 9-stage pipeline; 19 custom properties
+- **Ads:** Google Ads (live since 2026-04-23); Meta Ads (live since 2026-04-26)
+- **Community:** Nextdoor (organic only)
+- **Analytics:** GA4 + GTM + Meta Pixel + Nextdoor Pixel + Google Ads Conversion + MS Clarity
+- **Warehouse:** Supabase Postgres (12 tables, 6 views, daily ingestion)
+- **Estimator:** Streamlit app at https://cwdb-estimator.streamlit.app/ (built 2026-05-28; live 2026-05-31)
+- **Contractor onboarding:** DocuSign-driven parameterized agreement templates
+- **Automation (parked):** Make scenario 4792854 inactive since 2026-04-19 pivot
 
-Average ad cost per lead: $20–$60
-Revenue per accepted bid: $1,000
-Estimated cost per accepted bid (at 20% contractor close rate): ~$300
+## Brand
 
-Target margin: ~$700 per accepted bid.
+- **Name:** Central Wisconsin Deck Builders (CWDB internally)
+- **Domain:** cwdeckbuilders.com
+- **Tagline:** "Fast Quotes. Trusted Builders."
+- **Colors:** `#e54c00` Crafted Orange (CTAs) · `#323434` Timber Slate (text) · `#646760` Builders Grey (secondary) · `#83b2cf` Wisconsin Sky Blue (accent)
+- **Logos:** `/branding/logos/1.1-primary-logo-high-res.png` (stacked) · `/branding/logos/1.2-horizontal-logo-high-res.png` (horizontal)
+- **Full guidelines:** `/business-context/brand-discovery/`
 
----
-
-# Initial Market
-
-Primary niche:
-
-Deck Builders
-
-Initial geographic market:
-
-Central Wisconsin
-
-Cities:
-
-- Wausau
-- Schofield
-- Weston
-- Mosinee
-- Merrill
-
-Expansion markets:
-
-- Eau Claire
-- Appleton
-- Green Bay
-- Stevens Point
-- Madison
-- Minneapolis suburbs
-
----
-
-# System Architecture
-
-Traffic Sources  
-→ Landing Pages  
-→ Quote Request Form  
-→ Lead Qualification  
-→ Lead Routing  
-→ Contractor Delivery  
-→ CRM Tracking  
-→ Billing
-
-All stages should be automated.
-
----
-
-# Core Technology Stack
-
-Advertising Platforms
-
-- Google Ads
-- Facebook / Instagram Ads
-- TikTok
-- Nextdoor (primary community channel — where homeowners go for neighbor contractor recommendations)
-
-Landing Pages
-
-- Webflow
-
-Automation
-
-- Make (formerly Integromat)
-
-CRM
-
-- HubSpot (free tier)
-
-Lead Forms
-
-- Webflow native forms (replaced Tally as of 2026-03-29 — simpler stack, better design control)
-
-Website
-
-- 21-page authority site (see `/business-context/website-plan.md` for full spec)
-- Design system: `/website/design-system.md`
-- Site architecture: `/website/site-architecture.md`
-
-Future upgrades may include custom infrastructure.
-
----
-
-# Brand Identity
-
-Brand name: Central Wisconsin Deck Builders
-Abbreviated: CWDB (internal use, favicons, small UI only)
-Domain: cwdeckbuilders.com (GoDaddy)
-Tagline: "Fast Quotes. Trusted Builders."
-
-Color palette:
-
-- `#e54c00`  Crafted Orange    — CTAs, highlights, primary accent
-- `#323434`  Timber Slate      — backgrounds, primary text
-- `#646760`  Builders Grey     — subheadings, secondary text, borders
-- `#83b2cf`  Wisconsin Sky Blue — complementary accent, outdoor feel
-
-Logo files (in /branding/logos/):
-
-- `1.1-primary-logo-high-res.png`    — stacked layout; use for website hero, print, large placements
-- `1.2-horizontal-logo-high-res.png` — horizontal layout; use for email signatures, banners, constrained widths
-
-Full brand guidelines: /business-context/brand-discovery/
-
----
-
-# Project File Structure
-
-The system is organized as a company with agents as employees and folders as departments.
+## File Structure
 
 ```
 CWDB/
-├── agents/           EMPLOYEES — AI agent system prompts and configs
-├── branding/         BRAND — Logo files and brand assets
-├── business-context/ PLANNING — Phase plans and brand discovery docs
-├── marketing/        DEPT — Ad campaigns (Google, Facebook, TikTok, Nextdoor)
-├── website/          DEPT — Webflow pages and templates
-├── sales/            DEPT — Contractor outreach, onboarding, CRM
-├── operations/       DEPT — Lead processing, qualification, routing, Make automation
-├── finance/          DEPT — P&L statements and performance reports
-└── templates/        SHARED — Reusable assets across departments
+├── .claude/              Agents, skills, hooks, settings
+├── _vault/               Obsidian vault — briefs, sessions, state-archive, board, data logs
+├── branding/             Logos and brand assets
+├── business-context/     Phase plans, brand discovery, validation roadmap
+├── docs/legal/           LLC docs, EIN proof, contractor agreement templates
+├── finance/              P&L, reports
+├── marketing/            Ad campaigns (Google, Meta, Nextdoor, TikTok)
+├── operations/
+│   ├── data-warehouse/   Supabase schema, views, ingestion orchestrator
+│   ├── leads/            Form specs, routing rules
+│   └── make/             Parked scenario configs
+├── sales/                Contractor outreach, onboarding, agreements, estimates
+├── templates/scripts/    Hook scripts, data-pull scripts, vault-sync
+└── website/              Webflow page content, design system, design docs
 ```
 
----
+## AI Agent Roster
 
-# AI Agent System
+Specialty agents live in `.claude/agents/`. Each is invoked via the Agent tool. Agent-specific platform constraints live in `~/.claude/agent-memory/<agent>/MEMORY.md`.
 
-The system operates through multiple AI agents.
+- **cwdb-ceo-operator** — daily briefing, prioritization, decision-making (orchestrator)
+- **web-dev** — Webflow page builds and edits (MCP-driven)
+- **ad-campaign** — Google/Meta/Nextdoor/TikTok creative + targeting + optimization
+- **content-writer** — page copy, email, sales scripts, blog
+- **contractor-sales** — contractor outreach, onboarding, agreement sends
+- **lead-qualification** — validate inbound leads
+- **lead-routing** — deliver leads to contractors via HubSpot workflow
+- **revenue-optimization** — pricing, ad spend allocation
+- **accounting** — billing, P&L, reconciliation
+- **analytics** — funnel diagnostics, attribution debugging
+- **market-research** — niche / city expansion (Phase 3+)
+- **legal-compliance-counsel** — compliance review, document drafting
 
-Each agent owns a specific operational function.
+Agents marked Phase 3+ should not be invoked until Phase 1 gate passes.
 
----
+## Phase 1: Validation (active)
 
-## Agent 1: Market Research Agent
+Goal: prove contractors pay $1,000 per accepted bid for CWDB leads.
 
-Responsibilities:
+| Step | Status |
+|---|---|
+| Secure first contractor commitment | DONE (2026-03-12, $1,000/accepted bid) |
+| Confirm brand + domain | DONE (2026-03-28) |
+| Build website | DONE (2026-04-21 site revamp complete) |
+| Sign contractor agreements | DONE (Ben Barton + John Garcia, 2026-04-17) |
+| Run ad campaign | LIVE (Google 2026-04-23, Meta 2026-04-26) |
+| Deliver first lead via routing | NOT DONE (no HubSpot workflow yet) |
+| Get first accepted bid | NOT DONE (0 since project start) |
 
-- Identify high demand contractor niches
-- Analyze local market demand
-- Identify underserved cities
-- Estimate lead value by niche
-- Monitor Nextdoor neighborhood posts to validate demand in target cities
+Active gate: see Validation Gate section at top.
 
-Outputs:
+## Phase 2: Profitability (gated on Phase 1 pass)
 
-- Niche opportunity reports
-- City expansion recommendations
-- Keyword demand analysis
+20-50 leads/month at <$60 CPL, >$1,000 revenue/accepted bid, 2x+ ROI.
 
----
+## Phase 3: Replication (gated on Phase 2)
 
-## Agent 2: Web Dev Agent
+Clone funnel into a second city only after the first is profitable.
 
-Responsibilities:
+## Phase 4: Marketplace Expansion (long-term)
 
-- Generate landing page copy
-- Build landing page structure in Webflow
-- Optimize conversion flow
-- Generate CTA messaging
-- Embed Tally forms
+Multi-trade, multi-contractor marketplace (roofing, bathroom, concrete, basement finishing, pole barns). Comparable: Angi, Thumbtack.
 
-Typical landing page structure:
+## Success Metrics (queried from warehouse, not narrated here)
 
-Headline
-Value proposition
-Project examples
-Trust signals
-Quote request form (Tally)
+- Cost per lead: `v_cac_by_channel` (target <$60)
+- Revenue per accepted bid: `v_pl_monthly` (target $1,000)
+- Cost per accepted bid: derived (target <$400)
+- Lead-to-accepted-bid conversion: `v_lead_funnel` (no target yet — need first accepted bid to measure)
+- Contractor LTV: `v_contractor_scorecard`
 
-Goal:
+## Strategic Advantage
 
-Maximize lead conversion rate.
+Digital marketing capability + automation + a fragmented contractor market where most operators lack online presence. Owning the lead flow beats owning any one contractor.
 
----
+## End State
 
-## Agent 3: Ad Campaign Agent
-
-Responsibilities:
-
-- Generate ad creatives
-- Manage ad targeting
-- Optimize cost per lead
-- Scale profitable campaigns
-
-Platforms:
-
-Google Ads
-Facebook / Instagram Ads
-TikTok
-Nextdoor (paid ads + organic community engagement)
-
-Key metric:
-
-Cost per lead.
-
----
-
-## Agent 4: Lead Qualification Agent
-
-Responsibilities:
-
-- Validate lead quality
-- Filter spam submissions
-- Confirm homeowner intent
-- Capture project details
-
-Collected data:
-
-Name  
-Address  
-Phone  
-Project type  
-Budget  
-Timeline
-
-Goal:
-
-Ensure contractors receive high quality leads.
-
----
-
-## Agent 5: Lead Routing Agent
-
-Responsibilities:
-
-- Deliver leads to contractors
-- Route based on territory
-- Handle multi contractor distribution
-- Trigger notifications
-
-Notifications may include:
-
-SMS  
-Email  
-CRM updates
-
-Automation platform:
-
-Make (formerly Integromat)
-
----
-
-## Agent 6: Contractor Sales Agent
-
-Responsibilities:
-
-- Identify potential contractor partners
-- Generate contractor outreach scripts
-- Handle contractor onboarding
-- Negotiate pricing
-
-Primary sales model:
-
-Pay per accepted bid.
-
-Example:
-
-Contractor pays $1,000 each time they win a job
-sourced from one of our leads (homeowner accepts their bid).
-
----
-
-## Agent 7: Revenue Optimization Agent
-
-Responsibilities:
-
-- Analyze lead conversion rates
-- Optimize pricing models
-- Identify profitable markets
-- Adjust ad spend allocation
-
-Key metrics:
-
-Cost per lead (ad efficiency)
-Revenue per accepted bid (target: $1,000)
-Cost per accepted bid (target: <$400)
-Contractor retention
-Ad ROI
-
----
-
-## Agent 8: Accounting Agent
-
-Responsibilities:
-
-- Track contractor payments and billing cycles
-- Generate and send invoices
-- Reconcile ad spend vs. revenue
-- Produce monthly P&L statements
-
-Outputs:
-
-P&L statements → /finance/pl/
-Performance summaries → /finance/reports/performance/
-
----
-
-## Agent 9: Analytics Agent
-
-Responsibilities:
-
-- Monitor landing page traffic and conversion rates
-- Analyze ad platform performance by channel
-- Track lead funnel drop-off points
-- Identify top-performing creatives and keywords
-
-Key funnel:
-
-Ad Impression → Click → Page Visit → Form Submit → Qualified Lead → Contractor Delivery
-
-Outputs:
-
-Funnel and channel reports → /finance/reports/performance/
-
----
-
-# Operating Principles
-
-1. Own the lead asset
-
-Contractors are replaceable.  
-The lead flow is the true asset.
-
----
-
-2. Validate demand before building infrastructure
-
-Do not build complex systems until contractors confirm willingness to pay.
-
----
-
-3. Focus on one niche first
-
-Start with deck builders before expanding into additional trades.
-
----
-
-4. Replicate profitable systems
-
-Once a profitable funnel exists, clone it into new cities.
-
----
-
-5. Automation first
-
-Every operational task should eventually be automated.
-
----
-
-# Phase 1: Validation
-
-Goal:
-
-Prove contractors will pay for leads.
-
-Steps:
-
-1. Contact 10–20 deck contractors
-2. Ask if they would pay for deck project leads
-3. Secure at least one contractor commitment ✅ DONE — $1,000/accepted bid (2026-03-12)
-4. Confirm brand name and domain ✅ DONE — Central Wisconsin Deck Builders / cwdeckbuilders.com (2026-03-28)
-5. Build full 21-page website ← EXPANDED from single landing page (2026-03-29, see `/business-context/website-plan.md`)
-6. Run small ad campaign
-7. Deliver first leads
-
-Timeline:
-
-30 days.
-
----
-
-# Phase 2: Profitability
-
-Goal:
-
-Build a stable lead generation funnel.
-
-Targets:
-
-20–50 leads per month.
-
-Revenue target:
-
-$3K–$10K per month.
-
-Focus:
-
-Optimize cost per lead and conversion rates.
-
----
-
-# Phase 3: Replication
-
-Goal:
-
-Expand geographically.
-
-New cities added once the system proves profitable.
-
-Each new city replicates the same funnel.
-
----
-
-# Phase 4: Marketplace Expansion
-
-Goal:
-
-Expand into multiple trades.
-
-New verticals may include:
-
-- Roofing
-- Bathroom remodels
-- Concrete
-- Basement finishing
-- Pole barns
-
-Multiple contractors receive each lead.
-
-This increases revenue per lead.
-
----
-
-# Long Term Vision
-
-Create a regional contractor lead marketplace.
-
-Potential revenue scale:
-
-$50K–$150K per month.
-
-Eventually operate across multiple states.
-
-Comparable platforms include:
-
-Angi  
-Thumbtack
-
----
-
-# Success Metrics
-
-Primary metrics:
-
-Cost per lead (ad efficiency)
-Revenue per accepted bid
-Contractor lifetime value
-Lead-to-accepted-bid conversion rate
-
-Target benchmarks:
-
-Cost per lead: <$60
-Revenue per accepted bid: $1,000
-Cost per accepted bid: <$400
-ROI: 2x+ advertising return
-
----
-
-# Core Strategic Advantage
-
-The system combines:
-
-Digital marketing expertise  
-Automation systems  
-Fragmented contractor markets
-
-Most contractors lack digital marketing capability.
-
-This creates a strong opportunity to own the lead flow.
-
----
-
-# End State
-
-The system becomes a scalable lead infrastructure platform serving contractors across multiple trades and cities.
+Regional contractor lead marketplace across multiple trades and states. $50K-$150K/month at scale. Validated by Phase 1 first.
