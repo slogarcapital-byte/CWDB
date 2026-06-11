@@ -29,12 +29,17 @@
   - Acceptance: site-wide grep of Webflow copy for licensed/insured claims; each instance either removed, attributed to the named builder, or made true (post-licensing)
   - Ship type: build
 
-- [WB-016] HubSpot private app scopes: contacts + deals schema write
+- [WB-016] HubSpot private app scopes: schema write + files + objects write
   - Created: 2026-06-10
-  - Source: phone-lead channel tracking build (blocked) + cwdb_job_number property (blocked since 2026-06-10)
-  - Issue: private app token lacks `crm.schemas.contacts.write` and `crm.schemas.deals.write`. Jim: HubSpot > Settings > Integrations > Private Apps > (the cwdb app) > Scopes, add both, save. Then Claude creates `lead_channel` + `tcpa_consent_source` contact properties, `cwdb_job_number` + `walkthrough_datetime` deal properties, and tags the 4 skipped contacts (Sjoberg and Darlene are real phone leads waiting to count toward the funnel).
+  - Source: phone-lead channel tracking, cwdb_job_number property, estimate-PDF deal attachments (all blocked on scopes)
+  - Issue: Jim: HubSpot > Settings > Integrations > Private Apps > (the cwdb app) > Scopes, add these four, save (2 minutes):
+    1. `crm.schemas.contacts.write` (create lead_channel + tcpa_consent_source properties)
+    2. `crm.schemas.deals.write` (create cwdb_job_number + walkthrough_datetime properties)
+    3. `files` (upload estimate/invoice PDFs; `templates/scripts/attach-file-to-deal.ps1` is built and tested to this wall)
+    4. `crm.objects.deals.write` (stamp estimate amount/date on deals)
+  - Then Claude: creates the 4 properties, tags the skipped contacts (Sjoberg + Darlene = real phone leads; Sjoberg already has a $13,443 deal invisible to the warehouse), re-runs the pull, and attaches the Overbeck estimate + INV-2026-001 to deal 324817992387.
   - Suggested owner: Jim (2 minutes) then cwdb-ceo-operator
-  - Acceptance: properties exist; Sjoberg + Darlene flow into fact_leads on next warehouse pull
+  - Acceptance: properties exist; Sjoberg + Darlene in fact_leads on next pull; Overbeck PDFs visible on her deal timeline
   - Ship type: build
 
 - [WB-015] WB-002 GMB park default-ship trigger 2026-05-11
