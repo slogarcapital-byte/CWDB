@@ -97,6 +97,67 @@ function Get-QboApiBase {
     }
 }
 
+function Get-QboLogPath {
+    # Append-only operational log, one line per QBO API call, so the intuit_tid
+    # for any request can be handed to Intuit support and failures are durably
+    # recorded. Gitignored; may contain Intuit fault detail.
+    $dir = Join-Path (Get-QboRepoRoot) "finance\invoices\_logs"
+    if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
+    Join-Path $dir "qbo.log"
+}
+
+function Write-QboLog {
+    param(
+        [Parameter(Mandatory)] [ValidateSet("INFO", "ERROR")] [string] $Level,
+        [Parameter(Mandatory)] [string] $Message,
+        [string] $Tid
+    )
+    $ts      = (Get-Date).ToString("yyyy-MM-ddTHH:mm:sszzz")
+    $tidPart = if ($Tid) { "intuit_tid=$Tid" } else { "intuit_tid=-" }
+    $line    = "$ts`t$Level`t$(Get-QboEnvironment)`t$tidPart`t$Message"
+    try { Add-Content -Path (Get-QboLogPath) -Value $line -Encoding utf8 } catch { }
+}
+
+function Get-QboTidFromHeaders {
+    # intuit_tid arrives as a response header on every Intuit call. The hashtable
+    # from -ResponseHeadersVariable stores values as string arrays.
+    param($Headers)
+    if (-not $Headers) { return $null }
+    foreach ($key in @("intuit_tid", "Intuit_Tid", "INTUIT_TID")) {
+        if ($Headers.ContainsKey($key)) {
+            $v = $Headers[$key]
+            if ($v -is [System.Array]) { return ($v -join ",") }
+            return [string] $v
+        }
+    }
+    return $null
+}
+
+function Get-QboTidFromError {
+    # On a thrown Invoke-RestMethod call the headers live on the HttpResponse,
+    # not in -ResponseHeadersVariable (which never got populated).
+    param($ErrorRecord)
+    $resp = $ErrorRecord.Exception.Response
+    if (-not $resp) { return $null }
+    $vals = $null
+    try {
+        if ($resp.Headers.TryGetValues("intuit_tid", [ref] $vals)) { return ($vals -join ",") }
+    } catch { }
+    return $null
+}
+
+function Get-QboErrorDetail {
+    param($ErrorRecord)
+    $detail = if ($ErrorRecord.ErrorDetails -and $ErrorRecord.ErrorDetails.Message) {
+        $ErrorRecord.ErrorDetails.Message   # Intuit's fault JSON body
+    } else {
+        $ErrorRecord.Exception.Message
+    }
+    $detail = ($detail -replace "\s+", " ").Trim()
+    if ($detail.Length -gt 1500) { $detail = $detail.Substring(0, 1500) }
+    $detail
+}
+
 function Get-QboAccessToken {
     # Exchange the stored refresh token for an access token. Intuit ROTATES
     # the refresh token: always persist the new one or the chain dies in 24h.
@@ -106,14 +167,26 @@ function Get-QboAccessToken {
     $refresh  = Get-QboSetting REFRESH_TOKEN -Required
     $basic = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(
         "${clientId}:${secret}"))
-    $resp = Invoke-RestMethod -Method Post `
-        -Uri "https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer" `
-        -Headers @{ Authorization = "Basic $basic"; Accept = "application/json" } `
-        -ContentType "application/x-www-form-urlencoded" `
-        -Body @{ grant_type = "refresh_token"; refresh_token = $refresh }
+    $respHeaders = $null
+    try {
+        $resp = Invoke-RestMethod -Method Post `
+            -Uri "https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer" `
+            -Headers @{ Authorization = "Basic $basic"; Accept = "application/json" } `
+            -ContentType "application/x-www-form-urlencoded" `
+            -Body @{ grant_type = "refresh_token"; refresh_token = $refresh } `
+            -ResponseHeadersVariable respHeaders
+    } catch {
+        Write-QboLog -Level ERROR -Message "token refresh FAILED: $(Get-QboErrorDetail $_)" `
+            -Tid (Get-QboTidFromError $_)
+        throw
+    }
+    $rotated = $false
     if ($resp.refresh_token -and $resp.refresh_token -ne $refresh) {
         Set-QboEnvVar -Name (Get-QboSettingName REFRESH_TOKEN) -Value $resp.refresh_token
+        $rotated = $true
     }
+    Write-QboLog -Level INFO -Message "token refresh ok (rotated=$rotated)" `
+        -Tid (Get-QboTidFromHeaders $respHeaders)
     return $resp.access_token
 }
 
@@ -130,10 +203,21 @@ function Invoke-QboApi {
     $realm = Get-QboSetting REALM_ID -Required
     $uri   = "$base/v3/company/$realm/$Path"
     $headers = @{ Authorization = "Bearer $token"; Accept = "application/json" }
-    if ($null -ne $Body) {
-        Invoke-RestMethod -Method $Method -Uri $uri -Headers $headers `
-            -ContentType "application/json" -Body ($Body | ConvertTo-Json -Depth 10)
-    } else {
-        Invoke-RestMethod -Method $Method -Uri $uri -Headers $headers
+    $respHeaders = $null
+    try {
+        if ($null -ne $Body) {
+            $result = Invoke-RestMethod -Method $Method -Uri $uri -Headers $headers `
+                -ContentType "application/json" -Body ($Body | ConvertTo-Json -Depth 10) `
+                -ResponseHeadersVariable respHeaders
+        } else {
+            $result = Invoke-RestMethod -Method $Method -Uri $uri -Headers $headers `
+                -ResponseHeadersVariable respHeaders
+        }
+    } catch {
+        Write-QboLog -Level ERROR -Message "$($Method.ToUpper()) $Path FAILED: $(Get-QboErrorDetail $_)" `
+            -Tid (Get-QboTidFromError $_)
+        throw
     }
+    Write-QboLog -Level INFO -Message "$($Method.ToUpper()) $Path" -Tid (Get-QboTidFromHeaders $respHeaders)
+    return $result
 }

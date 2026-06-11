@@ -46,3 +46,6 @@ sales/estimates/*.pdf
 **/.streamlit/secrets.toml
 finance/invoices/_data/*.json
 finance/invoices/*.pdf
+
+# QBO API operational log (intuit_tid + error detail per call)
+finance/invoices/_logs/
