@@ -14,6 +14,14 @@ customers. The series is owned by the accounting agent (see
 Online API connection is live, invoices generated here must be entered into
 QBO manually once connected (books of record).
 
+Standing policies (owner decisions, Jim, 2026-06-10):
+- NO sales tax on any CWDB invoice. This generator renders no tax line and
+  ignores any "tax" key in the JSON.
+- Payment methods, in this order: (1) card or digital payment via the
+  QuickBooks invoice link, (2) check payable to Central Wisconsin Deck
+  Builders, LLC. Cash is NOT accepted. If the JSON omits
+  "payment_instructions", DEFAULT_PAYMENT_INSTRUCTIONS below is used.
+
 Usage:
     python generate_invoice_pdf.py _data/INV-2026-001-overbeck-deposit.json
 
@@ -45,6 +53,17 @@ from generate_estimate_pdf import (ORANGE, SLATE, GREY, LIGHT_BG, ROW_ALT,
 due_style = ParagraphStyle('due_style', fontName='Helvetica-Bold', fontSize=13,
                            leading=17, textColor=ORANGE, alignment=TA_RIGHT)
 
+# Default payment methods for ALL invoices (owner decision 2026-06-10):
+# card/digital first, check second, no cash.
+DEFAULT_PAYMENT_INSTRUCTIONS = [
+    '<b>Card or digital payment:</b> pay online with a credit or debit card, '
+    'or by bank transfer, using the secure QuickBooks payment link in the '
+    'invoice email. Questions? Call (715) 544-7941 or email '
+    'info@cwdeckbuilders.com.',
+    '<b>Check:</b> payable to <b>Central Wisconsin Deck Builders, LLC</b>. '
+    'Mail or deliver to 906 N 16th Ave, Wausau, WI 54401.',
+]
+
 
 def _money2(n):
     return '${:,.2f}'.format(n)
@@ -74,19 +93,15 @@ def _bill_to_block(bill_to, invoice):
 
 
 def _amount_due_table(invoice):
+    # No tax line, ever: owner decision 2026-06-10 (no sales tax on any CWDB
+    # invoice). Any "tax" key in the JSON is intentionally ignored.
     line_items = invoice['line_items']
-    subtotal = sum(amt for _, amt in line_items)
-    tax = invoice.get('tax', {'label': 'Sales tax', 'amount': 0.00})
-    amount_due = subtotal + tax['amount']
+    amount_due = sum(amt for _, amt in line_items)
 
     rows = [[Paragraph('Description', table_h), Paragraph('Amount', table_h_r)]]
     for label, amount in line_items:
         rows.append([Paragraph(label, table_c),
                      Paragraph(_money2(amount), table_c_r)])
-    rows.append([Paragraph('Subtotal', table_c),
-                 Paragraph(_money2(subtotal), table_c_r)])
-    rows.append([Paragraph(tax['label'], table_c),
-                 Paragraph(_money2(tax['amount']), table_c_r)])
     rows.append([Paragraph('AMOUNT DUE', total),
                  Paragraph(_money2(amount_due), total_r)])
 
@@ -102,7 +117,7 @@ def _amount_due_table(invoice):
         ('LINEABOVE',     (0, -1), (-1, -1), 1.2, ORANGE),
         ('BACKGROUND',    (0, -1), (-1, -1), LIGHT_BG),
     ]
-    for i in range(1, len(rows) - 3):
+    for i in range(1, len(rows) - 1):
         if i % 2 == 0:
             style.append(('BACKGROUND', (0, i), (-1, i), ROW_ALT))
     t.setStyle(TableStyle(style))
@@ -198,9 +213,10 @@ def generate_invoice(invoice, output_path):
         _payment_schedule_table(invoice),
     ]))
 
-    # HOW TO PAY
+    # HOW TO PAY (card/digital first, check second, no cash: policy 2026-06-10)
     s.append(Paragraph('How to Pay', h2))
-    for item in invoice['payment_instructions']:
+    for item in invoice.get('payment_instructions',
+                            DEFAULT_PAYMENT_INSTRUCTIONS):
         s.append(Paragraph(f'• {item}', body))
     s.append(sp(0.04))
     s.append(Paragraph(f"<i>{invoice['remittance_note']}</i>", note))

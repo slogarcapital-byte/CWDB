@@ -8,15 +8,16 @@
 ## Active directives
 
 - [WB-018] Legal/compliance punch list from fulfillment-pivot opinion (2026-06-10)
-  - Created: 2026-06-10
+  - Created: 2026-06-10. Updated 2026-06-10 late: items 1 and 3 CLOSED by owner decision; item 2 risk-accepted for the staining job.
   - Source: legal-compliance-counsel memo on Option A (CWDB estimates, builder contracts) vs Option B (CWDB primes, subs out)
-  - Issue: Jim-required external verifications before the pivot is fully de-risked, in priority order:
-    1. URGENT: WI DOR determination on staining/resurfacing sales-tax characterization (taxable repair service vs exempt improvement). Money moving on Overbeck INV-2026-001; resolve before the FINAL invoice. Working paper: `finance/invoices/INV-2026-001-tax-position-note.md`
-    2. Bind GL insurance NOW (covers walk-throughs + staining today; uninsured-operations gap on Overbeck until bound)
-    3. WI DOR confirmation lead-fee sales-tax exemption (before first $1,000 contractor invoice)
+  - Owner decisions 2026-06-10 (Jim): NO Wisconsin sales tax charged on any CWDB revenue (lead fees or construction/staining); Overbeck staining job proceeds WITHOUT GL insurance bound (risk accepted). Both recorded; do not re-raise.
+  - Remaining items:
+    1. ~~WI DOR staining-tax determination~~ CLOSED: owner decision, no sales tax
+    2. Bind GL insurance (still required before DSPS cert filing; staining-job gap risk-accepted by Jim 2026-06-10)
+    3. ~~WI DOR lead-fee exemption confirmation~~ CLOSED: owner decision, no sales tax
     4. DSPS filings: Qualifier 12-hour course + entity Dwelling Contractor Certification (insurance binds first)
     5. City of Wausau / Marathon County: cosmetic-vs-structural permit line + any local bond/registration
-    6. One-time WI attorney review: estimate disclosure language, staining work order, home improvement contract, subcontractor agreement, amendment, side letter (`docs/legal/templates/side-letter-accepted-bid-definition.md`)
+    6. One-time WI attorney review: estimate disclosure language, combined estimate/work-order doc, home improvement contract, subcontractor agreement, amendment, side letter
   - Suggested owner: Jim (external calls) + legal-compliance-counsel (document prep done)
   - Acceptance: each item checked off with date + outcome noted here
   - Ship type: artifact-prod (compliance)
@@ -32,7 +33,7 @@
 - [WB-016] HubSpot private app scopes: schema write + files + objects write
   - Created: 2026-06-10
   - Source: phone-lead channel tracking, cwdb_job_number property, estimate-PDF deal attachments (all blocked on scopes)
-  - Issue: Jim: HubSpot > Settings > Integrations > Private Apps > (the cwdb app) > Scopes, add these four, save (2 minutes):
+  - Issue: Jim: direct link https://app-na2.hubspot.com/private-apps/245712220 (portal 245712220, NA2; the app exists, the token works for reads). If the link 404s, confirm the portal ID shown in the HubSpot URL bar matches 245712220 (wrong-account login is the usual cause). Open the app > Scopes tab, add these four, save (2 minutes):
     1. `crm.schemas.contacts.write` (create lead_channel + tcpa_consent_source properties)
     2. `crm.schemas.deals.write` (create cwdb_job_number + walkthrough_datetime properties)
     3. `files` (upload estimate/invoice PDFs; `templates/scripts/attach-file-to-deal.ps1` is built and tested to this wall)

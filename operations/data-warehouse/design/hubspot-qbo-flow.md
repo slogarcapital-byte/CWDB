@@ -53,11 +53,9 @@ Supporting items: `Late Fee / Penalty` -> 4100 (1.5%/mo interest, $250 unreporte
 
 **Option B (future, post-license).** CWDB primes; Ben/John become vendors (subcontractors), paid via Bill/BillPayment, mapped to a new COGS account (Subcontractor Labor, under 5100 block). 1099-NEC applies to this channel only; QBO contractor/1099 tracking turns on then. Do not create vendor records for Ben/John until Option B is live (they are customers today; QBO allows both but keep it clean until needed).
 
-## 4. Sales Tax Hooks (open DOR question)
+## 4. Sales Tax Hooks (RESOLVED 2026-06-10 by owner decision)
 
-Open inquiry (action item 5): WI taxability of (1) lead fees and (2) standalone staining/resurfacing. Current positions in `agent-memory/accounting/wi-sales-use-tax.md`: lead fees likely exempt (not enumerated under Wis. Stat. 77.52(2)), staining at meaningful risk of taxable repair/maintenance. Both NEEDS VERIFICATION; written DOR inquiry must resolve before the Overbeck final invoice.
-
-Design hooks so either outcome is a config change, not a redesign:
+Jim decided 2026-06-10: no WI sales tax on any CWDB revenue (lead fees and all construction/staining/resurfacing). DOR inquiry closed. See `agent-memory/accounting/wi-sales-use-tax.md`. Operative config: QBO sales tax stays off, all items non-taxable, no seller's permit registration, invoice push always tax-silent. The table below is retained only as the config map if DOR ever contacts us:
 
 | Outcome | QBO config change |
 |---|---|
@@ -99,8 +97,8 @@ Invoice push script reads a per-item taxable flag from its JSON input so the fli
 ## 7. Open Decisions for Jim
 
 1. **QBO tier:** stay Essentials now; upgrade to Plus at Option B launch (classes + better job costing). Confirm this trigger or upgrade earlier if item-level channel reporting feels thin.
-2. **QBO Payments:** enable for card/ACH on homeowner invoices before the Overbeck final invoice? Fees apply (rate check at signup); the alternative is check/cash only.
-3. **DOR inquiry authorization** (existing action item 5): blocks the section 4 tax config and WI registration decision.
+2. **QBO Payments:** DECIDED 2026-06-10: enable for card/ACH. Policy: card/digital first, check second, no cash, on all invoices. Setup steps: `finance/invoices/qbo-setup-for-jim.md`.
+3. **DOR inquiry:** CLOSED 2026-06-10 by owner decision (section 4): no sales tax on any CWDB revenue, no registration.
 4. **Cash basis confirmation** (existing action item 4): affects whether deposits post as income on receipt or as a liability.
 5. **Invoice sending channel:** QBO-emailed invoices (QBO branding) vs our branded PDFs with QBO as ledger only. Recommend: our PDFs to the customer, QBO for the books, until QBO Payments makes the QBO email link worth it.
 6. **HubSpot mirror property:** want invoice number/status visible on the deal record? Needs the same scope work as `cwdb_job_number` (WB-016).
