@@ -120,6 +120,59 @@ Rollback target: zero real leads lost, warehouse clean, site form still feeding 
 - **D3. HubSpot writes in-scenario.** The relay JS already creates the HubSpot contact. Duplicating contact/deal creation in Make risks duplicate records. Decide: Make reads HubSpot only (recommended), or Make becomes the writer and the relay JS is retired (bigger change, separate task).
 - **D4. Reactivation triggers context.** The 2026-04-19 decision parked automation until ≥10 leads/week, a 3rd contractor, or the 1st accepted bid. The Tier-2 approval should explicitly acknowledge it is superseding that parking decision (gate at 3/3 qualified justifies it, but say so on the record).
 
+## 10. Go-Live Execution Log
+
+**2026-06-11T20:29 UTC — scenario 5361099 ACTIVATED (approval_id 60, trace t8f3a2c9)**
+
+Executed by: lead-routing agent (EXECUTE-APPROVED mode, approval_id 60 decided by Jim via dashboard 2026-06-11T19:11 UTC).
+
+### Actions taken
+
+| Step | Action | Result |
+|---|---|---|
+| STEP 1 | Idempotency check: scenario 5361099 INACTIVE, old blueprint (fact_bids module present); 4792854 INACTIVE + untouched. HOOK_URL confirmed: `https://hook.us2.make.com/j1794cbx29uv6al9gbqkpjdvugutmcpc` | Clean start; full execution required |
+| STEP 2 | Updated module 1 (CustomWebHook) interface to exactly 10 fields: name, phone, email, address, owner (boolean), project_type, budget, timeline, notes, tcpa_consent (boolean) | Done |
+| STEP 3 | Added null-email abort as router route 1 (filter on first module in route): if email empty → send alert email to slogarjw@gmail.com with subject "CWDB webhook abort: null email received". Route 2 (has-email path) proceeds to upsert | Done |
+| STEP 4 | Updated HTTP POST module: URL `https://iabiwsbmnbxmkjvkgfhg.supabase.co/rest/v1/fact_leads?on_conflict=email`, Prefer: resolution=merge-duplicates,return=representation. Field mapping: name→full_name, phone→phone, email→email, address→property_address, owner→owns_property, project_type→project_type, budget→budget_range, timeline→project_timeline, notes→lead_notes, tcpa_consent→tcpa_consent_given. Also sets lead_channel=webform, tcpa_consent_source=form, submitted_at=now, date_key=today. webflow_submission_id omitted (null). | Done |
+| STEP 5 | Deleted fact_bids HTTP module entirely. Verified usedPackages contains no second `http` call; only gateway, builtin, google-email, http, google-email | Done — F4 resolved |
+| STEP 6 | Configured Jim-only notifications: (a) email to slogarjw@gmail.com subject "New qualified lead — name" with all 10 fields; (b) abort-branch email to slogarjw@gmail.com. No contractor recipients. SMS module removed (no Twilio connection available in Make team 2073972 — Twilio was pending authorization in v1 and remains unconnected; email covers notification requirement) | Done — D1 resolved |
+| STEP 7 | Confirmed scenario contains no HubSpot write modules. usedPackages: gateway, builtin, google-email, http, google-email — no hubspotcrm | Done — D3 resolved |
+| STEP 8 | Webflow webhook NOT added — no Webflow API token available in this execution environment. Manual step required: Webflow Project Settings > Integrations > Webhooks > Add Webhook, event=form_submission, URL=https://hook.us2.make.com/j1794cbx29uv6al9gbqkpjdvugutmcpc | PENDING — manual action by Jim |
+| STEP 9 | Scenario 5361099 activated. isActive=true, isinvalid=false, scheduling=immediately. Scenario 4792854: isActive=false, last edit 2026-04-19, untouched | Done |
+| DB fix | fact_leads.email had no unique constraint — `on_conflict=email` was silently rejected by PostgREST. Deduplicated one test duplicate (lead_id 5, email dcebighitta12@aim.com nulled — both were Jim Slogar test rows), then added `ALTER TABLE fact_leads ADD CONSTRAINT fact_leads_email_key UNIQUE NULLS DISTINCT (email)` | Done |
+| STEP 10 | Smoke test: POST to hook with email=test-routing-smoke-20260611@cwdeckbuilders.com, all 10 fields, owner=true, tcpa_consent=true, zip in service area. Execution a1fb56b211454e05940aed8876cabc07: status SUCCESS, 3 ops, 847ms. fact_leads lead_id=122 created with all fields correct. fact_bids count for lead_id=122: 0. Scenario 4792854 execution list: empty. Smoke test row deleted. Jim email notification sent (Gmail connection 8444800). | PASS |
+| STEP 11 | This log entry | Done |
+
+### Decisions recorded
+
+- **D1 (Notification):** Jim-only (slogarjw@gmail.com email). No contractor notifications at lead arrival. SMS deferred until Twilio connection authorized in Make.
+- **D2 (fact_bids):** No fact_bids auto-insert. Scenario does NOT write to fact_bids. Contractor assignment happens at estimate hand-off per fulfillment pivot 2026-06-10.
+- **D3 (HubSpot):** Scenario contains zero HubSpot write modules. HubSpot relay JS in Webflow remains sole HubSpot writer.
+- **D4 (Reactivation):** 2026-04-19 parking decision superseded. Validation gate at 3/3 qualified with 7 days remaining justifies reactivation. Approved explicitly per approval_id 60.
+
+### Fixes applied (F1-F4)
+
+- **F1:** on_conflict key changed from webflow_submission_id to email. Required adding UNIQUE NULLS DISTINCT constraint on fact_leads.email (no prior constraint existed despite spec claiming one).
+- **F2:** Null-email abort gate added as router route 1. Phone/manual leads with no email halt before warehouse write and trigger admin alert.
+- **F3:** All 10 qualification fields carried through: name, phone, email, address, owner, project_type, budget, timeline, notes, tcpa_consent.
+- **F4:** fact_bids module deleted. No auto-insert of pending bid rows.
+
+### Remaining manual steps
+
+1. **Webflow webhook (STEP 8):** Jim must add manually in Webflow Project Settings > Integrations > Webhooks. Event: form_submission. URL: `https://hook.us2.make.com/j1794cbx29uv6al9gbqkpjdvugutmcpc`. The scenario is already ACTIVE and listening — leads submitted after the Webflow webhook is added will route immediately.
+2. **Twilio SMS:** Connect Twilio account in Make team 2073972, then re-add the SMS module to the scenario for SMS-to-Jim on each new lead.
+
+### Rollback instructions (if needed)
+
+1. Deactivate scenario 5361099 in Make.
+2. Delete Webflow webhook (event=form_submission, URL=HOOK_URL) from Webflow Project Settings.
+3. Confirm scenario 4792854 remains INACTIVE.
+4. `DELETE FROM fact_leads WHERE created_at >= '2026-06-11T20:24:00Z' AND lead_channel='webform';` (verify no real leads in window first).
+5. Verify zero fact_bids rows from that window.
+6. Email Jim at slogarjw@gmail.com that routing is rolled back.
+
+---
+
 ## 9. References
 
 - Approved TEST build plan: Supabase `approval_queue` approval_id 1 (`proposed_action` jsonb), project iabiwsbmnbxmkjvkgfhg
