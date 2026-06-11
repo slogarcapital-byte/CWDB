@@ -4,6 +4,14 @@
 **Question:** Can QBO's native Customer Hub (Estimates, Proposals, Contracts, e-sign) replace parts of our custom PDF generators + planned DocuSign flow?
 **Short answer:** Partially. The compliance content generation stays ours. The e-signing and invoicing layers can move to QBO, but only after a Plus upgrade and legal sign-off.
 
+> **OWNER UPDATE 2026-06-11 (overrides the Plus gating below):** Jim confirmed in the live
+> QBO UI that **Essentials IS giving him e-signature** (Contracts e-sign usable in-product,
+> no Plus upgrade). The tier table in sec. 1 reflected Intuit's marketing page, not actual
+> entitlement; the in-product reality wins. **Decision: NO Plus upgrade. Candidate B (our
+> compliant PDF + QBO Contracts e-sign) is GO on Essentials.** First use: Overbeck work
+> order, signed before INV-2026-001 is sent. The sec. 5 upgrade-cost analysis is moot;
+> everything else (Estimates can't carry ATCP content, our generators own compliance) stands.
+
 ---
 
 ## 1. What Customer Hub actually is, and tier gating
