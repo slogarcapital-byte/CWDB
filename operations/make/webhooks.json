@@ -13,6 +13,12 @@
       "status": "ACTIVE",
       "decided_by": "Jim Slogar",
       "decision_ref": "_vault/state-of-cwdb.md §Decisions Needed from Jim, P4"
+    },
+    {
+      "date": "2026-06-11",
+      "change": "Built sc-002 'CWDB Lead Routing webhook->fact_bids (TEST)' (scenario 5361099, hook 2442209) per approval_queue approval_id 1 (trace b7a0af806648). New stripped-down chain: Custom Webhook -> PostgREST upsert fact_leads -> PostgREST insert fact_bids. End-to-end test passed (execution 743cd9d361154ce1b5411e4706100315); test rows deleted; v_clean_leads excluded the @cwdb-internal.test email; validation gate counts unchanged. Scenario left INACTIVE. Parked scenario 4792854 untouched.",
+      "status": "ACTIVE",
+      "decided_by": "Jim Slogar (approval_queue approval_id 1)"
     }
   ],
   "scenarios": [
@@ -100,6 +106,52 @@
         "6. Connect Gmail + Twilio in Make → Connections",
         "7. Run test submission from Webflow staging → verify full flow end-to-end",
         "8. Activate scenario"
+      ]
+    },
+    {
+      "scenario_id": "sc-002",
+      "name": "CWDB Lead Routing webhook->fact_bids (TEST)",
+      "purpose": "Minimal webhook -> Supabase warehouse routing skeleton, built per human-approved control-plane task (approval_queue approval_id 1, action_kind build_make_routing_scenario, trace b7a0af806648). Proves a form payload can land as fact_leads + a pending fact_bids row with no HubSpot/Gmail/Twilio dependencies. NOT wired to Webflow; for selftest traffic only.",
+      "trigger": "Make Webhooks module (Custom webhook; nothing external posts to it — test payloads only)",
+      "steps": [
+        {
+          "step": 1,
+          "action": "Receive webhook payload",
+          "module": "gateway:CustomWebHook (hook 2442209)",
+          "notes": "Interface: webflow_submission_id, submitted_at, date_key, name, phone, email, tcpa_consent_given, utm_source"
+        },
+        {
+          "step": 2,
+          "action": "Upsert lead into Supabase fact_leads",
+          "module": "http:ActionSendData (HTTP Make a request)",
+          "notes": "POST https://iabiwsbmnbxmkjvkgfhg.supabase.co/rest/v1/fact_leads?on_conflict=webflow_submission_id with headers apikey + Authorization Bearer (service-role) + Prefer: resolution=merge-duplicates,return=representation. Body adds lead_channel=webform, tcpa_consent_source=form. webflow_submission_id is the upsert natural key (only non-HubSpot unique index on fact_leads). parseResponse=true; returns lead_id."
+        },
+        {
+          "step": 3,
+          "action": "Insert pending bid row into Supabase fact_bids",
+          "module": "http:ActionSendData (HTTP Make a request)",
+          "notes": "POST https://iabiwsbmnbxmkjvkgfhg.supabase.co/rest/v1/fact_bids with Prefer: return=representation. Body: {lead_id: {{2.data[1].lead_id}}, contractor_id: null, bid_status: 'pending'}."
+        }
+      ],
+      "webhook_url": "https://hook.us2.make.com/j1794cbx29uv6al9gbqkpjdvugutmcpc",
+      "make_scenario_id": 5361099,
+      "make_scenario_url": "https://us2.make.com/2073972/scenarios/5361099/edit",
+      "make_hook_id": 2442209,
+      "make_team_id": 2073972,
+      "make_organization_id": 7086579,
+      "make_folder_id": 231872,
+      "status": "BUILT + TESTED 2026-06-11 — scenario INACTIVE. End-to-end test execution 743cd9d361154ce1b5411e4706100315 (3 ops, success): test lead routing-selftest@cwdb-internal.test created fact_leads lead_id 120 + fact_bids bid_id 80 (pending), v_clean_leads correctly excluded the @cwdb-internal.test email (count 0), v_validation_gate counts unchanged (qualified_since_gate 3 / accepted_lifetime 0 before and after), test rows deleted after verification. Service-role credentials smoke-tested via PostgREST insert/delete before the webhook test (lead_id 119 / bid_id 79, deleted). Do NOT point Webflow at this hook; production rewiring requires a new approval.",
+      "verification": {
+        "date": "2026-06-11",
+        "approval_ref": "approval_queue approval_id 1, trace b7a0af806648, council_id 1 feedback honored",
+        "execution_id": "743cd9d361154ce1b5411e4706100315",
+        "gate_before": { "qualified_since_gate": 3, "accepted_lifetime": 0, "gate_met": true },
+        "gate_after": { "qualified_since_gate": 3, "accepted_lifetime": 0, "gate_met": true },
+        "v_clean_leads_test_email_count": 0,
+        "test_rows_deleted": true
+      },
+      "connections_required": [
+        { "app": "HTTP (no Make connection)", "notes": "Auth via Supabase service-role key embedded in module headers (key source: .env.local SUPABASE_SERVICE_ROLE_KEY)" }
       ]
     }
   ],

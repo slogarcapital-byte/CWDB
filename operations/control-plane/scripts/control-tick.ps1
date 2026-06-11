@@ -108,6 +108,35 @@ try {
         Write-ControlEvent -Actor 'control_tick' -EventType 'lease_expired' -Severity 'warn' -TaskId ([long]$t.task_id) -Detail @{ type = $t.type; new_attempts = ([int]$t.attempts + 1) }
     }
 
+    # ---- 4b. approval reapers (Inc 3) ----------------------------------------
+    # Expiry: pending/approved rows past expires_at can no longer be acted on.
+    # An expired APPROVED row is loud (warn): Jim approved something that never ran.
+    $staleApprovals = @(Get-SupabaseRows -Table "approval_queue" -Select "approval_id,status,expires_at" `
+        -Filter "status=in.(pending,approved)&expires_at=lt.$nowIso")
+    foreach ($a in $staleApprovals) {
+        Invoke-SupabasePatch -Table "approval_queue" -Filter "approval_id=eq.$($a.approval_id)" -Set @{
+            status = 'expired'; updated_at = $nowIso
+        }
+        $sev = if ($a.status -eq 'approved') { 'warn' } else { 'info' }
+        Write-ControlEvent -Actor 'control_tick' -EventType 'approval_expired' -Severity $sev -Detail @{
+            approval_id = [long]$a.approval_id; was_status = $a.status; expired_at = $a.expires_at
+        }
+    }
+    # Stale claim: an executor that crashed mid-execution leaves status='executing'.
+    # Release it back to 'approved' (the attempt was already counted at claim time);
+    # safe only because the executor is idempotency-checked before mutating.
+    $staleClaimCutoff = $nowUtc.AddMinutes(-45).ToString("o")
+    $staleClaims = @(Get-SupabaseRows -Table "approval_queue" -Select "approval_id,claimed_at" `
+        -Filter "status=eq.executing&claimed_at=lt.$staleClaimCutoff")
+    foreach ($a in $staleClaims) {
+        Invoke-SupabasePatch -Table "approval_queue" -Filter "approval_id=eq.$($a.approval_id)" -Set @{
+            status = 'approved'; updated_at = $nowIso
+        }
+        Write-ControlEvent -Actor 'control_tick' -EventType 'approval_execution_stale' -Severity 'warn' -Detail @{
+            approval_id = [long]$a.approval_id; claimed_at = $a.claimed_at
+        }
+    }
+
     # ---- 5. circuit breakers ------------------------------------------------
     $b = $cfg.breakers
     $dayHardCents     = [long]([double]$cfg.budget.day_hard_dollars * 100)
@@ -151,6 +180,27 @@ try {
 
     # ---- 6. warehouse freshness ---------------------------------------------
     $fresh = Test-WarehouseFresh -MaxAgeHours ([double]$cfg.data_freshness.warehouse_max_age_hours)
+
+    # ---- 6b. proven_delivery_path hinge (Inc 3) -------------------------------
+    # One human-approved REAL delivery flips subsequent deliveries on the proven
+    # path Tier 2 -> Tier 1. Two-condition AND: a real (non-test) fact_bids row
+    # exists (v_delivery_proof) AND the loop actually executed a delivery-class
+    # action (action_executed event). The second leg matters: WB-016 backfilled
+    # real deals into fact_bids, so bid rows alone prove nothing about routing.
+    if (-not [bool]$state.proven_delivery_path) {
+        $proof = @(Get-SupabaseRows -Table "v_delivery_proof" -Select "real_bid_count")[0]
+        if ($proof -and [int]$proof.real_bid_count -ge 1) {
+            $deliveryKinds = @('routing.deliver_lead', 'deliver_lead')
+            $execEvents = @(Get-SupabaseRows -Table "event_log" -Select "event_id,detail" -Filter "event_type=eq.action_executed")
+            $delivered = @($execEvents | Where-Object { $_.detail -and ($deliveryKinds -contains [string]$_.detail.action_kind) })
+            if ($delivered.Count -ge 1) {
+                $patch["proven_delivery_path"] = $true
+                Write-ControlEvent -Actor 'control_tick' -EventType 'proven_delivery_path_set' -Severity 'info' -Detail @{
+                    real_bid_count = [int]$proof.real_bid_count; first_delivery_event_id = [long]$delivered[0].event_id
+                }
+            }
+        }
+    }
 
     # ---- 7. watchdog gate ---------------------------------------------------
     $softCents = [long]([double]$cfg.budget.day_soft_dollars * 100)

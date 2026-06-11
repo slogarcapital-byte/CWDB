@@ -106,7 +106,7 @@ function Send-Static {
 function Get-StateBundle {
     $status   = @(Get-SupabaseRows -Table "v_control_status" -Select "*")[0]
     $pending  = @(Get-SupabaseRows -Table "approval_queue" -Select "approval_id,task_id,action_kind,summary,recommended,rollback_plan,status,decided_by,decided_at,decision_note,expires_at,created_at,updated_at" -Filter "status=eq.pending&order=created_at.asc")
-    $decided  = @(Get-SupabaseRows -Table "approval_queue" -Select "approval_id,task_id,action_kind,summary,recommended,rollback_plan,status,decided_by,decided_at,decision_note,expires_at,created_at,updated_at" -Filter "status=neq.pending&order=updated_at.desc&limit=20")
+    $decided  = @(Get-SupabaseRows -Table "approval_queue" -Select "approval_id,task_id,action_kind,summary,recommended,rollback_plan,status,decided_by,decided_at,decision_note,expires_at,created_at,updated_at,claimed_at,executed_at,execution_attempts" -Filter "status=neq.pending&order=updated_at.desc&limit=20")
     $tasks    = @(Get-SupabaseRows -Table "task" -Select "task_id,type,title,status,priority,assigned_agent,permission_tier,attempts,max_attempts,updated_at" -Filter "order=priority.asc,created_at.asc&limit=50")
     $events   = @(Get-SupabaseRows -Table "event_log" -Select "event_id,actor,event_type,severity,detail,created_at" -Filter "order=created_at.desc&limit=50")
     $gate     = @(Get-SupabaseRows -Table "v_validation_gate" -Select "*")[0]
