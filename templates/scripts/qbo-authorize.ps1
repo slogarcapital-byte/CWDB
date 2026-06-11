@@ -1,20 +1,29 @@
 <#
 .SYNOPSIS
-    One-time QBO OAuth2 authorization. Catches the redirect on
-    http://localhost:8000/callback, exchanges the code for tokens, and writes
-    QBO_REFRESH_TOKEN + QBO_REALM_ID into .env.local.
+    One-time QBO OAuth2 authorization for ONE environment (sandbox or
+    production). Catches the redirect on http://localhost:8000/callback,
+    exchanges the code for tokens, and writes the environment's
+    QBO_<ENV>_REFRESH_TOKEN + QBO_<ENV>_REALM_ID into .env.local.
 
 .DESCRIPTION
     1. Prints the Intuit authorize URL (or accepts -State so the caller can
        print it). Jim opens it, signs in, picks the company, clicks Connect.
+       For -Environment production pick the REAL CWDB company on the consent
+       screen (realm 9341457249522270), not the sandbox company.
     2. A raw TcpListener on 127.0.0.1:8000 catches the callback (no admin
        urlacl needed, unlike HttpListener).
-    3. Exchanges the auth code, persists refresh token + realm, and verifies
-       with a CompanyInfo read.
+    3. Exchanges the auth code, persists refresh token + realm under the
+       environment-suffixed keys, and verifies with a CompanyInfo read.
+
+.EXAMPLE
+    pwsh templates/scripts/qbo-authorize.ps1                            # active env
+    pwsh templates/scripts/qbo-authorize.ps1 -Environment production    # go-live
 #>
 
 [CmdletBinding()]
 param(
+    [ValidateSet("sandbox", "production")]
+    [string] $Environment,
     [string] $State = [guid]::NewGuid().ToString("N"),
     [int] $TimeoutMinutes = 15
 )
@@ -22,21 +31,21 @@ param(
 $ErrorActionPreference = "Stop"
 . "$PSScriptRoot\qbo-common.ps1"
 Import-QboEnv
+if (-not $Environment) { $Environment = Get-QboEnvironment }
+Set-QboEnvironmentOverride $Environment
 
-foreach ($v in 'QBO_CLIENT_ID','QBO_CLIENT_SECRET') {
-    if (-not [Environment]::GetEnvironmentVariable($v, 'Process')) {
-        throw "Missing $v in .env.local"
-    }
-}
+$clientId     = Get-QboSetting CLIENT_ID -Required
+$clientSecret = Get-QboSetting CLIENT_SECRET -Required
 
 $redirect = "http://localhost:8000/callback"
 $authUrl = "https://appcenter.intuit.com/connect/oauth2" +
-    "?client_id=$($env:QBO_CLIENT_ID)" +
+    "?client_id=$clientId" +
     "&response_type=code" +
     "&scope=com.intuit.quickbooks.accounting" +
     "&redirect_uri=" + [uri]::EscapeDataString($redirect) +
     "&state=$State"
 
+Write-Output "Authorizing the $Environment environment."
 Write-Output "AUTHORIZE URL:"
 Write-Output $authUrl
 Write-Output ""
@@ -92,17 +101,17 @@ if (-not $code) { throw "Timed out waiting for the OAuth callback." }
 
 Write-Output "Auth code received (realm $realm). Exchanging for tokens..."
 $basic = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(
-    "$($env:QBO_CLIENT_ID):$($env:QBO_CLIENT_SECRET)"))
+    "${clientId}:${clientSecret}"))
 $tokens = Invoke-RestMethod -Method Post `
     -Uri "https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer" `
     -Headers @{ Authorization = "Basic $basic"; Accept = "application/json" } `
     -ContentType "application/x-www-form-urlencoded" `
     -Body @{ grant_type = "authorization_code"; code = $code; redirect_uri = $redirect }
 
-Set-QboEnvVar -Name "QBO_REFRESH_TOKEN" -Value $tokens.refresh_token
-if ($realm) { Set-QboEnvVar -Name "QBO_REALM_ID" -Value $realm }
+Set-QboEnvVar -Name (Get-QboSettingName REFRESH_TOKEN) -Value $tokens.refresh_token
+if ($realm) { Set-QboEnvVar -Name (Get-QboSettingName REALM_ID) -Value $realm }
 Write-Output "Tokens stored. Verifying with CompanyInfo..."
 
 $info = Invoke-QboApi -Path "companyinfo/$realm"
 Write-Output ("CONNECTED: " + $info.CompanyInfo.CompanyName +
-    " (realm $realm, env $($env:QBO_ENVIRONMENT))")
+    " (realm $realm, env $Environment)")

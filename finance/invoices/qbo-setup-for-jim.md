@@ -1,5 +1,10 @@
 # QBO Setup for Jim (2026-06-10)
 
+> **2026-06-11 update:** Parts A and B are DONE (sandbox connected, INV-2026-001
+> pushed + verified). The env-var names in Part B step 6 are superseded: scripts
+> now use environment-suffixed keys (`QBO_SANDBOX_*` / `QBO_PRODUCTION_*`).
+> Next step is the production cutover: see `finance/invoices/qbo-production-cutover.md`.
+
 Two parts. Part A sends INV-2026-001 from QBO tonight. Part B creates the
 Intuit developer app so I can build the API push next session.
 Company: Central Wisconsin Deck Builders, Essentials, realm ID 9341457249522270.
