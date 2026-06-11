@@ -93,7 +93,7 @@ $ContactProperties = @(
     # CWDB-custom homeowner lead fields
     "project_type","budget_range","project_timeline","lead_notes","owns_property",
     "source_city","utm_source","utm_medium","utm_campaign","utm_term","utm_content",
-    "gclid","tcpa_consent_given","lead_source_page",
+    "gclid","tcpa_consent_given","lead_source_page","lead_channel","tcpa_consent_source",
     # CWDB-custom contractor fields
     "business_name","service_area_zips","onboarded_at"
 )
@@ -348,7 +348,7 @@ try {
     }
 
     $leadRecords = New-Object System.Collections.Generic.List[hashtable]
-    $skipped = [ordered]@{ no_tcpa = 0; no_phone = 0; no_email = 0; is_customer = 0; no_submitted_at = 0 }
+    $skipped = [ordered]@{ no_consent = 0; no_phone = 0; no_email = 0; is_customer = 0; no_submitted_at = 0 }
 
     foreach ($c in $contacts) {
         $props = Get-PropOrNull $c "properties"
@@ -357,14 +357,32 @@ try {
         $stage = Get-PropOrNull $props "lifecyclestage"
         if ($stage -eq "customer") { $skipped.is_customer++; continue }
 
-        $tcpaRaw = Get-PropOrNull $props "tcpa_consent_given"
-        $tcpa    = ConvertTo-BoolOrNull $tcpaRaw
-        if ($tcpa -ne $true) { $skipped.no_tcpa++; continue }
+        # Consent gate (2026-06-10 pivot: all channels count).
+        # A lead passes when the form relay set tcpa_consent_given=true, OR it is
+        # a phone/manual entry where Jim recorded a consent source (verbal/assumed).
+        $tcpaRaw    = Get-PropOrNull $props "tcpa_consent_given"
+        $tcpa       = ConvertTo-BoolOrNull $tcpaRaw
+        $channelRaw = Get-PropOrNull $props "lead_channel"
+        $consentSrc = Get-PropOrNull $props "tcpa_consent_source"
+        $consentOk  = ($tcpa -eq $true) -or
+                      ($consentSrc -and $channelRaw -in @("phone", "manual", "other"))
+        if (-not $consentOk) { $skipped.no_consent++; continue }
+
+        # Channel: explicit property wins; otherwise a form-set TCPA means webform
+        # (the relay was the only path that ever set it before lead_channel existed).
+        $leadChannel = if ($channelRaw) { $channelRaw } else { "webform" }
+        if (-not $consentSrc) { $consentSrc = "form" }
 
         $phone = Get-PropOrNull $props "phone"
         $email = Get-PropOrNull $props "email"
         if (-not $phone) { $skipped.no_phone++; continue }
-        if (-not $email) { $skipped.no_email++; continue }
+        if (-not $email) {
+            # Phone/manual leads may arrive with no email (schema/010 allows
+            # NULL); webform leads always have one, so a missing email there
+            # is a data problem worth skipping.
+            if ($leadChannel -eq "webform") { $skipped.no_email++; continue }
+            $email = $null
+        }
 
         $createdate = Get-PropOrNull $props "createdate"
         $submittedAt = ConvertTo-IsoOrNull $createdate
@@ -405,6 +423,8 @@ try {
             project_timeline                   = (Get-PropOrNull $props "project_timeline")
             lead_notes                         = (Get-PropOrNull $props "lead_notes")
             tcpa_consent_given                 = $true
+            lead_channel                       = $leadChannel
+            tcpa_consent_source                = $consentSrc
             utm_source                         = (Get-PropOrNull $props "utm_source")
             utm_medium                         = (Get-PropOrNull $props "utm_medium")
             utm_campaign                       = (Get-PropOrNull $props "utm_campaign")
@@ -422,14 +442,14 @@ try {
 
     if ($DryRun) {
         Write-Output "DryRun: would upsert $($leadRecords.Count) fact_leads rows."
-        Write-Output "DryRun: skipped $($skipped.is_customer) contractors, $($skipped.no_tcpa) without TCPA, $($skipped.no_phone) without phone, $($skipped.no_email) without email, $($skipped.no_submitted_at) without createdate"
+        Write-Output "DryRun: skipped $($skipped.is_customer) contractors, $($skipped.no_consent) without consent (no form TCPA and no recorded consent source), $($skipped.no_phone) without phone, $($skipped.no_email) without email, $($skipped.no_submitted_at) without createdate"
     } elseif ($leadRecords.Count -gt 0) {
         $n = Invoke-SupabaseUpsert -Table "fact_leads" -Records $leadRecords.ToArray() -ConflictColumns "hubspot_contact_id"
         Write-Output "Upserted $n rows into fact_leads"
-        Write-Output "Skipped: contractors=$($skipped.is_customer), no_tcpa=$($skipped.no_tcpa), no_phone=$($skipped.no_phone), no_email=$($skipped.no_email), no_createdate=$($skipped.no_submitted_at)"
+        Write-Output "Skipped: contractors=$($skipped.is_customer), no_consent=$($skipped.no_consent), no_phone=$($skipped.no_phone), no_email=$($skipped.no_email), no_createdate=$($skipped.no_submitted_at)"
     } else {
         Write-Output "No homeowner leads with TCPA + phone + email; fact_leads unchanged"
-        Write-Output "Skipped: contractors=$($skipped.is_customer), no_tcpa=$($skipped.no_tcpa), no_phone=$($skipped.no_phone), no_email=$($skipped.no_email), no_createdate=$($skipped.no_submitted_at)"
+        Write-Output "Skipped: contractors=$($skipped.is_customer), no_consent=$($skipped.no_consent), no_phone=$($skipped.no_phone), no_email=$($skipped.no_email), no_createdate=$($skipped.no_submitted_at)"
     }
 
     # ===========================================================================
