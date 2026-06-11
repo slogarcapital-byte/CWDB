@@ -17,9 +17,19 @@ Fulfillment lanes (ATCP 110 disclosure): every estimate JSON should carry
                     "builder_name": "Barton Builders LLC"}   partner builds
 The "builder" lane prints the required disclosure naming the contractor who
 will sign and perform the work; never issue a build estimate without it.
+
+Combined estimate + work order (cwdb lane only): set "combined": true to
+render the single-document flow per docs/legal/templates/
+combined-estimate-work-order-spec.md. The homeowner's signature converts the
+estimate into the binding Deck Staining Work Order: the PDF carries the
+ATCP 110.05(2) contract content, the conspicuous Right to Cancel
+(Wis. Stat. 423.201-203 + 16 CFR 429), the 779.02(2) Notice to Owner, and
+two Notice of Cancellation copies. Ignored (with a warning) on builder-lane
+JSONs: that contract is the builder's own paper.
 """
 
 import sys
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import ParagraphStyle
@@ -105,6 +115,93 @@ def _fulfillment(estimate):
         raise ValueError('fulfillment.lane is "builder" but '
                          'fulfillment.builder_name is missing')
     return lane, builder_name
+
+
+def _federal_holidays(year):
+    """US federal holidays (observed dates ignored; the actual dates govern
+    the 16 CFR 429 business-day count)."""
+    def nth_weekday(month, weekday, n):
+        d = date(year, month, 1)
+        d += timedelta(days=(weekday - d.weekday()) % 7)
+        return d + timedelta(weeks=n - 1)
+
+    def last_weekday(month, weekday):
+        d = date(year, month + 1, 1) - timedelta(days=1) if month < 12 \
+            else date(year, 12, 31)
+        while d.weekday() != weekday:
+            d -= timedelta(days=1)
+        return d
+
+    return {
+        date(year, 1, 1),                  # New Year's Day
+        nth_weekday(1, 0, 3),              # MLK Day (3rd Mon Jan)
+        nth_weekday(2, 0, 3),              # Washington's Birthday
+        last_weekday(5, 0),                # Memorial Day (last Mon May)
+        date(year, 6, 19),                 # Juneteenth
+        date(year, 7, 4),                  # Independence Day
+        nth_weekday(9, 0, 1),              # Labor Day
+        nth_weekday(10, 0, 2),             # Columbus Day
+        date(year, 11, 11),                # Veterans Day
+        nth_weekday(11, 3, 4),             # Thanksgiving (4th Thu Nov)
+        date(year, 12, 25),                # Christmas
+    }
+
+
+def _cancellation_deadline(estimate):
+    """Midnight of the third business day after the transaction date.
+    Per 16 CFR 429: Saturdays count as business days; Sundays and federal
+    holidays do not. JSON key cancellation_deadline overrides."""
+    override = estimate.get('cancellation_deadline')
+    if override:
+        return override
+    d = datetime.strptime(estimate['date_issued'], '%B %d, %Y').date()
+    holidays = _federal_holidays(d.year) | _federal_holidays(d.year + 1)
+    counted = 0
+    while counted < 3:
+        d += timedelta(days=1)
+        if d.weekday() != 6 and d not in holidays:
+            counted += 1
+    return d.strftime('%B %d, %Y')
+
+
+def _notice_of_cancellation(copy_no, date_issued, deadline):
+    """One complete Notice of Cancellation copy (the buyer signs only to
+    cancel; both copies are delivered unsigned in the executed PDF)."""
+    parts = [
+        Paragraph(f'NOTICE OF CANCELLATION (Copy {copy_no} of 2)', h2),
+        Paragraph(f'<b>Date of Transaction: {date_issued}</b>', body_b),
+        Paragraph(
+            '<b>YOU MAY CANCEL THIS TRANSACTION, WITHOUT ANY PENALTY OR '
+            'OBLIGATION, WITHIN THREE BUSINESS DAYS FROM THE ABOVE '
+            'DATE.</b>', body_b),
+        Paragraph(
+            'If you cancel, any payments made by you under this Agreement, '
+            'and any negotiable instrument executed by you, will be returned '
+            'within TEN (10) DAYS following CWDB\'s receipt of your '
+            'cancellation notice, and any security interest arising out of '
+            'the transaction will be cancelled.', body),
+        Paragraph(
+            'If CWDB has delivered any goods or materials to you under this '
+            'Agreement, you must make them available to CWDB at your '
+            'residence in substantially as good condition as when received; '
+            'or you may comply with CWDB\'s instructions regarding return at '
+            'CWDB\'s expense and risk. If CWDB does not pick them up within '
+            'twenty (20) days of the date of your Notice of Cancellation, '
+            'you may keep or dispose of them without further obligation.', body),
+        Paragraph(
+            'TO CANCEL THIS TRANSACTION, mail or deliver a signed and dated '
+            'copy of this Notice of Cancellation, or any other written '
+            'notice, to <b>Central Wisconsin Deck Builders, LLC, 906 N 16th '
+            'Ave, Wausau, WI 54401</b>, NOT LATER THAN MIDNIGHT OF '
+            f'<b>{deadline}</b> (the third business day after the date of '
+            'the transaction, not counting Sundays and federal holidays).', body),
+        Spacer(1, 0.08 * inch),
+        Paragraph('I HEREBY CANCEL THIS TRANSACTION.', body_b),
+        Paragraph('Buyer Signature: ' + '_' * 40, sig),
+        Paragraph('Printed Name: ' + '_' * 42, sig),
+        Paragraph('Date of this Cancellation: ' + '_' * 20, sig),
+    ]
+    return KeepTogether(parts)
 
 
 def _disclosure_box(builder_name):
@@ -228,13 +325,23 @@ def _client_block(client):
     return t
 
 
-def _signature_block():
+def _signature_block(co_owner_name=None):
     line = '_' * 50
     rows = [
         [Paragraph('Homeowner signature', client_h), Paragraph('Date', client_h)],
         [Paragraph(line, sig), Paragraph('_' * 18, sig)],
         [Paragraph('Printed name:', client_h), Paragraph('', client_h)],
         [Paragraph(line, sig), Paragraph('', sig)],
+    ]
+    if co_owner_name:
+        rows += [
+            [Spacer(1, 0.1 * inch), Spacer(1, 0.1 * inch)],
+            [Paragraph(f'Co-owner signature ({co_owner_name}; all '
+                       f'titleholders must sign)', client_h),
+             Paragraph('Date', client_h)],
+            [Paragraph(line, sig), Paragraph('_' * 18, sig)],
+        ]
+    rows += [
         [Spacer(1, 0.15 * inch), Spacer(1, 0.15 * inch)],
         [Paragraph('Central Wisconsin Deck Builders, LLC', client_h),
          Paragraph('Date', client_h)],
@@ -277,6 +384,14 @@ def generate_pdf(estimate, output_path):
     sp = lambda n=0.1: Spacer(1, n * inch)
     lane, builder_name = _fulfillment(estimate)
 
+    combined = bool(estimate.get('combined', False))
+    if combined and lane != 'cwdb':
+        print('WARNING: combined=true ignored on a builder-lane estimate; '
+              'the binding contract there is the builder\'s own paper.',
+              file=sys.stderr)
+        combined = False
+    cancel_deadline = _cancellation_deadline(estimate) if combined else None
+
     # ── HEADER: logo + NAP ──────────────────────────────────────────────────
     s.append(_logo_flowable(target_width_in=2.8))
     s.append(sp(0.06))
@@ -297,6 +412,10 @@ def generate_pdf(estimate, output_path):
         s.append(Paragraph(
             f'Construction by: {builder_name}, independent licensed '
             f'Wisconsin dwelling contractor', builder_m))
+    if combined:
+        s.append(Paragraph(
+            'Estimate and Work Order: your signature in the Acceptance '
+            'section makes this the binding Deck Staining Work Order', builder_m))
     s.append(sp(0.1))
 
     # ── CLIENT BLOCK ────────────────────────────────────────────────────────
@@ -364,10 +483,143 @@ def generate_pdf(estimate, output_path):
             f'<i>The deposit and all construction payments are payable to '
             f'{builder_name} under your construction contract, not to '
             f'Central Wisconsin Deck Builders, LLC.</i>', note))
+    if combined:
+        payment_block.append(Paragraph(
+            '<b>Deposit hold.</b> CWDB will not deposit, spend, or apply '
+            'your deposit, and will not order job-specific materials against '
+            'it, until your three-business-day right to cancel (see Your '
+            'Right to Cancel below) has expired. CWDB takes no security '
+            'interest, mortgage, or lien on the Property or your property as '
+            'part of this Agreement. If you cancel within the cancellation '
+            'period, your deposit is fully refundable. CWDB will not require '
+            'any payment beyond the deposit before the Work is complete, '
+            'except by signed change order.', body))
     s.append(KeepTogether(payment_block))
 
+    # ── COMBINED WORK-ORDER CONTRACT CONTENT (ATCP 110.05(2)) ───────────────
+    # Per docs/legal/templates/combined-estimate-work-order-spec.md
+    if combined:
+        s.append(KeepTogether([
+            Paragraph('Start and Completion', h2),
+            Paragraph(
+                f"CWDB will begin the Work on or about "
+                f"<b>{estimate['schedule']['start']}</b>, after the "
+                f"three-business-day cancellation period below has expired, "
+                f"weather permitting. CWDB estimates the Work will be "
+                f"complete within approximately "
+                f"<b>{estimate['schedule']['duration']}</b> of the start "
+                f"date, subject to weather and proper finish cure.", body),
+        ]))
+        s.append(KeepTogether([
+            Paragraph('Materials', h2),
+            Paragraph(
+                'CWDB supplies all premium finish product plus application '
+                'supplies (sandpaper, brushes, pads, rollers, drop cloths, '
+                'masking). The finish product and color are as stated in the '
+                'Itemized Pricing above.', body),
+        ]))
+        s.append(KeepTogether([
+            Paragraph('Change Orders', h2),
+            Paragraph(
+                'Any change to the scope, materials, price, or schedule must '
+                'be in a written change order signed by both CWDB and you '
+                'before the changed work proceeds. CWDB is not obligated to '
+                'perform, and you are not obligated to pay for, any extra or '
+                'changed work not covered by a signed change order. Verbal '
+                'requests do not bind either party.', body),
+        ]))
+        s.append(KeepTogether([
+            Paragraph('Surface-Finish Only: No Structural Work', h2),
+            Paragraph(
+                '<b>This Agreement covers cosmetic surface finishing of an '
+                'existing, structurally sound deck only.</b> It does not '
+                'include, and CWDB is not performing, any structural '
+                'construction, repair, board replacement beyond cosmetic, '
+                'framing, footing, ledger, or railing-rebuild work. If CWDB '
+                'discovers rot, structural defects, or other concealed '
+                'conditions during preparation, CWDB will stop affected work '
+                'and notify you, and any such repair will be addressed only '
+                'by a separate signed agreement.', body),
+        ]))
+        warranty_text = estimate.get('warranty') or (
+            'CWDB warrants the Work will be free from defects in '
+            'workmanship for one (1) year from the date of completion. If a '
+            'covered workmanship defect appears within that period and you '
+            'give CWDB written notice within the period, CWDB will, at its '
+            'option and at no charge, correct the defect. This warranty does '
+            'not cover normal weathering, fading, or wear; failure to '
+            'maintain or re-coat on a normal schedule; movement, splitting, '
+            'or grain shadow of natural wood consistent with industry norms; '
+            'damage from storms, floods, or other events beyond CWDB\'s '
+            'control; or any pre-existing structural condition. Manufacturer '
+            'warranties on the finish product, if any, pass through to you '
+            'to the extent transferable.')
+        s.append(KeepTogether([
+            Paragraph('Warranty', h2),
+            Paragraph(warranty_text, body),
+        ]))
+        s.append(KeepTogether([
+            Paragraph('Your Right to Cancel', h2),
+            Paragraph(
+                '<b>YOU, THE BUYER, MAY CANCEL THIS TRANSACTION AT ANY TIME '
+                'PRIOR TO MIDNIGHT OF THE THIRD BUSINESS DAY AFTER THE DATE '
+                'OF THIS TRANSACTION.</b> This right is provided under the '
+                'Wisconsin Consumer Act, Wis. Stat. 423.202 and 423.203, and '
+                'the federal Cooling-Off Rule, 16 CFR Part 429.', body_b),
+            Paragraph(
+                'CWDB has given you two (2) completed copies of the Notice '
+                'of Cancellation (attached to this document) and has '
+                'informed you of your right to cancel. To cancel, sign and '
+                'date one copy of the attached Notice of Cancellation and '
+                'mail or deliver it, or send any other written notice of '
+                'cancellation, to Central Wisconsin Deck Builders, LLC, '
+                '906 N 16th Ave, Wausau, WI 54401, not later than midnight '
+                f'of <b>{cancel_deadline}</b>. If you cancel within the '
+                'cancellation period, CWDB will return your deposit and any '
+                'other payments in full within ten (10) days after receiving '
+                'your cancellation notice.', body),
+        ]))
+        s.append(KeepTogether([
+            Paragraph('Notice to Owner (Wis. Stat. 779.02(2))', h2),
+            Paragraph(
+                '<b>"PLEASE READ THIS NOTICE. As a result of receiving labor '
+                'or materials for the improvement of your property, those '
+                'who provide labor or materials for the work may have a '
+                'right under Wisconsin law to claim a construction lien '
+                'against your property if they are not paid. Central '
+                'Wisconsin Deck Builders, LLC, and any subcontractors and '
+                'material suppliers, may have lien rights on your land and '
+                'buildings if not paid. Those entitled to lien rights, in '
+                'addition to Central Wisconsin Deck Builders, LLC, are those '
+                'who contract directly with you or those who give you notice '
+                'within 60 days after they first furnish labor or materials '
+                'for the work. Accordingly, you may receive notices from '
+                'those who furnish labor or materials for the work, and you '
+                'should give a copy of each notice you receive to your '
+                'mortgage lender, if any. Central Wisconsin Deck Builders, '
+                'LLC, agrees to cooperate with you and your lender, if any, '
+                'to see that all potential lien claimants are duly paid. IF '
+                'YOU DO NOT UNDERSTAND THESE REQUIREMENTS OR THE STEPS TO '
+                'PROTECT YOURSELF FROM CONSTRUCTION LIENS, PLEASE CONSULT '
+                'YOUR ATTORNEY."</b> You acknowledge receiving this Notice '
+                'to Owner as part of this Agreement.', body_b),
+        ]))
+
     # ── ACCEPTANCE ──────────────────────────────────────────────────────────
-    if lane == 'builder':
+    if combined:
+        acceptance_text = (
+            f"By signing below, you accept this estimate and <b>this "
+            f"document becomes the binding Deck Staining Work Order and "
+            f"Home Improvement Agreement between you and Central Wisconsin "
+            f"Deck Builders, LLC.</b> No separate work order is required. "
+            f"You acknowledge you have received two completed copies of the "
+            f"Notice of Cancellation and the Notice to Owner above, and "
+            f"that your three-business-day right to cancel runs from the "
+            f"date you sign. This Agreement is governed by the laws of the "
+            f"State of Wisconsin; venue is Marathon County, Wisconsin. "
+            f"Estimate pricing is valid for <b>{estimate['valid_days']} "
+            f"days</b> from the date issued ({estimate['date_issued']}).")
+    elif lane == 'builder':
         acceptance_text = (
             f"Acceptance of this estimate is subject to execution of a "
             f"written construction contract directly with "
@@ -385,24 +637,37 @@ def generate_pdf(estimate, output_path):
             f"a binding contract. Estimate is valid for "
             f"<b>{estimate['valid_days']} days</b> from the date issued "
             f"({estimate['date_issued']}).")
+    co_owner = (estimate['client'].get('co_owner_name')
+                if isinstance(estimate.get('client'), dict) else None)
     s.append(KeepTogether([
         Paragraph('Acceptance', h2),
         Paragraph(acceptance_text, body),
         sp(0.15),
-        _signature_block(),
+        _signature_block(co_owner_name=co_owner),
     ]))
 
-    # ── LIEN NOTICE ─────────────────────────────────────────────────────────
-    s.append(_hr(color=GREY, thickness=0.5, space_after=8, space_before=14))
-    s.append(Paragraph('Notice to Owner: Wisconsin Construction Lien Notice', h2))
-    s.append(Paragraph(
-        "As required by Wisconsin construction lien law (Wis. Stat. §779.02), "
-        "the builder hereby notifies the owner that persons or companies "
-        "furnishing labor or materials for construction work on the owner's "
-        "land may have lien rights on the owner's land and buildings if they "
-        "are not paid. The builder agrees to provide a list of all such "
-        "persons supplying labor or materials upon request.",
-        lien))
+    if combined:
+        # Spec section 3: the full 779.02(2) Notice to Owner above replaces
+        # the short estimate-style lien blurb; the two Notice of Cancellation
+        # copies ride as attachments after the signatures (delivered
+        # unsigned; the buyer signs one only to cancel).
+        for copy_no in (1, 2):
+            s.append(_hr(color=GREY, thickness=0.5, space_after=8,
+                         space_before=14))
+            s.append(_notice_of_cancellation(
+                copy_no, estimate['date_issued'], cancel_deadline))
+    else:
+        # ── LIEN NOTICE (estimate-only documents) ───────────────────────────
+        s.append(_hr(color=GREY, thickness=0.5, space_after=8, space_before=14))
+        s.append(Paragraph('Notice to Owner: Wisconsin Construction Lien Notice', h2))
+        s.append(Paragraph(
+            "As required by Wisconsin construction lien law (Wis. Stat. §779.02), "
+            "the builder hereby notifies the owner that persons or companies "
+            "furnishing labor or materials for construction work on the owner's "
+            "land may have lien rights on the owner's land and buildings if they "
+            "are not paid. The builder agrees to provide a list of all such "
+            "persons supplying labor or materials upon request.",
+            lien))
 
     doc.build(s, onFirstPage=_footer, onLaterPages=_footer)
     return str(output_path)

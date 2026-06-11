@@ -1,0 +1,76 @@
+{
+  "estimate_number": "TEST-COMBINED",
+  "date_issued": "June 03, 2026",
+  "valid_days": 14,
+  "client": {
+    "name": "Test Homeowner",
+    "address_line": "1234 Sample Rd, Wausau, WI 54401",
+    "phone": "(715) 555-0100",
+    "email": "homeowner@example.com"
+  },
+  "project": {
+    "overview": "Two-coat solid stain on an existing single-level pressure-treated wood deck at the project address. The job covers approximately <b>416 sq ft of deck floor</b>. Work includes full surface preparation (power wash, sand rough spots, set raised fasteners, mask landscaping), application of two coats of premium paint-and-sealer combination product, and complete job-site protection and cleanup.",
+    "scope": [
+      "Move and protect homeowner furniture, grill, and personal items",
+      "Cover and protect plants, landscaping, and adjacent siding",
+      "Power-wash the entire deck surface, stairs, and railing system",
+      "Light sanding of rough spots on floor boards, stair treads, and railing surfaces",
+      "Set any raised or popped fasteners flush with the deck surface",
+      "Apply two coats of premium paint-and-sealer combination product to all visible wood surfaces: deck floor, stair treads and risers, top rails, bottom rails, balusters, and posts",
+      "Final touch-ups, complete cleanup, and haul-off of all debris"
+    ],
+    "scope_note": "Work covers all visible wood surfaces above the deck floor and on the staircase. Underside of deck framing, joists, support posts below the deck floor, and any structural members hidden from normal view are not included. Two coats provide full uniform coverage; the second coat is applied after the first has cured per manufacturer spec."
+  },
+  "line_items": [
+    [
+      "Surface preparation: power wash, sand rough spots, set fasteners, mask landscaping",
+      668
+    ],
+    [
+      "Premium materials (solid / paint-and-sealer stain, brushes, pads, rollers, drop cloths, masking)",
+      646
+    ],
+    [
+      "Application of 2 coats of solid / paint-and-sealer stain to deck floor, stairs, and railing system (~416 sq ft)",
+      1055
+    ],
+    [
+      "Job site protection, cleanup, and debris haul-off",
+      431
+    ]
+  ],
+  "included": [
+    "All materials: premium paint-and-sealer combination product, sandpaper, brushes, pads, rollers, drop cloths, masking",
+    "All labor: approximately 3 working days (Day 1: prep; Day 2: first coat; Day 3: second coat or repairs)",
+    "Full job-site protection of furniture, plants, and siding",
+    "Post-job cleanup and debris haul-off",
+    "<b>1-year limited warranty</b> against premature finish failure caused by defects in workmanship (excludes acts of nature, normal wear, and pre-existing structural conditions)"
+  ],
+  "not_included": [
+    "Repair or replacement of damaged or rotted boards (will be quoted separately if discovered during preparation)",
+    "Hardware replacement (screws, nails, joist hangers, fasteners) beyond setting existing raised fasteners and any specifically scoped repair items",
+    "Structural repairs of any kind beyond minor scoped repairs",
+    "Removal of carpet, outdoor mats, planters, or built-in features",
+    "Refinishing of pergolas, gazebos, or attached fences unless explicitly added to scope in writing",
+    "Site power supply (homeowner provides access to a working exterior 120V outlet)",
+    "Third coat application (rare; only needed on heavily weathered cedar)"
+  ],
+  "schedule": {
+    "start_label": "Targeted start",
+    "start": "June 2026, pending signed acceptance and deposit",
+    "duration": "3 working days",
+    "weather": "Application will be rescheduled if rain forecast exceeds 40% during the cure window. A minimum ambient temperature of 50\u00b0F day and night is required for proper finish cure. Cooler-weather applications may extend cure time by 24-48 hours per coat."
+  },
+  "payment": {
+    "deposit_pct": 30,
+    "methods": "credit or debit card or digital payment (preferred), or check. Cash not accepted."
+  },
+  "_meta": {
+    "computed_sell_price": 2800,
+    "source": "transcribed from 2026-06-03-overbeck-stain.pdf (Excel-pipeline quote; JSON backfilled 2026-06-10)"
+  },
+  "fulfillment": {
+    "lane": "cwdb"
+  },
+  "combined": true
+}
