@@ -69,7 +69,7 @@ Revenue: **pay per accepted bid at $1,000** (contractor pays when homeowner acce
 Ben/John are busy building and cannot meet the 48-hour quote promise, so **Jim owns all lead follow-up, walk-through booking, walk-throughs, and estimates** (Streamlit estimator + `sales/estimates/generate_estimate_pdf.py`). Phased hybrid per legal-compliance-counsel opinion:
 
 - **Phase 0 (now, pre-license).** Hand-off at the estimate. Two lanes, set via `fulfillment.lane` in the estimate JSON:
-  - `cwdb`: cosmetic stain/resurface (no permit) — CWDB self-performs under the interim staining work order and takes the deposit.
+  - `cwdb`: cosmetic stain/resurface (no permit) — CWDB self-performs and takes the deposit. **Document: the combined estimate + work order (`combined: true` in the estimate JSON; standing rule 2026-06-11)** — one PDF, homeowner's signature converts it to the binding work order, e-signed via QBO Contracts (works on Essentials). The standalone staining work order is retired for new jobs. The two embedded Notice of Cancellation copies are legally required; never strip them.
   - `builder`: any build/repair/structural job — CWDB issues the estimate WITH the named-builder disclosure; the contractor signs the homeowner, takes the deposit, pulls the permit; CWDB collects $1,000 on acceptance. CWDB must NOT sign as prime or take a build deposit pre-license.
 - **Phase 1 (after DSPS Dwelling Contractor cert + GL insurance).** Option B unlocks per-job: CWDB primes the Home Improvement Contract and subs to Ben/John under the subcontractor agreement. A and B run side by side; choose per job.
 - Legal punch list and gating items: board directive WB-018.
