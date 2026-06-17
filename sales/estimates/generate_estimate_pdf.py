@@ -446,6 +446,16 @@ def generate_pdf(estimate, output_path):
     s.append(Paragraph('Project Overview', h2))
     s.append(Paragraph(estimate['project']['overview'], overview))
 
+    # ── SCOPE OF WORK ───────────────────────────────────────────────────────
+    s.append(Paragraph('Scope of Work', h2))
+    for item in estimate['project']['scope']:
+        s.append(Paragraph(f'• {item}', bullet))
+    if estimate['project'].get('scope_note'):
+        s.append(sp(0.05))
+        s.append(Paragraph(
+            f"<i><b>Scope boundary:</b> {estimate['project']['scope_note']}</i>",
+            note))
+
     # ── DESIGN MOCK-UP (AI renderings, if provided) ─────────────────────────
     renderings = [r for r in (estimate.get('renderings') or [])
                   if r.get('path') and Path(r['path']).exists()]
@@ -457,16 +467,6 @@ def generate_pdf(estimate, output_path):
                 Paragraph(f"<i>{r.get('caption', '')}</i>", note),
                 sp(0.12),
             ]))
-
-    # ── SCOPE OF WORK ───────────────────────────────────────────────────────
-    s.append(Paragraph('Scope of Work', h2))
-    for item in estimate['project']['scope']:
-        s.append(Paragraph(f'• {item}', bullet))
-    if estimate['project'].get('scope_note'):
-        s.append(sp(0.05))
-        s.append(Paragraph(
-            f"<i><b>Scope boundary:</b> {estimate['project']['scope_note']}</i>",
-            note))
 
     # ── ITEMIZED PRICING ────────────────────────────────────────────────────
     total_amount = sum(amt for _, amt in estimate['line_items'])

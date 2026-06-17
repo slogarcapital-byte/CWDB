@@ -70,8 +70,10 @@ _MAX_EDGE = 1568
 
 
 def _open_image(path):
-    """Open a photo as an RGB PIL image, registering the HEIC opener on demand."""
-    from PIL import Image  # local import so the module loads without Pillow
+    """Open a photo as an upright RGB PIL image, registering the HEIC opener on
+    demand. Honors the EXIF orientation tag so portrait phone photos are not sent
+    to the model (and rendered back) rotated 90 degrees."""
+    from PIL import Image, ImageOps  # local import so the module loads without Pillow
 
     ext = Path(path).suffix.lower()
     if ext in (".heic", ".heif"):
@@ -82,7 +84,9 @@ def _open_image(path):
         except Exception:
             pass  # if unavailable, Image.open will raise and the caller skips it
 
-    img = Image.open(path).convert("RGB")
+    img = Image.open(path)
+    img = ImageOps.exif_transpose(img)  # bake EXIF orientation into the pixels
+    img = img.convert("RGB")
     if max(img.size) > _MAX_EDGE:
         img.thumbnail((_MAX_EDGE, _MAX_EDGE))
     return img
@@ -119,18 +123,24 @@ def _prompt(sel, shot):
     framing = (
         "Show a wide, full view of the whole project in its setting."
         if shot == "wide"
-        else "Show a closer detail view that emphasizes the material texture, "
-        "grain, and true color of the decking and railing."
+        else "Show the same finished project from a slightly closer vantage so the "
+        "decking boards, railing, and joinery read clearly, while still showing the "
+        "full structure in context."
     )
     return (
         "You are an architectural visualization tool for a deck and fence "
         f"contractor. Edit the provided photo of the customer's property to show {subject}. "
         f"{framing} "
+        "Apply the selected materials and colors to the ENTIRE deck or fence in the "
+        "photo (every board, post, and rail), replacing any existing or old structure; "
+        "do not leave part of it in the original material, and do not render only a "
+        "small sample patch, swatch, or close-up of the boards. "
         "Keep the house, yard, landscaping, existing structures, sky, camera "
         "perspective, and lighting from the original photo intact and realistic; "
         "only add or replace the deck/fence described. Photorealistic, natural "
         "lighting, true-to-product material color and wood grain. Do not add any "
-        "text, watermarks, logos, people, or furniture that was not already in the photo."
+        "text, watermarks, logos, material swatches, sample insets, color chips, "
+        "people, or furniture that was not already in the photo."
     )
 
 
