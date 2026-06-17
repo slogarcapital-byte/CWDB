@@ -100,11 +100,28 @@ st.markdown(
       .stTextInput input, .stNumberInput input,
       .stSelectbox div[data-baseweb="select"] > div {
         background: rgba(255, 255, 255, 0.08) !important;
+        background-color: #3a3c3c !important;   /* opaque dark: iOS can't composite it to white */
         border: 1px solid rgba(255, 255, 255, 0.18) !important;
         color: #fafafa !important;
+        -webkit-text-fill-color: #fafafa !important;  /* beats iOS autofill text color */
+        -webkit-appearance: none !important;          /* drop iOS native light input chrome */
+        appearance: none !important;
         border-radius: 10px !important;
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
+      }
+      /* iOS Safari autofill repaints the field light with its own text color.
+         box-shadow inset is the only way to override the autofill background;
+         -webkit-text-fill-color is the only way to override its text color. */
+      .stTextInput input:-webkit-autofill,
+      .stTextInput input:-webkit-autofill:hover,
+      .stTextInput input:-webkit-autofill:focus,
+      .stNumberInput input:-webkit-autofill,
+      .stNumberInput input:-webkit-autofill:focus {
+        -webkit-text-fill-color: #fafafa !important;
+        -webkit-box-shadow: 0 0 0 1000px #3a3c3c inset !important;
+        caret-color: #fafafa !important;
+        transition: background-color 9999s ease 0s;   /* freeze the autofill flash */
       }
       .stTextInput input::placeholder,
       .stNumberInput input::placeholder { color: rgba(255,255,255,0.45) !important; }
