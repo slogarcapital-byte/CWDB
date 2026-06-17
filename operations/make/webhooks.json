@@ -140,7 +140,7 @@
       "make_team_id": 2073972,
       "make_organization_id": 7086579,
       "make_folder_id": 231872,
-      "status": "BUILT + TESTED 2026-06-11 — scenario INACTIVE. End-to-end test execution 743cd9d361154ce1b5411e4706100315 (3 ops, success): test lead routing-selftest@cwdb-internal.test created fact_leads lead_id 120 + fact_bids bid_id 80 (pending), v_clean_leads correctly excluded the @cwdb-internal.test email (count 0), v_validation_gate counts unchanged (qualified_since_gate 3 / accepted_lifetime 0 before and after), test rows deleted after verification. Service-role credentials smoke-tested via PostgREST insert/delete before the webhook test (lead_id 119 / bid_id 79, deleted). Do NOT point Webflow at this hook; production rewiring requires a new approval.",
+      "status": "ACTIVE 2026-06-11T20:29 UTC — scenario activated per approval_id 60 (trace t8f3a2c9). v2 blueprint: webhook→router(null-email-abort|has-email)→fact_leads upsert on_conflict=email→Jim email notify. No fact_bids module. No HubSpot modules. Gmail connection 8444800 (slogarjw@gmail.com). Smoke test execution a1fb56b211454e05940aed8876cabc07: SUCCESS, 3 ops, 847ms, lead_id=122 created+deleted, 0 fact_bids. PENDING: Webflow form_submission webhook not yet added (requires Jim manual action in Webflow Project Settings > Integrations > Webhooks, URL=https://hook.us2.make.com/j1794cbx29uv6al9gbqkpjdvugutmcpc).",
       "verification": {
         "date": "2026-06-11",
         "approval_ref": "approval_queue approval_id 1, trace b7a0af806648, council_id 1 feedback honored",
