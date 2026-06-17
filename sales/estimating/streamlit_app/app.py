@@ -45,6 +45,7 @@ from generate_estimate_pdf import generate_pdf  # noqa: E402
 
 from email_send import send_estimate_email  # noqa: E402
 from populate_workbook import populate as populate_workbook  # noqa: E402
+from render_mockup import generate_mockups  # noqa: E402
 
 
 def _next_months(n: int = 12, start: date | None = None) -> list[str]:
@@ -179,6 +180,21 @@ def cached_pricing() -> dict:
 db = cached_pricing()
 
 
+def _material_by_name(items, name):
+    for m in items:
+        if m["name"] == name:
+            return m
+    return None
+
+
+def colors_for(material):
+    """Color names for a decking/railing/fence material (for the dropdown)."""
+    if not material:
+        return ["(standard)"]
+    names = [c["name"] for c in material.get("colors", [])]
+    return names or ["(standard)"]
+
+
 # ---------------------------------------------------------------------------
 # Input form (mirror of Quote Input sheet) — each section in a glass panel
 # ---------------------------------------------------------------------------
@@ -208,57 +224,29 @@ with st.container(border=True):
     )
     pt_obj = find_project_type(db, project_type)
     matrix = pt_obj["matrix"]
+    is_fence = matrix.get("fence") == "Y"
 
-    col1, col2 = st.columns(2)
-    with col1:
-        length = st.number_input("Deck length (ft)", min_value=1, value=20, step=1)
-    with col2:
-        depth = st.number_input("Deck depth (ft)", min_value=1, value=15, step=1)
+    if not is_fence:
+        col1, col2 = st.columns(2)
+        with col1:
+            length = st.number_input("Deck length (ft)", min_value=1, value=20, step=1)
+        with col2:
+            depth = st.number_input("Deck depth (ft)", min_value=1, value=15, step=1)
+        st.caption(f"Deck SF: **{length * depth}**")
+    else:
+        length, depth = 1, 1  # not read by the fence engine
 
-    st.caption(f"Deck SF: **{length * depth}**")
-
-with st.container(border=True):
-    st.subheader("Materials")
-    decking_material = st.selectbox(
-        "Decking",
-        [m["name"] for m in db["decking_materials"]],
-        index=3,  # Trex Select
-    )
-    railing_material = st.selectbox(
-        "Railing",
-        [m["name"] for m in db["railing_materials"]],
-        index=2,  # Trex Aluminum
-    )
-    framing_material = st.selectbox(
-        "Framing",
-        [m["name"] for m in db["framing_materials"]],
-        index=0,  # KDAT
-    )
-
-with st.container(border=True):
-    st.subheader("Site conditions")
-    height = st.selectbox(
-        "Height",
-        [m["value"] for m in db["condition_multipliers"]["height"]],
-        index=0,
-    )
-    grade = st.selectbox(
-        "Grade",
-        [m["value"] for m in db["condition_multipliers"]["grade"]],
-        index=0,
-    )
-    complexity = st.selectbox(
-        "Complexity",
-        [m["value"] for m in db["condition_multipliers"]["complexity"]],
-        index=0,
-    )
-    market = st.selectbox(
-        "Market load",
-        [m["value"] for m in db["condition_multipliers"]["market_load"]],
-        index=0,
-    )
-
-# Sensible defaults that get overridden below based on project type
+# Defaults so the inputs dict is always complete (overridden per branch below)
+decking_material = db["decking_materials"][3]["name"]   # Trex Select
+railing_material = db["railing_materials"][2]["name"]    # Trex Aluminum
+framing_material = db["framing_materials"][0]["name"]    # KDAT
+decking_color = None
+railing_color = None
+stain_color = None
+height = db["condition_multipliers"]["height"][0]["value"]
+grade = db["condition_multipliers"]["grade"][0]["value"]
+complexity = db["condition_multipliers"]["complexity"][0]["value"]
+market = db["condition_multipliers"]["market_load"][0]["value"]
 border_style = "Pencil Border"
 fascia_lf = 0
 railing_lf = 0
@@ -272,68 +260,145 @@ stain_coats = 1
 board_repairs = 0
 joist_repair_lf = 0
 hardware_inc = "No"
+skirting_sf = 0
+lighting_fix = 0
+bench_count = 0
+privacy_screen_lf = 0
+hot_tub = "No"
+# Fence defaults
+fence_material = db["fence_materials"][0]["name"]
+fence_height = "6"
+fence_color = None
+fence_lf = 0
+walk_gates = 0
+drive_gates = 0
+tearout_lf = 0
 
-if matrix["deck"] == "Y":
+if is_fence:
     with st.container(border=True):
-        st.subheader("Scope detail")
-        border_style = st.selectbox("Border style", ["Pencil Border", "Double Border"], index=0)
-        fascia_lf = st.number_input("Fascia LF", min_value=0, value=70, step=1)
-
-if matrix["rail"] != "N":
-    with st.container(border=True):
-        st.subheader("Railing")
-        railing_lf = st.number_input("Railing LF", min_value=0, value=40, step=1)
-
-if matrix["stair"] != "N":
-    with st.container(border=True):
-        st.subheader("Stairs")
+        st.subheader("Fence")
+        fence_material = st.selectbox(
+            "Fence type", [m["name"] for m in db["fence_materials"]], index=0)
+        fmat_obj = _material_by_name(db["fence_materials"], fence_material)
+        heights = list(fmat_obj["cost_per_lf_by_height"].keys())
+        fence_height = st.selectbox(
+            "Height (ft)", heights, index=heights.index("6") if "6" in heights else 0)
+        fence_color = st.selectbox("Color / finish", colors_for(fmat_obj), index=0)
+        fence_lf = st.number_input("Fence length (LF)", min_value=0, value=150, step=1)
         col1, col2 = st.columns(2)
         with col1:
-            stair_runs = st.number_input("Runs", min_value=0, value=1, step=1)
+            walk_gates = st.number_input("Walk gates", min_value=0, value=1, step=1)
         with col2:
-            stair_treads = st.number_input("Total treads", min_value=0, value=6, step=1) if stair_runs > 0 else 0
-        if stair_runs > 0:
-            col3, col4 = st.columns(2)
-            with col3:
-                stair_landings = st.number_input("Landings", min_value=0, value=0, step=1)
-            with col4:
-                wraparound = st.selectbox("Wraparound?", ["No", "Yes"], index=0)
-
-if matrix["stain"] == "Y":
+            drive_gates = st.number_input("Drive / double gates", min_value=0, value=0, step=1)
+        tearout_lf = st.number_input(
+            "Existing fence to remove (LF)", min_value=0, value=0, step=1)
+else:
     with st.container(border=True):
-        st.subheader("Stain")
-        stain_sf = st.number_input(
-            "Stain SF (deck + railing/stair SF blended)", min_value=0, value=0, step=10
-        )
-        if stain_sf > 0:
-            stain_types = sorted({sr["type"] for sr in db["stain_rates_per_sf"]})
-            stain_type = st.selectbox(
-                "Stain type",
-                stain_types,
-                index=stain_types.index("Solid / Paint-and-Sealer")
-                if "Solid / Paint-and-Sealer" in stain_types else 0,
+        st.subheader("Materials")
+        decking_material = st.selectbox(
+            "Decking", [m["name"] for m in db["decking_materials"]], index=3)  # Trex Select
+        decking_color = st.selectbox(
+            "Decking color", colors_for(_material_by_name(db["decking_materials"], decking_material)),
+            index=0)
+        railing_material = st.selectbox(
+            "Railing", [m["name"] for m in db["railing_materials"]], index=2)  # Trex Aluminum
+        railing_color = st.selectbox(
+            "Railing color", colors_for(_material_by_name(db["railing_materials"], railing_material)),
+            index=0)
+        framing_material = st.selectbox(
+            "Framing", [m["name"] for m in db["framing_materials"]], index=0)  # KDAT
+
+    with st.container(border=True):
+        st.subheader("Site conditions")
+        height = st.selectbox(
+            "Height", [m["value"] for m in db["condition_multipliers"]["height"]], index=0)
+        grade = st.selectbox(
+            "Grade", [m["value"] for m in db["condition_multipliers"]["grade"]], index=0)
+        complexity = st.selectbox(
+            "Complexity", [m["value"] for m in db["condition_multipliers"]["complexity"]], index=0)
+        market = st.selectbox(
+            "Market load", [m["value"] for m in db["condition_multipliers"]["market_load"]], index=0)
+
+    if matrix["deck"] == "Y":
+        with st.container(border=True):
+            st.subheader("Scope detail")
+            border_style = st.selectbox("Border style", ["Pencil Border", "Double Border"], index=0)
+            fascia_lf = st.number_input("Fascia LF", min_value=0, value=70, step=1)
+
+    if matrix["rail"] != "N":
+        with st.container(border=True):
+            st.subheader("Railing")
+            railing_lf = st.number_input("Railing LF", min_value=0, value=40, step=1)
+
+    if matrix["stair"] != "N":
+        with st.container(border=True):
+            st.subheader("Stairs")
+            col1, col2 = st.columns(2)
+            with col1:
+                stair_runs = st.number_input("Runs", min_value=0, value=1, step=1)
+            with col2:
+                stair_treads = st.number_input("Total treads", min_value=0, value=6, step=1) if stair_runs > 0 else 0
+            if stair_runs > 0:
+                col3, col4 = st.columns(2)
+                with col3:
+                    stair_landings = st.number_input("Landings", min_value=0, value=0, step=1)
+                with col4:
+                    wraparound = st.selectbox("Wraparound?", ["No", "Yes"], index=0)
+
+    if matrix["stain"] == "Y":
+        with st.container(border=True):
+            st.subheader("Stain")
+            stain_sf = st.number_input(
+                "Stain SF (deck + railing/stair SF blended)", min_value=0, value=0, step=10
             )
-            stain_coats = int(st.selectbox("Coats", ["1", "2"], index=0))
+            if stain_sf > 0:
+                stain_types = sorted({sr["type"] for sr in db["stain_rates_per_sf"]})
+                stain_type = st.selectbox(
+                    "Stain type",
+                    stain_types,
+                    index=stain_types.index("Solid / Paint-and-Sealer")
+                    if "Solid / Paint-and-Sealer" in stain_types else 0,
+                )
+                stain_coats = int(st.selectbox("Coats", ["1", "2"], index=0))
+                stain_color = st.selectbox(
+                    "Stain color", db.get("stain_colors", ["Natural / Clear"]), index=0)
 
-if project_type in ("Stain + Minor Repairs", "Resurface (Boards Only)"):
-    with st.container(border=True):
-        st.subheader("Repair bucket")
+    if project_type in ("Stain + Minor Repairs", "Resurface (Boards Only)"):
+        with st.container(border=True):
+            st.subheader("Repair bucket")
+            col1, col2 = st.columns(2)
+            with col1:
+                board_repairs = st.number_input("Board replacements", min_value=0, value=0, step=1)
+            with col2:
+                joist_repair_lf = st.number_input("Joist repair LF", min_value=0, value=0, step=1)
+            hardware_inc = st.selectbox("Hardware allowance?", ["No", "Yes"], index=0)
+
+    with st.expander("Optional adders"):
         col1, col2 = st.columns(2)
         with col1:
-            board_repairs = st.number_input("Board replacements", min_value=0, value=0, step=1)
+            skirting_sf = st.number_input("Skirting / privacy wall SF", min_value=0, value=0, step=1)
+            lighting_fix = st.number_input("Lighting fixtures", min_value=0, value=0, step=1)
         with col2:
-            joist_repair_lf = st.number_input("Joist repair LF", min_value=0, value=0, step=1)
-        hardware_inc = st.selectbox("Hardware allowance?", ["No", "Yes"], index=0)
+            bench_count = st.number_input("Built-in benches", min_value=0, value=0, step=1)
+            privacy_screen_lf = st.number_input("Privacy screen LF", min_value=0, value=0, step=1)
+        hot_tub = st.selectbox("Hot tub structural upgrade?", ["No", "Yes"], index=0)
 
-with st.expander("Optional adders"):
-    col1, col2 = st.columns(2)
-    with col1:
-        skirting_sf = st.number_input("Skirting / privacy wall SF", min_value=0, value=0, step=1)
-        lighting_fix = st.number_input("Lighting fixtures", min_value=0, value=0, step=1)
-    with col2:
-        bench_count = st.number_input("Built-in benches", min_value=0, value=0, step=1)
-        privacy_screen_lf = st.number_input("Privacy screen LF", min_value=0, value=0, step=1)
-    hot_tub = st.selectbox("Hot tub structural upgrade?", ["No", "Yes"], index=0)
+# ---------------------------------------------------------------------------
+# Walk-through photos -> AI mock-up renderings (all project types)
+# ---------------------------------------------------------------------------
+with st.container(border=True):
+    st.subheader("Walk-through photos")
+    st.caption(
+        "Upload site photos from the walk-through. Two AI mock-up renderings "
+        "(wide + detail) of the finished project in the selected materials and "
+        "colors are generated automatically and added to the PDF, each labeled "
+        "as an illustration only."
+    )
+    uploaded_photos = st.file_uploader(
+        "Photos (JPG / PNG / HEIC)",
+        type=["jpg", "jpeg", "png", "heic"],
+        accept_multiple_files=True,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -344,7 +409,9 @@ inputs = {
     "length": length,
     "depth": depth,
     "decking_material": decking_material,
+    "decking_color": decking_color,
     "railing_material": railing_material,
+    "railing_color": railing_color,
     "framing_material": framing_material,
     "height": height,
     "grade": grade,
@@ -360,6 +427,7 @@ inputs = {
     "stain_sf": stain_sf,
     "stain_type": stain_type,
     "stain_coats": stain_coats,
+    "stain_color": stain_color,
     "board_repairs": board_repairs,
     "joist_repair_lf": joist_repair_lf,
     "hardware_inc": hardware_inc,
@@ -368,6 +436,14 @@ inputs = {
     "bench_count": bench_count,
     "privacy_screen_lf": privacy_screen_lf,
     "hot_tub": hot_tub,
+    # fence
+    "fence_material": fence_material,
+    "fence_height": fence_height,
+    "fence_color": fence_color,
+    "fence_lf": fence_lf,
+    "walk_gates": walk_gates,
+    "drive_gates": drive_gates,
+    "tearout_lf": tearout_lf,
 }
 
 
@@ -388,7 +464,13 @@ with st.container(border=True):
     low = round_money(eng["sell_price"] * (1 - contingency))
     high = round_money(eng["sell_price"] * (1 + contingency))
     deck_sf = eng["deck_sf"]
-    psf = round(eng["sell_price"] / deck_sf, 2) if deck_sf else 0
+    if is_fence:
+        flf = eng.get("fence_lf", 0)
+        unit = round(eng["sell_price"] / flf, 2) if flf else 0
+        unit_label = f"${unit:,}/LF"
+    else:
+        psf = round(eng["sell_price"] / deck_sf, 2) if deck_sf else 0
+        unit_label = f"${psf:,}/sf"
 
     st.markdown(
         f"""
@@ -396,32 +478,43 @@ with st.container(border=True):
           <div class="label">Quoted Sell Price</div>
           <div class="value">${sell:,}</div>
           <div class="range">Range: ${low:,} &nbsp;&ndash;&nbsp; ${high:,}
-            &nbsp;&middot;&nbsp; ${psf:,}/sf</div>
+            &nbsp;&middot;&nbsp; {unit_label}</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
     with st.expander("Line-item breakdown", expanded=False):
-        rows = [
-            ("Base Package (framing + decking)", eng["base_package"]),
-            ("Demo", eng["demo"]),
-            ("Border upgrade", eng["border"]),
-            ("Railing", eng["rail"]),
-            ("Fascia", eng["fascia"]),
-            ("Stairs", eng["stair"]),
-            ("Stain", eng["stain"]),
-            ("Repairs", eng["repair"]),
-            ("Skirting", eng["skirting"]),
-            ("Lighting", eng["lighting"]),
-            ("Built-in benches", eng["benches"]),
-            ("Privacy screen", eng["privacy"]),
-            ("Hot tub structural", eng["hot_tub"]),
-            ("Permit / engineering", eng["permit"]),
-            ("Dumpster / cleanup", eng["dumpster"]),
-            ("Mobilization", eng["mobilization"]),
-            ("Misc", eng["misc"]),
-        ]
+        if is_fence:
+            rows = [
+                ("Fence run", eng.get("fence_run", 0)),
+                ("Gates", eng.get("fence_gates", 0)),
+                ("Tear-out / disposal", eng.get("fence_tearout", 0)),
+                ("Permit / engineering", eng["permit"]),
+                ("Dumpster / cleanup", eng["dumpster"]),
+                ("Mobilization", eng["mobilization"]),
+                ("Misc", eng["misc"]),
+            ]
+        else:
+            rows = [
+                ("Base Package (framing + decking)", eng["base_package"]),
+                ("Demo", eng["demo"]),
+                ("Border upgrade", eng["border"]),
+                ("Railing", eng["rail"]),
+                ("Fascia", eng["fascia"]),
+                ("Stairs", eng["stair"]),
+                ("Stain", eng["stain"]),
+                ("Repairs", eng["repair"]),
+                ("Skirting", eng["skirting"]),
+                ("Lighting", eng["lighting"]),
+                ("Built-in benches", eng["benches"]),
+                ("Privacy screen", eng["privacy"]),
+                ("Hot tub structural", eng["hot_tub"]),
+                ("Permit / engineering", eng["permit"]),
+                ("Dumpster / cleanup", eng["dumpster"]),
+                ("Mobilization", eng["mobilization"]),
+                ("Misc", eng["misc"]),
+            ]
         nonzero = [(label, round_money(v)) for label, v in rows if v]
         if nonzero:
             st.table(
@@ -436,17 +529,22 @@ with st.container(border=True):
                 f"sell price: **${sell:,}**"
             )
         else:
-            st.write("No cost components yet — enter dimensions and materials.")
+            st.write("No cost components yet. Enter dimensions and materials.")
 
 
 # ---------------------------------------------------------------------------
 # Send button
 # ---------------------------------------------------------------------------
 st.divider()
-send_disabled = not (client_name and client_address and length > 0 and depth > 0)
+if is_fence:
+    send_disabled = not (client_name and client_address and fence_lf > 0)
+else:
+    send_disabled = not (client_name and client_address and length > 0 and depth > 0)
 
 if send_disabled:
-    st.caption("Enter client name, address, and dimensions to enable send.")
+    st.caption("Enter client name, address, and "
+               + ("fence length" if is_fence else "dimensions")
+               + " to enable send.")
 
 if st.button(
     "Send PDF + Excel to my inbox",
@@ -478,6 +576,38 @@ if st.button(
                 pdf_path = tmp / f"{stem}.pdf"
                 xlsx_path = tmp / f"{stem}.xlsx"
 
+                # Save walk-through photos and auto-generate AI mock-up renderings.
+                if uploaded_photos:
+                    photo_dir = tmp / "photos"
+                    photo_dir.mkdir(exist_ok=True)
+                    saved = []
+                    for up in uploaded_photos:
+                        dest = photo_dir / up.name
+                        dest.write_bytes(up.getbuffer())
+                        saved.append(dest)
+                    selections = {
+                        "is_fence": is_fence,
+                        "decking_material": decking_material,
+                        "decking_color": decking_color,
+                        "railing_material": railing_material,
+                        "railing_color": railing_color,
+                        "fence_material": fence_material,
+                        "fence_height": fence_height,
+                        "fence_color": fence_color,
+                    }
+                    api_key = st.secrets.get("gemini_api_key", "")
+                    renderings = generate_mockups(saved, selections, tmp / "renders", api_key)
+                    if renderings:
+                        estimate["renderings"] = [
+                            {"path": str(r["path"]), "caption": r["caption"]}
+                            for r in renderings
+                        ]
+                    else:
+                        st.warning(
+                            "Mock-up rendering was skipped (no Gemini API key set, or "
+                            "rendering failed). The estimate is sent without renderings."
+                        )
+
                 generate_pdf(estimate, pdf_path)
                 populate_workbook(inputs, client_info, xlsx_path)
 
@@ -486,8 +616,8 @@ if st.button(
                     gmail_app_password=st.secrets["gmail_app_password"],
                     recipient=st.secrets["recipient"],
                     subject=(
-                        f"CWDB Estimate — {client_info['name']} — "
-                        f"{project_type} — ${sell:,}"
+                        f"CWDB Estimate - {client_info['name']} - "
+                        f"{project_type} - ${sell:,}"
                     ),
                     body=(
                         f"Estimate generated {date.today().isoformat()}.\n\n"
@@ -495,10 +625,14 @@ if st.button(
                         f"Address: {client_info['address_line']}\n"
                         f"Project type: {project_type}\n"
                         f"Targeted start: {start_month}\n"
-                        f"Deck: {length} ft x {depth} ft = {deck_sf} sf\n"
-                        f"Decking: {decking_material}\n"
-                        f"Railing: {railing_material}\n\n"
-                        f"Quoted sell price: ${sell:,}\n"
+                        + (
+                            f"Fence: {fence_height} ft {fence_material}, {fence_lf} LF\n"
+                            if is_fence else
+                            f"Deck: {length} ft x {depth} ft = {deck_sf} sf\n"
+                            f"Decking: {decking_material}\n"
+                            f"Railing: {railing_material}\n"
+                        )
+                        + f"\nQuoted sell price: ${sell:,}\n"
                         f"Range: ${low:,} - ${high:,}\n\n"
                         f"PDF and populated workbook attached."
                     ),

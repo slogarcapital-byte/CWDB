@@ -43,6 +43,18 @@ INPUT_CELL_MAP: dict[str, str] = {
     "decking_material": QI.DECKING_MAT,
     "railing_material": QI.RAILING_MAT,
     "framing_material": QI.FRAMING_MAT,
+    # Colors
+    "decking_color": QI.DECKING_COLOR,
+    "railing_color": QI.RAILING_COLOR,
+    "stain_color": QI.STAIN_COLOR,
+    # Fence
+    "fence_material": QI.FENCE_MAT,
+    "fence_height": QI.FENCE_HEIGHT,
+    "fence_lf": QI.FENCE_LF,
+    "walk_gates": QI.WALK_GATES,
+    "drive_gates": QI.DRIVE_GATES,
+    "tearout_lf": QI.TEAROUT_LF,
+    "fence_color": QI.FENCE_COLOR,
     # Site conditions
     "height": QI.HEIGHT_COND,
     "grade": QI.GRADE_COND,

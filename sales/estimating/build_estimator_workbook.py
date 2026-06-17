@@ -197,6 +197,332 @@ def load_pricing():
 
 
 # ---------------------------------------------------------------------------
+# Shared layout maps. Populated by build_pricing_db / build_project_behavior
+# (called first in main) and read by the formula-building sheets so no formula
+# hard-codes a row that shifts when the data grows. Every value is a full,
+# absolute, sheet-qualified A1 reference string.
+# ---------------------------------------------------------------------------
+PDB = {}   # Pricing DB ranges/cells, keyed by semantic name
+PB = {}    # Project Type Behavior ranges, keyed by column letter ("A".."J")
+
+
+def _pdb_col(col, start, end):
+    return f"'Pricing DB'!${col}${start}:${col}${end}"
+
+
+def _pdb_cell(col, row):
+    return f"'Pricing DB'!${col}${row}"
+
+
+# ---------------------------------------------------------------------------
+# Build Pricing DB sheet (cursor-based; collision-proof; records PDB ranges)
+# ---------------------------------------------------------------------------
+def build_pricing_db_v2(wb, db):
+    ws = wb.create_sheet("Pricing DB")
+    ws.column_dimensions["A"].width = 34
+    ws.column_dimensions["B"].width = 16
+    ws.column_dimensions["C"].width = 16
+    ws.column_dimensions["D"].width = 14
+    ws.column_dimensions["E"].width = 48
+    ws.column_dimensions["F"].width = 38
+
+    ws["A1"] = "CWDB Pricing Database"
+    ws["A1"].font = title_font()
+    ws.merge_cells("A1:F1")
+    ws["A2"] = (f"As-of {db['as_of']} · Edit yellow cells. Regenerate workbook "
+                f"to reflect changes. Review quarterly.")
+    ws["A2"].font = Font(name="Calibri", size=10, italic=True, color=GREY)
+    ws.merge_cells("A2:F2")
+
+    cur = 5  # running row cursor
+
+    def headers(row, labels):
+        for col, text in enumerate(labels, start=1):
+            header_cell(ws, row, col, text)
+
+    # ---- Decking ----------------------------------------------------------
+    section_header(ws, cur, "Decking Materials", span=6)
+    headers(cur + 1, ["Name", "Sell $/SF", "Material $/SF", "Waste %",
+                      "Description", "Source"])
+    s = cur + 2
+    for i, m in enumerate(db["decking_materials"]):
+        r = s + i
+        db_cell(ws, r, 1, m["name"], editable=False)
+        db_cell(ws, r, 2, m["sell_per_sf"], number_format='"$"#,##0.00')
+        db_cell(ws, r, 3, m["material_per_sf"], number_format='"$"#,##0.00')
+        db_cell(ws, r, 4, m["waste_pct"], number_format='0.0%')
+        db_cell(ws, r, 5, m["description"], editable=False)
+        db_cell(ws, r, 6, m["source"], editable=False)
+    e = s + len(db["decking_materials"]) - 1
+    PDB["dk_name"] = _pdb_col("A", s, e)
+    PDB["dk_sell"] = _pdb_col("B", s, e)
+    PDB["dk_mat"] = _pdb_col("C", s, e)
+    PDB["dk_waste"] = _pdb_col("D", s, e)
+    cur = e + 2
+
+    # ---- Railing ----------------------------------------------------------
+    section_header(ws, cur, "Railing Materials", span=6)
+    headers(cur + 1, ["Name", "Sell $/LF", "Material $/LF", "Description",
+                      "Source", ""])
+    s = cur + 2
+    for i, m in enumerate(db["railing_materials"]):
+        r = s + i
+        db_cell(ws, r, 1, m["name"], editable=False)
+        db_cell(ws, r, 2, m["sell_per_lf"], number_format='"$"#,##0')
+        db_cell(ws, r, 3, m["material_per_lf"], number_format='"$"#,##0')
+        db_cell(ws, r, 4, m["description"], editable=False)
+        db_cell(ws, r, 5, m["source"], editable=False)
+    e = s + len(db["railing_materials"]) - 1
+    PDB["rl_name"] = _pdb_col("A", s, e)
+    PDB["rl_sell"] = _pdb_col("B", s, e)
+    cur = e + 2
+
+    # ---- Framing ----------------------------------------------------------
+    section_header(ws, cur, "Framing Materials", span=6)
+    headers(cur + 1, ["Name", "Sell $/SF", "Material $/SF", "Description",
+                      "Source", ""])
+    s = cur + 2
+    for i, m in enumerate(db["framing_materials"]):
+        r = s + i
+        db_cell(ws, r, 1, m["name"], editable=False)
+        db_cell(ws, r, 2, m["sell_per_sf"], number_format='"$"#,##0.00')
+        db_cell(ws, r, 3, m["material_per_sf"], number_format='"$"#,##0.00')
+        db_cell(ws, r, 4, m["description"], editable=False)
+        db_cell(ws, r, 5, m["source"], editable=False)
+    e = s + len(db["framing_materials"]) - 1
+    PDB["fr_name"] = _pdb_col("A", s, e)
+    PDB["fr_sell"] = _pdb_col("B", s, e)
+    cur = e + 2
+
+    # ---- Demo Rates -------------------------------------------------------
+    section_header(ws, cur, "Demo Rates by Project Type", span=6)
+    headers(cur + 1, ["Project Type", "Demo $/SF", "", "", "", ""])
+    s = cur + 2
+    for i, pt in enumerate(db["project_types"]):
+        r = s + i
+        db_cell(ws, r, 1, pt["name"], editable=False)
+        db_cell(ws, r, 2, db["demo_rates_per_sf"].get(pt["key"], 0),
+                number_format='"$"#,##0.00')
+    e = s + len(db["project_types"]) - 1
+    PDB["demo_name"] = _pdb_col("A", s, e)
+    PDB["demo_rate"] = _pdb_col("B", s, e)
+    cur = e + 2
+
+    # ---- Stain Rates ------------------------------------------------------
+    section_header(ws, cur, "Stain Rates", span=6)
+    headers(cur + 1, ["Stain Type", "Coats", "$/SF (combined)", "Key", "", ""])
+    s = cur + 2
+    for i, sr in enumerate(db["stain_rates_per_sf"]):
+        r = s + i
+        db_cell(ws, r, 1, sr["type"], editable=False)
+        db_cell(ws, r, 2, sr["coats"], number_format='0')
+        db_cell(ws, r, 3, sr["per_sf"], number_format='"$"#,##0.00')
+        db_cell(ws, r, 4, f"{sr['type']}|{sr['coats']}", editable=False)
+    e = s + len(db["stain_rates_per_sf"]) - 1
+    PDB["stain_rate"] = _pdb_col("C", s, e)
+    PDB["stain_key"] = _pdb_col("D", s, e)
+    cur = e + 2
+
+    # ---- Repair Rates -----------------------------------------------------
+    section_header(ws, cur, "Repair Rates", span=6)
+    rr = db["repair_rates"]
+    repair_rows = [
+        ("Board Replacement $/board", rr["board_replacement_per_board"], "repair_board"),
+        ("Joist Repair $/LF", rr["joist_repair_per_lf"], "repair_joist"),
+        ("Hardware Allowance $/job", rr["hardware_allowance"], "repair_hardware"),
+        ("Inspection-only Allowance $/job", rr["inspection_only_allowance"], "repair_inspection"),
+    ]
+    s = cur + 1
+    for i, (label, value, key) in enumerate(repair_rows):
+        r = s + i
+        db_cell(ws, r, 1, label, editable=False)
+        db_cell(ws, r, 2, value, number_format='"$"#,##0')
+        PDB[key] = _pdb_cell("B", r)
+    cur = s + len(repair_rows) + 1
+
+    # ---- Condition Multipliers -------------------------------------------
+    cm = db["condition_multipliers"]
+    for title, key, prefix in [
+        ("Condition Multipliers - Height", "height", "mh"),
+        ("Condition Multipliers - Grade", "grade", "mg"),
+        ("Condition Multipliers - Complexity", "complexity", "mc"),
+        ("Condition Multipliers - Market Load", "market_load", "mm"),
+    ]:
+        section_header(ws, cur, title, span=6)
+        s = cur + 1
+        for i, m in enumerate(cm[key]):
+            r = s + i
+            db_cell(ws, r, 1, m["value"], editable=False)
+            db_cell(ws, r, 2, m["multiplier"], number_format='0.00"x"')
+        e = s + len(cm[key]) - 1
+        PDB[f"{prefix}_name"] = _pdb_col("A", s, e)
+        PDB[f"{prefix}_mult"] = _pdb_col("B", s, e)
+        cur = e + 2
+
+    # ---- Stair Pricing ----------------------------------------------------
+    section_header(ws, cur, "Stair Pricing", span=6)
+    sp = db["stair_pricing"]
+    stair_rows = [
+        ("Stair Base Setup", sp["base_setup"], "stair_base"),
+        ("Cost per Tread", sp["per_tread"], "stair_tread"),
+        ("Cost per Landing", sp["per_landing"], "stair_landing"),
+        ("Wraparound Stair Premium", sp["wraparound_premium"], "stair_wrap"),
+        ("Double Border Stairs $/tread", sp["double_border_per_tread"], "stair_dblborder"),
+    ]
+    s = cur + 1
+    for i, (label, value, key) in enumerate(stair_rows):
+        r = s + i
+        db_cell(ws, r, 1, label, editable=False)
+        db_cell(ws, r, 2, value, number_format='"$"#,##0')
+        PDB[key] = _pdb_cell("B", r)
+    cur = s + len(stair_rows) + 1
+
+    # ---- Border Pricing ---------------------------------------------------
+    section_header(ws, cur, "Border Pricing", span=6)
+    db_cell(ws, cur + 1, 1, "Pencil Border $/SF", editable=False)
+    db_cell(ws, cur + 1, 2, db["border_pricing"]["pencil_per_sf"], number_format='"$"#,##0.00')
+    db_cell(ws, cur + 2, 1, "Double Border $/SF", editable=False)
+    db_cell(ws, cur + 2, 2, db["border_pricing"]["double_per_sf"], number_format='"$"#,##0.00')
+    PDB["border_double"] = _pdb_cell("B", cur + 2)
+    cur = cur + 4
+
+    # ---- Other Per-Unit ---------------------------------------------------
+    section_header(ws, cur, "Other Per-Unit Rates", span=6)
+    db_cell(ws, cur + 1, 1, "Fascia $/LF", editable=False)
+    db_cell(ws, cur + 1, 2, db["fascia_per_lf"], number_format='"$"#,##0')
+    PDB["fascia"] = _pdb_cell("B", cur + 1)
+    db_cell(ws, cur + 2, 1, "Skirting / Privacy Wall $/SF", editable=False)
+    db_cell(ws, cur + 2, 2, db["skirting_per_sf"], number_format='"$"#,##0')
+    PDB["skirting"] = _pdb_cell("B", cur + 2)
+    cur = cur + 4
+
+    # ---- Adders -----------------------------------------------------------
+    section_header(ws, cur, "Adders (Optional Upgrades)", span=6)
+    headers(cur + 1, ["Adder", "Unit", "Price", "Key", "", ""])
+    s = cur + 2
+    for i, ad in enumerate(db["adders"]):
+        r = s + i
+        db_cell(ws, r, 1, ad["name"], editable=False)
+        db_cell(ws, r, 2, ad["unit"], editable=False)
+        db_cell(ws, r, 3, ad["price"], number_format='"$"#,##0')
+        db_cell(ws, r, 4, ad["key"], editable=False)
+    e = s + len(db["adders"]) - 1
+    PDB["adder_price"] = _pdb_col("C", s, e)
+    PDB["adder_key"] = _pdb_col("D", s, e)
+    cur = e + 2
+
+    # ---- Allowances (Defaults) -------------------------------------------
+    section_header(ws, cur, "Allowances (Defaults)", span=6)
+    alw = db["allowances"]
+    alw_rows = [
+        ("Permit / Engineering", alw["permit_engineering_default"], "alw_permit_def"),
+        ("Dumpster / Cleanup", alw["dumpster_cleanup_default"], "alw_dump_def"),
+        ("Mobilization Minimum", alw["mobilization_minimum_default"], "alw_mob_def"),
+        ("Default Misc", alw["misc_default"], "alw_misc_def"),
+    ]
+    s = cur + 1
+    for i, (label, value, key) in enumerate(alw_rows):
+        r = s + i
+        db_cell(ws, r, 1, label, editable=False)
+        db_cell(ws, r, 2, value, number_format='"$"#,##0')
+        PDB[key] = _pdb_cell("B", r)
+    cur = s + len(alw_rows) + 1
+
+    # ---- Margin & Contingency --------------------------------------------
+    section_header(ws, cur, "Margin & Contingency", span=6)
+    mc = db["margin_and_contingency"]
+    db_cell(ws, cur + 1, 1, "Default Target Gross Margin", editable=False)
+    db_cell(ws, cur + 1, 2, mc["default_margin"], number_format='0.0%')
+    db_cell(ws, cur + 2, 1, "Default Contingency Range (+/-)", editable=False)
+    db_cell(ws, cur + 2, 2, mc["default_contingency"], number_format='0.0%')
+    cur = cur + 4
+
+    # ---- Allowances by Project Type --------------------------------------
+    section_header(ws, cur, "Allowances by Project Type (auto-defaults)", span=6)
+    headers(cur + 1, ["Project Type", "Permit $", "Dumpster $", "Mobilization $", "", ""])
+    s = cur + 2
+    for i, a in enumerate(db["allowances_by_project_type"]):
+        r = s + i
+        db_cell(ws, r, 1, a["name"], editable=False)
+        db_cell(ws, r, 2, a["permit"], number_format='"$"#,##0')
+        db_cell(ws, r, 3, a["dumpster"], number_format='"$"#,##0')
+        db_cell(ws, r, 4, a["mobilization"], number_format='"$"#,##0')
+    e = s + len(db["allowances_by_project_type"]) - 1
+    PDB["alwbt_name"] = _pdb_col("A", s, e)
+    PDB["alwbt_permit"] = _pdb_col("B", s, e)
+    PDB["alwbt_dump"] = _pdb_col("C", s, e)
+    PDB["alwbt_mob"] = _pdb_col("D", s, e)
+    cur = e + 2
+
+    # ---- Fence Materials (rate per LF by height) -------------------------
+    section_header(ws, cur, "Fence Materials ($/LF by height)", span=6)
+    fence_heights = db.get("fence_heights", ["4", "5", "6", "8"])
+    headers(cur + 1, ["Material"] + [f"{h} ft" for h in fence_heights] + [""])
+    # numeric height header row used for column MATCH
+    hdr_row = cur + 1
+    for j, h in enumerate(fence_heights):
+        ws.cell(row=hdr_row, column=2 + j).value = int(h)
+    s = cur + 2
+    for i, fm in enumerate(db.get("fence_materials", [])):
+        r = s + i
+        db_cell(ws, r, 1, fm["name"], editable=False)
+        for j, h in enumerate(fence_heights):
+            rate = fm["cost_per_lf_by_height"].get(h)
+            db_cell(ws, r, 2 + j, rate if rate is not None else 0,
+                    number_format='"$"#,##0.00')
+    n_fence = len(db.get("fence_materials", []))
+    e = s + max(n_fence, 1) - 1
+    last_col = get_column_letter(1 + len(fence_heights))
+    PDB["fence_name"] = _pdb_col("A", s, e)
+    PDB["fence_hdr"] = f"'Pricing DB'!$B${hdr_row}:${last_col}${hdr_row}"
+    PDB["fence_rates"] = f"'Pricing DB'!$B${s}:${last_col}${e}"
+    cur = e + 2
+
+    # ---- Fence Gates / Other ---------------------------------------------
+    section_header(ws, cur, "Fence Gates & Other", span=6)
+    gates = {g["key"]: g for g in db.get("fence_gates", [])}
+    rows = [
+        ("Walk gate $/each", gates.get("walk", {}).get("cost_each", 0), "fence_walk"),
+        ("Drive / double gate $/each", gates.get("drive", {}).get("cost_each", 0), "fence_drive"),
+        ("Tear-out existing fence $/LF", db.get("fence_tearout_per_lf", 0), "fence_tearout"),
+        ("Fence mobilization default", db.get("fence_mobilization_default", 0), "fence_mobil"),
+    ]
+    s = cur + 1
+    for i, (label, value, key) in enumerate(rows):
+        r = s + i
+        db_cell(ws, r, 1, label, editable=False)
+        db_cell(ws, r, 2, value, number_format='"$"#,##0')
+        PDB[key] = _pdb_cell("B", r)
+    cur = s + len(rows) + 1
+
+    # ---- Materials Unit Costs --------------------------------------------
+    section_header(ws, cur, "Materials Unit Costs (edit yellow cells)", span=6)
+    headers(cur + 1, ["Key (do not edit)", "Description", "Unit", "Price",
+                      "Source", ""])
+    s = cur + 2
+    for i, item in enumerate(db["materials_unit_costs"]):
+        r = s + i
+        db_cell(ws, r, 1, item["key"], editable=False)
+        db_cell(ws, r, 2, item["description"], editable=False)
+        db_cell(ws, r, 3, item["unit"], editable=False)
+        db_cell(ws, r, 4, item["price"], number_format='"$"#,##0.00')
+        db_cell(ws, r, 5, item["source"], editable=False)
+    e = s + len(db["materials_unit_costs"]) - 1
+    PDB["muc_key"] = _pdb_col("A", s, e)
+    PDB["muc_price"] = _pdb_col("D", s, e)
+    cur = e + 3
+
+    # ---- Metadata ---------------------------------------------------------
+    section_header(ws, cur, "Metadata", span=6)
+    db_cell(ws, cur + 1, 1, "Pricing As-Of", editable=False)
+    db_cell(ws, cur + 1, 2, db["as_of"], editable=False)
+    db_cell(ws, cur + 2, 1, "Schema Version", editable=False)
+    db_cell(ws, cur + 2, 2, db["schema_version"], editable=False)
+
+    return ws
+
+
+# ---------------------------------------------------------------------------
 # Build Pricing DB sheet
 # ---------------------------------------------------------------------------
 def build_pricing_db(wb, db):
@@ -550,6 +876,13 @@ def build_project_behavior(wb, db):
         desc.alignment = WRAP_LEFT
         ws.row_dimensions[r].height = 30
 
+    n = len(db["project_types"])
+    last = 3 + n
+    PB["A"] = f"'Project Type Behavior'!$A$4:$A${last}"
+    for col in "BCDEFGHI":
+        PB[col] = f"'Project Type Behavior'!${col}$4:${col}${last}"
+    PB["last_row"] = last
+
     return ws
 
 
@@ -645,14 +978,35 @@ class QI:
     HIGH_RANGE = "E42"
     PRICE_PER_SF = "E43"
 
+    # Color inputs (populated; no calc impact unless a color carries an override)
+    DECKING_COLOR = "B79"
+    RAILING_COLOR = "B80"
+    STAIN_COLOR = "B81"
+
+    # Fence inputs (left column, below the margin block)
+    FENCE_MAT = "B72"
+    FENCE_HEIGHT = "B73"
+    FENCE_LF = "B74"
+    WALK_GATES = "B75"
+    DRIVE_GATES = "B76"
+    TEAROUT_LF = "B77"
+    FENCE_COLOR = "B78"
+
+    # Fence calc (right column)
+    FENCE_RATE = "E45"
+    FENCE_RUN = "E46"
+    FENCE_GATES_COST = "E47"
+    FENCE_TEAROUT_COST = "E48"
+    FENCE_ALW = "E49"
+    FENCE_SUBTOTAL = "E50"
+
 
 def matrix_lookup(field_col_letter):
     """Returns an Excel INDEX/MATCH formula fragment that looks up a value
     from the Project Type Behavior matrix for the currently-selected
     project type. field_col_letter is B-I (Demo-Multipliers)."""
-    return (f"INDEX('Project Type Behavior'!${field_col_letter}$4:"
-            f"${field_col_letter}$8, MATCH({QI.PROJECT_TYPE}, "
-            f"'Project Type Behavior'!$A$4:$A$8, 0))")
+    return (f"INDEX({PB[field_col_letter]}, MATCH({QI.PROJECT_TYPE}, "
+            f"{PB['A']}, 0))")
 
 
 def build_quote_input(wb, db):
@@ -724,26 +1078,26 @@ def build_quote_input(wb, db):
 
     label_cell(ws, 7, 4, "Framing $/SF", bold=True)
     calc_cell(ws, 7, 5,
-              f"=IFERROR(INDEX('Pricing DB'!$B$25:$B$26, MATCH({QI.FRAMING_MAT}, "
-              f"'Pricing DB'!$A$25:$A$26, 0)), 0)",
+              f"=IFERROR(INDEX({PDB['fr_sell']}, MATCH({QI.FRAMING_MAT}, "
+              f"{PDB['fr_name']}, 0)), 0)",
               number_format='"$"#,##0.00')
 
     label_cell(ws, 8, 4, "Decking $/SF", bold=True)
     calc_cell(ws, 8, 5,
-              f"=IFERROR(INDEX('Pricing DB'!$B$7:$B$11, MATCH({QI.DECKING_MAT}, "
-              f"'Pricing DB'!$A$7:$A$11, 0)), 0)",
+              f"=IFERROR(INDEX({PDB['dk_sell']}, MATCH({QI.DECKING_MAT}, "
+              f"{PDB['dk_name']}, 0)), 0)",
               number_format='"$"#,##0.00')
 
     label_cell(ws, 9, 4, "Decking Waste %")
     calc_cell(ws, 9, 5,
-              f"=IFERROR(INDEX('Pricing DB'!$D$7:$D$11, MATCH({QI.DECKING_MAT}, "
-              f"'Pricing DB'!$A$7:$A$11, 0)), 0)",
+              f"=IFERROR(INDEX({PDB['dk_waste']}, MATCH({QI.DECKING_MAT}, "
+              f"{PDB['dk_name']}, 0)), 0)",
               number_format='0.0%')
 
     label_cell(ws, 10, 4, "Railing $/LF", bold=True)
     calc_cell(ws, 10, 5,
-              f"=IFERROR(INDEX('Pricing DB'!$B$16:$B$20, MATCH({QI.RAILING_MAT}, "
-              f"'Pricing DB'!$A$16:$A$20, 0)), 0)",
+              f"=IFERROR(INDEX({PDB['rl_sell']}, MATCH({QI.RAILING_MAT}, "
+              f"{PDB['rl_name']}, 0)), 0)",
               number_format='"$"#,##0')
 
     # ---- Project Type (rows 12-13) ---------------------------------------
@@ -753,29 +1107,29 @@ def build_quote_input(wb, db):
     section_header_at(ws, 12, 1, 3, "Project Type")
     label_cell(ws, 13, 1, "Project Type")
     input_cell(ws, 13, 2, db["project_types"][4]["name"])  # Default: Full Tear-Out
-    add_dv(ws, "B13", formula="'Project Type Behavior'!$A$4:$A$8")
+    add_dv(ws, "B13", formula=PB['A'])
 
     # Multipliers
     section_header_at(ws, 12, 4, 6, "Multipliers")
     label_cell(ws, 13, 4, "Height multiplier")
     calc_cell(ws, 13, 5,
-              f"=IFERROR(INDEX('Pricing DB'!$B$54:$B$55, MATCH({QI.HEIGHT_COND}, "
-              f"'Pricing DB'!$A$54:$A$55, 0)), 1)",
+              f"=IFERROR(INDEX({PDB['mh_mult']}, MATCH({QI.HEIGHT_COND}, "
+              f"{PDB['mh_name']}, 0)), 1)",
               number_format='0.00"x"')
     label_cell(ws, 14, 4, "Grade multiplier")
     calc_cell(ws, 14, 5,
-              f"=IFERROR(INDEX('Pricing DB'!$B$58:$B$60, MATCH({QI.GRADE_COND}, "
-              f"'Pricing DB'!$A$58:$A$60, 0)), 1)",
+              f"=IFERROR(INDEX({PDB['mg_mult']}, MATCH({QI.GRADE_COND}, "
+              f"{PDB['mg_name']}, 0)), 1)",
               number_format='0.00"x"')
     label_cell(ws, 15, 4, "Complexity multiplier")
     calc_cell(ws, 15, 5,
-              f"=IFERROR(INDEX('Pricing DB'!$B$63:$B$65, MATCH({QI.COMPLEXITY_COND}, "
-              f"'Pricing DB'!$A$63:$A$65, 0)), 1)",
+              f"=IFERROR(INDEX({PDB['mc_mult']}, MATCH({QI.COMPLEXITY_COND}, "
+              f"{PDB['mc_name']}, 0)), 1)",
               number_format='0.00"x"')
     label_cell(ws, 16, 4, "Market multiplier")
     calc_cell(ws, 16, 5,
-              f"=IFERROR(INDEX('Pricing DB'!$B$68:$B$70, MATCH({QI.MARKET_COND}, "
-              f"'Pricing DB'!$A$68:$A$70, 0)), 1)",
+              f"=IFERROR(INDEX({PDB['mm_mult']}, MATCH({QI.MARKET_COND}, "
+              f"{PDB['mm_name']}, 0)), 1)",
               number_format='0.00"x"')
 
     # Combined multiplier - respects matrix.Multipliers (N / Light / Y)
@@ -822,8 +1176,8 @@ def build_quote_input(wb, db):
     label_cell(ws, 21, 4, "Demo")
     calc_cell(ws, 21, 5,
               f'=IF({matrix_lookup("B")}="N", 0, '
-              f'{QI.DECK_SF}*IFERROR(INDEX(\'Pricing DB\'!$B$31:$B$35, '
-              f'MATCH({QI.PROJECT_TYPE}, \'Pricing DB\'!$A$31:$A$35, 0)), 0))',
+              f'{QI.DECK_SF}*IFERROR(INDEX({PDB["demo_rate"]}, '
+              f'MATCH({QI.PROJECT_TYPE}, {PDB["demo_name"]}, 0)), 0))',
               number_format='"$"#,##0')
 
     # E22 - Border (only when deck="Y")
@@ -831,7 +1185,7 @@ def build_quote_input(wb, db):
     calc_cell(ws, 22, 5,
               f'=IF({matrix_lookup("D")}<>"Y", 0, '
               f'IF({QI.BORDER_STYLE}="Double Border", '
-              f'{QI.DECK_SF}*\'Pricing DB\'!$B$81, 0))',
+              f'{QI.DECK_SF}*{PDB["border_double"]}, 0))',
               number_format='"$"#,##0')
 
     # E23 - Railing
@@ -845,28 +1199,28 @@ def build_quote_input(wb, db):
     label_cell(ws, 24, 4, "Fascia")
     calc_cell(ws, 24, 5,
               f'=IF({matrix_lookup("D")}<>"Y", 0, '
-              f'{QI.FASCIA_LF}*\'Pricing DB\'!$B$84)',
+              f'{QI.FASCIA_LF}*{PDB["fascia"]})',
               number_format='"$"#,##0')
 
     # E25 - Stairs
     label_cell(ws, 25, 4, "Stairs")
     calc_cell(ws, 25, 5,
               f'=IF(OR({matrix_lookup("F")}="N", {QI.STAIR_RUNS}=0), 0, '
-              f"'Pricing DB'!$B$73 + "
-              f"{QI.STAIR_TREADS}*'Pricing DB'!$B$74 + "
-              f"{QI.STAIR_LANDINGS}*'Pricing DB'!$B$75 + "
-              f'IF({QI.WRAPAROUND}="Yes", \'Pricing DB\'!$B$76, 0) + '
+              f"{PDB['stair_base']} + "
+              f"{QI.STAIR_TREADS}*{PDB['stair_tread']} + "
+              f"{QI.STAIR_LANDINGS}*{PDB['stair_landing']} + "
+              f'IF({QI.WRAPAROUND}="Yes", {PDB["stair_wrap"]}, 0) + '
               f'IF({QI.BORDER_STYLE}="Double Border", '
-              f"{QI.STAIR_TREADS}*'Pricing DB'!$B$77, 0))",
+              f"{QI.STAIR_TREADS}*{PDB['stair_dblborder']}, 0))",
               number_format='"$"#,##0')
 
     # E26 - Stain
     label_cell(ws, 26, 4, "Stain")
     calc_cell(ws, 26, 5,
               f'=IF({matrix_lookup("H")}<>"Y", 0, '
-              f"{QI.STAIN_SF}*IFERROR(INDEX('Pricing DB'!$C$40:$C$45, "
+              f"{QI.STAIN_SF}*IFERROR(INDEX({PDB['stain_rate']}, "
               f"MATCH({QI.STAIN_TYPE}&\"|\"&{QI.STAIN_COATS}, "
-              f"'Pricing DB'!$D$40:$D$45, 0)), 0))",
+              f"{PDB['stain_key']}, 0)), 0))",
               number_format='"$"#,##0')
 
     # E27 - Repairs
@@ -874,47 +1228,47 @@ def build_quote_input(wb, db):
     calc_cell(ws, 27, 5,
               f'=IF(AND({QI.PROJECT_TYPE}<>"Stain + Minor Repairs", '
               f'{QI.PROJECT_TYPE}<>"Resurface (Boards Only)"), 0, '
-              f"{QI.BOARD_REPAIRS}*'Pricing DB'!$B$48 + "
-              f"{QI.JOIST_REPAIR_LF}*'Pricing DB'!$B$49 + "
-              f"IF({QI.HARDWARE_INC}=\"Yes\", 'Pricing DB'!$B$50, 0) + "
+              f"{QI.BOARD_REPAIRS}*{PDB['repair_board']} + "
+              f"{QI.JOIST_REPAIR_LF}*{PDB['repair_joist']} + "
+              f"IF({QI.HARDWARE_INC}=\"Yes\", {PDB['repair_hardware']}, 0) + "
               f'IF({QI.PROJECT_TYPE}="Resurface (Boards Only)", '
-              f"'Pricing DB'!$B$51, 0))",
+              f"{PDB['repair_inspection']}, 0))",
               number_format='"$"#,##0')
 
     # E28 - Skirting (allowed for Y deck only)
     label_cell(ws, 28, 4, "Skirting / Privacy Wall")
     calc_cell(ws, 28, 5,
               f'=IF({matrix_lookup("D")}<>"Y", 0, '
-              f"{QI.SKIRTING_SF}*'Pricing DB'!$B$85)",
+              f"{QI.SKIRTING_SF}*{PDB['skirting']})",
               number_format='"$"#,##0')
 
     # E29 - Lighting (allowed when deck or stain)
     label_cell(ws, 29, 4, "Lighting Fixtures")
     calc_cell(ws, 29, 5,
-              f"={QI.LIGHTING_FIX}*IFERROR(INDEX('Pricing DB'!$C$90:$C$94, "
-              f"MATCH(\"lighting\", 'Pricing DB'!$D$90:$D$94, 0)), 0)",
+              f"={QI.LIGHTING_FIX}*IFERROR(INDEX({PDB['adder_price']}, "
+              f"MATCH(\"lighting\", {PDB['adder_key']}, 0)), 0)",
               number_format='"$"#,##0')
 
     # E30 - Built-In Benches
     label_cell(ws, 30, 4, "Built-In Benches")
     calc_cell(ws, 30, 5,
-              f"={QI.BENCH_COUNT}*IFERROR(INDEX('Pricing DB'!$C$90:$C$94, "
-              f"MATCH(\"bench\", 'Pricing DB'!$D$90:$D$94, 0)), 0)",
+              f"={QI.BENCH_COUNT}*IFERROR(INDEX({PDB['adder_price']}, "
+              f"MATCH(\"bench\", {PDB['adder_key']}, 0)), 0)",
               number_format='"$"#,##0')
 
     # E31 - Privacy Screen
     label_cell(ws, 31, 4, "Privacy Screen")
     calc_cell(ws, 31, 5,
-              f"={QI.PRIV_SCREEN_LF}*IFERROR(INDEX('Pricing DB'!$C$90:$C$94, "
-              f"MATCH(\"privacy_screen\", 'Pricing DB'!$D$90:$D$94, 0)), 0)",
+              f"={QI.PRIV_SCREEN_LF}*IFERROR(INDEX({PDB['adder_price']}, "
+              f"MATCH(\"privacy_screen\", {PDB['adder_key']}, 0)), 0)",
               number_format='"$"#,##0')
 
     # E32 - Hot Tub
     label_cell(ws, 32, 4, "Hot Tub Structural")
     calc_cell(ws, 32, 5,
               f'=IF({QI.HOT_TUB}="Yes", '
-              f"IFERROR(INDEX('Pricing DB'!$C$90:$C$94, "
-              f"MATCH(\"hot_tub\", 'Pricing DB'!$D$90:$D$94, 0)), 0), 0)",
+              f"IFERROR(INDEX({PDB['adder_price']}, "
+              f"MATCH(\"hot_tub\", {PDB['adder_key']}, 0)), 0), 0)",
               number_format='"$"#,##0')
 
     # E33-E36 - Allowances (echo from input cells)
@@ -929,7 +1283,9 @@ def build_quote_input(wb, db):
 
     # E37 - SUBTOTAL
     label_cell(ws, 37, 4, "SUBTOTAL (Cost)", bold=True)
-    sub = calc_cell(ws, 37, 5, f"=SUM({QI.BASE_PACKAGE}:{QI.MISC_COST})",
+    sub = calc_cell(ws, 37, 5,
+                    f'=IF({QI.PROJECT_TYPE}="Fence", {QI.FENCE_SUBTOTAL}, '
+                    f"SUM({QI.BASE_PACKAGE}:{QI.MISC_COST}))",
                     number_format='"$"#,##0')
     sub.font = Font(name="Calibri", size=11, bold=True, color=SLATE)
     sub.fill = fill(LIGHT_BG)
@@ -951,10 +1307,37 @@ def build_quote_input(wb, db):
     calc_cell(ws, 42, 5,
               f"={QI.SELL_PRICE}*(1+{QI.CONTINGENCY})",
               number_format='"$"#,##0')
-    label_cell(ws, 43, 4, "Sell Price / SF")
+    label_cell(ws, 43, 4, "Sell Price / unit")
     calc_cell(ws, 43, 5,
-              f"=IF({QI.DECK_SF}=0, 0, {QI.SELL_PRICE}/{QI.DECK_SF})",
+              f'=IF({QI.PROJECT_TYPE}="Fence", '
+              f"IF({QI.FENCE_LF}=0, 0, {QI.SELL_PRICE}/{QI.FENCE_LF}), "
+              f"IF({QI.DECK_SF}=0, 0, {QI.SELL_PRICE}/{QI.DECK_SF}))",
               number_format='"$"#,##0.00')
+
+    # ---- Fence calc (right column, rows 44-50) ---------------------------
+    section_header_at(ws, 44, 4, 6, "Fence Calc (used when Project Type = Fence)")
+    label_cell(ws, 45, 4, "Fence rate $/LF")
+    calc_cell(ws, 45, 5,
+              f"=IFERROR(INDEX({PDB['fence_rates']}, "
+              f"MATCH({QI.FENCE_MAT}, {PDB['fence_name']}, 0), "
+              f"MATCH(VALUE({QI.FENCE_HEIGHT}), {PDB['fence_hdr']}, 0)), 0)",
+              number_format='"$"#,##0.00')
+    label_cell(ws, 46, 4, "Fence run")
+    calc_cell(ws, 46, 5, f"={QI.FENCE_LF}*{QI.FENCE_RATE}", number_format='"$"#,##0')
+    label_cell(ws, 47, 4, "Gates")
+    calc_cell(ws, 47, 5,
+              f"={QI.WALK_GATES}*{PDB['fence_walk']}+{QI.DRIVE_GATES}*{PDB['fence_drive']}",
+              number_format='"$"#,##0')
+    label_cell(ws, 48, 4, "Tear-out")
+    calc_cell(ws, 48, 5, f"={QI.TEAROUT_LF}*{PDB['fence_tearout']}", number_format='"$"#,##0')
+    label_cell(ws, 49, 4, "Fence allowances")
+    calc_cell(ws, 49, 5,
+              f"={QI.PERMIT_ALW}+{QI.DUMPSTER_ALW}+{QI.MOBIL_ALW}+{QI.MISC_ALW}",
+              number_format='"$"#,##0')
+    label_cell(ws, 50, 4, "Fence subtotal")
+    calc_cell(ws, 50, 5,
+              f"={QI.FENCE_RUN}+{QI.FENCE_GATES_COST}+{QI.FENCE_TEAROUT_COST}+{QI.FENCE_ALW}",
+              number_format='"$"#,##0')
 
     # =====================================================================
     # LEFT COLUMN CONTINUED: more inputs
@@ -1087,21 +1470,21 @@ def build_quote_input(wb, db):
 
     label_cell(ws, 58, 1, "Permit / Engineering")
     permit_cell = input_cell(ws, 58, 2, None, number_format='"$"#,##0')
-    permit_cell.value = (f"=IFERROR(INDEX('Pricing DB'!$B$115:$B$119, "
-                         f"MATCH({QI.PROJECT_TYPE}, 'Pricing DB'!$A$115:$A$119, 0)), "
-                         f"'Pricing DB'!$B$97)")
+    permit_cell.value = (f"=IFERROR(INDEX({PDB['alwbt_permit']}, "
+                         f"MATCH({QI.PROJECT_TYPE}, {PDB['alwbt_name']}, 0)), "
+                         f"{PDB['alw_permit_def']})")
 
     label_cell(ws, 59, 1, "Dumpster / Cleanup")
     dump_cell = input_cell(ws, 59, 2, None, number_format='"$"#,##0')
-    dump_cell.value = (f"=IFERROR(INDEX('Pricing DB'!$C$115:$C$119, "
-                       f"MATCH({QI.PROJECT_TYPE}, 'Pricing DB'!$A$115:$A$119, 0)), "
-                       f"'Pricing DB'!$B$98)")
+    dump_cell.value = (f"=IFERROR(INDEX({PDB['alwbt_dump']}, "
+                       f"MATCH({QI.PROJECT_TYPE}, {PDB['alwbt_name']}, 0)), "
+                       f"{PDB['alw_dump_def']})")
 
     label_cell(ws, 60, 1, "Mobilization")
     mob_cell = input_cell(ws, 60, 2, None, number_format='"$"#,##0')
-    mob_cell.value = (f"=IFERROR(INDEX('Pricing DB'!$D$115:$D$119, "
-                      f"MATCH({QI.PROJECT_TYPE}, 'Pricing DB'!$A$115:$A$119, 0)), "
-                      f"'Pricing DB'!$B$99)")
+    mob_cell.value = (f"=IFERROR(INDEX({PDB['alwbt_mob']}, "
+                      f"MATCH({QI.PROJECT_TYPE}, {PDB['alwbt_name']}, 0)), "
+                      f"{PDB['alw_mob_def']})")
 
     label_cell(ws, 61, 1, "Manual Misc Add")
     input_cell(ws, 61, 2, 0, number_format='"$"#,##0')
@@ -1129,14 +1512,49 @@ def build_quote_input(wb, db):
         ws[f"A{r}"].font = Font(name="Calibri", size=10, color=GREY, italic=True)
         ws.merge_cells(start_row=r, start_column=1, end_row=r, end_column=6)
 
+    # ---- Fence & Colors (rows 71-81) -------------------------------------
+    section_header_at(ws, 71, 1, 3, "Fence Inputs (used only when Project Type = Fence) + Colors")
+
+    label_cell(ws, 72, 1, "Fence Type")
+    input_cell(ws, 72, 2, db["fence_materials"][0]["name"])
+    add_dv(ws, "B72", options=[m["name"] for m in db["fence_materials"]])
+
+    label_cell(ws, 73, 1, "Fence Height (ft)")
+    input_cell(ws, 73, 2, "6")
+    add_dv(ws, "B73", options=db.get("fence_heights", ["4", "5", "6", "8"]))
+
+    label_cell(ws, 74, 1, "Fence LF")
+    input_cell(ws, 74, 2, 0, number_format="0")
+
+    label_cell(ws, 75, 1, "Walk Gates")
+    input_cell(ws, 75, 2, 0, number_format="0")
+
+    label_cell(ws, 76, 1, "Drive / Double Gates")
+    input_cell(ws, 76, 2, 0, number_format="0")
+
+    label_cell(ws, 77, 1, "Existing Fence Tear-out LF")
+    input_cell(ws, 77, 2, 0, number_format="0")
+
+    label_cell(ws, 78, 1, "Fence Color")
+    input_cell(ws, 78, 2, "")
+
+    label_cell(ws, 79, 1, "Decking Color")
+    input_cell(ws, 79, 2, "")
+
+    label_cell(ws, 80, 1, "Railing Color")
+    input_cell(ws, 80, 2, "")
+
+    label_cell(ws, 81, 1, "Stain Color")
+    input_cell(ws, 81, 2, "")
+
     # =====================================================================
     # Conditional formatting: grey out inputs the engine ignores
     # =====================================================================
     # Stain inputs (rows 41-43) - grey out when matrix.Stain != "Y"
     na_fill = PatternFill("solid", fgColor=NA_GREY)
     stain_rule = FormulaRule(
-        formula=[f'INDEX(\'Project Type Behavior\'!$H$4:$H$8, '
-                 f'MATCH({QI.PROJECT_TYPE}, \'Project Type Behavior\'!$A$4:$A$8, 0))<>"Y"'],
+        formula=[f'INDEX({PB["H"]}, '
+                 f'MATCH({QI.PROJECT_TYPE}, {PB["A"]}, 0))<>"Y"'],
         fill=na_fill)
     ws.conditional_formatting.add("A41:C43", stain_rule)
     ws.conditional_formatting.add("D26:E26", stain_rule)
@@ -1192,20 +1610,20 @@ def build_materials_list(wb, db):
     # ---------- helpers --------------------------------------------------
     def mat_matrix(col_letter):
         """Cross-sheet matrix lookup for current project type."""
-        return (f"INDEX('Project Type Behavior'!${col_letter}$4:${col_letter}$8, "
+        return (f"INDEX({PB[col_letter]}, "
                 f"MATCH('Quote Input'!{QI.PROJECT_TYPE}, "
-                f"'Project Type Behavior'!$A$4:$A$8, 0))")
+                f"{PB['A']}, 0))")
 
     def uc(key):
         """Unit cost lookup against Pricing DB Materials Unit Costs."""
-        return (f"INDEX('Pricing DB'!$D$130:$D$157, "
-                f"MATCH(\"{key}\", 'Pricing DB'!$A$130:$A$157, 0))")
+        return (f"INDEX({PDB['muc_price']}, "
+                f"MATCH(\"{key}\", {PDB['muc_key']}, 0))")
 
     def deck_board_unit_cost():
         """Per-board cost = material $/SF × 7.33 SF/board (5/4x6x16)."""
-        return (f"INDEX('Pricing DB'!$C$7:$C$11, "
+        return (f"INDEX({PDB['dk_mat']}, "
                 f"MATCH('Quote Input'!{QI.DECKING_MAT}, "
-                f"'Pricing DB'!$A$7:$A$11, 0))*7.33")
+                f"{PDB['dk_name']}, 0))*7.33")
 
     def section(row, text):
         section_header_at(ws, row, 1, 6, text)
@@ -1748,27 +2166,27 @@ def build_estimate_summary(wb, db):
         db_cell(ws, r, 1, name, editable=False)
 
         # Decking $/SF
-        decking_psf = (f"IFERROR(INDEX('Pricing DB'!$B$7:$B$11, "
-                       f"MATCH(\"{name}\", 'Pricing DB'!$A$7:$A$11, 0)), 0)")
+        decking_psf = (f"IFERROR(INDEX({PDB['dk_sell']}, "
+                       f"MATCH(\"{name}\", {PDB['dk_name']}, 0)), 0)")
         ws.cell(row=r, column=2).value = f"={decking_psf}"
         ws.cell(row=r, column=2).number_format = '"$"#,##0.00'
 
         # Waste %
-        waste = (f"IFERROR(INDEX('Pricing DB'!$D$7:$D$11, "
-                 f"MATCH(\"{name}\", 'Pricing DB'!$A$7:$A$11, 0)), 0)")
+        waste = (f"IFERROR(INDEX({PDB['dk_waste']}, "
+                 f"MATCH(\"{name}\", {PDB['dk_name']}, 0)), 0)")
         ws.cell(row=r, column=3).value = f"={waste}"
         ws.cell(row=r, column=3).number_format = '0.0%'
 
         # Base Package = DeckSF * (Framing + Decking*(1+waste)) * Multiplier
         # (matrix-aware: only if frame/deck included)
         base = (f"='Quote Input'!{QI.DECK_SF}*"
-                f"(IF(INDEX('Project Type Behavior'!$C$4:$C$8, "
+                f"(IF(INDEX({PB['C']}, "
                 f"MATCH('Quote Input'!{QI.PROJECT_TYPE}, "
-                f"'Project Type Behavior'!$A$4:$A$8, 0))=\"Y\", "
+                f"{PB['A']}, 0))=\"Y\", "
                 f"'Quote Input'!{QI.FRAMING_PSF}, 0) + "
-                f"IF(INDEX('Project Type Behavior'!$D$4:$D$8, "
+                f"IF(INDEX({PB['D']}, "
                 f"MATCH('Quote Input'!{QI.PROJECT_TYPE}, "
-                f"'Project Type Behavior'!$A$4:$A$8, 0))=\"Y\", "
+                f"{PB['A']}, 0))=\"Y\", "
                 f"{decking_psf}*(1+{waste}), 0))"
                 f"*'Quote Input'!{QI.COMBINED_MULT}")
         ws.cell(row=r, column=4).value = base
@@ -2045,8 +2463,8 @@ def main():
     # Remove default sheet
     wb.remove(wb.active)
 
-    build_pricing_db(wb, db)
-    build_project_behavior(wb, db)
+    build_pricing_db_v2(wb, db)     # cursor-based, records PDB ranges
+    build_project_behavior(wb, db)  # records PB ranges
     build_quote_input(wb, db)       # inserts at position 0
     build_materials_list(wb, db)
     build_estimate_summary(wb, db)

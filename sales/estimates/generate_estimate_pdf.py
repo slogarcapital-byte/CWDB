@@ -241,6 +241,21 @@ def _logo_flowable(target_width_in=2.8):
     return img
 
 
+def _rendering_flowable(path, target_width_in=5.5, max_height_in=6.0):
+    """A centered, proportionally-scaled mock-up rendering image. Portrait
+    images are capped by height so they always fit on the page."""
+    ir = ImageReader(str(path))
+    nw, nh = ir.getSize()
+    w = target_width_in * inch
+    h = w * (nh / nw)
+    if h > max_height_in * inch:
+        h = max_height_in * inch
+        w = h * (nw / nh)
+    img = Image(str(path), width=w, height=h)
+    img.hAlign = 'CENTER'
+    return img
+
+
 def _hr(color=ORANGE, thickness=1.5, space_after=8, space_before=4):
     return HRFlowable(width='100%', thickness=thickness, color=color,
                       spaceAfter=space_after, spaceBefore=space_before)
@@ -431,6 +446,18 @@ def generate_pdf(estimate, output_path):
     s.append(Paragraph('Project Overview', h2))
     s.append(Paragraph(estimate['project']['overview'], overview))
 
+    # ── DESIGN MOCK-UP (AI renderings, if provided) ─────────────────────────
+    renderings = [r for r in (estimate.get('renderings') or [])
+                  if r.get('path') and Path(r['path']).exists()]
+    if renderings:
+        s.append(Paragraph('Design Mock-Up', h2))
+        for r in renderings:
+            s.append(KeepTogether([
+                _rendering_flowable(r['path']),
+                Paragraph(f"<i>{r.get('caption', '')}</i>", note),
+                sp(0.12),
+            ]))
+
     # ── SCOPE OF WORK ───────────────────────────────────────────────────────
     s.append(Paragraph('Scope of Work', h2))
     for item in estimate['project']['scope']:
@@ -454,8 +481,18 @@ def generate_pdf(estimate, output_path):
         s.append(Paragraph(f'• {item}', bullet))
 
     # ── NOT INCLUDED ────────────────────────────────────────────────────────
+    not_included = list(estimate['not_included'])
+    if renderings:
+        # Subordinate AI mock-ups to the priced line items (ATCP 110 / UCC
+        # 402.313 mitigation per legal-compliance-counsel review).
+        not_included.append(
+            'Design mock-up images are AI-generated visualizations for '
+            'illustration only and are not part of the scope of work; any '
+            'feature, material, color, or dimension shown in a mock-up is '
+            'included only if it is separately listed as a line item in the '
+            'itemized pricing above.')
     s.append(Paragraph("What's Not Included", h2))
-    for item in estimate['not_included']:
+    for item in not_included:
         s.append(Paragraph(f'• {item}', bullet))
 
     # ── SCHEDULE ────────────────────────────────────────────────────────────

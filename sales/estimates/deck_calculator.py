@@ -100,6 +100,85 @@ def get_project_allowances(db, project_type_name):
     )
 
 
+def find_fence_material(db, name):
+    for m in db.get("fence_materials", []):
+        if m["name"] == name:
+            return m
+    raise KeyError(f"fence_material={name!r} not found")
+
+
+def effective_price(material, color_name, price_key):
+    """Return the per-unit sell price for a material, honoring a per-color
+    override if the selected color carries one. Colors without a price inherit
+    the line price (price_key = 'sell_per_sf' or 'sell_per_lf')."""
+    base = material[price_key]
+    if color_name:
+        for c in material.get("colors", []):
+            if c.get("name") == color_name and price_key in c:
+                return c[price_key]
+    return base
+
+
+# -----------------------------------------------------------------------------
+# Fence engine - linear-foot model (not the deck SF model)
+# -----------------------------------------------------------------------------
+def compute_fence(db, inputs, pt):
+    """Price a fence: LF x rate-by-height + gates + tear-out + allowances,
+    then apply margin. Returns the same result-dict shape compute_engine
+    returns (deck buckets zeroed) plus fence-specific keys."""
+    fmat = find_fence_material(db, inputs["fence_material"])
+    height = str(inputs.get("fence_height", "6"))
+    by_height = fmat["cost_per_lf_by_height"]
+    rate = by_height.get(height)
+    if rate is None:  # requested height unavailable for this material; use tallest
+        height = sorted(by_height.keys(), key=lambda h: int(h))[-1]
+        rate = by_height[height]
+
+    fence_lf = inputs.get("fence_lf", 0) or 0
+    fence_run = fence_lf * rate
+
+    gate_costs = {g["key"]: g["cost_each"] for g in db.get("fence_gates", [])}
+    walk_n = inputs.get("walk_gates", 0) or 0
+    drive_n = inputs.get("drive_gates", 0) or 0
+    gates_cost = walk_n * gate_costs.get("walk", 0) + drive_n * gate_costs.get("drive", 0)
+
+    tearout_lf = inputs.get("tearout_lf", 0) or 0
+    tearout = tearout_lf * db.get("fence_tearout_per_lf", 0)
+
+    permit, dumpster, mobil = get_project_allowances(db, pt["name"])
+    permit = inputs.get("permit_alw", permit)
+    dumpster = inputs.get("dumpster_alw", dumpster)
+    mobil = inputs.get("mobil_alw", mobil)
+    misc = inputs.get("misc_alw", db["allowances"]["misc_default"])
+
+    subtotal = fence_run + gates_cost + tearout + permit + dumpster + mobil + misc
+    margin = inputs.get("margin", db["margin_and_contingency"]["default_margin"])
+    sell = subtotal / (1 - margin) if margin < 1 else 0
+
+    return {
+        "project_type": pt,
+        "matrix": pt["matrix"],
+        "deck_sf": 0,
+        "decking": None,
+        "railing": None,
+        "framing": None,
+        "combined_multiplier": 1.0,
+        # deck cost buckets (zeroed for fence)
+        "base_package": 0, "demo": 0, "border": 0, "rail": 0, "fascia": 0,
+        "stair": 0, "stain": 0, "repair": 0, "skirting": 0, "lighting": 0,
+        "benches": 0, "privacy": 0, "hot_tub": 0,
+        "permit": permit, "dumpster": dumpster, "mobilization": mobil, "misc": misc,
+        # fence-specific buckets
+        "fence_run": fence_run, "fence_gates": gates_cost, "fence_tearout": tearout,
+        "fence_lf": fence_lf, "fence_rate": rate, "fence_height": height,
+        "fence_material": fmat, "walk_gates": walk_n, "drive_gates": drive_n,
+        "tearout_lf": tearout_lf,
+        "subtotal_cost": subtotal,
+        "sell_price": sell,
+        "margin": margin,
+    }
+
+
 # -----------------------------------------------------------------------------
 # Engine - mirror of Excel formulas (and verify_engine.py)
 # -----------------------------------------------------------------------------
@@ -109,6 +188,9 @@ def compute_engine(db, inputs):
     use."""
     pt = find_project_type(db, inputs["project_type"])
     matrix = pt["matrix"]
+
+    if matrix.get("fence") == "Y":
+        return compute_fence(db, inputs, pt)
 
     deck_sf = inputs["length"] * inputs["depth"]
     decking = find_by_name(db["decking_materials"], inputs["decking_material"])
@@ -130,9 +212,10 @@ def compute_engine(db, inputs):
     frame_include = matrix["frame"] == "Y"
     deck_include = matrix["deck"] == "Y"
 
+    decking_sell_sf = effective_price(decking, inputs.get("decking_color"), "sell_per_sf")
     base_package = deck_sf * (
         (framing["sell_per_sf"] if frame_include else 0)
-        + (decking["sell_per_sf"] * (1 + decking["waste_pct"]) if deck_include else 0)
+        + (decking_sell_sf * (1 + decking["waste_pct"]) if deck_include else 0)
     ) * combined_m
 
     demo_rate = db["demo_rates_per_sf"].get(pt["key"], 0)
@@ -144,7 +227,8 @@ def compute_engine(db, inputs):
 
     rail = 0
     if matrix["rail"] != "N":
-        rail = inputs.get("railing_lf", 0) * railing["sell_per_lf"]
+        railing_sell_lf = effective_price(railing, inputs.get("railing_color"), "sell_per_lf")
+        rail = inputs.get("railing_lf", 0) * railing_sell_lf
 
     fascia = 0
     if deck_include:
@@ -235,10 +319,63 @@ def round_money(x):
     return int(round(x))
 
 
+def _with_color(name, color):
+    """Append the chosen color to a material name when it is meaningful
+    (skip 'Natural'/'Clear' placeholders that defer to stain)."""
+    if color and not any(w in color for w in ("Natural", "Clear", "finish via stain")):
+        return f"{name} in {color}"
+    return name
+
+
+def build_fence_line_items(eng, inputs):
+    """Customer-facing line items for a fence quote (sell-side, sum to sell)."""
+    cost_total = eng["subtotal_cost"]
+    sell_total = eng["sell_price"]
+    if cost_total <= 0:
+        return [["No scope priced", 0]]
+    scale = sell_total / cost_total
+
+    fmat = _with_color(eng["fence_material"]["name"], inputs.get("fence_color"))
+    items = [[
+        f"{eng['fence_height']} ft {fmat} fence, {eng['fence_lf']} linear feet, "
+        f"posts set in concrete",
+        round_money(eng["fence_run"] * scale)]]
+
+    if eng["fence_gates"] > 0:
+        gp = []
+        if eng.get("walk_gates", 0) > 0:
+            gp.append(f"{eng['walk_gates']} walk gate"
+                      + ("s" if eng["walk_gates"] > 1 else ""))
+        if eng.get("drive_gates", 0) > 0:
+            gp.append(f"{eng['drive_gates']} drive / double gate"
+                      + ("s" if eng["drive_gates"] > 1 else ""))
+        items.append(["Gates: " + ", ".join(gp),
+                      round_money(eng["fence_gates"] * scale)])
+
+    if eng["fence_tearout"] > 0:
+        items.append([
+            f"Removal and disposal of existing fence ({eng['tearout_lf']} LF)",
+            round_money(eng["fence_tearout"] * scale)])
+
+    admin = eng["permit"] + eng["dumpster"] + eng["mobilization"] + eng["misc"]
+    if admin > 0:
+        items.append(["Permits, layout, mobilization, and final cleanup",
+                      round_money(admin * scale)])
+
+    current_sum = sum(amt for _, amt in items)
+    delta = round_money(sell_total) - current_sum
+    if items and delta != 0:
+        items[-1] = [items[-1][0], items[-1][1] + delta]
+    return items
+
+
 def build_line_items(eng, inputs):
     """Map engine cost buckets to customer-friendly sell-side line items.
     Each line item is [label, amount]. Amounts sum to sell_price (with
     rounding spread on the last line)."""
+    if eng.get("matrix", {}).get("fence") == "Y":
+        return build_fence_line_items(eng, inputs)
+
     pt_name = eng["project_type"]["name"]
     cost_total = eng["subtotal_cost"]
     sell_total = eng["sell_price"]
@@ -287,8 +424,8 @@ def build_line_items(eng, inputs):
     # --- For build-type projects (Resurface / Frame Rebuild / Full Tear-Out) ---
     else:
         deck_sf = eng["deck_sf"]
-        decking_name = eng["decking"]["name"]
-        railing_name = eng["railing"]["name"]
+        decking_name = _with_color(eng["decking"]["name"], inputs.get("decking_color"))
+        railing_name = _with_color(eng["railing"]["name"], inputs.get("railing_color"))
         framing_name = eng["framing"]["name"]
 
         # Demo + dumpster
@@ -400,6 +537,8 @@ SCOPE_FILE_MAP = {
     "Resurface (Boards Only)": "scope-resurface.md",
     "Frame + Deck Rebuild (Keep Footings)": "scope-build.md",
     "Full Tear-Out + New Build": "scope-build.md",
+    "New Build (No Tear-Out)": "scope-new-build.md",
+    "Fence": "scope-fence.md",
 }
 
 
@@ -421,12 +560,12 @@ def build_scope_context(inputs, eng):
     railing_name = eng["railing"]["name"]
     framing_name = eng["framing"]["name"]
 
-    # Friendly material phrases
-    decking_phrase = decking_name  # already client-friendly
+    # Friendly material phrases (with chosen color where meaningful)
+    decking_phrase = _with_color(decking_name, inputs.get("decking_color"))
     framing_phrase = ("kiln-dried pressure-treated lumber"
                       if framing_name.startswith("KDAT")
                       else "Fortress Evolution galvanized steel")
-    railing_phrase = railing_name
+    railing_phrase = _with_color(railing_name, inputs.get("railing_color"))
 
     # Stair/rail overview fragments
     stair_runs = inputs.get("stair_runs", 0) or 0
@@ -453,6 +592,12 @@ def build_scope_context(inputs, eng):
                           "forms × 48 in deep for WI frost line) at code-required spacing\n")
         footing_inclusion_phrase = ("- All new footings: concrete tube forms, "
                                     "concrete mix, rebar, and excavation\n")
+    elif pt_name == "New Build (No Tear-Out)":
+        demo_extras = ""
+        footing_phrase = ("- Excavate and pour new code-compliant footings (12 in tube "
+                          "forms × 48 in deep for WI frost line) at code-required spacing\n")
+        footing_inclusion_phrase = ("- All new footings: concrete tube forms, "
+                                    "concrete mix, rebar, and excavation\n")
     elif pt_name == "Frame + Deck Rebuild (Keep Footings)":
         demo_extras = " — existing footings retained"
         footing_phrase = ("- Inspect existing footings; flag any inadequate footing "
@@ -467,6 +612,9 @@ def build_scope_context(inputs, eng):
     if pt_name == "Full Tear-Out + New Build":
         duration_range = "7-10"
         start_window_weeks = "3-4"
+    elif pt_name == "New Build (No Tear-Out)":
+        duration_range = "6-9"
+        start_window_weeks = "2-3"
     elif pt_name == "Frame + Deck Rebuild (Keep Footings)":
         duration_range = "5-7"
         start_window_weeks = "2-3"
@@ -531,7 +679,11 @@ def build_scope_context(inputs, eng):
             "premium paint-and-sealer combination product"
             if "solid" in stain_type.lower()
             else f"premium {stain_type_lc} stain")
-        stain_color_phrase = ""  # could be filled if user provides
+        stain_color = inputs.get("stain_color", "")
+        stain_color_phrase = (
+            f" in {stain_color}"
+            if stain_color and not any(w in stain_color for w in ("Natural", "Clear"))
+            else "")
         deck_existing_material = inputs.get(
             "existing_deck_material", "pressure-treated wood")
 
@@ -612,6 +764,8 @@ def build_scope_context(inputs, eng):
     # Project phrase for build
     if pt_name == "Full Tear-Out + New Build":
         project_phrase = "Complete tear-out and new deck build"
+    elif pt_name == "New Build (No Tear-Out)":
+        project_phrase = "New deck build"
     elif pt_name == "Frame + Deck Rebuild (Keep Footings)":
         project_phrase = "Frame and deck rebuild on existing footings"
     elif pt_name == "Resurface (Boards Only)":
@@ -745,6 +899,8 @@ def make_estimate_filename(client_name, project_type_name, today=None):
         "Resurface (Boards Only)": "resurface",
         "Frame + Deck Rebuild (Keep Footings)": "frame-rebuild",
         "Full Tear-Out + New Build": "deck-build",
+        "New Build (No Tear-Out)": "new-build",
+        "Fence": "fence",
     }.get(project_type_name, "deck-project")
     return f"{today.isoformat()}-{slugify(last)}-{pt_short}.json"
 
@@ -755,12 +911,57 @@ def make_estimate_number(today=None):
 
 
 # -----------------------------------------------------------------------------
+# Fence scope context (placeholders for scope-fence.md)
+# -----------------------------------------------------------------------------
+def build_fence_context(inputs, eng):
+    """Build the {placeholder} -> value dict for the fence scope template."""
+    fmat = eng["fence_material"]["name"]
+    color = inputs.get("fence_color", "")
+    color_phrase = (f", {color} finish"
+                    if color and not any(w in color for w in ("Natural", "finish via stain"))
+                    else "")
+    gates = []
+    if eng.get("walk_gates", 0) > 0:
+        gates.append(f"{eng['walk_gates']} walk gate"
+                     + ("s" if eng["walk_gates"] > 1 else ""))
+    if eng.get("drive_gates", 0) > 0:
+        gates.append(f"{eng['drive_gates']} drive / double gate"
+                     + ("s" if eng["drive_gates"] > 1 else ""))
+    gates_phrase = (" with " + " and ".join(gates)) if gates else ""
+    gates_scope_line = (("\n- Hang " + " and ".join(gates)
+                         + " on heavy-duty hinges with self-latching hardware")
+                        if gates else "")
+    if eng.get("tearout_lf", 0) > 0:
+        tearout_scope_line = (f"\n- Remove and dispose of {eng['tearout_lf']} LF "
+                              "of existing fence before layout")
+        tearout_included = "- Removal and disposal of the existing fence\n"
+    else:
+        tearout_scope_line = ""
+        tearout_included = ""
+    return {
+        "fence_lf": eng["fence_lf"],
+        "fence_height": eng["fence_height"],
+        "fence_material": fmat,
+        "fence_color_phrase": color_phrase,
+        "gates_phrase": gates_phrase,
+        "gates_scope_line": gates_scope_line,
+        "tearout_scope_line": tearout_scope_line,
+        "tearout_included": tearout_included,
+        "duration_range": "2-4",
+        "start_window_weeks": "2-3",
+    }
+
+
+# -----------------------------------------------------------------------------
 # Build the final estimate JSON
 # -----------------------------------------------------------------------------
 def build_estimate_json(inputs, client_info, db, today=None):
     eng = compute_engine(db, inputs)
     template = load_scope_template(eng["project_type"]["name"])
-    ctx = build_scope_context(inputs, eng)
+    if eng["matrix"].get("fence") == "Y":
+        ctx = build_fence_context(inputs, eng)
+    else:
+        ctx = build_scope_context(inputs, eng)
     scope = render_scope(template, ctx)
 
     line_items = build_line_items(eng, inputs)

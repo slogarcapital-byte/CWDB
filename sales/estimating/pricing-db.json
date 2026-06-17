@@ -12,6 +12,10 @@
     "Menards SKU 1072752 (Cedar 2x4x8 S4S) - fallback price used; verify in-person"
   ],
 
+  "_color_pricing_note": "Each decking/railing material may carry a 'colors' array. A color is {name, optional hex, optional sell_per_sf/sell_per_lf}. If a color omits a price it inherits the line price; a price on the color overrides it. TimberTech color lists + any premium-color upcharges are representative pending final scrape of timbertech.com/order-samples and /products/railing (CONFIRM).",
+
+  "_timbertech_pricing_note": "TimberTech sell_per_sf derived from John's supplier cost per LF (Badger=AZEK/PVC, Woodland=PRO/composite, photos 2026-06): material_per_sf = cost_per_lf x 2.18 (5.5in board => 0.458 SF/LF); sell_per_sf = material_per_sf x 2.75 (Trex-implied markup 2.6-2.9x). board_coverage and markup are the two tunable constants. CONFIRM markup with John before quoting a real customer.",
+
   "decking_materials": [
     {
       "key": "pt_pine",
@@ -20,7 +24,10 @@
       "material_per_sf": 1.25,
       "waste_pct": 0.10,
       "description": "Budget tier. AC2 5/4x6x16 PT decking (Menards SKU 1110669). 8-12 yr life with stain maintenance.",
-      "source": "Menards Wausau 2026-05 (fallback - verify in-person)"
+      "source": "Menards Wausau 2026-05 (fallback - verify in-person)",
+      "colors": [
+        { "name": "Natural (finish via stain - see Stain section)" }
+      ]
     },
     {
       "key": "cedar",
@@ -29,7 +36,10 @@
       "material_per_sf": 4.85,
       "waste_pct": 0.10,
       "description": "Mid wood tier. Red Cedar 5/4x6x16 (Menards SKU 1072723 - $35.59 rebate). Natural rot resistance. 15-20 yr life.",
-      "source": "Menards Wausau 2026-05 (confirmed)"
+      "source": "Menards Wausau 2026-05 (confirmed)",
+      "colors": [
+        { "name": "Natural (finish via stain - see Stain section)" }
+      ]
     },
     {
       "key": "trex_enhance",
@@ -38,7 +48,11 @@
       "material_per_sf": 7.50,
       "waste_pct": 0.08,
       "description": "Entry composite. 25-yr warranty. Budget-friendly composite option.",
-      "source": "John Garcia spreadsheet (verified 2026-05)"
+      "source": "John Garcia spreadsheet (verified 2026-05)",
+      "colors": [
+        { "name": "Beach Dune" }, { "name": "Clam Shell" }, { "name": "Foggy Wharf" },
+        { "name": "Saddle" }, { "name": "Toasted Sand" }, { "name": "Rocky Harbor" }
+      ]
     },
     {
       "key": "trex_select",
@@ -47,7 +61,11 @@
       "material_per_sf": 10.50,
       "waste_pct": 0.08,
       "description": "Mid-tier composite. 35-yr warranty. Most common composite upgrade.",
-      "source": "John Garcia spreadsheet (verified 2026-05)"
+      "source": "John Garcia spreadsheet (verified 2026-05)",
+      "colors": [
+        { "name": "Pebble Grey" }, { "name": "Saddle" }, { "name": "Madeira" },
+        { "name": "Woodland Brown" }, { "name": "Winchester Grey" }
+      ]
     },
     {
       "key": "trex_transcend",
@@ -56,7 +74,123 @@
       "material_per_sf": 16.00,
       "waste_pct": 0.10,
       "description": "Premium composite. Full grain, deep colors. 50-yr warranty.",
-      "source": "John Garcia spreadsheet (verified 2026-05)"
+      "source": "John Garcia spreadsheet (verified 2026-05)",
+      "colors": [
+        { "name": "Spiced Rum" }, { "name": "Lava Rock" }, { "name": "Tiki Torch" },
+        { "name": "Island Mist" }, { "name": "Gravel Path" }, { "name": "Havana Gold" },
+        { "name": "Rope Swing" }, { "name": "Vintage Lantern" }
+      ]
+    },
+    {
+      "key": "tt_azek_harvest",
+      "name": "TimberTech AZEK Harvest",
+      "sell_per_sf": 33,
+      "material_per_sf": 11.92,
+      "cost_per_lf": 5.47,
+      "waste_pct": 0.08,
+      "description": "Advanced PVC (AZEK), Harvest Collection - refined cathedral grain. Capped polymer, no organic content. Entry AZEK tier.",
+      "source": "John Garcia / Badger cost sheet 2026-06 ($5.47/LF). sell = 5.47x2.18x2.75. CONFIRM markup.",
+      "colors": [
+        { "name": "Slate Gray" }, { "name": "Brownstone" }, { "name": "Kona" },
+        { "name": "Coconut Husk" }, { "name": "Terra" }
+      ]
+    },
+    {
+      "key": "tt_azek_harvest_plus",
+      "name": "TimberTech AZEK Harvest+",
+      "sell_per_sf": 41,
+      "material_per_sf": 14.91,
+      "cost_per_lf": 6.84,
+      "waste_pct": 0.08,
+      "description": "Advanced PVC (AZEK), Harvest+ Collection - understated cathedral grain.",
+      "source": "John Garcia / Badger cost sheet 2026-06 ($6.84/LF). sell = 6.84x2.18x2.75. CONFIRM markup + colors.",
+      "colors": [
+        { "name": "Slate Gray" }, { "name": "Brownstone" }, { "name": "Hazelwood" },
+        { "name": "Driftwood" }
+      ]
+    },
+    {
+      "key": "tt_azek_landmark",
+      "name": "TimberTech AZEK Landmark",
+      "sell_per_sf": 41,
+      "material_per_sf": 14.91,
+      "cost_per_lf": 6.84,
+      "waste_pct": 0.08,
+      "description": "Advanced PVC (AZEK), Landmark Collection - crosscut hardwoods, cathedral grain.",
+      "source": "John Garcia / Badger cost sheet 2026-06 ($6.84/LF). sell = 6.84x2.18x2.75. CONFIRM markup.",
+      "colors": [
+        { "name": "American Walnut" }, { "name": "Castle Gate" }, { "name": "French White Oak" }
+      ]
+    },
+    {
+      "key": "tt_azek_vintage",
+      "name": "TimberTech AZEK Vintage",
+      "sell_per_sf": 47,
+      "material_per_sf": 17.24,
+      "cost_per_lf": 7.91,
+      "waste_pct": 0.08,
+      "description": "Advanced PVC (AZEK), Vintage Collection - exotic hardwoods, wire-brushed finish. Top AZEK tier.",
+      "source": "John Garcia / Badger cost sheet 2026-06 ($7.91/LF). sell = 7.91x2.18x2.75. CONFIRM markup.",
+      "colors": [
+        { "name": "Coastline" }, { "name": "Dark Hickory" }, { "name": "English Walnut" },
+        { "name": "Mahogany" }, { "name": "Cypress" }, { "name": "Weathered Teak" }
+      ]
+    },
+    {
+      "key": "tt_pro_terrain",
+      "name": "TimberTech PRO Terrain",
+      "sell_per_sf": 27,
+      "material_per_sf": 9.81,
+      "cost_per_lf": 4.50,
+      "waste_pct": 0.08,
+      "description": "Capped composite (PRO), Terrain Collection - rugged cathedral grain. Entry PRO tier.",
+      "source": "John Garcia / Woodland cost sheet 2026-06 ($4.50/LF). sell = 4.50x2.18x2.75. CONFIRM markup.",
+      "colors": [
+        { "name": "Brown Oak" }, { "name": "Silver Maple" }, { "name": "Stone Ash" },
+        { "name": "Rustic Elm" }
+      ]
+    },
+    {
+      "key": "tt_pro_terrain_plus",
+      "name": "TimberTech PRO Terrain+",
+      "sell_per_sf": 27,
+      "material_per_sf": 9.81,
+      "cost_per_lf": 4.50,
+      "waste_pct": 0.08,
+      "description": "Capped composite (PRO), Terrain+ Collection - subtle wood grain.",
+      "source": "John Garcia / Woodland cost sheet 2026-06 ($4.50/LF). sell = 4.50x2.18x2.75. CONFIRM markup + colors.",
+      "colors": [
+        { "name": "Brown Oak" }, { "name": "Coconut Husk" }, { "name": "Pecan" },
+        { "name": "Driftwood" }
+      ]
+    },
+    {
+      "key": "tt_pro_reserve",
+      "name": "TimberTech PRO Reserve",
+      "sell_per_sf": 38,
+      "material_per_sf": 13.93,
+      "cost_per_lf": 6.39,
+      "waste_pct": 0.08,
+      "description": "Capped composite (PRO), Reserve Collection - reclaimed-wood look.",
+      "source": "John Garcia / Woodland cost sheet 2026-06 ($6.39/LF). sell = 6.39x2.18x2.75. CONFIRM markup.",
+      "colors": [
+        { "name": "Antique Leather" }, { "name": "Dark Roast" }, { "name": "Driftwood" },
+        { "name": "Storm Gray" }, { "name": "Walnut" }, { "name": "Weathered Wood" }
+      ]
+    },
+    {
+      "key": "tt_pro_legacy",
+      "name": "TimberTech PRO Legacy",
+      "sell_per_sf": 46,
+      "material_per_sf": 16.74,
+      "cost_per_lf": 7.68,
+      "waste_pct": 0.08,
+      "description": "Capped composite (PRO), Legacy Collection - hand-scraped finish. Top PRO tier.",
+      "source": "John Garcia / Woodland cost sheet 2026-06 ($7.68/LF). sell = 7.68x2.18x2.75. CONFIRM markup.",
+      "colors": [
+        { "name": "Pecan" }, { "name": "Tigerwood" }, { "name": "Mocha" },
+        { "name": "Espresso" }, { "name": "Ashwood" }
+      ]
     }
   ],
 
@@ -67,7 +201,8 @@
       "sell_per_lf": 40,
       "material_per_lf": 11,
       "description": "PT 2x4 top/bottom rail (Menards SKU 1110818) with PT 2x2 balusters and 4x4 posts. Budget tier.",
-      "source": "Menards Wausau 2026-05 (confirmed for 2x4)"
+      "source": "Menards Wausau 2026-05 (confirmed for 2x4)",
+      "colors": [ { "name": "Natural (finish via stain)" } ]
     },
     {
       "key": "cedar_wood",
@@ -75,7 +210,8 @@
       "sell_per_lf": 60,
       "material_per_lf": 18,
       "description": "Cedar 2x4 top/bottom rail (Menards SKU 1072752 - fallback) with cedar balusters. Mid wood tier.",
-      "source": "Menards Wausau 2026-05 (fallback - verify in-person)"
+      "source": "Menards Wausau 2026-05 (fallback - verify in-person)",
+      "colors": [ { "name": "Natural (finish via stain)" } ]
     },
     {
       "key": "trex_aluminum",
@@ -83,7 +219,8 @@
       "sell_per_lf": 165,
       "material_per_lf": 65,
       "description": "Trex Signature aluminum rail system. Black/bronze. Lifetime warranty.",
-      "source": "John Garcia spreadsheet (verified 2026-05)"
+      "source": "John Garcia spreadsheet (verified 2026-05)",
+      "colors": [ { "name": "Charcoal Black" }, { "name": "Bronze" }, { "name": "Classic White" } ]
     },
     {
       "key": "cable",
@@ -91,7 +228,8 @@
       "sell_per_lf": 110,
       "material_per_lf": 45,
       "description": "Feeney CableRail (Menards SKU 6310-PKG) on PT/cedar posts. Full system with top+bot rail. Modern look, view preservation.",
-      "source": "Dunn Lumber + Menards 2026-05 (corroborated)"
+      "source": "Dunn Lumber + Menards 2026-05 (corroborated)",
+      "colors": [ { "name": "Black powder-coat posts" }, { "name": "Bronze posts" }, { "name": "Natural wood posts" } ]
     },
     {
       "key": "glass_panel",
@@ -99,7 +237,44 @@
       "sell_per_lf": 275,
       "material_per_lf": 180,
       "description": "Tempered glass panel railing with aluminum posts. Premium tier - $60K+ projects only.",
-      "source": "Angi + HomeGuide + Viewrail (industry avg 2026-05)"
+      "source": "Angi + HomeGuide + Viewrail (industry avg 2026-05)",
+      "colors": [ { "name": "Clear glass / Black posts" }, { "name": "Clear glass / Bronze posts" }, { "name": "Clear glass / White posts" } ]
+    },
+    {
+      "key": "tt_reliance_rail",
+      "name": "TimberTech Reliance Rail (Vinyl)",
+      "sell_per_lf": 70,
+      "material_per_lf": 28,
+      "description": "Premium vinyl railing, value tier. Low-maintenance. CONFIRM pricing.",
+      "source": "Market research 2026-06 (TimberTech does not publish; rail material ~$20-60/LF). sell = material x 2.5. CONFIRM.",
+      "colors": [ { "name": "White" }, { "name": "Black" } ]
+    },
+    {
+      "key": "tt_premier_rail",
+      "name": "TimberTech Premier Rail (Composite)",
+      "sell_per_lf": 100,
+      "material_per_lf": 40,
+      "description": "Composite railing, mid tier. Pairs with PRO/EDGE decking.",
+      "source": "Market research 2026-06. sell = material x 2.5. CONFIRM.",
+      "colors": [ { "name": "White" }, { "name": "Black" }, { "name": "Brown" }, { "name": "Kona" } ]
+    },
+    {
+      "key": "tt_impression_rail",
+      "name": "TimberTech Impression Rail Express (Aluminum)",
+      "sell_per_lf": 110,
+      "material_per_lf": 45,
+      "description": "Powder-coated aluminum railing, mid tier. Slim sightlines.",
+      "source": "Market research 2026-06. sell = material x 2.5. CONFIRM.",
+      "colors": [ { "name": "Matte Black" }, { "name": "Matte Bronze" }, { "name": "Gloss White" }, { "name": "Textured Black" } ]
+    },
+    {
+      "key": "tt_radiance_rail",
+      "name": "TimberTech RadianceRail (Premium)",
+      "sell_per_lf": 150,
+      "material_per_lf": 60,
+      "description": "Premium capped composite/PVC railing, drink-rail capable. Top TimberTech rail tier.",
+      "source": "Market research 2026-06. sell = material x 2.5. CONFIRM.",
+      "colors": [ { "name": "White" }, { "name": "Black" }, { "name": "Brown" }, { "name": "Kona" }, { "name": "Gravel Path" } ]
     }
   ],
 
@@ -127,7 +302,9 @@
     "stain_repairs": 0,
     "resurface": 3,
     "frame_deck_rebuild": 6,
-    "full_tearout": 8
+    "full_tearout": 8,
+    "new_build": 0,
+    "fence": 0
   },
 
   "stain_rates_per_sf": [
@@ -137,6 +314,21 @@
     { "type": "Semi-Transparent", "coats": 2, "per_sf": 5.20 },
     { "type": "Solid / Paint-and-Sealer", "coats": 1, "per_sf": 3.75 },
     { "type": "Solid / Paint-and-Sealer", "coats": 2, "per_sf": 6.00 }
+  ],
+
+  "stain_colors": [
+    "Natural / Clear",
+    "Cedar",
+    "Redwood",
+    "Honey Gold",
+    "Chestnut Brown",
+    "Walnut",
+    "Driftwood Gray",
+    "Slate Gray",
+    "Mahogany",
+    "Ebony / Black",
+    "Solid White",
+    "Solid Tan"
   ],
 
   "repair_rates": {
@@ -204,7 +396,9 @@
     { "name": "Stain + Minor Repairs",                 "permit": 0,   "dumpster": 350, "mobilization": 750 },
     { "name": "Resurface (Boards Only)",               "permit": 250, "dumpster": 600, "mobilization": 1500 },
     { "name": "Frame + Deck Rebuild (Keep Footings)",  "permit": 500, "dumpster": 950, "mobilization": 2500 },
-    { "name": "Full Tear-Out + New Build",             "permit": 750, "dumpster": 950, "mobilization": 2500 }
+    { "name": "Full Tear-Out + New Build",             "permit": 750, "dumpster": 950, "mobilization": 2500 },
+    { "name": "New Build (No Tear-Out)",               "permit": 750, "dumpster": 350, "mobilization": 2500 },
+    { "name": "Fence",                                  "permit": 200, "dumpster": 200, "mobilization": 750 }
   ],
 
   "margin_and_contingency": {
@@ -288,8 +482,83 @@
         "multipliers": "Y"
       },
       "description": "Complete demolition including footings. New build from grade up."
+    },
+    {
+      "key": "new_build",
+      "name": "New Build (No Tear-Out)",
+      "matrix": {
+        "demo": "N",
+        "frame": "Y",
+        "deck": "Y",
+        "rail": "Y",
+        "stair": "Y",
+        "footing": "Y",
+        "stain": "N",
+        "multipliers": "Y"
+      },
+      "description": "Brand-new deck where none existed. New footings, framing, decking, rails, stairs. No demolition, tear-out, or waste-removal cost."
+    },
+    {
+      "key": "fence",
+      "name": "Fence",
+      "matrix": {
+        "demo": "N",
+        "frame": "N",
+        "deck": "N",
+        "rail": "N",
+        "stair": "N",
+        "footing": "N",
+        "stain": "N",
+        "multipliers": "N",
+        "fence": "Y"
+      },
+      "description": "Fence build, priced by linear foot. Uses fence_materials (rate by height) + gates + tear-out, not the deck SF model."
     }
   ],
+
+  "fence_materials": [
+    {
+      "key": "wood_privacy",
+      "name": "Wood Privacy (Cedar / PT)",
+      "cost_per_lf_by_height": { "4": 24, "5": 28, "6": 33, "8": 45 },
+      "colors": [ { "name": "Natural (finish via stain)" }, { "name": "Pre-stained Cedar" }, { "name": "Pre-stained Gray" } ],
+      "description": "Solid-board privacy fence, cedar or treated pine. Most common in Central WI.",
+      "source": "CONFIRM WITH JOHN - Central WI market est 2026-06"
+    },
+    {
+      "key": "vinyl_privacy",
+      "name": "Vinyl Privacy",
+      "cost_per_lf_by_height": { "4": 34, "5": 38, "6": 45, "8": 58 },
+      "colors": [ { "name": "White" }, { "name": "Tan / Almond" }, { "name": "Khaki" }, { "name": "Gray" } ],
+      "description": "Maintenance-free vinyl privacy panels. Popular upgrade.",
+      "source": "CONFIRM WITH JOHN - Central WI market est 2026-06"
+    },
+    {
+      "key": "aluminum_ornamental",
+      "name": "Aluminum Ornamental",
+      "cost_per_lf_by_height": { "4": 34, "5": 40, "6": 48 },
+      "colors": [ { "name": "Black" }, { "name": "Bronze" }, { "name": "White" } ],
+      "description": "Powder-coated aluminum (pool / decorative). Premium tier. No 8 ft option.",
+      "source": "CONFIRM WITH JOHN - Central WI market est 2026-06"
+    },
+    {
+      "key": "chain_link",
+      "name": "Chain Link (Galvanized)",
+      "cost_per_lf_by_height": { "4": 16, "5": 19, "6": 22, "8": 30 },
+      "colors": [ { "name": "Galvanized" }, { "name": "Black vinyl-coated" }, { "name": "Green vinyl-coated" } ],
+      "description": "Galvanized or vinyl-coated chain link. Value tier, common for pets / yards.",
+      "source": "CONFIRM WITH JOHN - Central WI market est 2026-06"
+    }
+  ],
+
+  "fence_gates": [
+    { "key": "walk",  "name": "Walk gate (3-4 ft)",            "cost_each": 300, "source": "CONFIRM WITH JOHN" },
+    { "key": "drive", "name": "Drive / double gate (10-12 ft)", "cost_each": 700, "source": "CONFIRM WITH JOHN" }
+  ],
+
+  "fence_tearout_per_lf": 6,
+  "fence_mobilization_default": 750,
+  "fence_heights": ["4", "5", "6", "8"],
 
   "border_options": [
     "Pencil Border",
