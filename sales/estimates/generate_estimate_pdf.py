@@ -92,6 +92,8 @@ disc_h    = ParagraphStyle('disc_h', fontName='Helvetica-Bold', fontSize=11, lea
                            textColor=ORANGE, spaceAfter=4, alignment=TA_LEFT)
 disc_b    = ParagraphStyle('disc_b', fontName='Helvetica', fontSize=10, leading=14,
                            textColor=SLATE, spaceAfter=0, alignment=TA_LEFT)
+mockup_disc = ParagraphStyle('mockup_disc', fontName='Helvetica-Oblique', fontSize=8,
+                           leading=11, textColor=SLATE, spaceAfter=0, alignment=TA_LEFT)
 
 
 def _fulfillment(estimate):
@@ -241,19 +243,67 @@ def _logo_flowable(target_width_in=2.8):
     return img
 
 
-def _rendering_flowable(path, target_width_in=5.5, max_height_in=6.0):
-    """A centered, proportionally-scaled mock-up rendering image. Portrait
-    images are capped by height so they always fit on the page."""
-    ir = ImageReader(str(path))
-    nw, nh = ir.getSize()
-    w = target_width_in * inch
-    h = w * (nh / nw)
-    if h > max_height_in * inch:
-        h = max_height_in * inch
-        w = h * (nw / nh)
-    img = Image(str(path), width=w, height=h)
-    img.hAlign = 'CENTER'
-    return img
+# One illustration-only disclosure for the whole Design Mock-Up section (owner
+# direction 2026-06-17: a single disclosure covers all renderings, replacing the
+# per-image caption). Wording mirrors render_mockup.DISCLAIMER minus the
+# "COMPUTER-GENERATED SIMULATION: NOT A PHOTOGRAPH" lead-in, which still rides
+# burned into every image as the watermark band. Do not weaken.
+MOCKUP_DISCLOSURE = (
+    "This image was produced by AI image-editing software from a photo of your "
+    "property to help you visualize a possible design. It is for illustration "
+    "only and is not an architectural drawing, a measured rendering, or a "
+    "promise of how the finished project will look. Materials, colors, "
+    "dimensions, railing and stair styles, lighting, landscaping, and other "
+    "details shown are approximations and may differ from, or may not be "
+    "included in, the actual work. Only the written, itemized scope and price "
+    "in this estimate (and any signed contract) control what CWDB will build. "
+    "This image is not a representation, guarantee, or warranty of the "
+    "finished work."
+)
+
+
+def _mockup_section(renderings):
+    """Design Mock-Up section as a single-page-safe block.
+
+    All renderings sit side by side in one row, each hard-capped in height so a
+    tall portrait phone photo cannot push the section onto a second page. One
+    consolidated disclosure sits below the images. The whole section is wrapped
+    in KeepTogether so it never splits across pages, regardless of the source
+    photos' dimensions or count.
+    """
+    content_w = 6.8 * inch          # letter width minus the 0.85in side margins
+    gap = 0.2 * inch                # gutter between images / inset at the edges
+    n = max(1, len(renderings))
+    cell_w = content_w / n
+    img_max_w = cell_w - gap
+    max_h = 4.3 * inch              # height cap that guarantees a one-page fit
+
+    cells = []
+    for r in renderings:
+        ir = ImageReader(str(r['path']))
+        nw, nh = ir.getSize()
+        w, h = img_max_w, img_max_w * (nh / nw)
+        if h > max_h:               # portrait: re-derive width from the height cap
+            h, w = max_h, max_h * (nw / nh)
+        img = Image(str(r['path']), width=w, height=h)
+        img.hAlign = 'CENTER'
+        cells.append(img)
+
+    row = Table([cells], colWidths=[cell_w] * len(cells))
+    row.setStyle(TableStyle([
+        ('VALIGN',        (0, 0), (-1, -1), 'TOP'),
+        ('ALIGN',         (0, 0), (-1, -1), 'CENTER'),
+        ('LEFTPADDING',   (0, 0), (-1, -1), gap / 2),
+        ('RIGHTPADDING',  (0, 0), (-1, -1), gap / 2),
+        ('TOPPADDING',    (0, 0), (-1, -1), 0),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
+    ]))
+    return KeepTogether([
+        Paragraph('Design Mock-Up', h2),
+        row,
+        Spacer(1, 0.08 * inch),
+        Paragraph(MOCKUP_DISCLOSURE, mockup_disc),
+    ])
 
 
 def _hr(color=ORANGE, thickness=1.5, space_after=8, space_before=4):
@@ -460,13 +510,7 @@ def generate_pdf(estimate, output_path):
     renderings = [r for r in (estimate.get('renderings') or [])
                   if r.get('path') and Path(r['path']).exists()]
     if renderings:
-        s.append(Paragraph('Design Mock-Up', h2))
-        for r in renderings:
-            s.append(KeepTogether([
-                _rendering_flowable(r['path']),
-                Paragraph(f"<i>{r.get('caption', '')}</i>", note),
-                sp(0.12),
-            ]))
+        s.append(_mockup_section(renderings))
 
     # ── ITEMIZED PRICING ────────────────────────────────────────────────────
     total_amount = sum(amt for _, amt in estimate['line_items'])
