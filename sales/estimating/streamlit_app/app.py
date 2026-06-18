@@ -10,8 +10,10 @@ Run locally:
     streamlit run app.py
 
 Deploy:
-    Push to GitHub, connect repo on share.streamlit.io,
-    set secrets (gmail_address, gmail_app_password, recipient) in dashboard.
+    Push to GitHub (test-branch), connect repo on share.streamlit.io, set
+    secrets in the dashboard: gmail_address, gmail_app_password, recipient,
+    gemini_api_key, hubspot_private_app_token (for the HubSpot client pre-fill),
+    and app_passcode (gates the app since it now reads customer PII).
 """
 
 from __future__ import annotations
@@ -46,6 +48,8 @@ from generate_estimate_pdf import generate_pdf  # noqa: E402
 from email_send import send_estimate_email  # noqa: E402
 from populate_workbook import populate as populate_workbook  # noqa: E402
 from render_mockup import generate_mockups  # noqa: E402
+
+from hubspot_client import list_recent_contacts  # noqa: E402
 
 
 def _next_months(n: int = 12, start: date | None = None) -> list[str]:
@@ -187,6 +191,39 @@ st.caption("Central Wisconsin Deck Builders, LLC · Field quote tool")
 
 
 # ---------------------------------------------------------------------------
+# Passcode gate — the app now reads customer PII from HubSpot, and it lives on
+# a public Streamlit URL. A shared passcode (Streamlit secret `app_passcode`)
+# must be entered once per session. If the secret is unset we warn and allow,
+# so a missing secret never locks out the live app; the HubSpot picker also
+# self-disables without its token, so no PII flows in that state.
+# ---------------------------------------------------------------------------
+def require_passcode() -> None:
+    expected = st.secrets.get("app_passcode", "")
+    if not expected:
+        st.warning(
+            "Passcode not configured. Set app_passcode in Streamlit secrets "
+            "to protect customer data.",
+            icon="⚠️",
+        )
+        return
+    if st.session_state.get("_authed"):
+        return
+    with st.container(border=True):
+        st.subheader("Enter passcode")
+        code = st.text_input("Passcode", type="password", key="_passcode_input")
+        if st.button("Enter", type="primary"):
+            if code == expected:
+                st.session_state["_authed"] = True
+                st.rerun()
+            else:
+                st.error("Incorrect passcode.")
+    st.stop()
+
+
+require_passcode()
+
+
+# ---------------------------------------------------------------------------
 # Load pricing DB (cached so we don't re-read on every input change)
 # ---------------------------------------------------------------------------
 @st.cache_data
@@ -217,13 +254,51 @@ def colors_for(material):
 # ---------------------------------------------------------------------------
 with st.container(border=True):
     st.subheader("Client")
+
+    # Pre-fill from HubSpot: pick a lead and the four fields below auto-fill,
+    # so there's no copy-paste back and forth to the contact record. The four
+    # inputs are key-based (not value=), so the picker writes them via
+    # session_state. A load is applied once per selection (guarded by
+    # _loaded_contact_id) so manual edits afterward survive Streamlit reruns.
+    _MANUAL = "(manual entry)"
+    contacts, hs_status = list_recent_contacts()
+    if hs_status == "ok" and contacts:
+        by_label = {c["label"]: c for c in contacts}
+        pick_col, refresh_col = st.columns([6, 1])
+        with pick_col:
+            choice = st.selectbox(
+                "Load customer from HubSpot",
+                [_MANUAL] + list(by_label.keys()),
+                index=0,
+                help="Pick a lead to auto-fill name, address, phone, and email. "
+                     "Type to search by name.",
+            )
+        with refresh_col:
+            st.write("")  # nudge the button down to line up with the selectbox
+            if st.button("↻", help="Refresh contacts from HubSpot"):
+                list_recent_contacts.clear()
+                st.rerun()
+        if choice != _MANUAL:
+            c = by_label[choice]
+            if st.session_state.get("_loaded_contact_id") != c["id"]:
+                st.session_state["client_name"] = c["name"]
+                st.session_state["client_address"] = c["address_line"]
+                st.session_state["client_phone"] = c["phone"]
+                st.session_state["client_email"] = c["email"]
+                st.session_state["_loaded_contact_id"] = c["id"]
+                st.rerun()
+    elif hs_status == "not_configured":
+        st.caption("Connect HubSpot (set hubspot_private_app_token in secrets) "
+                   "to auto-fill a lead's details.")
+    # hs_status == "error": a warning was already surfaced by the client.
+
     col1, col2 = st.columns(2)
     with col1:
-        client_name = st.text_input("Name", value="")
-        client_phone = st.text_input("Phone", value="")
+        client_name = st.text_input("Name", key="client_name")
+        client_phone = st.text_input("Phone", key="client_phone")
     with col2:
-        client_address = st.text_input("Address", value="")
-        client_email = st.text_input("Email", value="")
+        client_address = st.text_input("Address", key="client_address")
+        client_email = st.text_input("Email", key="client_email")
 
 with st.container(border=True):
     st.subheader("Project")
