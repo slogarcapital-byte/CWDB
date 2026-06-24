@@ -348,7 +348,7 @@ try {
     }
 
     $leadRecords = New-Object System.Collections.Generic.List[hashtable]
-    $skipped = [ordered]@{ no_consent = 0; no_phone = 0; no_email = 0; is_customer = 0; no_submitted_at = 0 }
+    $skipped = [ordered]@{ no_consent = 0; no_phone = 0; no_email = 0; is_customer = 0; no_submitted_at = 0; test_lead = 0 }
 
     foreach ($c in $contacts) {
         $props = Get-PropOrNull $c "properties"
@@ -356,6 +356,26 @@ try {
 
         $stage = Get-PropOrNull $props "lifecyclestage"
         if ($stage -eq "customer") { $skipped.is_customer++; continue }
+
+        # Test-lead exclusion: never INGEST a test contact into fact_leads. The
+        # v_clean_leads view already filters these from the funnel, but a view filter is
+        # NOT enough - an un-skipped test contact can 409 the fact_leads UPSERT (the table
+        # has UNIQUE(email) while this loader upserts on hubspot_contact_id, so a second
+        # contact sharing an email collides) and fail the entire HubSpot pull, which closes
+        # the watchdog gate as stale_warehouse_data. (Incident 2026-06-24: test@test.com.)
+        # Predicate mirrors views/003-006 exactly: test emails, the synthetic internal
+        # domain, full_name starting "test", and utm_source='test'.
+        $emailRaw = Get-PropOrNull $props "email"
+        $emailLc  = if ($emailRaw) { ([string]$emailRaw).Trim().ToLowerInvariant() } else { "" }
+        $nameLc   = ((@((Get-PropOrNull $props "firstname"), (Get-PropOrNull $props "lastname")) |
+                      Where-Object { $_ }) -join " ").Trim().ToLowerInvariant()
+        $utmLc    = ([string](Get-PropOrNull $props "utm_source")).Trim().ToLowerInvariant()
+        $isTestLead =
+            ($emailLc -in @('test@test.com','dcebighitta12@aim.com','slogarjw@gmail.com')) -or
+            ($emailLc -like '*@cwdb-internal.test') -or
+            ($nameLc.StartsWith('test')) -or
+            ($utmLc -eq 'test')
+        if ($isTestLead) { $skipped.test_lead++; continue }
 
         # Consent gate (2026-06-10 pivot: all channels count).
         # A lead passes when the form relay set tcpa_consent_given=true, OR it is
@@ -442,14 +462,14 @@ try {
 
     if ($DryRun) {
         Write-Output "DryRun: would upsert $($leadRecords.Count) fact_leads rows."
-        Write-Output "DryRun: skipped $($skipped.is_customer) contractors, $($skipped.no_consent) without consent (no form TCPA and no recorded consent source), $($skipped.no_phone) without phone, $($skipped.no_email) without email, $($skipped.no_submitted_at) without createdate"
+        Write-Output "DryRun: skipped $($skipped.is_customer) contractors, $($skipped.test_lead) test leads, $($skipped.no_consent) without consent (no form TCPA and no recorded consent source), $($skipped.no_phone) without phone, $($skipped.no_email) without email, $($skipped.no_submitted_at) without createdate"
     } elseif ($leadRecords.Count -gt 0) {
         $n = Invoke-SupabaseUpsert -Table "fact_leads" -Records $leadRecords.ToArray() -ConflictColumns "hubspot_contact_id"
         Write-Output "Upserted $n rows into fact_leads"
-        Write-Output "Skipped: contractors=$($skipped.is_customer), no_consent=$($skipped.no_consent), no_phone=$($skipped.no_phone), no_email=$($skipped.no_email), no_createdate=$($skipped.no_submitted_at)"
+        Write-Output "Skipped: contractors=$($skipped.is_customer), test_leads=$($skipped.test_lead), no_consent=$($skipped.no_consent), no_phone=$($skipped.no_phone), no_email=$($skipped.no_email), no_createdate=$($skipped.no_submitted_at)"
     } else {
         Write-Output "No homeowner leads with TCPA + phone + email; fact_leads unchanged"
-        Write-Output "Skipped: contractors=$($skipped.is_customer), no_consent=$($skipped.no_consent), no_phone=$($skipped.no_phone), no_email=$($skipped.no_email), no_createdate=$($skipped.no_submitted_at)"
+        Write-Output "Skipped: contractors=$($skipped.is_customer), test_leads=$($skipped.test_lead), no_consent=$($skipped.no_consent), no_phone=$($skipped.no_phone), no_email=$($skipped.no_email), no_createdate=$($skipped.no_submitted_at)"
     }
 
     # ===========================================================================
