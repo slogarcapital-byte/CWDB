@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "as_of": "2026-06-24",
+  "market": "Wausau / Marathon County, WI",
+  "purpose": "Editable benchmark used ONLY by the estimator's 'Average Market Price' pricing rung. The app multiplies the matching rate by the project's square footage. This file does NOT feed compute_engine, the pricing DB, or any cost calculation. Refresh the numbers here quarterly; nothing else needs to change.",
+  "next_review_date": "2026-09-24",
+  "source": "HomeBlue Wausau deck cost (PT $16-19/sf, composite $32-34/sf installed, 2026); Homewyse / HomeGuide / Angi 2026 (deck stain $1.57-6.16/sf, deck refinish $3.00-8.87/sf). Figures are installed totals for a basic-to-mid deck including labor. CWDB scope (premium TimberTech, elaborate railing, stairs, demo, permits) can legitimately sit above a bare-deck market rate, so treat this rung as a sanity anchor, not a target.",
+  "rates_per_sf": {
+    "stain": 4,
+    "resurface": 20,
+    "new_build_wood_pt": 18,
+    "new_build_wood_cedar": 26,
+    "new_build_composite": 34
+  },
+  "rate_notes": {
+    "stain": "Re-stain / seal of existing deck, applied over stain_sf (floor + railing + stair surface actually coated).",
+    "resurface": "Replace deck boards on an existing frame (boards + install, frame stays). Higher than a re-stain, lower than a full build.",
+    "new_build_wood_pt": "Pressure-treated pine build, installed, over deck floor area.",
+    "new_build_wood_cedar": "Cedar build, installed (between PT and composite; cedar pricing volatile per pricing-db note).",
+    "new_build_composite": "Composite / TimberTech build, installed. Top of the Wausau composite range; premium AZEK collections can run higher."
+  }
+}

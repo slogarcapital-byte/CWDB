@@ -18,6 +18,7 @@ Deploy:
 
 from __future__ import annotations
 
+import json
 import sys
 import tempfile
 from datetime import date
@@ -37,6 +38,7 @@ for p in (ESTIMATING_DIR, ESTIMATES_DIR):
 
 from deck_calculator import (  # noqa: E402
     build_estimate_json,
+    compute_cost_floor,
     compute_engine,
     find_project_type,
     load_pricing,
@@ -232,6 +234,72 @@ def cached_pricing() -> dict:
 
 
 db = cached_pricing()
+
+
+@st.cache_data
+def cached_market_rates() -> dict:
+    """Editable Wausau / Marathon County benchmark used ONLY by the 'Average
+    Market Price' pricing rung. Never feeds the cost engine."""
+    path = ESTIMATING_DIR / "market-rates.json"
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+market_rates = cached_market_rates()
+
+
+def market_price(eng, inputs, rates):
+    """Average Market Price rung: local benchmark $/sf x project area.
+    Returns (price, descriptor) or (None, reason). Read-only; the engine is
+    untouched. Keyed by project category (a stain job's $/sf is nothing like a
+    composite build's), then by decking tier for builds."""
+    if eng.get("matrix", {}).get("fence") == "Y":
+        return None, "no fence benchmark yet"
+    table = rates.get("rates_per_sf", {})
+    pt_key = eng["project_type"]["key"]
+    if pt_key in ("stain_only", "stain_repairs"):
+        rate = table.get("stain")
+        area = inputs.get("stain_sf", 0) or eng["deck_sf"]
+    elif pt_key == "resurface":
+        rate = table.get("resurface")
+        area = eng["deck_sf"]
+    else:  # build-type projects
+        dk = eng["decking"]["key"]
+        if dk == "pt_pine":
+            rate = table.get("new_build_wood_pt")
+        elif dk == "cedar":
+            rate = table.get("new_build_wood_cedar")
+        else:
+            rate = table.get("new_build_composite")
+        area = eng["deck_sf"]
+    if not rate or not area:
+        return None, "no benchmark for this project type"
+    return round_money(rate * area), f"${rate}/sf x {int(area)} sf"
+
+
+def pricing_options(eng, db, inputs, rates):
+    """Build the five pricing rungs Jim chooses from before the PDF is made.
+    Every rung is derived read-only from the engine's already-computed cost
+    subtotal (S) and area. No underlying calc is changed. Returns a list of
+    (display_name, price, basis_tag); default selection is the last (20%)."""
+    S = eng["subtotal_cost"]
+    opts = [
+        ("My Cost", compute_cost_floor(db, inputs, eng),
+         "My Cost (raw material + labor floor)"),
+        ("0% Margin (cost basis)", round_money(S), "0% margin (cost basis)"),
+    ]
+    mkt, mkt_desc = market_price(eng, inputs, rates)
+    if mkt is not None:
+        opts.append(("Average Market Price", mkt,
+                     f"Average market price ({mkt_desc})"))
+    opts += [
+        ("10% Margin", round_money(S / (1 - 0.10)), "10% margin"),
+        ("20% Margin (engine default)", round_money(S / (1 - 0.20)),
+         "20% margin (engine default)"),
+    ]
+    return opts
 
 
 def _material_by_name(items, name):
@@ -551,17 +619,32 @@ with st.container(border=True):
         st.error(f"Calculation error: {e}")
         st.stop()
 
-    sell = round_money(eng["sell_price"])
+    # --- Final price selector: Jim picks the rung before the PDF is made ------
+    opts = pricing_options(eng, db, inputs, market_rates)
+    labels = [f"{name}  ·  ${price:,}" for name, price, _ in opts]
+    default_idx = len(opts) - 1  # 20% margin (engine default) == current behavior
+    choice = st.radio(
+        "Final price (you have the last word before the PDF goes out)",
+        labels,
+        index=default_idx,
+        help="Each rung is derived from your existing cost subtotal. Picking one "
+             "only changes the final number and re-scales the PDF line items to "
+             "match. None of the underlying pricing math changes.",
+    )
+    sel_name, selected_price, pricing_basis = opts[labels.index(choice)]
+
+    sell = selected_price
+    S = round_money(eng["subtotal_cost"])
     contingency = db["margin_and_contingency"]["default_contingency"]
-    low = round_money(eng["sell_price"] * (1 - contingency))
-    high = round_money(eng["sell_price"] * (1 + contingency))
+    low = round_money(selected_price * (1 - contingency))
+    high = round_money(selected_price * (1 + contingency))
     deck_sf = eng["deck_sf"]
     if is_fence:
         flf = eng.get("fence_lf", 0)
-        unit = round(eng["sell_price"] / flf, 2) if flf else 0
+        unit = round(selected_price / flf, 2) if flf else 0
         unit_label = f"${unit:,}/LF"
     else:
-        psf = round(eng["sell_price"] / deck_sf, 2) if deck_sf else 0
+        psf = round(selected_price / deck_sf, 2) if deck_sf else 0
         unit_label = f"${psf:,}/sf"
 
     st.markdown(
@@ -609,17 +692,27 @@ with st.container(border=True):
             ]
         nonzero = [(label, round_money(v)) for label, v in rows if v]
         if nonzero:
+            st.caption("Rows below are your cost basis. The chosen rung sets the "
+                       "final price; the PDF re-scales these into customer "
+                       "line items that sum to it.")
             st.table(
                 {
                     "Component": [r[0] for r in nonzero],
                     "Cost": [f"${v:,}" for _, v in nonzero],
                 }
             )
+            implied = (1 - S / selected_price) * 100 if selected_price else 0
+            # Escape $ so Streamlit markdown does not read it as LaTeX math
+            # (cause of the garbled "40,430 ** . margin : ** 2050,538" caption).
             st.caption(
-                f"Cost subtotal: **${round_money(eng['subtotal_cost']):,}** · "
-                f"margin: **{int(eng['margin'] * 100)}%** · "
-                f"sell price: **${sell:,}**"
+                f"Basis: **{sel_name}**  ·  cost subtotal **\\${S:,}**  ·  "
+                f"final price **\\${sell:,}**  ·  margin vs cost **{implied:+.0f}%**"
             )
+            if selected_price < S:
+                st.warning(
+                    f"Heads up: \\${sell:,} is below your \\${S:,} cost subtotal "
+                    f"(margin vs cost {implied:+.0f}%)."
+                )
         else:
             st.write("No cost components yet. Enter dimensions and materials.")
 
@@ -653,7 +746,12 @@ if st.button(
         }
 
         try:
-            estimate = build_estimate_json(inputs, client_info, db)
+            # final_price = the rung Jim picked above; the PDF line items
+            # re-scale to it. None of the cost math changes.
+            estimate = build_estimate_json(
+                inputs, client_info, db,
+                final_price=selected_price, pricing_basis=pricing_basis,
+            )
 
             # Override the auto-generated schedule with Jim's chosen target month
             estimate["schedule"]["start"] = (

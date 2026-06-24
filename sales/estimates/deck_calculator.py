@@ -327,13 +327,15 @@ def _with_color(name, color):
     return name
 
 
-def build_fence_line_items(eng, inputs):
-    """Customer-facing line items for a fence quote (sell-side, sum to sell)."""
+def build_fence_line_items(eng, inputs, sell_override=None):
+    """Customer-facing line items for a fence quote (sell-side). Items sum to
+    the engine sell price, or to sell_override when given (the final price Jim
+    picked in the estimator's pricing-option step)."""
     cost_total = eng["subtotal_cost"]
-    sell_total = eng["sell_price"]
+    target = sell_override if sell_override is not None else eng["sell_price"]
     if cost_total <= 0:
         return [["No scope priced", 0]]
-    scale = sell_total / cost_total
+    scale = target / cost_total
 
     fmat = _with_color(eng["fence_material"]["name"], inputs.get("fence_color"))
     items = [[
@@ -363,26 +365,29 @@ def build_fence_line_items(eng, inputs):
                       round_money(admin * scale)])
 
     current_sum = sum(amt for _, amt in items)
-    delta = round_money(sell_total) - current_sum
+    delta = round_money(target) - current_sum
     if items and delta != 0:
         items[-1] = [items[-1][0], items[-1][1] + delta]
     return items
 
 
-def build_line_items(eng, inputs):
+def build_line_items(eng, inputs, sell_override=None):
     """Map engine cost buckets to customer-friendly sell-side line items.
-    Each line item is [label, amount]. Amounts sum to sell_price (with
-    rounding spread on the last line)."""
+    Each line item is [label, amount]. Amounts sum to the engine sell price,
+    or to sell_override when given (the final price Jim picked in the
+    estimator's pricing-option step), with the rounding remainder spread onto
+    the last line. The cost buckets themselves are never recomputed; only the
+    scale factor changes."""
     if eng.get("matrix", {}).get("fence") == "Y":
-        return build_fence_line_items(eng, inputs)
+        return build_fence_line_items(eng, inputs, sell_override)
 
     pt_name = eng["project_type"]["name"]
     cost_total = eng["subtotal_cost"]
-    sell_total = eng["sell_price"]
+    target = sell_override if sell_override is not None else eng["sell_price"]
     if cost_total <= 0:
         return [["No scope priced", 0]]
 
-    scale = sell_total / cost_total
+    scale = target / cost_total
 
     items = []
 
@@ -499,11 +504,60 @@ def build_line_items(eng, inputs):
 
     # Reconcile rounding: adjust last line so sum matches sell price exactly
     current_sum = sum(amt for _, amt in items)
-    delta = round_money(sell_total) - current_sum
+    delta = round_money(target) - current_sum
     if items and delta != 0:
         items[-1] = [items[-1][0], items[-1][1] + delta]
 
     return items
+
+
+def compute_cost_floor(db, inputs, eng):
+    """'My Cost' rung: the lowest defensible floor the pricing DB supports.
+
+    Rebuilds only the material-bearing buckets (framing + decking + railing) at
+    the DB's RAW material rates (material_per_sf / material_per_lf) in place of
+    the retail sell rates, and keeps every labor and allowance bucket at the
+    engine's value. This does NOT touch compute_engine; it is a read-only
+    re-derivation used solely to populate the estimator's 'My Cost' option.
+
+    Caveat: the pricing DB carries no standalone labor rate (framing/decking
+    install labor is folded into the sell-vs-material spread), so this figure is
+    'raw material + the separately-priced labor/allowance lines', i.e. a true
+    floor, not a precise material+labor cost.
+    """
+    # Fence has a single cost_per_lf with no retail counterpart to strip; fall
+    # back to the 0%-margin subtotal so the option stays sensible.
+    if eng.get("matrix", {}).get("fence") == "Y":
+        return round_money(eng["subtotal_cost"])
+
+    matrix = eng["matrix"]
+    deck_sf = eng["deck_sf"]
+    combined_m = eng["combined_multiplier"]
+    frame_include = matrix["frame"] == "Y"
+    deck_include = matrix["deck"] == "Y"
+
+    framing_mat = eng["framing"].get("material_per_sf", 0)
+    decking_mat = eng["decking"].get("material_per_sf", 0)
+    waste = eng["decking"].get("waste_pct", 0)
+    base_package_cost = deck_sf * (
+        (framing_mat if frame_include else 0)
+        + (decking_mat * (1 + waste) if deck_include else 0)
+    ) * combined_m
+
+    rail_cost = 0
+    if matrix["rail"] != "N":
+        rail_mat = eng["railing"].get("material_per_lf", 0)
+        rail_cost = inputs.get("railing_lf", 0) * rail_mat
+
+    # Everything else stays at the engine's computed value (labor + allowances).
+    floor = (
+        base_package_cost + rail_cost
+        + eng["demo"] + eng["border"] + eng["fascia"] + eng["stair"]
+        + eng["stain"] + eng["repair"] + eng["skirting"] + eng["lighting"]
+        + eng["benches"] + eng["privacy"] + eng["hot_tub"]
+        + eng["permit"] + eng["dumpster"] + eng["mobilization"] + eng["misc"]
+    )
+    return round_money(floor)
 
 
 # -----------------------------------------------------------------------------
@@ -955,7 +1009,12 @@ def build_fence_context(inputs, eng):
 # -----------------------------------------------------------------------------
 # Build the final estimate JSON
 # -----------------------------------------------------------------------------
-def build_estimate_json(inputs, client_info, db, today=None):
+def build_estimate_json(inputs, client_info, db, today=None,
+                        final_price=None, pricing_basis=None):
+    """Build the estimate JSON. When final_price is given (the price Jim picked
+    in the estimator's pricing-option step), the customer-facing line items are
+    re-scaled to sum to it and _meta records the chosen price + basis. When it
+    is None, behavior is identical to before (engine 20%-margin sell price)."""
     eng = compute_engine(db, inputs)
     template = load_scope_template(eng["project_type"]["name"])
     if eng["matrix"].get("fence") == "Y":
@@ -964,8 +1023,10 @@ def build_estimate_json(inputs, client_info, db, today=None):
         ctx = build_scope_context(inputs, eng)
     scope = render_scope(template, ctx)
 
-    line_items = build_line_items(eng, inputs)
+    line_items = build_line_items(eng, inputs, sell_override=final_price)
 
+    quoted = (round_money(final_price) if final_price is not None
+              else round_money(eng["sell_price"]))
     today = today or date.today()
     return {
         "estimate_number": make_estimate_number(today),
@@ -987,9 +1048,11 @@ def build_estimate_json(inputs, client_info, db, today=None):
                         "(details provided upon acceptance)"),
         },
         "_meta": {
-            "computed_sell_price": round_money(eng["sell_price"]),
+            "computed_sell_price": quoted,
             "computed_subtotal_cost": round_money(eng["subtotal_cost"]),
             "computed_margin": eng["margin"],
+            "engine_sell_price": round_money(eng["sell_price"]),
+            "pricing_basis": pricing_basis or "20% margin (engine default)",
             "engine_version": "v1.1",
         },
     }
