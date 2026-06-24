@@ -24,6 +24,15 @@
 [CmdletBinding()]
 param([int] $Port = 7717, [switch] $SelfTest)
 
+# Last-resort guard: surface any terminating error to stderr (captured to _logs/dashboard-server.err.log
+# by the babysitter) and exit non-zero so the babysitter relaunches within <=5 min. Without this the
+# process used to die silently (-WindowStyle Hidden, no redirect) and leave no trace - the 2026-06-24
+# incident. Placed before the dot-source so even a failed control-db load is logged.
+trap {
+    Write-Error ("dashboard-server fatal: {0}`n{1}" -f $_.Exception.Message, $_.ScriptStackTrace)
+    exit 1
+}
+
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot "..\scripts\control-db.ps1")
 
@@ -132,7 +141,26 @@ function Get-StateBundle {
 }
 
 while ($listener.IsListening) {
-    $ctx = $listener.GetContext()
+    # Guard the blocking accept separately from request handling. A transient HttpListenerException
+    # here (e.g. the listener aborted across a sleep/resume) used to be an unhandled terminating
+    # error that killed the process; instead, try to restart the listener in place, and only exit
+    # (non-zero -> babysitter relaunch) if that fails.
+    try {
+        $ctx = $listener.GetContext()
+    } catch [System.Net.HttpListenerException] {
+        Write-Error "GetContext faulted ($($_.Exception.Message)); attempting listener restart"
+        try {
+            if ($listener.IsListening) { $listener.Stop() }
+            $listener.Start()
+            continue
+        } catch {
+            Write-Error "listener restart failed: $($_.Exception.Message)"
+            exit 1
+        }
+    } catch {
+        Write-Error "fatal accept error: $($_.Exception.Message)"
+        exit 1
+    }
     try {
         $path   = $ctx.Request.Url.AbsolutePath
         $method = $ctx.Request.HttpMethod

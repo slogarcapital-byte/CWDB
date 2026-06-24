@@ -49,3 +49,6 @@ finance/invoices/*.pdf
 
 # QBO API operational log (intuit_tid + error detail per call)
 finance/invoices/_logs/
+
+# Mission Control dashboard runtime logs (babysitter + server stdout/stderr)
+operations/control-plane/dashboard/_logs/
