@@ -1,0 +1,38 @@
+{
+  "client": {
+    "name": "David Olson",
+    "address_line": "789 Pine Court, Weston, WI 54476",
+    "phone": "(715) 555-0789",
+    "email": "dolson@example.com"
+  },
+  "inputs": {
+    "project_type": "Resurface (Boards Only)",
+    "length": 24,
+    "depth": 16,
+    "decking_material": "Cedar",
+    "railing_material": "Trex Aluminum",
+    "framing_material": "KDAT Pressure-Treated",
+    "height": "1 Story / Low",
+    "grade": "Mild Slope",
+    "complexity": "Bump Outs / Angles",
+    "market": "Normal Schedule",
+    "border_style": "Pencil Border",
+    "railing_lf": 50,
+    "fascia_lf": 80,
+    "stair_runs": 1,
+    "stair_treads": 5,
+    "stair_landings": 0,
+    "wraparound": "No",
+    "stain_sf": 0,
+    "stain_type": "Semi-Transparent",
+    "stain_coats": 1,
+    "board_repairs": 3,
+    "joist_repair_lf": 0,
+    "hardware_inc": "No",
+    "skirting_sf": 0,
+    "lighting_fix": 0,
+    "bench_count": 0,
+    "privacy_screen_lf": 0,
+    "hot_tub": "No"
+  }
+}

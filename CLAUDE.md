@@ -74,6 +74,10 @@ Ben/John are busy building and cannot meet the 48-hour quote promise, so **Jim o
 - **Phase 1 (after DSPS Dwelling Contractor cert + GL insurance).** Option B unlocks per-job: CWDB primes the Home Improvement Contract and subs to Ben/John under the subcontractor agreement. A and B run side by side; choose per job.
 - Legal punch list and gating items: board directive WB-018.
 
+### SBG Construction Group (under evaluation, 2026-06-18)
+
+Jim is evaluating going full-time into construction with Ben Barton and John Garcia as **SBG Construction Group** (Slogar, Barton, Garcia): a shared-services / captive-labor group (NOT a merger). In Phase A the three existing LLCs stay independent and keep their own job profit, while shared SBG entities (SBG-Labor as an S-corp employing the crews and partners, SBG-Equipment, and a dormant SBG-RealEstate, owned 1/3 each and funded by equal cash) own the crews and equipment and bill the LLCs at market rates. Phase B (1 to 2 years out) would transition to a true merger where job profit pools 1/3, on rules decided now. Partners draw an $80/hr W-2 wage (derived billable rate ~$145/hr). Jim's lead engine stays CWDB's and is deliberately downplayed in all partner-facing docs. Full package and analysis: `business-context/construction-group/`. Memory: [[sbg-construction-group]]. Status: proposal stage, gated on a Wisconsin attorney + CPA. If pursued, it shifts CWDB from the lead-gen experiment toward a construction operating business.
+
 ### Leads count from EVERY channel
 
 Phone calls arrive at the same volume as webform submissions and count identically toward the funnel and validation gate. All leads live in HubSpot; `fact_leads.lead_channel` (webform | phone | manual | other) + `tcpa_consent_source` (form | verbal | assumed) track arrival and consent. Phone leads may lack an email. Never treat "lead" as synonymous with "webform submission."

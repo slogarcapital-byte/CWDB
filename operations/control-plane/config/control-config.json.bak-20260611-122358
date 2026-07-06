@@ -1,0 +1,74 @@
+﻿{
+    "_comment":  "CWDB control-plane thresholds. Authoritative source for the control tick. v_control_status duplicates the dollar targets as display literals - keep them in sync if you retune here. All money in dollars; the ledger stores cents.",
+    "version":  1,
+    "timezone":  "America/Chicago",
+    "rollout":  {
+                    "_comment":  "Safety rollout dial. Inc 1 = everything dry-run, council off. Loosen one step at a time only after the skeleton runs clean across multiple ticks.",
+                    "dry_run":  false,
+                    "auto_execute_max_tier":  1,
+                    "council_enabled":  true,
+                    "tier2_execution_enabled":  true
+                },
+    "budget":  {
+                   "_comment":  "Model spend for the loop ONLY - separate from the $50/day ad budget.",
+                   "day_soft_dollars":  8,
+                   "day_hard_dollars":  15.0,
+                   "project_cap_dollars":  150.0,
+                   "day_soft_tokens":  400000,
+                   "day_hard_tokens":  600000,
+                   "on_soft":  "tier0_1_only_no_council_no_tier2",
+                   "on_hard":  "close_gate",
+                   "on_project_cap":  "halt_and_escalate_for_reauthorization"
+               },
+    "per_task":  {
+                     "max_attempts":  3,
+                     "token_cap":  80000
+                 },
+    "per_tick":  {
+                     "max_workers_routed":  1,
+                     "max_councils":  2,
+                     "council_token_cap":  60000
+                 },
+    "lease":  {
+                  "_comment":  "How long a task may sit \u0027active\u0027 before the reaper requeues it (= crash recovery).",
+                  "task_lease_minutes":  20
+              },
+    "breakers":  {
+                     "consecutive_critic_fails":  3,
+                     "error_rate_window_hours":  2,
+                     "error_rate_threshold":  5,
+                     "deadman_ticks_since_progress":  12,
+                     "deadman_warn_ticks":  8,
+                     "loop_detection_repeats":  4,
+                     "cost_per_progress_flat_days":  2,
+                     "cost_per_progress_spend_multiple":  2.0
+                 },
+    "cadence":  {
+                    "control_tick_minutes":  30,
+                    "control_active_hours":  "06:00-22:00",
+                    "orchestrator_tick_hours":  2,
+                    "orchestrator_active_hours":  "07:00-21:00",
+                    "digest_hour_local":  7
+                },
+    "data_freshness":  {
+                           "_comment":  "Gate stays closed if the warehouse cron hasn\u0027t succeeded within this window - never reason on stale funnel data.",
+                           "warehouse_max_age_hours":  26
+                       },
+    "tiers":  {
+                  "_comment":  "Blast-radius boundary (Jim, 2026-06-09: loosest option). The dial is delivery_auto_after_approved.",
+                  "delivery_auto_after_approved":  1,
+                  "auto_shift_ad_budget_within_cap":  true,
+                  "ad_budget_daily_cap_dollars":  50.0,
+                  "tier3_hard_blocks":  [
+                                            "raise_total_ad_spend_ceiling",
+                                            "change_pricing_brand_domain_or_contractor_terms",
+                                            "disburse_funds_or_pay_invoices",
+                                            "delete_or_deactivate_live_lead_carrying_scenario"
+                                        ]
+              },
+    "escalation":  {
+                       "channel":  "gmail_draft",
+                       "to":  "slogarjw@gmail.com",
+                       "approval_pending_alert_hours":  12
+                   }
+}

@@ -8,15 +8,19 @@
 ## Active directives
 
 - [WB-018] Legal/compliance punch list from fulfillment-pivot opinion (2026-06-10)
-  - Created: 2026-06-10. Updated 2026-06-10 late: items 1 and 3 CLOSED by owner decision; item 2 risk-accepted for the staining job.
+  - Created: 2026-06-10. Updated 2026-06-10 late: items 1 and 3 CLOSED by owner decision; item 2 risk-accepted for the staining job. Updated 2026-06-24: licensing is now an ACTIVE push (Jim getting GL insurance through his agent); items 2 and 4 expanded with verified DSPS facts; full executable roadmap at `docs/legal/construction-setup/01-jim-qualifier-licensing-roadmap.md`.
   - Source: legal-compliance-counsel memo on Option A (CWDB estimates, builder contracts) vs Option B (CWDB primes, subs out)
   - Owner decisions 2026-06-10 (Jim): NO Wisconsin sales tax charged on any CWDB revenue (lead fees or construction/staining); Overbeck staining job proceeds WITHOUT GL insurance bound (risk accepted). Both recorded; do not re-raise.
   - Remaining items:
     1. ~~WI DOR staining-tax determination~~ CLOSED: owner decision, no sales tax
-    2. Bind GL insurance (still required before DSPS cert filing; staining-job gap risk-accepted by Jim 2026-06-10)
+    2. Bind GL insurance with three DSPS-required features: at least $250k per occurrence (spec targets $1M/$2M), a WI-authorized insurer, and a 30-day cancellation-notice-to-DSPS provision; disclose the dual lead-gen + construction operations to the carrier. Prerequisite for the entity Certification (item 4d), NOT for Jim's Qualifier course/application. Staining-job gap risk-accepted by Jim 2026-06-10. STATUS 2026-06-24: agent-request email DRAFTED in Jim's Gmail with full specs ($1M/$2M, residential-deck classification, 3 DSPS features, WC quoted separately) plus Articles + EIN to attach; pending Jim to set recipient, fill revenue/effective-date blanks, attach the 2 PDFs, and send.
     3. ~~WI DOR lead-fee exemption confirmation~~ CLOSED: owner decision, no sales tax
-    4. DSPS filings: Qualifier 12-hour course + entity Dwelling Contractor Certification (insurance binds first)
-    5. City of Wausau / Marathon County: cosmetic-vs-structural permit line + any local bond/registration
+    4. DSPS licensing (LicensE portal, license.wi.gov; no exam; verified 2026-06-24):
+       a. Jim completes an approved 12-hour initial qualifier course (~$99 online self-paced; e.g. Wisconsin Contractors Institute, @-Leisure, @ Your Pace). Can start now, no insurance needed.
+       b. File Jim's Dwelling Contractor Qualifier application (Form 3097; 2-yr term, renews $30 + 12 hrs CE).
+       c. (parallel) bind GL per item 2.
+       d. File the LLC's Dwelling Contractor Certification (Form 3096; 1-yr term, renews $25), attach insurance proof, link Jim as Qualifier, attest solo WC exemption.
+    5. City of Wausau / Marathon County: confirm any local contractor registration + the cosmetic-vs-structural permit line (state preempts stricter local insurance/education/exam rules per Wis. Stat. 101.654(4)).
     6. One-time WI attorney review: estimate disclosure language, combined estimate/work-order doc, home improvement contract, subcontractor agreement, amendment, side letter
   - Suggested owner: Jim (external calls) + legal-compliance-counsel (document prep done)
   - Acceptance: each item checked off with date + outcome noted here

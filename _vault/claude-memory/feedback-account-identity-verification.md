@@ -1,16 +1,8 @@
-﻿---
+---
 name: Verify platform-account identity before configuring tags
 description: Always confirm which Google/Meta/Nextdoor/etc. account is selected before creating pixels or conversion actions — Phase F was set up in Jim's CPA work account, costing 6 days of zero-data attribution
+type: feedback
 originSessionId: 7d02e16e-0b63-4430-a01f-1d4bf3ea0719
-title: Verify platform-account identity before configuring tags
-type: memory
-memory_type: feedback
-created: 2026-04-30
-updated: 2026-04-30
-source: C:/Users/jslog/.claude/projects/C--Users-jslog-OneDrive-Desktop-Slogars-CPA-Slogar-Capital-Claude-Projects-CWDB/memory/feedback-account-identity-verification.md
-tags:
-  - type/memory
-  - memory/feedback
 ---
 # Feedback — Verify platform-account identity BEFORE configuring tags
 

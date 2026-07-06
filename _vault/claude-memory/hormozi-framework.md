@@ -1,16 +1,8 @@
-﻿---
+---
 name: Hormozi Operating Framework
 description: Growth diagnostic vocabulary applied to CWDB via CEO agent, state file, and hormozi-operator skill
+type: project
 originSessionId: d3d19d06-e0d6-4c86-85da-9166324bb54b
-title: Hormozi Operating Framework
-type: memory
-memory_type: project
-created: 2026-04-30
-updated: 2026-04-30
-source: C:/Users/jslog/.claude/projects/C--Users-jslog-OneDrive-Desktop-Slogars-CPA-Slogar-Capital-Claude-Projects-CWDB/memory/hormozi-framework.md
-tags:
-  - type/memory
-  - memory/project
 ---
 **Installed 2026-04-21.** CWDB adopted Alex Hormozi's operator framework as the default vocabulary for growth/lead-gen/offer/scaling conversations.
 

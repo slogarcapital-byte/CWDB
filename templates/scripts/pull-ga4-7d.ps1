@@ -28,6 +28,32 @@ param(
     [string] $RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 )
 
+# Self-relaunch under PowerShell 7+ if invoked from 5.1.
+# RSA.ImportFromPem (used below for service-account JWT signing) requires .NET 5+,
+# which means pwsh.exe rather than legacy powershell.exe.
+if ($PSVersionTable.PSVersion.Major -lt 6) {
+    $pwshPath = (Get-Command pwsh -ErrorAction SilentlyContinue).Source
+    if (-not $pwshPath) {
+        $stub = Join-Path $env:LOCALAPPDATA "Microsoft\WindowsApps\pwsh.exe"
+        if (Test-Path $stub) { $pwshPath = $stub }
+    }
+    if (-not $pwshPath) {
+        throw "Requires PowerShell 7+. Install: winget install --id Microsoft.PowerShell --source winget --force"
+    }
+    $relaunchArgs = @()
+    foreach ($k in $PSBoundParameters.Keys) {
+        $v = $PSBoundParameters[$k]
+        if ($v -is [switch]) {
+            if ($v.IsPresent) { $relaunchArgs += "-$k" }
+        } else {
+            $relaunchArgs += "-$k"
+            $relaunchArgs += [string] $v
+        }
+    }
+    & $pwshPath -NoProfile -File $PSCommandPath @relaunchArgs
+    exit $LASTEXITCODE
+}
+
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 

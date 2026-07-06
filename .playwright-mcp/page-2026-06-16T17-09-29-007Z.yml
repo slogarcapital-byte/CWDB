@@ -1,0 +1,310 @@
+- generic:
+  - generic:
+    - generic [ref=e3]:
+      - banner [ref=e6]:
+        - generic [ref=e9]:
+          - button "Deploy" [ref=e20] [cursor=pointer]:
+            - generic [ref=e22]: Deploy
+          - button "Main menu" [ref=e24] [cursor=pointer]:
+            - img [ref=e25]
+      - generic [ref=e28]:
+        - generic [ref=e38]:
+          - button "Fullscreen" [ref=e43] [cursor=pointer]:
+            - img [ref=e44]
+          - img "0" [ref=e49]
+        - heading "CWDB Deck Estimator" [level=1] [ref=e56]:
+          - text: CWDB Deck Estimator
+          - generic [ref=e57]:
+            - link "Link to heading":
+              - /url: "#cwdb-deck-estimator"
+              - img
+        - paragraph [ref=e62]: Central Wisconsin Deck Builders, LLC · Field quote tool
+        - generic [ref=e64]:
+          - heading "Client" [level=3] [ref=e69]:
+            - text: Client
+            - generic [ref=e70]:
+              - link "Link to heading":
+                - /url: "#client"
+                - img
+          - generic [ref=e72]:
+            - generic [ref=e74]:
+              - generic [ref=e76]:
+                - paragraph [ref=e80]: Name
+                - textbox "Name" [ref=e83]:
+                  - /placeholder: ""
+              - generic [ref=e85]:
+                - paragraph [ref=e89]: Phone
+                - textbox "Phone" [ref=e92]:
+                  - /placeholder: ""
+            - generic [ref=e94]:
+              - generic [ref=e96]:
+                - paragraph [ref=e100]: Address
+                - textbox "Address" [ref=e103]:
+                  - /placeholder: ""
+              - generic [ref=e105]:
+                - paragraph [ref=e109]: Email
+                - textbox "Email" [ref=e112]:
+                  - /placeholder: ""
+        - generic [ref=e114]:
+          - heading "Project" [level=3] [ref=e119]:
+            - text: Project
+            - generic [ref=e120]:
+              - link "Link to heading":
+                - /url: "#project"
+                - img
+          - generic [ref=e122]:
+            - paragraph [ref=e126]: Project type
+            - generic [ref=e128]:
+              - generic [ref=e129]:
+                - generic [ref=e130]: Full Tear-Out + New Build
+                - combobox "Selected Full Tear-Out + New Build. Project type" [expanded] [active] [ref=e132]
+              - img "open" [ref=e134]
+          - generic [ref=e137]:
+            - generic [ref=e138]:
+              - paragraph [ref=e141]: Targeted start
+              - button "Help for Targeted start" [ref=e145] [cursor=pointer]:
+                - img [ref=e146]
+            - generic [ref=e150]:
+              - generic [ref=e151]:
+                - generic [ref=e152]: June 2026
+                - combobox "Selected June 2026. Targeted start" [ref=e154]
+              - img "open" [ref=e156]
+          - generic [ref=e159]:
+            - generic [ref=e163]:
+              - paragraph [ref=e167]: Deck length (ft)
+              - generic [ref=e168]:
+                - spinbutton "Deck length (ft)" [ref=e171]: "20"
+                - generic [ref=e172]:
+                  - button [ref=e173] [cursor=pointer]:
+                    - img [ref=e174]
+                  - button [ref=e176] [cursor=pointer]:
+                    - img [ref=e177]
+            - generic [ref=e182]:
+              - paragraph [ref=e186]: Deck depth (ft)
+              - generic [ref=e187]:
+                - spinbutton "Deck depth (ft)" [ref=e190]: "15"
+                - generic [ref=e191]:
+                  - button [ref=e192] [cursor=pointer]:
+                    - img [ref=e193]
+                  - button [ref=e195] [cursor=pointer]:
+                    - img [ref=e196]
+          - paragraph [ref=e202]:
+            - text: "Deck SF:"
+            - strong [ref=e203]: "300"
+        - generic [ref=e205]:
+          - heading "Materials" [level=3] [ref=e210]:
+            - text: Materials
+            - generic [ref=e211]:
+              - link "Link to heading":
+                - /url: "#materials"
+                - img
+          - generic [ref=e213]:
+            - paragraph [ref=e217]: Decking
+            - generic [ref=e219]:
+              - generic [ref=e220]:
+                - generic [ref=e221]: Trex Select
+                - combobox "Selected Trex Select. Decking" [ref=e223]
+              - img "open" [ref=e225]
+          - generic [ref=e228]:
+            - paragraph [ref=e232]: Decking color
+            - generic [ref=e234]:
+              - generic [ref=e235]:
+                - generic [ref=e236]: Pebble Grey
+                - combobox "Selected Pebble Grey. Decking color" [ref=e238]
+              - img "open" [ref=e240]
+          - generic [ref=e243]:
+            - paragraph [ref=e247]: Railing
+            - generic [ref=e249]:
+              - generic [ref=e250]:
+                - generic [ref=e251]: Trex Aluminum
+                - combobox "Selected Trex Aluminum. Railing" [ref=e253]
+              - img "open" [ref=e255]
+          - generic [ref=e258]:
+            - paragraph [ref=e262]: Railing color
+            - generic [ref=e264]:
+              - generic [ref=e265]:
+                - generic [ref=e266]: Charcoal Black
+                - combobox "Selected Charcoal Black. Railing color" [ref=e268]
+              - img "open" [ref=e270]
+          - generic [ref=e273]:
+            - paragraph [ref=e277]: Framing
+            - generic [ref=e279]:
+              - generic [ref=e280]:
+                - generic [ref=e281]: KDAT Pressure-Treated
+                - combobox "Selected KDAT Pressure-Treated. Framing" [ref=e283]
+              - img "open" [ref=e285]
+        - generic [ref=e288]:
+          - heading "Site conditions" [level=3] [ref=e293]:
+            - text: Site conditions
+            - generic [ref=e294]:
+              - link "Link to heading":
+                - /url: "#site-conditions"
+                - img
+          - generic [ref=e296]:
+            - paragraph [ref=e300]: Height
+            - generic [ref=e302]:
+              - generic [ref=e303]:
+                - generic [ref=e304]: 1 Story / Low
+                - combobox "Selected 1 Story / Low. Height" [ref=e306]
+              - img "open" [ref=e308]
+          - generic [ref=e311]:
+            - paragraph [ref=e315]: Grade
+            - generic [ref=e317]:
+              - generic [ref=e318]:
+                - generic [ref=e319]: Flat / Normal Access
+                - combobox "Selected Flat / Normal Access. Grade" [ref=e321]
+              - img "open" [ref=e323]
+          - generic [ref=e326]:
+            - paragraph [ref=e330]: Complexity
+            - generic [ref=e332]:
+              - generic [ref=e333]:
+                - generic [ref=e334]: Simple Rectangle
+                - combobox "Selected Simple Rectangle. Complexity" [ref=e336]
+              - img "open" [ref=e338]
+          - generic [ref=e341]:
+            - paragraph [ref=e345]: Market load
+            - generic [ref=e347]:
+              - generic [ref=e348]:
+                - generic [ref=e349]: Normal Schedule
+                - combobox "Selected Normal Schedule. Market load" [ref=e351]
+              - img "open" [ref=e353]
+        - generic [ref=e356]:
+          - heading "Scope detail" [level=3] [ref=e361]:
+            - text: Scope detail
+            - generic [ref=e362]:
+              - link "Link to heading":
+                - /url: "#scope-detail"
+                - img
+          - generic [ref=e364]:
+            - paragraph [ref=e368]: Border style
+            - generic [ref=e370]:
+              - generic [ref=e371]:
+                - generic [ref=e372]: Pencil Border
+                - combobox "Selected Pencil Border. Border style" [ref=e374]
+              - img "open" [ref=e376]
+          - generic [ref=e379]:
+            - paragraph [ref=e383]: Fascia LF
+            - generic [ref=e384]:
+              - spinbutton "Fascia LF" [ref=e387]: "70"
+              - generic [ref=e388]:
+                - button [ref=e389] [cursor=pointer]:
+                  - img [ref=e390]
+                - button [ref=e392] [cursor=pointer]:
+                  - img [ref=e393]
+        - generic [ref=e396]:
+          - heading "Railing" [level=3] [ref=e401]:
+            - text: Railing
+            - generic [ref=e402]:
+              - link "Link to heading":
+                - /url: "#railing"
+                - img
+          - generic [ref=e404]:
+            - paragraph [ref=e408]: Railing LF
+            - generic [ref=e409]:
+              - spinbutton "Railing LF" [ref=e412]: "40"
+              - generic [ref=e413]:
+                - button [ref=e414] [cursor=pointer]:
+                  - img [ref=e415]
+                - button [ref=e417] [cursor=pointer]:
+                  - img [ref=e418]
+        - generic [ref=e421]:
+          - heading "Stairs" [level=3] [ref=e426]:
+            - text: Stairs
+            - generic [ref=e427]:
+              - link "Link to heading":
+                - /url: "#stairs"
+                - img
+          - generic [ref=e429]:
+            - generic [ref=e433]:
+              - paragraph [ref=e437]: Runs
+              - generic [ref=e438]:
+                - spinbutton "Runs" [ref=e441]: "1"
+                - generic [ref=e442]:
+                  - button [ref=e443] [cursor=pointer]:
+                    - img [ref=e444]
+                  - button [ref=e446] [cursor=pointer]:
+                    - img [ref=e447]
+            - generic [ref=e452]:
+              - paragraph [ref=e456]: Total treads
+              - generic [ref=e457]:
+                - spinbutton "Total treads" [ref=e460]: "6"
+                - generic [ref=e461]:
+                  - button [ref=e462] [cursor=pointer]:
+                    - img [ref=e463]
+                  - button [ref=e465] [cursor=pointer]:
+                    - img [ref=e466]
+          - generic [ref=e469]:
+            - generic [ref=e473]:
+              - paragraph [ref=e477]: Landings
+              - generic [ref=e478]:
+                - spinbutton "Landings" [ref=e481]: "0"
+                - generic [ref=e482]:
+                  - button [disabled] [ref=e483]:
+                    - img [ref=e484]
+                  - button [ref=e486] [cursor=pointer]:
+                    - img [ref=e487]
+            - generic [ref=e492]:
+              - paragraph [ref=e496]: Wraparound?
+              - generic [ref=e498]:
+                - generic [ref=e499]:
+                  - generic [ref=e500]: "No"
+                  - combobox "Selected No. Wraparound?" [ref=e502]
+                - img "open" [ref=e504]
+        - group [ref=e508]:
+          - generic "keyboard_arrow_right Optional adders" [ref=e509] [cursor=pointer]:
+            - generic [ref=e510]:
+              - generic [ref=e512]: keyboard_arrow_right
+              - paragraph [ref=e515]: Optional adders
+        - generic [ref=e517]:
+          - heading "Walk-through photos" [level=3] [ref=e522]:
+            - text: Walk-through photos
+            - generic [ref=e523]:
+              - link "Link to heading":
+                - /url: "#walk-through-photos"
+                - img
+          - paragraph [ref=e528]: Upload site photos from the walk-through. Two AI mock-up renderings (wide + detail) of the finished project in the selected materials and colors are generated automatically and added to the PDF, each labeled as an illustration only.
+          - generic [ref=e530]:
+            - paragraph [ref=e534]: Photos (JPG / PNG / HEIC)
+            - region "Photos (JPG / PNG / HEIC)" [ref=e535] [cursor=pointer]:
+              - button "Choose File" [ref=e536]
+              - button "upload Upload" [ref=e538]:
+                - generic [ref=e540]:
+                  - generic [ref=e542]: upload
+                  - paragraph [ref=e544]: Upload
+              - generic [ref=e547]: 200MB per file • JPG, PNG, HEIC
+        - generic [ref=e549]:
+          - heading "Estimate" [level=3] [ref=e554]:
+            - text: Estimate
+            - generic [ref=e555]:
+              - link "Link to heading":
+                - /url: "#estimate"
+                - img
+          - generic [ref=e560]:
+            - generic [ref=e561]: Quoted Sell Price
+            - generic [ref=e562]: $50,538
+            - generic [ref=e563]: "Range: $46,494 – $54,580 · $168.46/sf"
+          - group [ref=e566]:
+            - generic "keyboard_arrow_right Line-item breakdown" [ref=e567] [cursor=pointer]:
+              - generic [ref=e568]:
+                - generic [ref=e570]: keyboard_arrow_right
+                - paragraph [ref=e573]: Line-item breakdown
+        - separator [ref=e578]
+        - paragraph [ref=e583]: Enter client name, address, and dimensions to enable send.
+        - button "Send PDF + Excel to my inbox" [disabled] [ref=e586]:
+          - paragraph [ref=e590]: Send PDF + Excel to my inbox
+    - list [ref=e594]:
+      - generic [ref=e596]:
+        - option "Stain Only" [ref=e597] [cursor=pointer]:
+          - generic [ref=e601]: Stain Only
+        - option "Stain + Minor Repairs" [ref=e602] [cursor=pointer]:
+          - generic [ref=e606]: Stain + Minor Repairs
+        - option "Resurface (Boards Only)" [ref=e607] [cursor=pointer]:
+          - generic [ref=e611]: Resurface (Boards Only)
+        - option "Frame + Deck Rebuild (Keep Footings)" [ref=e612] [cursor=pointer]:
+          - generic [ref=e616]: Frame + Deck Rebuild (Keep Footings)
+        - option "Full Tear-Out + New Build" [ref=e617] [cursor=pointer]:
+          - generic [ref=e621]: Full Tear-Out + New Build
+        - option "New Build (No Tear-Out)" [ref=e622] [cursor=pointer]:
+          - generic [ref=e626]: New Build (No Tear-Out)
+        - option "Fence" [selected] [ref=e627] [cursor=pointer]:
+          - generic [ref=e631]: Fence

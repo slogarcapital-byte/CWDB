@@ -1,16 +1,8 @@
-﻿---
+---
 name: Vault RAG architecture
 description: How the CWDB Obsidian vault mirrors project content — junction + transclusions + memory copy — so future sessions don't re-diagnose "missing folders"
+type: reference
 originSessionId: 11c51573-e6a8-4e9f-a093-cf492020737f
-title: Vault RAG architecture
-type: memory
-memory_type: reference
-created: 2026-04-30
-updated: 2026-04-30
-source: C:/Users/jslog/.claude/projects/C--Users-jslog-OneDrive-Desktop-Slogars-CPA-Slogar-Capital-Claude-Projects-CWDB/memory/vault-rag-architecture.md
-tags:
-  - type/memory
-  - memory/reference
 ---
 # CWDB Obsidian Vault — RAG Architecture
 

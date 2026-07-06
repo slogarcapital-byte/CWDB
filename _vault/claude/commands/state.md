@@ -6,7 +6,7 @@ Refresh the live data snapshot inside today's daily brief. This is the manual mi
 
 This skill **does not rebuild the brief.** It only rewrites the Live Data Tables section. Everything else (Today's Top 3, Decisions Needed, Notes from Jim, Mentor Check, Memory Updates) — including any `[x]` marks and `%...%` comments Jim has left mid-day — is preserved exactly as written.
 
-The legacy singleton `_vault/state-of-cwdb.md` is deprecated. Do not read or write it.
+Live data source is the Supabase warehouse (project `iabiwsbmnbxmkjvkgfhg`); query views like `v_lead_funnel` and `v_cac_by_channel`. The legacy `_vault/state-of-cwdb.md` singleton has been deleted (2026-06-05); do not recreate it.
 
 ## What to do
 

@@ -1,16 +1,9 @@
-﻿---
+---
 name: Webflow — component-first section building
 description: Every section on a CWDB Webflow page must be a named Webflow component. Use a strict 3-tier hierarchy before creating anything new — edit property values first, copy+rename to create a styling variation second, build net new only as a last resort.
-title: Webflow — component-first section building
-type: memory
-memory_type: feedback
-created: 2026-04-30
-updated: 2026-04-30
-source: C:/Users/jslog/.claude/projects/C--Users-jslog-OneDrive-Desktop-Slogars-CPA-Slogar-Capital-Claude-Projects-CWDB/memory/feedback-webflow-components.md
-tags:
-  - type/memory
-  - memory/feedback
+type: feedback
 ---
+
 Every section on every CWDB Webflow page must be a named Webflow component. No raw sections, no orphaned divs used as page sections.
 
 **Why:** The Get a Quote page (untitled-2) was built without using existing Webflow components — just raw HTML sections. This breaks the component library, makes the 21-page site inconsistent, and creates a maintenance problem. The user explicitly flagged this and established the correct methodology going forward.

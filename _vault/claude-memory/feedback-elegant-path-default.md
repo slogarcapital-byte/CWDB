@@ -1,16 +1,8 @@
-﻿---
+---
 name: Always steer back to the most elegant approach
 description: When work is heading down a manual / click-through / step-by-step path and a bulk-import / CSV / API / Editor / scripted path exists, propose the elegant path proactively — don't wait to be asked
+type: feedback
 originSessionId: fa9cfbd6-9de3-4868-9fc9-f7a70658d170
-title: Always steer back to the most elegant approach
-type: memory
-memory_type: feedback
-created: 2026-04-30
-updated: 2026-04-30
-source: C:/Users/jslog/.claude/projects/C--Users-jslog-OneDrive-Desktop-Slogars-CPA-Slogar-Capital-Claude-Projects-CWDB/memory/feedback-elegant-path-default.md
-tags:
-  - type/memory
-  - memory/feedback
 ---
 When Jim is about to execute work the manual way (clicking through a UI, copy-pasting one field at a time, repeating a step N times), and a bulk / templated / scripted alternative exists for that platform — **propose the elegant path before serving the manual one.** Even if Jim asked for "step by step copy-paste," check whether bulk import is available first. If yes, lead with it.
 

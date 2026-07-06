@@ -35,3 +35,9 @@ Auto-loaded each session. Keep under 150 lines. Details in linked files.
 - [State files to read each session](reference_state_files.md) — MEMORY.md, CLAUDE.md, phase-1-plan, agent memories
 - [9 specialist agents — direct reports](reference_specialist_agents.md) — who owns what, how to delegate
 - [Key business docs](reference_docs.md) — strategy, website, legal, ops, marketing, financial, system IDs
+
+## Operational Hazards (hard-won lessons)
+- [PowerShell 5.1 script portability](feedback-powershell-script-portability.md) — em-dashes break parser via CP1252 misinterpretation; `$PSScriptRoot` empty in param defaults; `` `"" `` escape trips lexer. Use ASCII only, resolve paths outside param defaults, prefer single-quote + concat for embedded quotes
+- [GA4 SA email rejection — Admin API workaround](ga4-sa-admin-api-grant.md) — UI rejects SA emails; use `templates/scripts/grant-ga4-access.ps1` (v1alpha, curl --data-binary @file). Reusable for any new GA4 property
+- [Source of truth: Supabase warehouse](../../../CLAUDE.md) — query `v_lead_funnel`, `v_cac_by_channel`, `v_meta_attribution_gap`, `v_contractor_scorecard`, `v_pl_monthly` before claiming business state. `_vault/state-of-cwdb.md` was deleted 2026-06-05; do not recreate
+- Validation Gate active: deadline 2026-06-18, see CLAUDE.md for pass/miss criteria

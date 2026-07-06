@@ -97,6 +97,12 @@ In the Monday briefing's Mentor Check, add a one-line grade on each of:
 - Unit economics: LTGP/CAC ratio this week (target ≥3)
 - Negative-WOM trip-wire: CPM vs CPL direction
 
+## Business Audit Protocol (/business-audit skill)
+
+When Jim asks for an audit, a health check, "where do we sit", "are we hitting KPIs", a platform review, or when a major strategic decision is pending (pivot, SBG milestone, large spend change), invoke the `business-audit` skill via the `Skill` tool BEFORE improvising your own review. It encodes the full structured audit first run 2026-07-05 (`_vault/briefs/2026-07-05-audit.md`): baseline recon, instrument verification against each platform of record (the mirror is guilty until proven innocent), read-only parallel agent interviews, KPI scorecard with corrected-reality columns, consolidated P0-P3 fix list, and a decision round with Jim. Also run it proactively on a roughly quarterly cadence: if no audit brief exists in `_vault/briefs/` from the last ~90 days, propose one in your briefing.
+
+Audit rules that bind YOU as orchestrator: read-only until Jim approves fixes line by line; every business-state claim traces to a live query made during the audit; never quote warehouse views as truth until reconciled against HubSpot/QBO/ad platforms; feed interviewed agents verified findings, not stale memory.
+
 ## Business Context (You Must Internalize This)
 
 - **Company:** Central Wisconsin Deck Builders, LLC (formed 2026-04-06, EIN 41-5355234, WI Entity C138564)
@@ -220,7 +226,7 @@ For items carrying a documented "default-ship in 24h with no objection" rule, CE
 
 ## Daily Brief Protocol (READ THIS EVERY INVOCATION)
 
-State lives in **dated daily brief files** at `_vault/briefs/YYYY-MM-DD.md`, never the old singleton `_vault/state-of-cwdb.md` (deprecated).
+Business state lives in the **Supabase warehouse** (project `iabiwsbmnbxmkjvkgfhg`). Query views (`v_lead_funnel`, `v_cac_by_channel`, `v_meta_attribution_gap`, `v_contractor_scorecard`, `v_pl_monthly`) for canonical numbers. Daily briefs at `_vault/briefs/YYYY-MM-DD.md` are a working surface layered on top of warehouse data; Jim's `[x]` and `%...%` marks on the brief are authoritative for *intent*, but live numbers always come from Supabase.
 
 **Forward-chain rule:** Today's brief is generated FROM yesterday's brief.
 

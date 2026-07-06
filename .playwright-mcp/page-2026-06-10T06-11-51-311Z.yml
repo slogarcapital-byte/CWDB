@@ -1,0 +1,34 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]: …
+    - generic [ref=e4]: …
+    - button "⟳ refresh" [ref=e5] [cursor=pointer]
+    - button "⚙ run tick" [ref=e6] [cursor=pointer]
+    - button "⛁ warehouse" [ref=e7] [cursor=pointer]
+    - button "⏸ pause" [ref=e8] [cursor=pointer]
+  - generic [ref=e9]:
+    - generic [ref=e10]:
+      - generic [ref=e11]: VALIDATION GATE · … DAYS LEFT
+      - generic [ref=e12]: …
+      - generic [ref=e17]: …
+    - generic [ref=e18]:
+      - generic [ref=e19]: MODEL SPEND
+      - generic [ref=e20]: …
+      - generic [ref=e23]: …
+    - generic [ref=e24]:
+      - generic [ref=e25]: QUEUE
+      - generic [ref=e26]: …
+      - generic [ref=e27]: …
+  - main [ref=e28]:
+    - generic [ref=e29]:
+      - heading "⚡ Approvals 0" [level=2] [ref=e30]
+      - heading "decided" [level=3] [ref=e31]
+    - generic [ref=e32]:
+      - heading "◉ Activity" [level=2] [ref=e33]
+      - heading "tasks" [level=3] [ref=e34]
+  - contentinfo [ref=e35]:
+    - generic [ref=e36]:
+      - textbox "🎯 standing directive for the orchestrator… (e.g. 'prioritize routing the 2 real leads')" [ref=e37]
+      - button "send" [ref=e38] [cursor=pointer]
+      - button "+ task" [ref=e39] [cursor=pointer]
+      - button "⚙ dials" [ref=e40] [cursor=pointer]

@@ -6,7 +6,7 @@ Run the morning briefing ritual. This is the lowest-friction way for Jim to open
 
 Every run writes a **new dated daily brief** to `_vault/briefs/<today>.md`, generated forward from `_vault/briefs/<yesterday>.md`. **Jim's `[x]` marks and `%...%` comments from yesterday are authoritative** — merge against them, do not regenerate from memory. Yesterday's brief is then sealed (`status: sealed`) and the brief INDEX is updated.
 
-The legacy singleton `_vault/state-of-cwdb.md` is deprecated. Do not read or write it.
+Source of truth is the Supabase warehouse (project `iabiwsbmnbxmkjvkgfhg`). The brief is a daily working surface that layers Jim's marks and decisions on top of warehouse data. The legacy `_vault/state-of-cwdb.md` singleton has been deleted (2026-06-05); do not recreate it.
 
 ## What to do (in order)
 

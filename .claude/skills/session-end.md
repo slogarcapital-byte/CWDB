@@ -72,7 +72,7 @@ If today's brief does not exist (no `/brief` was run today):
 - Skip sealing. Note in the report that no brief was sealed because none was composed today.
 - Do NOT auto-create a placeholder brief at session-end. The morning ritual owns brief creation.
 
-The legacy `_vault/state-of-cwdb.md` singleton is deprecated. Do NOT write to it or to `_vault/state-archive/`.
+The `_vault/state-of-cwdb.md` singleton has been deleted (2026-06-05). Business-state source of truth is the Supabase warehouse. Write the dated session snapshot to `_vault/state-archive/state-<sessionId>.md` as a historical record only.
 
 ### 8. Trigger CEO end-of-session memory ritual
 

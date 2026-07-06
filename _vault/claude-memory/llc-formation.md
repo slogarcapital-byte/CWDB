@@ -1,16 +1,9 @@
-﻿---
+---
 name: LLC Formation — Central Wisconsin Deck Builders, LLC
 description: Legal entity details, EIN, Wisconsin DFI filing info — needed for banking, contracts, taxes, and annual reports
-title: LLC Formation — Central Wisconsin Deck Builders, LLC
-type: memory
-memory_type: project
-created: 2026-04-30
-updated: 2026-04-30
-source: C:/Users/jslog/.claude/projects/C--Users-jslog-OneDrive-Desktop-Slogars-CPA-Slogar-Capital-Claude-Projects-CWDB/memory/llc-formation.md
-tags:
-  - type/memory
-  - memory/project
+type: project
 ---
+
 ## Entity Details
 
 - **Legal name:** Central Wisconsin Deck Builders, LLC

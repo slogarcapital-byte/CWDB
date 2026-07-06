@@ -1,0 +1,3 @@
+[  259917ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://b.clarity.ms/collect:0
+[  259924ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://b.clarity.ms/collect:0
+[  357004ms] [LOG] [hubspot_form_relay] attached to form#wf-form-Quote-Request @ https://www.cwdeckbuilders.com/get-a-quote:9

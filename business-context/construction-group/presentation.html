@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SBG Construction Group: Partnership Proposal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Staatliches&family=Public+Sans:ital,wght@0,400;0,600;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --orange:#e54c00;
+    --slate:#323434;
+    --grey:#646760;
+    --sky:#83b2cf;
+    --paper:#faf8f5;
+    --line:#e4ded6;
+    --head:'Staatliches', 'Arial Narrow', sans-serif;
+    --body:'Public Sans', -apple-system, Segoe UI, Roboto, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:var(--body);color:var(--slate);background:#1c1d1d;overflow:hidden}
+  .deck{position:fixed;inset:0}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:6vh 8vw;background:var(--paper);animation:fade .35s ease}
+  .slide.active{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .progress{position:fixed;top:0;left:0;height:5px;background:var(--orange);z-index:20;transition:width .35s ease}
+  .counter{position:fixed;bottom:18px;right:26px;font-family:var(--head);letter-spacing:1px;color:var(--grey);font-size:15px;z-index:20}
+  .hint{position:fixed;bottom:18px;left:26px;color:var(--grey);font-size:12px;z-index:20;opacity:.7}
+  .kicker{font-family:var(--head);letter-spacing:2px;color:var(--orange);font-size:clamp(15px,1.6vw,20px);margin-bottom:14px;text-transform:uppercase}
+  h1{font-family:var(--head);font-weight:400;line-height:1.02;letter-spacing:.5px;font-size:clamp(40px,6.4vw,104px);color:var(--slate)}
+  h2{font-family:var(--head);font-weight:400;letter-spacing:.5px;font-size:clamp(30px,4.4vw,62px);line-height:1.05;margin-bottom:26px;color:var(--slate)}
+  h2 .u{box-shadow:inset 0 -.18em 0 var(--sky)}
+  p.lead{font-size:clamp(18px,1.9vw,26px);max-width:56ch;color:var(--grey);line-height:1.5}
+  ul{list-style:none;display:flex;flex-direction:column;gap:14px;max-width:64ch}
+  li{position:relative;padding-left:30px;font-size:clamp(16px,1.55vw,22px);line-height:1.45}
+  li::before{content:"";position:absolute;left:0;top:.55em;width:11px;height:11px;background:var(--orange);border-radius:2px}
+  li b{color:var(--slate)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start}
+  .three{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:10px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px 22px 24px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+  .card h3{font-family:var(--head);font-weight:400;letter-spacing:.5px;font-size:clamp(20px,2vw,28px);color:var(--orange);margin-bottom:6px}
+  .card .role{font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--grey);margin-bottom:12px}
+  .card p{font-size:15px;line-height:1.45;color:var(--slate)}
+  table{border-collapse:collapse;width:100%;margin-top:8px;font-size:clamp(14px,1.35vw,19px)}
+  th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line)}
+  th{font-family:var(--head);font-weight:400;letter-spacing:1px;color:var(--grey);text-transform:uppercase;font-size:.82em}
+  td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+  tr.hi td{background:#fff4ee;font-weight:700;color:var(--slate)}
+  .tag{display:inline-block;background:var(--sky);color:#10303f;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;padding:5px 11px;border-radius:999px;margin-bottom:18px}
+  .note{margin-top:22px;font-size:14px;color:var(--grey);max-width:72ch;line-height:1.45}
+  .flow{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:6px;font-size:clamp(12px,1.2vw,16px)}
+  .flow .box{background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center;min-width:150px}
+  .flow .box.llc{border-color:var(--orange);border-width:2px}
+  .flow .box small{color:var(--grey);display:block;font-size:.85em;margin-top:3px}
+  .midline{text-align:center;font-family:var(--head);letter-spacing:1px;color:var(--orange);margin:12px 0;font-size:clamp(13px,1.3vw,17px)}
+  .sbg{background:var(--slate);color:#fff;border:none}
+  .sbg small{color:var(--sky)}
+  .sbg.dim{opacity:.6}
+  #s1{background:linear-gradient(135deg,#2b2c2c 0%,#3a2317 55%,#5a2a09 100%);color:#fff;justify-content:center}
+  #s1 .kicker{color:var(--sky)}
+  #s1 h1{color:#fff}
+  #s1 .sub{margin-top:22px;font-size:clamp(17px,1.8vw,24px);color:#e9e2da;max-width:52ch;line-height:1.5}
+  #s1 .who{margin-top:34px;font-family:var(--head);letter-spacing:1.5px;font-size:clamp(15px,1.5vw,20px);color:var(--sky)}
+  .phase{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:6px}
+  .phase .card h3{font-size:clamp(22px,2.3vw,32px)}
+  .pill{display:inline-block;font-family:var(--head);letter-spacing:1px;font-size:12px;padding:3px 10px;border-radius:999px;background:var(--sky);color:#10303f;margin-bottom:10px}
+  .pill.b{background:var(--orange);color:#fff}
+  .end{background:var(--slate);color:#fff}
+  .end h2,.end h1{color:#fff}
+  .end li{color:#e9e2da}
+  .end li b{color:#fff}
+  .end .kicker{color:var(--sky)}
+  .end .note{color:#bcae9f}
+</style>
+</head>
+<body>
+<div class="progress" id="bar"></div>
+<div class="counter" id="counter"></div>
+<div class="hint">Arrow keys or click to advance</div>
+<div class="deck" id="deck">
+
+  <!-- 1 TITLE -->
+  <section class="slide active" id="s1">
+    <div class="kicker">Partnership Proposal</div>
+    <h1>SBG<br>Construction Group</h1>
+    <div class="sub">Keep your own business. Share the crews, the equipment, and the systems. Merge later, only if it works.</div>
+    <div class="who">Slogar &nbsp;&middot;&nbsp; Barton &nbsp;&middot;&nbsp; Garcia</div>
+  </section>
+
+  <!-- 2 OPPORTUNITY -->
+  <section class="slide">
+    <div class="kicker">Why now</div>
+    <h2>The work is here. <span class="u">The expensive parts hold us back.</span></h2>
+    <ul>
+      <li><b>The demand is booked.</b> Ben and John are scheduled into 2027, and homeowner leads and live quotes are already coming in. The constraint is crews, equipment, and systems, not finding work.</li>
+      <li><b>Crews and equipment are what a single trade can't keep busy.</b> Shared across three books of work, they stay busy and pay for themselves.</li>
+      <li><b>We stay our own bosses while we test it.</b> Combine the costly infrastructure first. Merge the businesses only after we prove the relationship and the numbers.</li>
+    </ul>
+  </section>
+
+  <!-- 3 VISION -->
+  <section class="slide">
+    <div class="kicker">The vision</div>
+    <h2>Keep your own business. <span class="u">Share the expensive parts.</span></h2>
+    <div class="two">
+      <div class="card">
+        <h3>Stays with each of us</h3>
+        <p style="margin-top:8px">Your customers and brand. Your signed jobs and your job profit. Your own license and insurance. Your own lead sources.</p>
+      </div>
+      <div class="card sbg">
+        <h3 style="color:var(--sky)">Shared in SBG</h3>
+        <p style="margin-top:8px;color:#e9e2da">The W-2 field crews. The equipment (trucks, tools, lifts). The real estate (a shop or yard, later). The systems and buying power.</p>
+      </div>
+    </div>
+    <p class="note">SBG rents its crews and equipment to whichever of us has the work. You pay SBG for what you use, and you keep what is left.</p>
+  </section>
+
+  <!-- 4 TWO STAGES -->
+  <section class="slide">
+    <div class="kicker">The model</div>
+    <h2>Two stages: prove it, then merge.</h2>
+    <div class="phase">
+      <div class="card">
+        <span class="pill">Phase A &middot; now &middot; 1 to 2 years</span>
+        <h3>Shared-services co-op</h3>
+        <p style="margin-top:8px">Each LLC signs its own jobs and <b>keeps its own profit</b>. SBG owns the crews and equipment and bills each LLC at market to use them. Whoever books more keeps more. Low risk, because nobody's profit is pooled yet.</p>
+      </div>
+      <div class="card">
+        <span class="pill b">Phase B &middot; later &middot; only if it works</span>
+        <h3>The merger</h3>
+        <p style="margin-top:8px">Job profit pools and splits one third. We agree the rules <b>now</b>, in calm times: what triggers it, and how we value and equalize what each of the three businesses brings.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 ENTITY STRUCTURE -->
+  <section class="slide">
+    <div class="kicker">The structure</div>
+    <h2>Three businesses on top. <span class="u">Shared muscle underneath.</span></h2>
+    <div class="flow">
+      <div class="box llc">Central Wisconsin<br>Deck Builders<br><small>Jim, signs its own jobs</small></div>
+      <div class="box llc">Barton Builders<br><small>Ben, signs its own jobs</small></div>
+      <div class="box llc">John Garcia<br>Construction<br><small>John, signs its own jobs</small></div>
+    </div>
+    <div class="midline">&uarr; SBG rents crews + equipment up &nbsp;&middot;&nbsp; the LLCs pay SBG &darr;</div>
+    <div class="flow">
+      <div class="box sbg">SBG-Labor<br><small>employs the crews + us</small></div>
+      <div class="box sbg">SBG-Equipment<br><small>owns + leases the gear</small></div>
+      <div class="box sbg dim">SBG-Real Estate<br><small>dormant for now</small></div>
+    </div>
+    <p class="note">Three separate SBG companies, owned one third each by the three of us. Kept separate on purpose: a jobsite claim against the crews can never reach the building or the equipment. Standard trades practice.</p>
+  </section>
+
+  <!-- 6 MONEY / PAY -->
+  <section class="slide">
+    <div class="kicker">How the money works (Phase A)</div>
+    <h2>You earn from your own work and <span class="u">your own jobs.</span></h2>
+    <div class="two">
+      <div class="card"><h3>Your two paychecks</h3><p style="margin-top:8px"><b>1. Your LLC's job profit.</b> You sign it, you keep it, same as today. Whoever books more earns more.<br><br><b>2. A W-2 wage from SBG</b> for the hours you personally work, on any job, yours or a partner's.</p></div>
+      <div class="card"><h3>SBG itself</h3><p style="margin-top:8px">Bills each LLC at <b>fair market rates</b> for crews and equipment. <b>Reinvests its profit</b> for the first 1 to 2 years into more equipment and a reserve, instead of paying out. That is how the shared muscle grows.</p></div>
+    </div>
+    <p class="note">SBG is a shared cost-and-asset center in Phase A, not a pot we split. Pooling comes in Phase B.</p>
+  </section>
+
+  <!-- 8 GOVERNANCE -->
+  <section class="slide">
+    <div class="kicker">Governance</div>
+    <h2>How three equal owners <span class="u">actually decide.</span></h2>
+    <ul>
+      <li><b>Lanes:</b> Jim runs sales, marketing, finance. John runs customer service, estimating, scheduling. Ben runs field operations and the crews. The lane owner decides day to day.</li>
+      <li><b>Major decisions:</b> at least two of three agree. The biggest (selling, dissolving, the Phase B merger) need all three.</li>
+      <li><b>Deadlock:</b> written positions, a meeting, mediation, then a pre-agreed neutral advisor breaks a true tie. A buy-sell trigger means the company never stays frozen.</li>
+    </ul>
+  </section>
+
+  <!-- 9 PROTECTION -->
+  <section class="slide">
+    <div class="kicker">Protection</div>
+    <h2>Nobody gets trapped. <span class="u">Nobody gets robbed.</span></h2>
+    <ul>
+      <li><b>Buy-sell with right of first refusal:</b> no one sells to a stranger without offering the other two first, at a pre-agreed value.</li>
+      <li><b>Covered events:</b> exit, death, disability, removal for cause, each with a defined buyout.</li>
+      <li><b>The back door is closed:</b> you cannot route around the rules by selling your shell company.</li>
+      <li><b>Transparency:</b> monthly statements, open books, and bank visibility for all three, since finance sits with Jim.</li>
+    </ul>
+  </section>
+
+  <!-- 10 INTER-COMPANY AGREEMENTS -->
+  <section class="slide">
+    <div class="kicker">The operational heart</div>
+    <h2>Three written agreements <span class="u">make it work.</span></h2>
+    <div class="three">
+      <div class="card"><h3>Labor lease</h3><div class="role">SBG-Labor to each LLC</div><p>Supplies crews at a market rate (wages + payroll tax + workers' comp + overhead + margin). The LLC's licensed Qualifier directs the work.</p></div>
+      <div class="card"><h3>Equipment lease</h3><div class="role">SBG-Equipment to each LLC</div><p>Leases the gear at a market rate. Note: Wisconsin sales tax applies to equipment rentals, and SBG-Equipment remits it.</p></div>
+      <div class="card"><h3>Workers' comp coordination</h3><div class="role">protects all three LLCs</div><p>SBG-Labor's coverage is coordinated so a leased-worker injury on any LLC's job is covered and barred against that LLC.</p></div>
+    </div>
+    <p class="note">These are real, market-priced contracts between our own companies, required for both tax and legal protection.</p>
+  </section>
+
+  <!-- 11 FINANCIAL SHAPE -->
+  <section class="slide">
+    <div class="tag">Illustrative, to be sized against real numbers</div>
+    <h2>What it takes to stand up SBG.</h2>
+    <ul>
+      <li><b>Equal cash in:</b> roughly $30,000 to $45,000 each (to be sized against the actual equipment list and payroll float).</li>
+      <li><b>It funds two things:</b> SBG buys its own equipment, and it floats payroll (crews are paid weekly while the LLCs are billed and collect later).</li>
+      <li><b>No real estate cost yet:</b> the real-estate company stays dormant. We use our own space for now.</li>
+      <li><b>SBG runs lean and reinvests,</b> building the equipment fleet and the reserve rather than paying out.</li>
+    </ul>
+    <p class="note">Selling existing gear into SBG is a separate fair-market sale, not a contribution, which keeps ownership cleanly equal.</p>
+  </section>
+
+  <!-- 12 LEGAL & TAX -->
+  <section class="slide">
+    <div class="kicker">Legal and tax setup</div>
+    <h2>Set up right from <span class="u">day one.</span></h2>
+    <ul>
+      <li><b>SBG-Labor is an S-corp,</b> which is what lets each of us draw a real W-2 paycheck for our hours.</li>
+      <li><b>Each LLC keeps its own license and insurance:</b> its own Dwelling Contractor Certification, Qualifier, and general liability. Jim still needs to finish his license to sign builds.</li>
+      <li><b>Workers' comp lives in SBG-Labor</b> and covers every crew member and all three of us.</li>
+      <li><b>Equipment leases carry Wisconsin sales tax;</b> SBG-Equipment registers and remits it. We confirm with the state before the first lease invoice.</li>
+    </ul>
+  </section>
+
+  <!-- 13 PHASE B -->
+  <section class="slide">
+    <div class="kicker">The merger, decided now</div>
+    <h2>Settle the hard questions <span class="u">while we are friends.</span></h2>
+    <ul>
+      <li><b>The trigger:</b> what moves us from co-op to merger (recommend a unanimous decision).</li>
+      <li><b>The valuation:</b> how we fairly value and equalize what each of the three businesses brings to the table at pooling.</li>
+      <li><b>The end state:</b> whether the three LLCs collapse into one company or stay as brands.</li>
+    </ul>
+    <p class="note">The whole point of Phase A is to earn the trust to do Phase B. We write the rules for it now, not in the middle of it.</p>
+  </section>
+
+  <!-- 14 GROWTH -->
+  <section class="slide">
+    <div class="kicker">The path</div>
+    <h2>Phased growth.</h2>
+    <ul>
+      <li><b>Now:</b> form the three SBG entities, sign the inter-company agreements, put in the equal cash, run live jobs through the co-op.</li>
+      <li><b>Phase A:</b> prove the relationship and the numbers. Build the crews, equipment, and reserve.</li>
+      <li><b>Phase B:</b> if it works, execute the merger on the pre-agreed rules.</li>
+      <li><b>Then scale:</b> more crews, and buy the shop or yard through the real-estate company when ready. Expand into adjacent markets.</li>
+    </ul>
+  </section>
+
+  <!-- 15 NEXT STEPS -->
+  <section class="slide end">
+    <div class="kicker">The ask tonight</div>
+    <h2>Agree in principle. Set up clean. Prove it.</h2>
+    <ul>
+      <li><b>Agree in principle</b> on the structure: three SBG entities owned one third each, our LLCs stay independent in Phase A, equal cash in, SBG bills at market and reinvests, the Phase B rules decided now.</li>
+      <li><b>Each of us completes the due-diligence disclosure</b> so we go in with eyes open.</li>
+      <li><b>Confirm the open numbers:</b> the equal cash amount, the loaded labor and equipment rates, the Phase B rules.</li>
+      <li><b>Engage a Wisconsin attorney and the CPA</b> for the agreements, the S-corp election, and the equipment-lease sales tax.</li>
+    </ul>
+    <p class="note">Companion documents: business plan, term sheet, inter-company agreements, financial model, due-diligence checklist. Nothing binds anyone until a Wisconsin attorney drafts the agreements and all three sign.</p>
+  </section>
+
+</div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  let i=0;
+  const bar=document.getElementById('bar');
+  const counter=document.getElementById('counter');
+  function show(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+    bar.style.width=((i+1)/slides.length*100)+'%';
+    counter.textContent=String(i+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
+  }
+  function next(){show(i+1)}
+  function prev(){show(i-1)}
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();next()}
+    else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();prev()}
+    else if(e.key==='Home'){show(0)}
+    else if(e.key==='End'){show(slides.length-1)}
+  });
+  document.getElementById('deck').addEventListener('click',e=>{
+    const x=e.clientX/window.innerWidth;
+    if(x<0.25){prev()}else{next()}
+  });
+  show(0);
+</script>
+</body>
+</html>

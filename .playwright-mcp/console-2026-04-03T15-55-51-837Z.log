@@ -1,5 +1,0 @@
-[    2145ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://www.pexels.com/en-us/api/v2/me:0
-[    3061ms] [WARNING] [GSI_LOGGER]: Your client application uses one of the Google One Tap prompt UI status methods that may stop functioning when FedCM becomes mandatory. Refer to the migration guide to update your code accordingly and opt-in to FedCM to test your changes. Learn more: https://developers.google.com/identity/gsi/web/guides/fedcm-migration?s=dc#display_moment and https://developers.google.com/identity/gsi/web/guides/fedcm-migration?s=dc#skipped_moment @ https://static.pexels.com/1/vendor/sentry-8.34.0/bundle.tracing.min.js:1
-[    3068ms] [ERROR] Not signed in with the identity provider. @ https://www.pexels.com/photo/big-suburb-house-with-terrace-and-backyard-7061662/:0
-[    8195ms] [ERROR] [GSI_LOGGER]: FedCM get() rejects with NetworkError: Error retrieving a token. @ https://static.pexels.com/1/_next/static/chunks/pages/_app-001d95cb5e67410e.js:19
-[    8195ms] [LOG] one tap prompt At @ https://static.pexels.com/1/vendor/sentry-8.34.0/bundle.tracing.min.js:1

@@ -1,16 +1,8 @@
-﻿---
+---
 name: Phase F Analytics IDs
 description: GTM, GA4, Meta, Nextdoor, Google Ads, MS Clarity account IDs for CWDB site install
+type: project
 originSessionId: c88b8450-e859-4bc8-ac91-1ebbe449e767
-title: Phase F Analytics IDs
-type: memory
-memory_type: project
-created: 2026-04-30
-updated: 2026-04-30
-source: C:/Users/jslog/.claude/projects/C--Users-jslog-OneDrive-Desktop-Slogars-CPA-Slogar-Capital-Claude-Projects-CWDB/memory/phase-f-ids.md
-tags:
-  - type/memory
-  - memory/project
 ---
 # Phase F — Analytics & Pixel IDs
 

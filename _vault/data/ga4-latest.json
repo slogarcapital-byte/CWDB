@@ -1,6 +1,15 @@
-﻿{
-    "pulled_at":  "2026-05-12T01:43:31.8006113Z",
-    "source":  "ga4",
-    "data":  null,
-    "error":  "Missing required env var: GA4_SERVICE_ACCOUNT_JSON. See operations/automation/api-credentials/README.md"
+{
+  "pulled_at": "2026-06-02T15:30:41.8697335Z",
+  "source": "ga4",
+  "data": {
+    "property_id": "533582902",
+    "date_range": "7daysAgo..today",
+    "sessions": 111,
+    "users": 103,
+    "conversions": 0.0,
+    "conversion_rate_percent": 0.0,
+    "top_channel": "Direct",
+    "top_channel_sessions": 52
+  },
+  "error": null
 }

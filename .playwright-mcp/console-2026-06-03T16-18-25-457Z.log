@@ -1,0 +1,2 @@
+[    1478ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://ad.doubleclick.net/ccm/s/collect?gclid=e2e_gclid_001&auid=840867822.1776802128&gtm=45be6611v9250276101z89249770986za20gzb9249770986zd9249770986xec:0
+[    9615ms] [LOG] [hubspot_form_relay] attached to form#wf-form-Quote-Request @ https://www.cwdeckbuilders.com/get-a-quote?utm_source=cwdb_e2e_test&utm_campaign=utm_verify_2026_06_03&gclid=e2e_gclid_001&zip=54401&phone=7155551234:9

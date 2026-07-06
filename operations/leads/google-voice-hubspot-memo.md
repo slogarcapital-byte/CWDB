@@ -2,6 +2,16 @@
 
 **Date:** 2026-06-10 · **Author:** Claude (research agent) · **Number at stake:** (715) 544-7941 (printed on website, estimates, invoices, signage)
 
+> ## DECISION UPDATE — 2026-06-17: action the upgrade (Option C / Quo)
+>
+> The Option A "defer the port" recommendation below was gated on the validation deadline. **Upgrade trigger #1 ("validation gate passes / first accepted bid") fired on 2026-06-12** (Debbie Overbeck — first accepted bid + first revenue). The deferral rationale no longer holds.
+>
+> Jim decided this session (2026-06-17) to **port (715) 544-7941 to Quo Business** (Quo = the 2026 rebrand of OpenPhone). Two reasons beyond the trigger: (a) Google Voice physically cannot auto-create the HubSpot contact (no API/Zapier/Make/webhook path), which is a hard requirement; (b) Jim is text-first, and HubSpot Starter has no native SMS at all, so the free GV stopgap offers no click-to-SMS. Salesmsg was the considered SMS-specialist alternative but loses on calling (Jim books walk-throughs by phone).
+>
+> Full migration runbook, costs, verification, and rollback: `C:\Users\jslog\.claude\plans\cwdb-ceo-operator-agent-i-m-having-mutable-nest.md`. Tracked as board item **WB-019**. Status: decided, port not yet executed.
+>
+> Everything below this banner is the original 2026-06-10 analysis, retained for context.
+
 ## Bottom Line
 
 **Recommendation: Option A. Keep Google Voice, spend $0, and adopt a 2-minute logging discipline in HubSpot Starter.** At a few calls per week, every paid bridge is over-engineering, and the validation gate (2026-06-18) means we should not port the business number anywhere while a pivot or sunset is still on the table.

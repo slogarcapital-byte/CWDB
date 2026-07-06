@@ -1,0 +1,38 @@
+{
+  "client": {
+    "name": "Sarah and Mike Henderson",
+    "address_line": "1234 Maple Street, Wausau, WI 54401",
+    "phone": "(715) 555-0123",
+    "email": "henderson@example.com"
+  },
+  "inputs": {
+    "project_type": "Full Tear-Out + New Build",
+    "length": 20,
+    "depth": 15,
+    "decking_material": "Trex Select",
+    "railing_material": "Trex Aluminum",
+    "framing_material": "KDAT Pressure-Treated",
+    "height": "1 Story / Low",
+    "grade": "Flat / Normal Access",
+    "complexity": "Simple Rectangle",
+    "market": "Normal Schedule",
+    "border_style": "Pencil Border",
+    "railing_lf": 40,
+    "fascia_lf": 70,
+    "stair_runs": 1,
+    "stair_treads": 6,
+    "stair_landings": 0,
+    "wraparound": "No",
+    "stain_sf": 0,
+    "stain_type": "Solid / Paint-and-Sealer",
+    "stain_coats": 1,
+    "board_repairs": 0,
+    "joist_repair_lf": 0,
+    "hardware_inc": "No",
+    "skirting_sf": 0,
+    "lighting_fix": 2,
+    "bench_count": 0,
+    "privacy_screen_lf": 0,
+    "hot_tub": "No"
+  }
+}

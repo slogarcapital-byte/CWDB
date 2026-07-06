@@ -57,3 +57,8 @@ Auto-loaded each session. Keep under 150 lines. Details in linked files.
 - All ads drive to cwdeckbuilders.com — never to third-party forms
 - Geographic targeting: 5 primary cities ([[Wausau]], [[Schofield]], [[Weston]], [[Mosinee]], [[Merrill]])
 - Persona: Homeowners aged 30-65 with property in Central Wisconsin
+
+## Platform Quirks (hard-won lessons)
+- [Google Ads Smart Bidding cold-start starvation](google-ads-smart-bidding-cold-start.md) — STANDING PATTERN. New campaigns with <30 conv/mo self-starve under Maximize Conversions / Target CPA. Bridge with Maximize Clicks + max CPC cap until ≥30 conversions banked, then graduate. CWDB campaign hit ~12% budget utilization for 26 days before this was diagnosed.
+- [Google Ads callout bulk Row type is "Callout" not "Callout extension"](google-ads-callout-row-type.md) — Google's own template sample rows are wrong; parser rejects the legacy value.
+- [Meta Ads bulk import gated ~2 weeks of account maturity](meta-ads-bulk-import-gate.md) — Fresh accounts can't use bulk; plan manual-UI launches for any new Meta account. CWDB unlocked ~2026-05-07.

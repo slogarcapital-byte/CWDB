@@ -1,4 +1,0 @@
-[     776ms] [LOG] [cwdb_ios_submit_fix v1.2.0] submit fallback bound @ https://cdn.prod.website-files.com/69c846db9eee02fddb1e2367%2F689e5ba67671442434f3ca35%2F69ef951cf41b850e9742635e%2Fcwdb_ios_submit_fix-1.2.0.js:2
-[     780ms] [LOG] [cwdb_ios_submit_fix diag] {display: block, pointerEvents: auto, touchAction: manipulation, position: static, zIndex: auto} @ https://cdn.prod.website-files.com/69c846db9eee02fddb1e2367%2F689e5ba67671442434f3ca35%2F69ef951cf41b850e9742635e%2Fcwdb_ios_submit_fix-1.2.0.js:2
-[  151095ms] [WARNING] [Meta Pixel] - Duplicate Pixel ID: 1276568654662913. @ https://connect.facebook.net/en_US/fbevents.js:181
-[  151232ms] [ERROR] Attestation check for Attribution Reporting on https://www.facebook.com failed. @ https://www.cwdeckbuilders.com/thank-you:0

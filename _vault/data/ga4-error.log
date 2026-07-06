@@ -4,3 +4,4 @@
 [2026-05-09T07:25:12.0009560-05:00] ga4 pull FAILED: Missing required env var: GA4_SERVICE_ACCOUNT_JSON. See operations/automation/api-credentials/README.md
 [2026-05-10T07:56:21.7965237-05:00] ga4 pull FAILED: Missing required env var: GA4_SERVICE_ACCOUNT_JSON. See operations/automation/api-credentials/README.md
 [2026-05-11T20:43:31.7812896-05:00] ga4 pull FAILED: Missing required env var: GA4_SERVICE_ACCOUNT_JSON. See operations/automation/api-credentials/README.md
+[2026-06-02T09:58:42.0638216-05:00] ga4 pull FAILED: Method invocation failed because [System.Security.Cryptography.RSACryptoServiceProvider] does not contain a method named 'ImportFromPem'.

@@ -1,0 +1,5 @@
+[     968ms] [WARNING] [Meta Pixel] - Duplicate Pixel ID: 1276568654662913. @ https://connect.facebook.net/en_US/fbevents.js:187
+[  697709ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://b.clarity.ms/collect:0
+[  697711ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://b.clarity.ms/collect:0
+[  697711ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://b.clarity.ms/collect:0
+[  697711ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://b.clarity.ms/collect:0

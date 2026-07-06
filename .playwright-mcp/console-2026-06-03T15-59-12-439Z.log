@@ -1,0 +1,3 @@
+[    3712ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://ad.doubleclick.net/ccm/s/collect?gclid=test_gclid_1&auid=1325073377.1776698456&gtm=45je6611v9104269162z89249770986za20gzb9249770986zd9249770986xec:0
+[   34542ms] [LOG] [hubspot_form_relay] attached to form#wf-form-Quote-Request @ https://central-wisconsin-deck-builders.webflow.io/get-a-quote?utm_source=test_handoff&utm_campaign=cwdb_diag_2026_06_03&gclid=test_gclid_1&zip=54401&phone=7155551234:9
+[  473365ms] [LOG] [hubspot_form_relay] attached to form#wf-form-Quote-Request @ https://central-wisconsin-deck-builders.webflow.io/get-a-quote?utm_source=test_handoff&utm_campaign=cwdb_diag_2026_06_03&gclid=test_gclid_1&zip=54401&phone=7155551234:9

@@ -22,7 +22,7 @@ Auto-loaded each session. Keep under 150 lines. Details in linked files.
 
 ## Design System
 - Colors: `#e54c00` Orange · `#323434` Timber Slate · `#646760` Builders Grey · `#83b2cf` Sky Blue
-- Fonts: Barlow Condensed (headlines, uppercase) · Inter (body, labels)
+- Fonts: Staatliches (headlines) · Public Sans (body, labels) — changed from Barlow/Inter in 2026-04-21 site revamp
 - Full spec: `/website/design-system.md`
 
 ## Components & CMS
@@ -38,3 +38,23 @@ Auto-loaded each session. Keep under 150 lines. Details in linked files.
 
 ## Audit Findings (2026-04-07)
 - [Gaps & Missing Info](gaps-identified.md) — Phone number, /privacy page, TCPA (resolved), Our Builders (resolved)
+
+## Platform Quirks (hard-won lessons; read before reaching for the obvious solution)
+
+### Webflow MCP
+- [Pseudo-elements stripped by whtml_builder](webflow-mcp-pseudo-elements.md) — `::before`/`::after` silently dropped on import; use `style_tool` with pseudo param OR fall back to aria-hidden div
+- [Designer page context shared across parallel agents](webflow-mcp-parallel-agents.md) — concurrent agents fight over active-page state; re-select target page before structural edits
+- [Cannot insert siblings adjacent to component instances](webflow-mcp-sibling-insert.md) — `before`/`after` fails with "Cannot insert elements directly into a component instance"; workaround is remove + re-append trailing sections
+- [Cannot bind DOM elements to CMS fields](webflow-mcp-cms-binds.md) — Image src/alt + Text content binds + Collection List filter settings are Designer-only; build DOM then hand off to Jim
+- [Use display:contents for grid/flex inside Collection List](webflow-collection-list-grid.md) — DynamoWrapper + DynamoList intercept layout; set display:contents on both so items become direct grid/flex children
+- [Per-instance Component Property overrides Designer-only on single-locale sites](webflow-mcp-component-bool-props.md) — all override types fail via Data API; Designer MCP has no write path; hand off to Jim in Designer
+- [Script slots cap at 15, inline cap at 2000 chars](webflow-mcp-script-constraints.md) — `data_scripts_tool` only exposes `add_inline_site_script`; page-scoped scripts via `upsert_page_script` for >2000 chars; `publish_site` requires domain IDs not hostnames
+- [No native Multi-Step Form element](webflow-no-native-multistep.md) — every multi-step is custom JS hiding wizard-step divs. Don't propose "use Webflow native multi-step."
+
+### Browser / Device
+- [Playwright MCP context dies on idle](playwright-mcp-context-death.md) — first call after idle fails; always run `browser_close` → `browser_navigate("about:blank")` → `browser_resize(1280, 800)` at session start, repeat if error recurs mid-run
+- [iOS Safari + flex on `<input type="submit">` swallows tap submits](feedback-ios-flex-submit-bug.md) — WebKit bug killed CWDB form 2026-04-27. Submit inputs stay `inline-block`; flex centering only on `a.btn-submit` anchors
+
+### Site-specific incidents (don't re-introduce)
+- [Hero form handoff silent-fail (fixed 2026-05-05 v1.2.0)](hero-form-handoff-silent-fail.md) — `novalidate` + `reportValidity()` is a no-op; drop novalidate and use browser native popups
+- [/get-a-quote form rebuild (2026-04-28)](project-form-rebuild-2026-04-27.md) — iOS bug killed, name+email first-class fields, project_type on Step 3, scripts consolidated to 8 site + 1 page-scoped

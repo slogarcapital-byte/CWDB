@@ -1,214 +1,88 @@
-﻿---
-title: MEMORY
-type: memory
-memory_type: index
-created: 2026-04-30
-updated: 2026-04-30
-source: C:/Users/jslog/.claude/projects/C--Users-jslog-OneDrive-Desktop-Slogars-CPA-Slogar-Capital-Claude-Projects-CWDB/memory/MEMORY.md
-tags:
-  - type/memory
-  - memory/index
----
 # CWDB Project Memory
-Auto-loaded each session. Keep under 150 lines. Details → project-state.md.
+Auto-loaded each session. Keep under 100 lines. Detail files in this directory; per-agent platform quirks in `~/.claude/agent-memory/<agent>/`.
 
-## Daily Read
-- **State of CWDB** — `_vault/state-of-cwdb.md` in the CWDB repo. Open first each session. Single source of truth for current state, Inbox/Outbox comms with Jim, decisions needed, KPIs. Updated by `/session-end` (auto) and `/state` (manual).
+## Source of Truth
+**Supabase warehouse, not vault files.** Project `iabiwsbmnbxmkjvkgfhg`. Query `v_lead_funnel`, `v_cac_by_channel`, `v_meta_attribution_gap`, `v_contractor_scorecard`, `v_pl_monthly` before claiming any business-state fact. Control-loop health + the gate are machine-readable via `v_control_status` and `v_validation_gate`. See CWDB/CLAUDE.md "Source of Truth" section for the daily-read order.
+
+## Validation Gate (CLOSED 2026-07-05)
+- **Verdict (adopted by Jim 2026-07-05):** Phase 1 closed with a pivot. Pay-per-accepted-bid unproven (0 contractor acceptances, $0 fees ever invoiced); parked as a secondary overflow product. Validated model: self-perform construction fed by CWDB's owned lead engine. Phase 2 = construction profitability (licensed, insured, 2-4 booked jobs/month, measured funnel). Full audit + 28-item fix list: `_vault/briefs/2026-07-05-audit.md`.
+- **Deadline (was):** 2026-06-18
+- **Pass:** `v_validation_gate.gate_met` (qualified_since_gate >= 3 OR accepted_lifetime >= 1). NOTE: the real columns are `leads_qualified`/`leads_bid_accepted`, NOT `qualified_count`/`accepted_count` (that drift is fixed in views/002).
+- **As of 2026-06-12: gate met on BOTH criteria** (3/3 qualified: Johnson 6/7, Kampstra 6/8, Quinn 6/10; AND accepted_lifetime=1: Overbeck CWDB-2026-043 [re-based 2026-06-26 from -001] signed + deposit paid 6/11). Caveat: Overbeck is cwdb-lane SELF-PERFORM (direct construction revenue); the $1,000 contractor-fee leg (Ben/John paying for an accepted bid) is still untested. Next proof: a builder-lane acceptance.
+- **Miss:** call pay-per-accepted-bid model unproven. Pivot or sunset. No third extension.
 
 ## User
-- [[user_name|User goes by Jim]] — call him Jim; James appears on legal docs only
+- [Jim](user_name.md) — call him Jim; James is legal docs only
+- [No em dashes ever](feedback-no-em-dashes.md) — STANDING RULE. Replace with period/colon/comma/parens/and
 
 ## Business Contact (Canonical NAP)
-- [[business-contact|CWDB NAP — name, address, phone, email, hours]] — 906 N 16th Ave, Wausau WI 54401 · (715) 544-7941 · info@cwdeckbuilders.com
+- [CWDB NAP](business-contact.md) — 906 N 16th Ave, Wausau WI 54401 · (715) 544-7941 · info@cwdeckbuilders.com
+- [Social URLs](social-urls.md) — IG `cwdeckbuilders`, FB `profile.php?id=61564720918864`, Nextdoor `central-wisconsin-deck-builders-wausau-wi`
 
-## LLC — Central Wisconsin Deck Builders, LLC
-- **Formed:** 2026-04-06 · Wisconsin single-member LLC · James Slogar, Sole Member
-- **EIN:** 41-5355234 · **Wisconsin Entity ID:** C138564
-- **Registered office:** 906 N 16th Ave., Wausau, WI 54401
-- **Annual report due:** June 30, 2027 ($25, DFI online) · S-Corp election window closes ~2026-06-20
-- **Docs:** `/docs/legal/` — articles, EIN proof, contractor agreement v1 (.md, .docx, .pdf)
-- **Contractor agreement v1:** Sent via DocuSign to Ben Barton + John Garcia (2026-04-07, effective April 6, 2026) · PDFs in `/sales/contractor-agreements/` · Generator: `/docs/legal/generate_agreement_pdf.py` (parameterized) · Send script: `/sales/contractor-agreements/generate_and_send.py` · Log: `/sales/contractor-agreements/log.md`
-- Full details → [[llc-formation|llc-formation.md]]
+## LLC
+[Central Wisconsin Deck Builders, LLC](llc-formation.md) — Formed 2026-04-06, Wisconsin single-member, James Slogar Sole Member. EIN 41-5355234, WI Entity C138564. Annual report due 2027-06-30. S-Corp election DECLINED for 2026 (decision 2026-06-09; revisit triggers in `agent-memory/accounting/s-corp-decision.md`).
 
-## What This Project Is
-Trades lead generation business. Generate homeowner deck project leads in Central Wisconsin and sell them to contractors.
-Niche: Deck Builders. Market: Wausau, Schofield, Weston, Mosinee, Merrill.
+## Brand
+Name: Central Wisconsin Deck Builders. Domain: cwdeckbuilders.com. Colors: `#e54c00` Orange · `#323434` Slate · `#646760` Grey · `#83b2cf` Sky Blue. Logos in `/branding/logos/`.
 
-## Current Phase
-Phase 1 — Validation (IN PROGRESS)
-Contractor commitment secured ✅ — first contractor agreed to $1,000 per accepted bid (2026-03-12)
-Full 21-page website plan created ✅ — see `/business-context/website-plan.md` (2026-03-29)
-Website content files, design system, site architecture, and cost calculator all created (2026-03-29)
-**Webflow Phase A complete ✅ (2026-04-02)** — design system, global styles, header, footer, all core components
-**Webflow Phase B complete ✅ (2026-04-02)** — homepage, Get a Quote page, Thank-You page all done
-**Webflow Phase C complete ✅ (2026-04-03)** — Service Areas CMS collection (28 fields), template page built + styled, all 5 city items published (Wausau, Schofield, Weston, Mosinee, Merrill)
-**Webflow Phase D complete ✅ (2026-04-03)** — About, FAQ, Gallery, Our Builders pages live on staging. 3 new CMS collections created.
-**Webflow Phase E complete ✅ (2026-04-03)** — cost calculator page, Blog Posts CMS collection (4 articles), /blog index, blog article template all live on staging.
-**Contractor agreements sent ✅ (2026-04-07)** — DocuSign sent to Ben Barton (Barton Builders LLC) + John Garcia (John Garcia Construction, LLC). Both HubSpot lifecycle stages → customer.
-**Webflow Phase F complete ✅ (2026-04-18)** — GTM snippet in Webflow site head; GTM container configured with 8 tags (GA4, Meta Pixel, Nextdoor Pixel, Clarity, Conversion Linker, Google Ads Conversion, Meta Lead event, Nextdoor Lead event); all tags verified firing in GTM Preview mode on staging. GTM container published 2026-04-18.
-**DNS cutover live ✅ (2026-04-18)** — cwdeckbuilders.com → 301 → www.cwdeckbuilders.com (200).
-**Make scenario v1 built (2026-04-18) — PARKED 2026-04-19** — `CWDB Lead Routing — v1` (scenario 4792854, hook 2183206) remains inactive. Not to be reactivated until triggers fire — see pivot memo.
-**HubSpot OAuth authorized in Make (2026-04-18)** — left as-is; no further connections pursued.
-**PIVOT 2026-04-19:** Make scenario parked; Google Voice → Twilio port-in cancelled. Manual contractor notification via Jim's SMS is the interim path. Rationale: Principle 2 — no lead flow yet, automation is premature. Reactivation triggers: ≥10 leads/week, 3rd contractor signs, first accepted bid, or Jim availability constraint. See `/agents/agent-memory/cwdb-ceo-operator/pivot-2026-04-19.md`.
-**Barton + Garcia deals → closedwon (2026-04-19)** — HubSpot deal IDs 318227725018 and 319472967405 updated via MCP.
-**Ad launch brief staged (2026-04-19)** — `/marketing/launch-brief-2026-04-20.md`. ~~Target launch 2026-04-20~~ **DELAYED** — see next line.
-**Site revamp COMPLETE ✅ (2026-04-21)** — Full 21-page revamp shipped. Phase 1 foundation (Staatliches + Public Sans, header/footer, social SVGs, content fixes); Phase 2 homepage spine complete (hero-split → process-steps-v2 → gallery-featured → builders-strip [CMS-bound] → coverage-map [static SVG, 5 sky-blue pins] → cta-final [unique variant]); Phase 3 complete (/get-a-quote 3-step wizard = Webflow native form + JS embed with URL-param pre-fill); Phase 4 complete (all 11 page rebuilds on new typography: 5 cities + About/FAQ/Gallery/Our Builders/Calculator/Blog). Phase 2.5 still deferred (hero-interior + CMS rewire + embedded-hero nuke). Plan reference `/plans/web-dev-agent-let-s-work-stateless-scroll.md` does NOT exist on disk — canonical source is `_vault/state-of-cwdb.md` §8.
-**Ad launch TODAY 2026-04-21** — Launch window pulled forward from 2026-04-30. Homepage section order AUDITED 2026-04-21 — correct (slot 1 header, 2 hero-split, 3 process-steps-v2, 4 gallery-featured, 5 builders-strip, 6 coverage-map, 7 faq-section-home, 8 cta-final, 9 footer, 10 mobile-sticky-bar). **Hero-form handoff bug FIXED ✅ 2026-04-21** — root cause: default Webflow form with no intercept reloaded `/` with query params. Fix: inline site script `hero_form_handoff` v1.0.0 registered + applied to homepage footer; capture-phase submit listener validates zip/phone, navigates to `/get-a-quote?zip=...&phone=...`. Verified end-to-end on staging + production (script CDN: `cdn.prod.website-files.com/.../hero_form_handoff-1.0.0.js`). Published to both `cwdeckbuilders.com` + `www.cwdeckbuilders.com`. Non-blocker tech debt: testimonials section absent from homepage (intentional?); legacy `hero-section-subpage` + `hero-subpage` still in component library (Phase 2.5 cleanup); phone formatting passed verbatim (aesthetic nicety).
+## Contractors signed
+- Ben Barton (Barton Builders LLC), HubSpot contact `462464338657`, agreement signed 2026-04-17
+- John Garcia (John Garcia Construction LLC), HubSpot contact `465926077160`, agreement signed 2026-04-17
+- Both deals closedwon 2026-04-19. Zero accepted bids to date.
 
-## Webflow Site IDs (confirmed 2026-04-02)
-- Site ID: `69c846db9eee02fddb1e2367`
-- Workspace ID: `69c8468c7b22dbee46e2fe14`
-- Staging URL: `https://central-wisconsin-deck-builders.webflow.io`
-- Page IDs: Home `69c846dd9eee02fddb1e2376` · Get a Quote `69ce4163e79002c5d4762a57` · Thank You `69ce7e7446c34cb2d17b7ffb` · Service Areas template `69cf0c27f69f8fdddb60ccc0`
-- Phase D page IDs: About `69cff11ab796bc97b788f894` · FAQ `69cff2909d6b4ef6581d1c83` · Our Builders `69cff29d53036270250204d6` · Gallery `69cff2a36004fc5dff348ad5`
-- Phase E page IDs: /cost-calculator `69d04360b87483b9bbc76b04` · /blog `69d04373a1cf39d4f6680755` · Blog Posts template `69d043662f0a55d546c1f61a`
-- CMS: Service Areas `69cf0c26f69f8fdddb60ccba` (28 fields) · Gallery Photos `69cff077a56c28009f3df538` (7 items — all real WI deck photos as of 2026-04-21) · Our Builders `69cff079df8b05e8d3935fdf` (2 real items — Ben Barton `69cff0a989e454afdd3f5788` + John Garcia `69d4b9e6b553503a6618ddbf` — all fields populated incl. headshots; homepage `builders-strip` CMS-bound as of 2026-04-21) · FAQs `69cff07bd29f3d1624e2ffb9` (12 items) · Blog Posts `69d043662f0a55d546c1f597` (4 articles: deck-cost-wisconsin, composite-vs-wood, deck-permits-wausau, best-time-build-deck)
-- Revamp Phase 2 component IDs: `hero-split` `0f19c38f-c81b-c27b-46e6-e5e3fa6807f1` · `process-steps-v2` `08624456-cfb4-450f-f121-c4e6c4f174a9` · `gallery-featured` `182ba5d8-1b29-7e4d-30f1-99ff54130c65` · `builders-strip`, `coverage-map`, `cta-final` (IDs not yet logged)
-- City template sections (in order): global-nav · city-intro-section · faq-section · testimonials · cedar-strip · coverage-area-cards · mobile-sticky-bar · quote-form-inline · global-footer
-- MCP protocol: all website changes go through Webflow MCP first, then sync local HTML — see `.claude/skills/webflow-connect.md`
+## Fulfillment Model (pivot 2026-06-10)
+[Jim owns follow-up/walk-throughs/estimates](fulfillment-model-pivot-2026-06-10.md) — Ben/John too busy for the 48h quote promise. Hand-off at the estimate: `fulfillment.lane` in estimate JSON = `cwdb` (stain/resurface self-perform, work order + deposit) or `builder` (named-builder disclosure prints; builder signs/deposits/permits; $1,000 fee on acceptance). CWDB NEVER signs as prime or takes a build deposit pre-license (DSPS cert + GL pending). Option B (CWDB primes, subs to Ben/John) unlocks post-license. Legal punch list: board WB-018.
 
-## Confirmed Tech Stack
-- Landing Pages: Webflow (21-page authority site)
-- Forms: Webflow native forms (replaced Tally 2026-03-29)
-- Automation: Make (formerly Integromat)
-- CRM: HubSpot (free tier)
-- Ads: Google Ads + Facebook/Instagram + Nextdoor (primary community channel) + TikTok
-- Analytics: GA4 + GTM + Meta Pixel + Nextdoor Pixel + Google Ads Conversion + MS Clarity
+## Lead history (as of 2026-06-11)
+- 11 clean rows in `fact_leads` = 7 webform + 2 phone (Sjoberg, Darlene) + 2 manual (Nayak, Keuler). 3 qualified leads followed up by Jim 6/11: Johnson, Kampstra, Quinn. See **[All channels count](phone-leads-count.md)** (phone leads = webform for funnel + gate; `lead_channel`/`tcpa_consent_source`, schema/009-010, views/004).
+- `v_clean_leads` excludes test noise: utm_source='test', slogarjw@gmail.com (views/003), and @cwdb-internal.test (views/006). lead_id 48 was Jim's self-test that false-counted as qualified.
+- **First accepted bid 2026-06-11** (Overbeck, bid_id 4, $2,800, cwdb lane). No real lead has ever been routed to a CONTRACTOR yet (builder-lane routing still unproven). Sjoberg $13,443 + Nayak $4,900 + Keuler deals in fact_bids.
 
-## Department Structure (agents = employees, folders = departments)
-- agents/       9 AI agent prompt configs
-- marketing/    Ad campaigns (Google, Facebook, Nextdoor, TikTok)
-- website/      Webflow pages, templates, design system, page content
-- sales/        Contractor outreach, onboarding, CRM
-- operations/   Lead processing, qualification, routing, Make automation
-- finance/      P&L and performance reports
-- templates/    Shared reusable assets
+## Standing Rules (durable, all agents)
+- [Reorient via vault primary sources before diagnosing](feedback-reorient-via-vault-before-diagnosing.md) — after multi-day gap, read state-archive + agent-memory + raw Supabase before forming hypotheses
+- [Elegant path default](feedback-elegant-path-default.md) — propose bulk/scripted/API alternatives before manual workflows
+- [Spreadsheets for heavy copy-paste](feedback-spreadsheet-for-copy-paste-workflows.md) — CSV columns Step/Section/Action/Value for any ≥10-value UI-paste task
+- [Verify platform-account identity before configuring](feedback-account-identity-verification.md) — confirm account selector at top of UI before pasting IDs (Phase F 2026-04-18 incident)
+- [Real-device mobile testing is the only acceptance](feedback-real-device-mobile-testing.md) — Playwright Chromium ≠ iOS Safari; require Jim's iPhone 11 Safari + Chrome confirmation
+- [Webflow native elements over custom HTML](feedback-webflow-native-elements.md) — pause and ask Jim if a custom embed seems needed
+- [Webflow component-first sections](feedback-webflow-components.md) — edit props → copy+rename → net new (last resort); headers always `hero-`, footer always `footer`
+- [Ad creatives always 1:1 + 9:16 + 16:9](feedback-ad-creative-three-ratios.md) — every batch, every platform, 1080×1080 + 1080×1920 + 1920×1080 master ratios
+- **Combined estimate + work order** (`combined: true`) for ALL new cwdb-lane jobs (standalone work-order generator retired; Overbeck grandfathered). Builder lane stays estimate-only. /bid skill encodes lane derivation + no-cash payment string + QBO Contracts send path.
 
-## 9 Agents Defined
-1. market-research
-2. web-dev (builds Webflow pages)
-3. ad-campaign (Google, Facebook, Nextdoor, TikTok)
-4. lead-qualification
-5. lead-routing
-6. contractor-sales
-7. revenue-optimization
-8. accounting
-9. analytics
+## Key Decisions Log (compressed; full detail in linked files / CLAUDE.md / agent-memory)
+- **2026-03-12** — Pay per accepted bid at $1,000 confirmed
+- **2026-03-29** — Webflow native forms (replaced Tally); 21-page site
+- **2026-04-18** — Ad budget $50/day ($30 Google + $20 Meta); Nextdoor organic-only
+- **2026-04-19** — Lead-routing pivot: Make scenario parked, manual SMS interim; reactivation triggers ≥10 leads/wk OR 3rd contractor OR 1st accepted bid. See [[pivot-2026-04-19]]
+- **2026-04-21** — Full site revamp (Staatliches + Public Sans, photo-driven, zero-decoration)
+- **2026-05-19** — Google Ads: switch to Maximize Clicks until ≥30 conv banked (Smart Bidding cold-start starved)
+- **2026-06-03** — Supabase warehouse + Task Scheduler cron + 4 ingestion scripts shipped
+- **2026-06-04** — Google OAuth refresh-token expiry fixed (cwdb-ads-pull app published; was misdiagnosed as dev-token blocker)
+- **2026-06-05** — `_vault/claude-memory` junction rebuilt (OneDrive corruption); CWDB pinned local; source-of-truth → Supabase; gate 2026-06-18 set
+- **2026-06-09** — Autonomous control plane built (migration 006 + views/002; `control-tick.ps1` watchdog + `cwdb-orchestrator-tick`). On/off: `control-power.ps1 on|off|status`. Remote routine `CWDB-Orchestrator-Tick` registered (cron every 2h 7a-9p Central; connectors Supabase+Make+HubSpot). Coupling caveat: gate token refreshed by LOCAL watchdog → laptop-off = remote tick skips. See [[schedule-supabase-not-routine-eligible]], [[v-clean-leads-test-exclusion-gap]]. Accounting agent = CPA+QBO; S-Corp DECLINED 2026 (revisit triggers in agent-memory/accounting).
+- **2026-06-10** — Two-tier homeowner contract system [[sow-job-number-system]] (homeowner-signed contract REQUIRED at deposit per ATCP 110.05; migration 008 `dim_jobs` + `allocate_job_number()`). Loop went LIVE; **Mission Control dashboard shipped** at `http://127.0.0.1:7717` (now port-aware babysitter [[dashboard-babysitter-port-aware]]). Found+fixed [[ps7-invoke-restmethod-non-enumeration]]. Gate hit 3/3 qualified. Fulfillment pivot [[fulfillment-model-pivot-2026-06-10]]. Invoice series INV-YYYY-NNN. All-channel lead tracking [[phone-leads-count]].
+- **2026-06-10 owner decisions (durable, do not re-raise):** (1) NO WI sales tax on ANY CWDB revenue (lead fees + construction/staining). (2) Payments card/digital (QBO) first, then check, NO cash; invoices sent from QBO. (3) Combined estimate+work order = one PDF, cwdb-lane (signature converts to binding work order); builder lane estimate-only. (4) Overbeck staining proceeds UNINSURED (risk accepted). (5) HubSpot portal **245712220 on NA2** (app-na2.hubspot.com).
+- **2026-06-11** — WB-016 HubSpot wiring DONE. **QBO PRODUCTION LIVE** (prod realm 9341457249522270; sandbox 9341457257078287 stays for testing; env vars `QBO_SANDBOX_*`/`QBO_PRODUCTION_*` + `QBO_ENVIRONMENT` selects; prod redirect-URI must be public HTTPS `https://cwdeckbuilders.com/qbo-callback`, two-step manual code exchange; cutover runbook `finance/invoices/qbo-production-cutover.md`; per-call logging → `finance/invoices/_logs/qbo.log`). Control plane **Inc 2→5 live** [[control-plane-inc2-5-rollout]] (dry_run=false, auto_execute_max_tier=1, council_enabled=true, tier2_execution_enabled=true; approval executor + reapers + 7 breakers; workers active: lead-routing/qualification/analytics/ad-campaign; contractor-sales gated on proven_delivery hinge). Owner: NO QBO Plus (Essentials gives e-sign; Candidate B replaces DocuSign); Notice of Cancellation copies STAY embedded (16 CFR 429 + Wis. Stat. 423.203); GV→HubSpot call-logging gap (OpenPhone = upgrade path, `operations/leads/google-voice-hubspot-memo.md`).
+- **2026-06-12** — **FIRST ACCEPTED BID + REVENUE.** Overbeck signed work order (eff. 6/11) via QBO Contracts + paid $840 deposit (QBO Payments). Gate met on BOTH criteria (caveat: cwdb-lane self-perform; contractor-fee leg untested). Deal 324817992387 → Accepted Bid $2,800; fact_bids bid_id 4 accepted, job CWDB-2026-043 (re-based 2026-06-26 from CWDB-2026-001 to match the invoice). Live deposit invoice auto-numbered **INV-2026-043** (≡ internal INV-2026-001, payment Id 4); Jim to decide QBO custom numbering vs auto. Final invoice $1,960 after completion + walkthrough.
+- **2026-06-17** — **Estimator v2 LIVE** (Streamlit Cloud): TimberTech decking/railing, per-line color, New Build + Fence, auto AI mock-ups. **Deploys from `test-branch` NOT main.** EXIF orientation via `exif_transpose`; PDF mock-up = side-by-side one-page + 8pt consolidated disclosure (commit 2e6faf7). Renderer needs PAID Gemini key in Streamlit Cloud secrets [[streamlit-secrets-location]]; iOS-Safari input fix [[ios-safari-streamlit-dark-inputs]]. OPEN: John to confirm TimberTech/fence pricing (`CONFIRM WITH JOHN`).
+- **2026-06-18** — **SBG Construction Group under evaluation** [[sbg-construction-group]]: shared-services/captive-labor group (NOT a merger); 3 LLCs stay independent (Phase A), shared SBG-Labor (S-corp) + SBG-Equipment + SBG-RealEstate owned 1/3 each. Partners $80/hr W-2 → ~$145/hr billable. Lead engine stays Jim's, DOWNPLAYED in partner docs. Package `business-context/construction-group/` (PRIVATE: financial-model §4 + jim-private-brief). Gated on WI attorney + CPA. Open: WI sales tax on equipment leases (SEPARATE from the no-CWDB-sales-tax call).
+- **2026-06-24** — Mission Control dashboard ghost-Running outage fixed: keep-alive is now a **port-aware short-lived babysitter** (not a direct always-running task) + crash logging to `_logs/` + resilient accept loop. Self-heal kill-tested. See [[dashboard-babysitter-port-aware]].
+- **2026-06-26** — **Quinn Home Improvement Contract staged + job numbers re-based to the QBO invoice series.** Thomas Quinn deck rebuild (self-perform, Jim signs as prime, builder gate bypassed per Jim — assumes DSPS cert + GL): generated `sales/estimates/2026-06-26-quinn-deck-build-contract.pdf` (ATCP 110 HIC via `generate_sow_pdf.py`, estimate as Exhibit A), **$7,751** ($8,960 estimate less the $1,209 demo line; homeowner already removed the old deck), targeted start **August 2026**. **SEND HELD by Jim** pending real cert/GL (Section 11 represents insurance active); QBO Contracts upload is manual (no API; Playwright blocked at Intuit login). Job-number re-base (migration 012, [[sow-job-number-system]]): Overbeck **CWDB-2026-043** (was -001, matches INV-2026-043), Quinn **CWDB-2026-044**, allocator floored at 043 for 2026, next = 045. Old Overbeck signed PDF/INV files keep their labels for audit.
 
-## Brand Identity (CONFIRMED 2026-03-28)
-- **Brand name:** Central Wisconsin Deck Builders (CWDB internally)
-- **Domain:** cwdeckbuilders.com (registered on GoDaddy)
-- **Colors:** #e54c00 Crafted Orange · #323434 Timber Slate · #646760 Builders Grey · #83b2cf Wisconsin Sky Blue
-- **Logos:** 2 active files in /branding/logos/ — 1.1-primary-logo-high-res.png (stacked) and 1.2-horizontal-logo-high-res.png
+- **2026-07-05** - **FULL BUSINESS AUDIT + PIVOT VERDICT ADOPTED** (`_vault/briefs/2026-07-05-audit.md`; 8 agent interviews, all platforms verified live). Jim's 4 decisions: (1) Phase 1 CLOSED, construction-first verdict adopted (see Validation Gate section above); (2) ads: keep Google $30/day, PAUSE Meta until its Pixel Lead event is fixed (Meta never fired one; campaign optimized blind since April); (3) control plane RETIRED (keep warehouse + views; weekly 15-min review replaces daily brief/session ritual; retire both Make scenarios, reject approval #61, rotate exposed Supabase service-role key); (4) SBG: unlock triggers adopted (license + insurance scope + booked-jobs demand + 2-3 cash-positive months + attorney/CPA scoping), scoping starts at Yde Law consult 7/6 3:30 PM. KEY CORRECTIONS: GL insurance BOUND ~6/25 ($1M/$2M CGL, COI in docs/legal; Jim must confirm classification covers hands-on construction + staining); Overbeck COMPLETE + fully collected ($840 + $1,960 = $2,800, final paid 6/28); INV-2026-044 = CWDB billed John Garcia $800 sub-labor, paid 6/28 (third revenue leg); QBO YTD net income +$1,550 (business break-even/positive, NOT underwater); 15 real lifetime leads, latest Petersen 6/30 (paid ads produced >=4: Johnson/Quinn/Reist PAID_SEARCH, Petersen PAID_SOCIAL per hs_analytics_source); 3 leads (Petersen/Hanson/Neely) silently DROPPED by the warehouse pull's TCPA consent gate; attribution breaks = no site persistence layer + relay omits hutk/most params + Google Ads conversion graveyard + pull never reads hs_analytics_source. Joint jobs with Ben/John already happening (Winchester Aug 17-21; W-9/COI exchanged); lead-purchase agreements to be terminated cleanly pre-SBG. AFTERMATH same day: Meta pause EXECUTED + verified (campaign 120241408537330461 PAUSED; re-enable = one status flip after Pixel Lead event fixed); **`/business-audit` skill created** (`.claude/skills/business-audit.md`, TDD-tested) and wired into the cwdb-ceo-operator agent (invoke on audit asks + quarterly if no audit brief in ~90 days).
 
-## Website Reference Files (created 2026-03-29)
-- Full plan: `/business-context/website-plan.md`
-- Design system: `/website/design-system.md`
-- Site architecture: `/website/site-architecture.md`
-- Base HTML template: `/website/templates/base.html`
-- Page content: `/website/pages/*/content.md`
-- Cost calculator JS: `/website/pages/cost-calculator/calculator.js`
-- Form spec: `/operations/leads/quote-form-fields.json` (updated for Webflow)
+## Detail Files (this directory; link with `[[name]]`)
+[Pivot 2026-04-19](pivot-2026-04-19.md) · [Hormozi Framework](hormozi-framework.md) · [Cron warehouse daily](cron-warehouse-daily.md) · [Google OAuth 7-day trap](google-oauth-testing-mode-7day-trap.md) · [Phase F IDs](phase-f-ids.md) · [Vault RAG architecture](vault-rag-architecture.md) · [Deck estimator tool](deck-estimator-tool.md) · [Estimator app live](estimator-app-live.md) · [v_clean_leads test-exclusion gap](v-clean-leads-test-exclusion-gap.md) · [Schedule: Supabase routine-eligible — RESOLVED](schedule-supabase-not-routine-eligible.md) · [SOW + Job Number system](sow-job-number-system.md) · [PS7 Invoke-RestMethod non-enumeration trap](ps7-invoke-restmethod-non-enumeration.md) · [Fulfillment model pivot](fulfillment-model-pivot-2026-06-10.md) · [Phone leads count](phone-leads-count.md) · [Control plane Inc 2-5 rollout](control-plane-inc2-5-rollout.md) · [iOS Safari dark inputs](ios-safari-streamlit-dark-inputs.md) · [Streamlit secrets location](streamlit-secrets-location.md) · [SBG Construction Group](sbg-construction-group.md) · [Dashboard babysitter port-aware](dashboard-babysitter-port-aware.md)
 
-## Key Decisions Log
-- WordPress dropped → Webflow only
-- Zapier dropped → Make (cheaper, better free tier)
-- Typeform dropped → Tally → **Tally dropped → Webflow native forms (2026-03-29)**
-- HubSpot on free tier
-- Landing-page-builder agent renamed to web-dev
-- Folder structure modeled as company departments
-- Nextdoor added as primary community traffic channel
-- **Pricing model confirmed (2026-03-12): Pay per accepted bid at $1,000**
-- **Brand finalized (2026-03-28):** Name, domain, logos, color palette confirmed
-- **Website expanded (2026-03-29):** Single landing page → 21-page authority site with SEO, blog, cost calculator, city pages
-- **Webflow native forms replace Tally (2026-03-29):** Simpler stack, better design control, Tally form 81GbEO superseded
-- **Ad budget confirmed (2026-04-18):** $50/day — $30 Google + $20 Meta; Nextdoor organic-only; no TikTok spend at launch
-- **Lead-routing pivot (2026-04-19):** Make scenario parked; manual SMS by Jim is interim path until reactivation triggers fire. Supersedes 2026-04-18 Make-as-router decision.
-- **Make paid tier cancelled (2026-04-19):** Free tier stays. Automation parked pending lead flow.
-- **Phone strategy reversed (2026-04-19):** Google Voice → Twilio port-in cancelled. Keep GV for (715) 544-7941.
-- **Barton + Garcia deals closedwon (2026-04-19):** Both HubSpot deals updated via MCP.
-- **Site revamp chosen over ad launch (2026-04-19 evening):** Full 21-page revamp before ads. Staatliches + Public Sans replace Barlow Condensed + Inter. Photo-driven, zero-decoration aesthetic (removes border-left stripes, tinted icon wrappers, cedar-strip divider, sky-tint section backgrounds). Proof-first homepage spine (hero-split → process → gallery → builders → map → FAQ → CTA). 3-step form wizard on /get-a-quote. Plan: `/plans/web-dev-agent-let-s-work-stateless-scroll.md`. 11-15 day timeline. Hero copy: "Get a quote within 48 hours." (was "24 hours — not 24 days" per Jim's realism feedback).
-- **Sky-blue reintegration (2026-04-19):** Sky becomes signal-accent color for text links on light bg, trust-row checkmarks, 1px connectors, inactive progress dashes, coverage-map pins, focus rings. Orange reserved for CTA buttons + section-label eyebrows only. Documented as Color Rule #9 in design-system.md.
-- **Hybrid double-hero fix (2026-04-19):** Full `hero-interior` component + CMS rewire + embedded-hero nuke deferred to Phase 2.5. Visibility toggles + Title overrides as interim. MCP limitation discovered: per-instance component property overrides not exposed on single-locale Webflow sites — manual Designer action required.
+## Per-Agent Memory (platform quirks live here, not in this file)
+- `~/.claude/agent-memory/web-dev/` — Webflow MCP quirks, iOS Safari bugs, Playwright MCP, script slot constraints
+- `~/.claude/agent-memory/ad-campaign/` — Google Ads cold-start, callout Row type, Meta bulk-import gate, account-identity gotcha
+- `~/.claude/agent-memory/cwdb-ceo-operator/` — PowerShell portability, OAuth 7-day trap, state-merge protocol
+- `~/.claude/agent-memory/contractor-sales/` — DocuSign user/account IDs, contractor roster
+- `~/.claude/agent-memory/accounting/` — CPA mandate, tax calendar, S-Corp decision, draft COA, billing terms, QBO API facts + setup checklist, WI sales-tax analysis (12 files, built 2026-06-09)
 
-## Open Items (Phase 1 Checklist)
-- [ ] Contact 10-20 deck contractors (use /sales/outreach/)
-- [x] Secure first contractor commitment ✅ — $1,000/accepted bid (2026-03-12)
-- [x] Contractor agreements signed ✅ — Ben Barton + John Garcia signed PDFs in /sales/contractor-agreements/ (2026-04-17)
-- [x] Website plan + content files created ✅ (2026-03-29)
-- [x] Webflow Phase A complete ✅ — design system, global styles, header, footer, components (2026-04-02)
-- [x] Webflow Phase B homepage complete ✅ — all sections + reusable components (2026-04-02)
-- [x] Webflow Phase B complete ✅ — Get a Quote, Thank-You pages done (2026-04-02)
-- [x] Service Areas CMS collection created ✅ — 28 fields, Wausau item populated (2026-04-03)
-- [x] Wausau city page template built ✅ — styled, CMS bindings done by user (2026-04-03)
-- [x] Webflow Phase C complete ✅ — all 5 city pages live on staging (2026-04-03)
-- [x] Webflow Phase D complete ✅ — About, FAQ, Gallery, Our Builders live; 3 CMS collections created (2026-04-03)
-- [x] Webflow Phase E complete ✅ — calculator + blog live on staging (2026-04-03)
-- [x] Manual: FAQPage JSON-LD added to FAQ page ✅ (2026-04-17)
-- [x] Manual: Gallery placeholder photos replaced with real Wisconsin deck photos ✅ (2026-04-17)
-- [x] Manual: calculator.js pasted into /cost-calculator Custom Code ✅ (2026-04-17)
-- [x] Manual: Article JSON-LD schema added to blog template ✅ (2026-04-17)
-- [x] Webflow Phase F complete ✅ — GTM + GA4 + Meta + Nextdoor + Google Ads + Clarity all wired and live; GTM container published 2026-04-18
-- [~] Make scenario for lead routing — PARKED 2026-04-19 (pivot). Scenario 4792854 remains inactive pending reactivation triggers.
-- [x] Barton + Garcia deals → closedwon ✅ (2026-04-19, via HubSpot MCP)
-- [x] ~~P0 (2026-04-20 AM) — 9 manual Webflow Designer toggles~~ **OBSOLETED 2026-04-20 Phase 4 Wave 0** — classname swap on header component root (`hero-section mobile` → `site-header`) eliminated the double-hero at source site-wide. Privacy/Terms Title override piece may still apply — to be re-audited in Wave 1.
-- [x] **P0 — Webflow form → email delivery verified ✅ (2026-04-28)** — confirmed during /get-a-quote form rebuild; submissions land at info@cwdeckbuilders.com
-- [x] **/get-a-quote form rebuild complete ✅ (2026-04-28)** — iOS submit bug killed (was `display: inline-flex` on `<input type="submit">`), name+email now first-class Webflow fields, project_type moved to Step 3, scripts consolidated 15→8 applied + 1 page-scoped (`quote_page_polish-1.0.0`). Verified by Jim on iPhone 11 Safari + Chrome.
-- [ ] Jim reviews + approves ad-launch brief `/marketing/launch-brief-2026-04-20.md` — **LAUNCH TODAY 2026-04-21** (window pulled forward from 2026-04-30)
-- [x] **Phase 2 homepage spine complete ✅ (2026-04-21)** — hero-split, process-steps-v2, gallery-featured, builders-strip (CMS-bound), coverage-map (static SVG), cta-final (unique variant) all built + placed
-- [x] **Phase 3 complete ✅ (2026-04-21)** — /get-a-quote 3-step wizard shipped as Webflow native form + JS embed with URL-param pre-fill
-- [x] **Phase 4 complete ✅ (2026-04-21)** — all 11 page rebuilds done: 5 cities + About/FAQ/Gallery/Our Builders/Calculator/Blog on new typography
-- [ ] **Phase 2.5 deferred** — build `hero-interior` component, rewire city CMS bindings, nuke embedded hero from `header`
-- [ ] **Homepage polish (post-launch, non-blocking)** — decide on testimonials section inclusion; remove legacy `hero-section-subpage` + `hero-subpage` from component library
-- [ ] Jim supplies real CWDB Facebook/Instagram/Nextdoor business URLs (currently placeholders in footer)
-- [ ] Set up HubSpot pipeline (reference /sales/crm/pipeline-stages.json) — for manual lead tracking
-- [ ] Set up Nextdoor business account + verification (Jim unconfirmed as of 2026-04-19)
-- [x] DNS cutover live ✅ — cwdeckbuilders.com → 301 → www.cwdeckbuilders.com (200); site published to both custom domains with GTM snippet active (2026-04-18)
-- [~] Run first small ad campaign ($50/day: $30 Google + $20 Meta; Nextdoor organic-only) — **GOOGLE LIVE ✅ 2026-04-23** (first ad spend in CWDB history — campaign `CWDB — Search — Launch 2026-04` un-paused after bulk-upload of 9 CSVs). **PAUSED 2026-04-25 mid-session for tracking audit; pending Primary swap + test lead before un-pause.** Meta still pending.
-
-## Memory Update Instructions (for Claude)
-When files are created or changed → update project-state.md
-When stack/agent/strategy decisions are made → update this file + project-state.md
-When user signals end of major session → remind user to run /claude-md-management:revise-claude-md
-
-## Webflow Development Rules
-- **Native elements only** — never use custom HTML embeds when a native Webflow element exists (forms, CMS, sliders, tabs, etc.)
-- **Pause > hack** — if a requirement forces a custom HTML embed, stop and ask the user to do it manually in the designer
-- **Component-first sections** — every section must be a named Webflow component; edit property values first, then copy+rename closest component for styling variations, build net new only as last resort; headers always use `hero-` component; footer always uses `footer` component
-- **CMS for repeating content** — design components with placeholder content first; bind to CMS collection when content repeats or follows a pattern (FAQ items, gallery photos, contractor profiles, city pages)
-
-## Detailed State
-See: project-state.md
-
-## DocuSign (for contractor agreement sends)
-- User ID: `265ec01f-b037-4eae-b96d-0fdebec59723` · Account ID (GUID): `07a2f8c5-1951-4d6d-baab-0c45359ab80e`
-- Skill: `.claude/skills/contractor-onboarding.md` — use for all future contractor agreement generation + sends
-- Contractors: Ben Barton `462464338657` (Barton Builders LLC) · John Garcia `465926077160` (John Garcia Construction, LLC)
-
-- [[phase-f-ids|Phase F Analytics IDs]] — All 6 IDs received (GTM, GA4, Meta, Nextdoor, Google Ads, Clarity) — ready for install
-
-- [[vault-rag-architecture|Vault RAG architecture]] — CWDB Obsidian vault mirrors project content via junction + transclusions + memory copy; run /vault-sync to refresh
-
-- [[feedback-webflow-native-elements|Webflow — prefer native elements over custom HTML]] — No custom HTML embeds when native Webflow elements exist; pause and ask user to do manually if needed
-- [[feedback-webflow-components|Webflow — component-first section building]] — Every section must be a named component; 3-tier hierarchy: edit properties → copy+rename for styling variations → net new as last resort; naming: `[base]-[descriptor]`; headers always `hero-`; footer always `footer`
-- [[webflow-mcp-pseudo-elements|Webflow MCP — pseudo-elements stripped by whtml_builder]] — `::before`/`::after` rules silently dropped on whtml import; use style_tool with pseudo param OR fall back to aria-hidden div
-- [[webflow-mcp-parallel-agents|Webflow MCP — Designer page context is shared across parallel agents]] — concurrent web-dev agents share active-page state; re-select target page before structural edits to avoid race failures
-- [[webflow-mcp-sibling-insert|Webflow MCP — cannot insert siblings adjacent to component instances at body level]] — `before`/`after` fails with "Cannot insert elements directly into a component instance"; workaround is remove + re-append trailing sections in correct order
-- [[webflow-mcp-cms-binds|Webflow MCP — cannot bind DOM elements to CMS fields]] — Image src/alt + Text content binds + Collection List filter settings are Designer-only; agents should build DOM then hand off to Jim
-- [[webflow-collection-list-grid|Webflow Collection List — use display:contents for grid/flex]] — DynamoWrapper + DynamoList intercept layout; set display:contents on both so Collection Items become direct grid/flex children
-- [[webflow-mcp-component-bool-props|Webflow MCP — per-instance Component Property overrides are Designer-only on single-locale sites]] — ALL override types (Text, Boolean, Image) fail via Data API with "locale must be a secondary locale"; Designer MCP has no write path; hand off to Jim in Designer
-- [[pivot-2026-04-19|Pivot 2026-04-19 — Make/Twilio parked]] — Manual contractor SMS until ≥10 leads/week or 3rd contractor; scenario 4792854 dormant
-- [[playwright-mcp-context-death|Playwright MCP — browser context dies on idle]] — First call after idle fails with "Target page, context or browser has been closed"; always run `browser_close` → `browser_navigate("about:blank")` → `browser_resize(1280, 800)` at start of any Playwright session, and repeat the cycle if the error reappears mid-run
-- [[hormozi-framework|Hormozi Operating Framework]] — `Skill hormozi-operator` + CEO agent 12-step diagnostic + state-file §4–§6; Lever 4 (proof) and Lever 1 (volume) are current bottlenecks
-- [[feedback-state-file-merge-protocol|State file is merged, not regenerated]] — `/state`, `/brief`, and `/session-end` read latest `_vault/state-archive/state-<session-id>.md`; Jim's `[x]` and `%...%` comments are authoritative; snapshot is mirrored to singleton `_vault/state-of-cwdb.md`
-- [[feedback-elegant-path-default|Always steer back to the most elegant approach]] — Before serving any multi-step manual workflow, propose the bulk/scripted/API alternative if one exists (Google Ads Editor CSV, Meta bulk import, Webflow MCP component_builder, HubSpot batched MCP, DocuSign templates). Standing instruction.
-- [[google-ads-callout-row-type|Google Ads callout bulk Row type must be "Callout" not "Callout extension"]] — Google's own template sample rows are wrong; parser rejects the legacy value. Fix-forward for future CWDB callout CSVs.
-- [[meta-ads-bulk-import-gate|Meta Ads bulk import gated behind ~2 weeks of account maturity]] — Fresh accounts can't use bulk; CWDB expected to unlock ~2026-05-07. Plan manual-UI for any first-launch on new Meta accounts.
-- [[feedback-spreadsheet-for-copy-paste-workflows|Heavy copy-paste workflows ship as spreadsheets, not prose walkthroughs]] — Default to CSV with Step/Section/Action/Value columns for any UI-paste task with ≥10 discrete values. Standing instruction.
-- [[feedback-account-identity-verification|Verify platform-account identity before configuring tags]] — Phase F (2026-04-18) was set up in Jim's CPA work account; Google Ads + Meta IDs landed in wrong businesses. Always confirm account selector at top of UI before pasting pixel/conversion IDs into launch docs.
-- [[feedback-ad-creative-three-ratios|Ad creatives — always 1:1, 9:16, and 16:9]] — STANDING RULE (2026-04-26). Every ad-campaign batch on every platform ships all three master ratios (1080×1080, 1080×1920, 1920×1080). 4:5 and 1.91:1 are optional secondary crops, not replacements.
-- [[feedback-ios-flex-submit-bug|iOS Safari + flex on `<input type="submit">` swallows tap submits]] — WebKit bug killed CWDB form 2026-04-27. Submit inputs stay `inline-block`; flex centering only on `a.btn-submit` anchors.
-- [[feedback-real-device-mobile-testing|Real-device testing is the only acceptance criterion for mobile UI claims]] — Playwright Chromium ≠ iOS Safari. Never claim a mobile fix is shipped without Jim's iPhone 11 Safari + Chrome confirmation. Re-read `list_applied_scripts` after any apply call.
-- [[webflow-no-native-multistep|Webflow has NO native Multi-Step Form element]] — every multi-step is custom JS hiding wizard-step divs. Don't propose "use Webflow native multi-step" as a rebuild path.
-- [[webflow-mcp-script-constraints|Webflow MCP — script slots cap at 15, inline cap at 2000 chars]] — `data_scripts_tool` only exposes `add_inline_site_script`; hosted-script registration not exposed; page-scoped scripts via `upsert_page_script` are the workaround for >2000 chars; `publish_site` requires domain IDs not hostnames.
-- [[project-form-rebuild-2026-04-27|/get-a-quote form rebuild complete (2026-04-28)]] — iOS bug killed; name+email are real fields; project_type on Step 3; 8 site scripts + 1 page-scoped (`quote_page_polish-1.0.0`); plan file at `~/.claude/plans/web-dev-agent-emergency-my-velvety-spark.md`.
+## Memory Update Discipline
+- When the warehouse schema changes → update this file's Source of Truth section
+- When a standing rule emerges → add to Standing Rules with `[[detail-file]]`; do not duplicate content
+- When a deprecated path / file is created → grep for refs first, update them; do not leave dangling
+- At end of major session → `/session-end` writes Work Done + Decisions to today's session note; THEN consider whether MEMORY.md needs a one-line addition

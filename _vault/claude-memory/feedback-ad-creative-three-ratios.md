@@ -1,16 +1,8 @@
-﻿---
+---
 name: Ad creatives — always produce 1:1, 9:16, and 16:9
 description: Every ad-campaign batch on every platform (Meta, Google, Nextdoor, TikTok, YouTube) must ship all three master ratios. Standing rule.
+type: feedback
 originSessionId: 37853590-4161-4f21-a7ce-ef5a8870c928
-title: Ad creatives — always produce 1:1, 9:16, and 16:9
-type: memory
-memory_type: feedback
-created: 2026-04-30
-updated: 2026-04-30
-source: C:/Users/jslog/.claude/projects/C--Users-jslog-OneDrive-Desktop-Slogars-CPA-Slogar-Capital-Claude-Projects-CWDB/memory/feedback-ad-creative-three-ratios.md
-tags:
-  - type/memory
-  - memory/feedback
 ---
 # Ad creatives — always produce 1:1, 9:16, and 16:9
 

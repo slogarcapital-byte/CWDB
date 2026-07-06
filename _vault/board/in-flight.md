@@ -7,6 +7,17 @@
 
 ## Active
 
+- [WB-019] Port (715) 544-7941 from Google Voice to Quo (OpenPhone) Business
+  - Owner: Jim (real-world signup + port + fees) — CEO tracks; specialist agents handle post-cutover doc/automation work
+  - Runbook: `C:\Users\jslog\.claude\plans\cwdb-ceo-operator-agent-i-m-having-mutable-nest.md` (full ordered migration + verification + rollback)
+  - Background: `operations/leads/google-voice-hubspot-memo.md` (decision recorded 2026-06-17)
+  - Why now: memo upgrade trigger #1 ("validation gate passes / first accepted bid") fired — gate met 2026-06-12 (Overbeck). GV has no API, so it can never auto-create contacts or auto-log; Jim is text-first.
+  - Status: in-flight (decided 2026-06-17) — awaiting Jim's Quo signup + GV unlock + port submission
+  - Acceptance: (715) 544-7941 ported to Quo Business (number preserved); Quo↔HubSpot integration ON with auto-log calls + auto-log messages; inbound from an unknown number auto-creates the HubSpot contact and logs call+text with zero manual entry; 10DLC approved so business SMS delivers; one real lead handled end-to-end from the iPhone and visible in HubSpot
+  - Ship type: build (vendor migration)
+  - Cost: ~$23/mo annual (or $33 month-to-month to trial) + ~$22 one-time/yr 10DLC + $3 GV unlock
+  - Notes: %% Do NOT cancel Google Voice until the port completes. Start 10DLC registration FIRST (long pole, EIN 41-5355234). Number never changes, so website/estimates/invoices/signage need no edits. Future HubSpot-triggered SMS automation rides on the existing Make stack (Phase 2, not part of the port). %%
+
 - [WB-001] Build HubSpot lead-routing Workflow
   - Owner: Jim (25-min UI build) — Path A (programmatic) ruled out 2026-05-05; HubSpot Workflows API requires Marketing Hub Pro+ ($800+/mo) and is not exposed by the HubSpot MCP toolkit on Starter tier.
   - Walkthrough: `operations/automation/hubspot-build/WB-001-jim-clicks.md` (5 sections, 25 min, click-by-click w/ acceptance checks per section)

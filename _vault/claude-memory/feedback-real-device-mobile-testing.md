@@ -1,16 +1,8 @@
-﻿---
+---
 name: Real-device testing is the only acceptance criterion for mobile UI claims
 description: Playwright Chromium with mobile viewport does NOT reproduce iOS WebKit bugs. Synthetic touch events bypass real Safari behavior. Never claim a mobile fix is shipped without Jim's iPhone confirmation.
+type: feedback
 originSessionId: 7a0b1919-ea22-4cce-8eed-19785562bedd
-title: Real-device testing is the only acceptance criterion for mobile UI claims
-type: memory
-memory_type: feedback
-created: 2026-04-30
-updated: 2026-04-30
-source: C:/Users/jslog/.claude/projects/C--Users-jslog-OneDrive-Desktop-Slogars-CPA-Slogar-Capital-Claude-Projects-CWDB/memory/feedback-real-device-mobile-testing.md
-tags:
-  - type/memory
-  - memory/feedback
 ---
 Playwright Chromium passing is a sanity check, not a ship gate, for any change that touches: forms, buttons, tap targets, scroll behavior, viewport-conditional layouts, or anything customers use on a phone. Real-device verification by Jim is the only acceptance test that counts.
 

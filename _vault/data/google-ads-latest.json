@@ -1,6 +1,16 @@
 ﻿{
-    "pulled_at":  "2026-05-12T01:43:30.9794768Z",
+    "pulled_at":  "2026-06-04T09:54:52.1545448Z",
     "source":  "google-ads",
-    "data":  null,
-    "error":  "Missing required env vars: GOOGLE_ADS_DEVELOPER_TOKEN, GOOGLE_ADS_CLIENT_ID, GOOGLE_ADS_CLIENT_SECRET, GOOGLE_ADS_REFRESH_TOKEN. See operations/automation/api-credentials/README.md"
+    "data":  {
+                 "customer_id":  "7129910870",
+                 "date_range":  "THIS_MONTH",
+                 "spend":  49.85,
+                 "impressions":  99,
+                 "clicks":  12,
+                 "ctr_percent":  12.12,
+                 "conversions":  0,
+                 "conversions_value":  0,
+                 "cost_per_conversion":  0
+             },
+    "error":  null
 }

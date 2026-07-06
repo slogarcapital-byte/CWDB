@@ -14,8 +14,8 @@
                    "day_soft_dollars":  8,
                    "day_hard_dollars":  15.0,
                    "project_cap_dollars":  150.0,
-                   "day_soft_tokens":  400000,
-                   "day_hard_tokens":  600000,
+                   "day_soft_tokens":  700000,
+                   "day_hard_tokens":  900000,
                    "on_soft":  "tier0_1_only_no_council_no_tier2",
                    "on_hard":  "close_gate",
                    "on_project_cap":  "halt_and_escalate_for_reauthorization"

@@ -1,0 +1,35 @@
+{
+  "client": {
+    "name": "Patricia Wozniak",
+    "address_line": "456 Birch Lane, Schofield, WI 54476",
+    "phone": "(715) 555-0456",
+    "email": "patricia.w@example.com"
+  },
+  "inputs": {
+    "project_type": "Stain Only",
+    "length": 22,
+    "depth": 14,
+    "decking_material": "Trex Select",
+    "railing_material": "Trex Aluminum",
+    "framing_material": "KDAT Pressure-Treated",
+    "height": "1 Story / Low",
+    "grade": "Flat / Normal Access",
+    "complexity": "Simple Rectangle",
+    "market": "Normal Schedule",
+    "border_style": "Pencil Border",
+    "railing_lf": 50,
+    "fascia_lf": 0,
+    "stair_runs": 1,
+    "stair_treads": 5,
+    "stair_landings": 0,
+    "wraparound": "No",
+    "stain_sf": 350,
+    "stain_type": "Solid / Paint-and-Sealer",
+    "stain_coats": 2,
+    "skirting_sf": 0,
+    "lighting_fix": 0,
+    "bench_count": 0,
+    "privacy_screen_lf": 0,
+    "hot_tub": "No"
+  }
+}

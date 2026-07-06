@@ -1,16 +1,8 @@
-﻿---
+---
 name: Heavy copy-paste workflows ship as spreadsheets, not prose walkthroughs
 description: When a manual UI task involves many discrete paste-values (ad copy fields, form fills, config setup across many fields), deliver it as a CSV/spreadsheet with isolated paste columns — not as a numbered-steps prose document with fenced code blocks
+type: feedback
 originSessionId: fa9cfbd6-9de3-4868-9fc9-f7a70658d170
-title: Heavy copy-paste workflows ship as spreadsheets, not prose walkthroughs
-type: memory
-memory_type: feedback
-created: 2026-04-30
-updated: 2026-04-30
-source: C:/Users/jslog/.claude/projects/C--Users-jslog-OneDrive-Desktop-Slogars-CPA-Slogar-Capital-Claude-Projects-CWDB/memory/feedback-spreadsheet-for-copy-paste-workflows.md
-tags:
-  - type/memory
-  - memory/feedback
 ---
 **For any task that is primarily heavy copy-paste into a UI, default to delivering a CSV/spreadsheet — not a prose walkthrough.** Jim's preferred format for this class of work going forward.
 

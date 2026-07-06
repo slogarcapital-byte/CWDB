@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CWDB Mission Control — Layout</title>
+<style>
+  :root{
+    --bg0:#07090f; --bg1:#0c1018; --ink:#e8ecf4; --dim:#8b94a7;
+    --glass:rgba(255,255,255,.045); --glass-bd:rgba(255,255,255,.10);
+    --orange:#e54c00; --sky:#83b2cf; --green:#3ddc84; --gold:#ffc24b; --red:#ff5d5d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Segoe UI',system-ui,sans-serif;color:var(--ink);min-height:100vh;padding:48px 28px 80px;
+    background:
+      radial-gradient(1100px 500px at 85% -10%, rgba(229,76,0,.16), transparent 60%),
+      radial-gradient(900px 600px at -10% 30%, rgba(131,178,207,.12), transparent 55%),
+      radial-gradient(700px 500px at 50% 110%, rgba(61,220,132,.07), transparent 60%),
+      linear-gradient(180deg, var(--bg0), var(--bg1));
+  }
+  h2{font-size:26px;font-weight:700;letter-spacing:.2px;text-align:center}
+  .subtitle{color:var(--dim);text-align:center;margin:10px auto 38px;max-width:720px;line-height:1.5}
+  .options{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:26px;max-width:1480px;margin:0 auto}
+  .option{
+    cursor:pointer;border-radius:22px;border:1px solid var(--glass-bd);
+    background:linear-gradient(160deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    padding:22px;transition:all .22s ease;position:relative;overflow:hidden;
+  }
+  .option:hover{transform:translateY(-4px);border-color:rgba(131,178,207,.45);box-shadow:0 18px 50px rgba(0,0,0,.45)}
+  .option.selected{border-color:var(--orange);box-shadow:0 0 0 2px var(--orange), 0 18px 60px rgba(229,76,0,.25)}
+  .option.selected::after{
+    content:"SELECTED";position:absolute;top:14px;right:14px;font-size:10px;font-weight:800;letter-spacing:.12em;
+    color:#fff;background:var(--orange);padding:4px 10px;border-radius:999px;
+  }
+  .letter{
+    width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:15px;background:rgba(229,76,0,.18);color:var(--orange);border:1px solid rgba(229,76,0,.4);
+    margin-bottom:12px;
+  }
+  .option h3{font-size:17px;margin-bottom:4px}
+  .option > p{color:var(--dim);font-size:13px;line-height:1.5;margin-bottom:16px;min-height:58px}
+
+  /* ---------- miniature mockups ---------- */
+  .mini{border-radius:14px;border:1px solid rgba(255,255,255,.09);background:#080b12;height:330px;padding:9px;display:flex;flex-direction:column;gap:7px;font-size:8px;color:var(--dim);overflow:hidden}
+  .g{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:8px;backdrop-filter:blur(6px)}
+  .row{display:flex;gap:7px}
+  .grow{flex:1}
+  .lab{font-size:7px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5d6678;padding:4px 6px 0}
+  .pill{display:inline-block;border-radius:999px;padding:2px 7px;font-size:7px;font-weight:700}
+  .pill.run{background:rgba(61,220,132,.15);color:var(--green);border:1px solid rgba(61,220,132,.4)}
+  .pill.tier{background:rgba(255,194,75,.12);color:var(--gold);border:1px solid rgba(255,194,75,.35)}
+  .bar{height:7px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden;margin:4px 6px}
+  .bar i{display:block;height:100%;border-radius:999px}
+  .btn{border-radius:6px;padding:3px 8px;font-size:7px;font-weight:700;text-align:center}
+  .ok{background:rgba(61,220,132,.16);color:var(--green);border:1px solid rgba(61,220,132,.4)}
+  .no{background:rgba(255,93,93,.13);color:var(--red);border:1px solid rgba(255,93,93,.35)}
+  .ch{background:rgba(131,178,207,.14);color:var(--sky);border:1px solid rgba(131,178,207,.4)}
+  .dot{width:5px;height:5px;border-radius:50%;display:inline-block;margin-right:4px}
+
+  /* A: command deck */
+  .deck-status{display:flex;align-items:center;gap:8px;padding:7px 9px}
+  .kpi{flex:1;padding:7px 8px}
+  .kpi b{display:block;color:var(--ink);font-size:11px;margin-top:2px}
+  .feed-item{margin:5px 6px;padding:6px;border-radius:7px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)}
+  .feed-item b{color:var(--ink);font-size:8px}
+
+  /* B: side rail */
+  .rail{width:64px;display:flex;flex-direction:column;gap:6px;padding:8px 6px;align-items:stretch}
+  .rail .nav{padding:7px 4px;border-radius:7px;text-align:center;font-size:7px;font-weight:700}
+  .rail .nav.active{background:rgba(229,76,0,.2);color:var(--orange);border:1px solid rgba(229,76,0,.45)}
+
+  /* C: hud */
+  .xp{padding:8px 9px}
+  .xp .big{font-size:13px;font-weight:800;color:var(--ink)}
+  .stick{display:flex;gap:6px;padding:7px;border-radius:10px;background:rgba(12,16,24,.85);border:1px solid rgba(255,255,255,.12);box-shadow:0 -6px 24px rgba(0,0,0,.5)}
+</style>
+</head>
+<body>
+  <h2>CWDB Mission Control — which layout?</h2>
+  <p class="subtitle">Three ways to organize the same content: status + validation-gate progress, pending approvals (the core action), activity feed, steering, and the budget/rollout config. All dark glass; the differences are <b>information hierarchy and navigation</b>. Click one to select.</p>
+
+  <div class="options">
+
+    <!-- A: COMMAND DECK -->
+    <div class="option" data-choice="a" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <h3>Command Deck</h3>
+      <p>Everything on one screen, no navigation. Status strip on top, KPI cards, then a two-column split: approvals (your decisions) dominate the left; live activity feed on the right. Dense, NASA-console feel.</p>
+      <div class="mini">
+        <div class="g deck-status">
+          <span class="pill run">● RUNNING</span><span>gate open</span>
+          <span class="grow"></span>
+          <span class="btn ch">⏸ pause</span><span class="btn ch">⟳ tick</span>
+        </div>
+        <div class="row">
+          <div class="g kpi"><span>GATE PROGRESS</span><b>2/3 qual · 0/1 acc</b><div class="bar"><i style="width:66%;background:linear-gradient(90deg,#e54c00,#ffc24b)"></i></div></div>
+          <div class="g kpi"><span>SPEND TODAY</span><b>$1.90 / $8</b><div class="bar"><i style="width:24%;background:#83b2cf"></i></div></div>
+          <div class="g kpi"><span>QUEUE</span><b>0q · 1 approval</b></div>
+        </div>
+        <div class="row grow" style="min-height:0">
+          <div class="g" style="flex:1.5;overflow:hidden">
+            <div class="lab">⚡ Approvals — 1 pending</div>
+            <div class="feed-item">
+              <span class="pill tier">TIER 2</span> <b>Build Make routing scenario</b>
+              <div style="margin-top:3px">clone 4792854 → test webhook → fact_bids…</div>
+              <div class="row" style="margin-top:5px"><span class="btn ok">✓ approve</span><span class="btn no">✕ reject</span><span class="btn ch">✎ changes</span></div>
+            </div>
+            <div class="feed-item" style="opacity:.45"><b>…decided history</b></div>
+          </div>
+          <div class="g" style="flex:1;overflow:hidden">
+            <div class="lab">◉ Activity</div>
+            <div style="padding:4px 7px;line-height:1.9">
+              <span class="dot" style="background:#3ddc84"></span>tick_skipped · gate<br>
+              <span class="dot" style="background:#ffc24b"></span>resumed · human<br>
+              <span class="dot" style="background:#83b2cf"></span>critic pass · #2<br>
+              <span class="dot" style="background:#ff5d5d"></span>requeued · critic
+            </div>
+          </div>
+        </div>
+        <div class="g" style="padding:6px 8px;display:flex;gap:6px;align-items:center">
+          <span>🎯 directive…</span><span class="grow" style="border-bottom:1px dashed #2a3140"></span><span class="btn ch">send</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- B: SIDE RAIL -->
+    <div class="option" data-choice="b" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <h3>Side Rail</h3>
+      <p>A slim nav rail switches between four focused full-screen sections: Overview, Approvals, Steer, Config. Each screen is calm and single-purpose — less density, more focus per task. Approvals get a badge count.</p>
+      <div class="mini">
+        <div class="row grow" style="min-height:0">
+          <div class="g rail">
+            <div class="nav active">◈<br>Home</div>
+            <div class="nav" style="position:relative">⚡<br>Approve<span style="position:absolute;top:2px;right:4px;background:#e54c00;color:#fff;border-radius:999px;padding:0 4px;font-size:6px">1</span></div>
+            <div class="nav">🎯<br>Steer</div>
+            <div class="nav">⚙<br>Config</div>
+          </div>
+          <div class="g grow" style="overflow:hidden">
+            <div class="lab">Overview</div>
+            <div class="row" style="padding:5px">
+              <div class="g kpi"><span>MODE</span><b style="color:#3ddc84">RUNNING</b></div>
+              <div class="g kpi"><span>GATE</span><b>open</b></div>
+            </div>
+            <div class="g" style="margin:5px;padding:7px">
+              <span>VALIDATION GATE · 9 days left</span>
+              <div class="bar"><i style="width:66%;background:linear-gradient(90deg,#e54c00,#ffc24b)"></i></div>
+              <div class="bar"><i style="width:4%;background:#83b2cf"></i></div>
+              <b style="color:var(--ink)">2/3 qualified · 0/1 accepted</b>
+            </div>
+            <div class="g" style="margin:5px;padding:6px">
+              <span>SPEND</span> <b style="color:var(--ink)">$1.90/$8 day · $1.90/$150 project</b>
+              <div class="bar"><i style="width:24%;background:#3ddc84"></i></div>
+            </div>
+            <div style="padding:2px 7px">→ 1 approval waiting · tap ⚡</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C: HUD SCROLL -->
+    <div class="option" data-choice="c" onclick="toggleSelect(this)">
+      <div class="letter">C</div>
+      <h3>Quest HUD</h3>
+      <p>Gamified single scroll. A hero "quest bar" tracks the validation gate like XP toward level-up (first accepted bid = boss fight). Approvals are big swipeable decision cards. A sticky dock keeps pause/tick/steer always reachable.</p>
+      <div class="mini">
+        <div class="g xp">
+          <span>⚔ QUEST: PROVE THE MODEL · 9 DAYS LEFT</span>
+          <div class="big">LV1 → LV2 · 2/3 qualified</div>
+          <div class="bar" style="height:9px"><i style="width:66%;background:linear-gradient(90deg,#e54c00,#ffc24b);box-shadow:0 0 10px rgba(229,76,0,.8)"></i></div>
+          <div class="row" style="padding:0 6px"><span>🏆 first accepted bid = WIN</span><span class="grow"></span><span style="color:var(--gold)">★ streak: 2 clean ticks</span></div>
+        </div>
+        <div class="g" style="padding:8px">
+          <div class="row"><span class="pill tier">TIER 2 · DECISION CARD</span><span class="grow"></span><span>expires 6d</span></div>
+          <b style="color:var(--ink);font-size:9px">Build Make routing scenario (TEST)</b>
+          <div style="margin:3px 0;line-height:1.5">Recommended: ✓ approve build+test only. Rollback: delete test rows…</div>
+          <div class="row"><span class="btn ok grow">✓ APPROVE</span><span class="btn ch grow">✎ CHANGES</span><span class="btn no grow">✕ REJECT</span></div>
+        </div>
+        <div class="g" style="padding:6px 8px;flex:1">
+          <span>◉ FEED</span><br>
+          <span class="dot" style="background:#3ddc84"></span>gate opened · 30m<br>
+          <span class="dot" style="background:#83b2cf"></span>warehouse fresh · 4 sources
+        </div>
+        <div class="stick">
+          <span class="btn ch grow">⏸</span><span class="btn ch grow">⟳ tick</span><span class="btn ch grow">🎯 steer</span><span class="btn ch grow">⚙</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

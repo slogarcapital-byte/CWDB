@@ -1,0 +1,68 @@
+- main [ref=e8]:
+  - generic [ref=e14]:
+    - generic [ref=e19]:
+      - heading "Let's get you in to QuickBooks" [level=1] [ref=e23]
+      - generic [ref=e24]:
+        - generic [ref=e26]:
+          - tablist [ref=e27]:
+            - tab "Email or user ID" [expanded] [selected] [ref=e28] [cursor=pointer]:
+              - strong [ref=e31]: Email or user ID
+            - tab "Phone" [ref=e32] [cursor=pointer]:
+              - strong [ref=e35]: Phone
+          - tabpanel "Email or user ID" [ref=e36]:
+            - textbox [active] [ref=e41]:
+              - /placeholder: Email or user ID
+        - generic [ref=e43] [cursor=pointer]:
+          - checkbox "Remember me" [checked] [ref=e45]
+          - generic [ref=e48]: Remember me
+        - button "Sign in" [ref=e49] [cursor=pointer]:
+          - img [ref=e50]
+          - generic [ref=e53]: Sign in
+        - generic [ref=e58]:
+          - text: By selecting Sign in, you agree to
+          - link "Intuit terms" [ref=e59] [cursor=pointer]:
+            - /url: https://glam.app.intuit.com/app/guesttos?glocale=en_us
+          - text: and
+          - link "Mailchimp terms" [ref=e61] [cursor=pointer]:
+            - /url: https://mailchimp.com/legal/terms
+          - text: . Our
+          - link "Privacy Policy" [ref=e62] [cursor=pointer]:
+            - /url: https://www.intuit.com/privacy/statement/
+          - text: applies to your personal data.
+      - generic [ref=e63]:
+        - text: New to Intuit?
+        - button "Create an account" [ref=e64] [cursor=pointer]:
+          - generic [ref=e65]: Create an account
+      - generic [ref=e66]:
+        - separator [ref=e67]
+        - text: Invisible reCAPTCHA by Google
+        - link "Privacy Policy for Google" [ref=e68] [cursor=pointer]:
+          - /url: https://www.google.com/intl/en/policies/privacy/
+          - text: Privacy Policy
+        - text: and
+        - link "Terms of Use for Google" [ref=e69] [cursor=pointer]:
+          - /url: https://www.google.com/intl/en/policies/terms/
+          - text: Terms of Use
+        - text: .
+    - generic [ref=e71]:
+      - generic [ref=e72]:
+        - list [ref=e73]:
+          - listitem [ref=e74]:
+            - link "Legal" [ref=e75] [cursor=pointer]:
+              - /url: https://www.intuit.com/legal/
+          - listitem [ref=e76]:
+            - link "Privacy" [ref=e77] [cursor=pointer]:
+              - /url: https://www.intuit.com/privacy/statement/
+          - listitem [ref=e78]:
+            - link "Security" [ref=e79] [cursor=pointer]:
+              - /url: https://security.intuit.com/
+        - list [ref=e80]:
+          - listitem [ref=e81]:
+            - link "Support" [ref=e82] [cursor=pointer]:
+              - /url: https://help.quickbooks.intuit.com/en_US/contact?pageContext=login
+          - listitem [ref=e83]:
+            - link "Software License Agreement" [ref=e84] [cursor=pointer]:
+              - /url: https://www.intuit.com/legal/terms/en-us/website/
+      - generic [ref=e85]:
+        - generic [ref=e86]: Intuit, QuickBooks, QB, TurboTax, ProConnect, Credit Karma, and Mailchimp are registered trademarks of Intuit Inc. Terms and conditions, features, support, pricing, and service options subject to change without notice.
+        - generic [ref=e87]: © 2026 Intuit, Inc. All rights reserved.

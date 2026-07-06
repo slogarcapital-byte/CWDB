@@ -124,7 +124,7 @@ WHERE segments.date DURING THIS_MONTH
     if ($loginCust) { $headers["login-customer-id"] = $loginCust }
 
     $body = @{ query = $gaql } | ConvertTo-Json -Depth 5
-    $apiVersion = "v18"
+    $apiVersion = "v21"
     $url = "https://googleads.googleapis.com/$apiVersion/customers/$customerId/googleAds:search"
 
     $resp = Invoke-RestMethod -Method Post -Uri $url -Headers $headers -Body $body -ErrorAction Stop

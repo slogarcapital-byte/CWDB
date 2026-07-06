@@ -1,16 +1,8 @@
-﻿---
+---
 name: business-contact
 description: Canonical NAP (Name/Address/Phone) for CWDB — use in all schema, footer, Google Business Profile, ad extensions, contractor agreements
+type: project
 originSessionId: c42edfe5-1610-46d4-9582-a1634d67e969
-title: business-contact
-type: memory
-memory_type: project
-created: 2026-04-30
-updated: 2026-04-30
-source: C:/Users/jslog/.claude/projects/C--Users-jslog-OneDrive-Desktop-Slogars-CPA-Slogar-Capital-Claude-Projects-CWDB/memory/business-contact.md
-tags:
-  - type/memory
-  - memory/project
 ---
 # CWDB Business Contact (Canonical NAP)
 
