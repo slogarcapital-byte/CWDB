@@ -1,0 +1,32 @@
+Daily read complete. Here's where CWDB stands as of the last warehouse pull (this morning 00:18 Central, data through July 5).
+
+## Headline
+July is quiet so far: zero new leads in the first five days despite 103 Google clicks, and today is the Yde Law consult at 3:30 PM (SBG scoping kickoff). The Meta pause executed 7/5 cannot be confirmed as effective yet, since the warehouse only has data through the day of the pause.
+
+## Funnel (`v_lead_funnel`)
+- **July: no row yet**, meaning 0 leads submitted July 1-5. Latest lead remains Petersen (6/30).
+- June: 9 submitted, 9 qualified, 8 with bids sent, **0 accepted**. The view now surfaces `leads_consent_missing: 3` (the Petersen/Hanson/Neely TCPA-gate drops flagged in the audit are now visible in the funnel rather than silently excluded).
+- May: 7 submitted, 1 accepted and paid (Overbeck).
+
+## Ad spend and CAC (`v_cac_by_channel` + daily fact check)
+- **Google July: $153.31, 103 clicks, 0 leads.** That's ~$1.49/click with nothing converting in 5 days. June's picture was similar in the view ($912 spend, 1 attributed lead), though the audit established attribution undercounts (paid actually produced 4+ leads in June). Still, 103 clicks with zero form submissions in July is a real signal worth watching this week, not just an attribution artifact.
+- **Meta July: spent every day 7/1-7/5 including $11.34 on pause day itself.** That's expected (pause happened mid-day 7/5). Tomorrow's pull is the first that can confirm $0 delivery on 7/6. Worth a one-line check tomorrow.
+- Meta attribution gap for July reads "agree" so far; June was `pixel_routing_broken` (GA4 saw 3 conversions, Meta UI saw 0), which is exactly why it's paused.
+
+## Contractors (`v_contractor_scorecard`)
+Unchanged: Ben 2 bids sent, John 1 bid sent, 0 accepted, $0 referral fees ever. The builder-lane fee leg remains untested, consistent with the Phase 1 pivot verdict.
+
+## P&L (`v_pl_monthly`)
+- June closed at **$3,605 collected, $1,179 ad spend, 67.3% margin** (Overbeck construction revenue plus the Garcia sub-labor invoice).
+- July so far: $196 spend, $0 revenue. Normal for 5 days in with no booked jobs beyond the pipeline.
+
+## What matters today
+1. **Yde Law consult, 3:30 PM**: SBG scoping per the adopted unlock triggers. That's the day's main event.
+2. **Quinn contract** ($7,751, August start) is still send-held pending DSPS cert confirmation; GL is bound but Jim still needs to confirm the classification covers hands-on construction and staining.
+3. Tomorrow's warehouse pull confirms whether the Meta pause actually zeroed spend.
+
+`★ Insight ─────────────────────────────────────`
+The `leads_consent_missing` column appearing in `v_lead_funnel` is a nice pattern: instead of a WHERE clause silently filtering non-consented leads out (which is how Petersen/Hanson/Neely vanished pre-audit), the view now counts them in a diagnostic column. Filters hide data quality problems; diagnostic columns surface them.
+`─────────────────────────────────────────────────`
+
+If "Read" meant something else (a specific file or document), tell me what and I'll pull it up.

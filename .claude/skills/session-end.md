@@ -86,7 +86,24 @@ Dispatch the `cwdb-ceo-operator` agent (or run inline if the CEO has been the ac
 >
 > Report back the list of memory files written (paths) or the justification for writing none.
 
-### 9. Report
+### 9. Emit a session_summary event to the CWDB HQ dashboard
+
+Append one row so the dashboard's activity trail sees this session's work
+(the Claude→dashboard half of the two-way loop). Via Supabase MCP (project
+`iabiwsbmnbxmkjvkgfhg`):
+
+```sql
+INSERT INTO dashboard_events (event_type, payload, actor, processed_at)
+VALUES ('session_summary',
+        '{"session_id":"<session-id>","work_done":["<3-6 one-line bullets>"],"decisions":["..."]}',
+        'claude', now());
+```
+
+Set `processed_at = now()` — this event is informational; it must not trigger
+/dashboard-sync in the next session. If any dashboard_tasks were worked this
+session without their rows being updated, update them now (status/notes).
+
+### 10. Report
 Tell the user:
 1. Session note created at `_vault/sessions/<session-id>.md` with <N> agents used, <M> decisions logged
 2. Brief sealed at `_vault/briefs/<today>.md` (status flipped to `sealed`) — or noted as skipped if no brief was composed today

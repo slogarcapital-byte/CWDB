@@ -19,20 +19,21 @@
 
 The Supabase MCP tool is authorized; pull live numbers before claiming any business-state fact.
 
-## Validation Gate (active)
+## Phase 2: Construction Profitability (Phase 1 CLOSED 2026-07-05 with pivot verdict)
 
-- **Deadline:** 2026-06-18
-- **Pass criteria:** `v_lead_funnel.qualified_count >= 3` since 2026-06-04 OR `v_lead_funnel.accepted_count >= 1` lifetime
-- **Miss verdict:** call the pay-per-accepted-bid model unproven. Decide between pivot (pay-per-lead, marketplace) or sunset. Do not extend the gate a third time.
-- **Why this matters:** 0 accepted bids since project start (2026-03-12). 0 new qualified leads in the 28 days from Debbie Overlook (2026-05-08) through today. OAuth refresh-token fix shipped 2026-06-04 was the last suspected funnel blocker; the gate measures whether the funnel actually works once unblocked.
+- **Verdict (adopted by Jim 2026-07-05):** the pay-per-accepted-bid contractor model is unproven (0 acceptances, $0 fees ever invoiced) and is parked as a secondary overflow product. The validated model is **self-perform construction fed by CWDB's owned lead engine** (Overbeck closed + collected $2,800, Garcia sub-labor $800, break-even YTD).
+- **Phase 2 targets:** licensed (DSPS) + insured (GL scope confirmed), 2-4 booked jobs/month, measured funnel.
+- **KPIs:** `v_kpi_booked_revenue`, `v_kpi_job_profitability`, `v_kpi_close_rate`, `v_kpi_cost_per_booked_job`, `v_kpi_cycle_time`, `v_kpi_backlog` (audit section 2 set; CPL ceiling repriced to $300-500 under job-margin economics).
+- Full audit + fix list: `_vault/briefs/2026-07-05-audit.md`. Fix-list execution is tracked in the CWDB HQ dashboard (below).
 
 ## Operating Rhythm
 
-- **Session start:** SessionStart hook creates `_vault/sessions/<today>-NNN.md`, scans `_vault/data/cron-runs.log` for last-24h failures, surfaces env-var gaps and continuity context. Read those before doing anything else.
-- **Brief (optional, troubleshooting):** `/brief` skill generates `_vault/briefs/<today>.md` from Supabase + checkboxes. Useful when planning the day. Not the source of truth.
-- **State (optional, troubleshooting):** `/state` skill patches live data tables into today's brief without rebuild.
+- **CWDB HQ dashboard (primary operating surface, 2026-07-06):** `pwsh operations/dashboard/launch-dashboard.ps1` (port 8511). Tabs: KPIs + exec summary + board of counselors, canonical to-do list (Complete/Defer/Decline/Send-to-Claude), platform diagnostics, QBO financials. Read-only phone twin on Streamlit Cloud. Docs: `operations/dashboard/README.md`.
+- **Weekly 15-minute review** replaces the daily brief/session ritual (audit decision 2026-07-05): open the dashboard, work the to-do tab, convene the board when strategy needs a fresh read.
+- **Two-way loop:** dashboard actions append `dashboard_events`; the SessionStart hook surfaces unprocessed events; `/dashboard-sync` ingests them. `/session-end` emits a `session_summary` event back to the dashboard.
+- **Session start:** SessionStart hook creates `_vault/sessions/<today>-NNN.md`, scans cron log, surfaces env-var gaps, continuity context, and pending dashboard events. Read those before doing anything else.
 - **Session end:** `/session-end` writes Work Done + Decisions + Memory Updates into today's session note. Hookify enforces non-empty Work Done.
-- **Project board:** `_vault/board/{directives,in-flight,shipped,killed}.md` for Kanban; ship-type tags `build` / `artifact-prod` / `scheduled-recurring-automation`.
+- **Project board:** `_vault/board/*.md` are GENERATED mirrors of `dashboard_tasks` - edit via the dashboard, never by hand. `/brief` + `/state` remain optional troubleshooting surfaces.
 
 ## Memory Map
 
@@ -165,7 +166,7 @@ Goal: prove contractors pay $1,000 per accepted bid for CWDB leads.
 | Deliver first lead via routing | NOT DONE (no HubSpot workflow yet) |
 | Get first accepted bid | NOT DONE (0 since project start) |
 
-Active gate: see Validation Gate section at top.
+Phase 1 CLOSED 2026-07-05 with pivot verdict: see the Phase 2 section at top.
 
 ## Phase 2: Profitability (gated on Phase 1 pass)
 

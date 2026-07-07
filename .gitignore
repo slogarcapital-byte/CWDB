@@ -15,6 +15,12 @@ _vault/data/hubspot-latest.json
 _vault/data/hubspot-error.log
 _vault/data/cron-runs.log
 
+# Playwright MCP artifacts (screenshots, snapshots, console logs)
+.playwright-mcp/
+
+# CWDB HQ dashboard runtime artifacts
+_vault/dashboard/logs/
+
 # OS files
 .DS_Store
 Thumbs.db

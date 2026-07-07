@@ -1,0 +1,114 @@
+{
+  "run_id": 5,
+  "exec_summary": "CWDB is roughly break-even with $2,952 cash, one completed job ever (Overbeck, $2,800), and a $53,740 estimate pipeline that produced 0 closes in June. The CEO brief correctly targets conversion and measurement but celebrates a profit built on $0 logged costs and misses the real blocker: without the DSPS Dwelling Contractor certification, CWDB cannot legally sign build work, which holds the $7,751 Quinn contract and an unknown share of the open pipeline. The board's verdict: file the cert now, run one focused in-person sales sweep of the 8 open estimates (selling only what is legal today, logging why losses happen), and push the plumbing (attribution fix, QBO job costing) to agents. Raise the quarter's bar from one close to: cert filed, Quinn sent, 2-3 closes, attribution fixed before any ad-spend increase.",
+  "ceo_brief": "CWDB STRATEGY BRIEF - Board Review, Run 5 (2026-07-06)\n\n1. CURRENT-STATE ASSESSMENT\n\nCWDB is small but no longer bleeding. June was the first profitable month (+$1,970), YTD net is +$1,550, AR is zero, and every dollar booked was collected. That is the good news, and it is real. The bad news is that all of it rests on a single job. Overbeck ($2,800) plus $800 sub-labor to John is the entire revenue story. The original thesis (contractors pay $1,000 per accepted bid) is dead: 0 acceptances, $0 fees ever. The business has already pivoted in practice to self-perform construction fed by our own leads.\n\nThe number that should worry the board: June closed 0 of 8 estimates with $53,740 sitting open and zero backlog. July revenue is $0 until something converts. Top-of-funnel is fine (9 submitted, 9 qualified, 8 bids sent); the constraint is the close and the follow-up. We booked at 100% GP only because we logged zero job costs, which means GP/job, the core Phase 2 KPI, is currently unmeasurable. We are also spending on Google while the conversion signal is broken end to end, so we cannot trust a single CPL number.\n\n2. THREE HIGHEST-LEVERAGE MOVES\n\nA. Work the $53,740. Run a structured follow-up sweep on all 8 June estimates this week. One call per homeowner: confirm received, surface the real objection, offer a smaller first phase or a scheduled start. Log outcome + reason per estimate in HubSpot. Expected impact: at even a 16.7% close (last real rate), that is roughly one $3K+ job. One close funds license, insurance, and SBG scoping. This is cash sitting in the pipeline, not a demand problem.\n\nB. Turn on job-level cost capture in QBO and retro-cost Overbeck. Project/sub-customer per CWDB job number. Expected impact: the first true GP/job number. Every Phase 2 pricing and go/no-go decision is blind until this exists. Cheap, one-time, unblocks everything downstream.\n\nC. Fix the conversion signal before spending another scaling dollar. One week of plumbing: Pixel Lead event, hutk through the relay, warehouse reads hs_analytics_source. Expected impact: trustworthy CPL, which is the precondition for re-enabling Meta and scaling Google. Do NOT re-enable Meta or raise budgets until this lands.\n\n3. WHAT TO STOP\n\n- Stop selling contractor lead fees. 0/$0. Terminate the Ben/John lead-purchase agreements cleanly before SBG papers move.\n- Stop treating leads as the bottleneck. Funnel is full; the leak is post-estimate. Spending more on top-of-funnel now buys unworked pipeline.\n- Stop booking jobs at fictional 100% GP. No job closes without costs logged against its number.\n- Stop scaling spend on broken attribution. No Meta re-enable, no Google increase, until the signal is trustworthy.\n\nOne close, one true GP number, one week of plumbing. That is the quarter.",
+  "lens_outputs": [
+    {
+      "key": "contrarian",
+      "name": "Contrarian",
+      "text": "The fatal flaw: this brief celebrates a profit that does not exist and prescribes a fix for a problem it has not diagnosed.\n\nJune's +$1,970 is an accounting artifact. Overbeck booked at $2,800 with zero direct costs logged, and the brief admits it (\"fictional 100% GP\") then still opens with \"no longer bleeding.\" Stain, materials, Jim's own labor hours, the $800 to Garcia: once real costs land, June may be a loss. You cannot claim a validated self-perform model on one job with unknown margin. That is n=1 with fabricated economics.\n\nMove A is worse. The brief assumes the constraint is follow-up and projects \"~one $3K+ job\" off May's 16.7%. But June went 0 for 8. When close rate collapses from 17% to 0% on rising volume, the likelier explanations are price, offer, or scope, not a missing phone call. And here is the buried killer: the strategy of record is self-perform construction, yet Jim has no DSPS Dwelling Contractor cert. He legally cannot sign as prime on build or structural work. How much of the $53,740 open pipeline is work CWDB cannot lawfully take even if the follow-up sweep converts it? The brief never asks. The Quinn contract is already held for exactly this reason. Calling homeowners to close jobs you cannot perform is not a plan, it is a liability generator.\n\nMeanwhile: $2,952 cash against $1,652 card debt is roughly $1,300 net, Google keeps burning ~$900/month on admittedly broken attribution, backlog is zero, and the brief's own STOP list (\"scaling spend on broken attribution\") contradicts continuing that spend. The quarter is not \"one close, one GP number, one week of plumbing.\" It is: get the license, or admit the pivot cannot legally execute yet."
+    },
+    {
+      "key": "first_principles",
+      "name": "First Principles",
+      "text": "First Principles read: the brief names the right problem, then under-invests in it.\n\nThe actual goal is booked construction revenue and GP per job. Strip everything else away and the June data says one thing: nine leads came in, nine qualified, eight got estimates, zero closed. The machine that was the entire original thesis (lead generation) works. The machine the pivot depends on (converting an estimate into a signed job) has a 1-in-14 lifetime hit rate, and the one win was a $2,800 stain job sold to a warm lead. That is not a funnel with a weak stage; that is a business with no proven sales process.\n\nMove A is correct but too small. \"One call each to surface objections\" treats an existential defect as a weekly task. First-principles question the brief never asks: why did 8 of 8 say no or nothing? Is pricing off (the estimator was built on unconfirmed TimberTech numbers, still \"CONFIRM WITH JOHN\")? Is the 48-hour-quote promise followed by silence? Is Jim, pre-DSPS-cert, legally unable to sign the jobs homeowners actually want (builds, not stains)? Note the structural tell: the only two closeable job types pre-license are cosmetic stain jobs and jobs where a contractor signs. If most of that $53,740 is build work, the constraint isn't follow-up. It's that CWDB cannot legally sell what its funnel generates. The DSPS cert appears in this brief only as a thing \"one close funds.\" Invert it: the license may BE the close-rate fix, and it should be Move A, filed this week, not a downstream purchase.\n\nMoves B and C are plumbing. Fine, cheap, do them. But measurement and attribution improve decisions about a conversion engine that doesn't yet exist. Sequence: unblock legal capacity to sign, diagnose the 8 losses as a pattern (not 8 calls), then instrument."
+    },
+    {
+      "key": "expansionist",
+      "name": "Expansionist",
+      "text": "EXPANSIONIST REVIEW: This Brief Plans a Quarter of Playing Not to Lose.\n\nThe closing line gives it away: \"One close, one true GP number, one week of plumbing. That is the quarter.\" One close is a week, not a quarter. The stated goal is 2-4 booked jobs/month; this brief would declare victory at one job in three months. That's a 90%+ ambition gap.\n\nWhat's left on the table:\n\nThe $53,740 is treated as a follow-up chore, not a pipeline to convert. One call each is timid. At even May's 16.7% close rate that's $9K booked; a real sales process (walk-through re-offer, financing options, phased pricing on every stale estimate, a deadline incentive) could plausibly close 2-3. The brief budgets for one.\n\nZero mention of generating NEW estimates in July. June produced 9 qualified leads on a broken funnel with Meta dark. Fix the Pixel and Meta comes back; the brief frames signal repair as a precondition for maybe scaling later. Flip it: the KPI bundle says a $3K-GP job supports $300-500 CPL, and Google runs at $30/day - a tenth of what that math permits. Where's the plan to test $60-100/day the moment attribution works? Nowhere.\n\nBacklog is zero and the brief accepts it. August already has Winchester (joint job with Ben/John) and Quinn ($7,751) staged pending DSPS cert. The cert isn't even on the move list. Getting licensed is the single biggest revenue unlock (Quinn alone dwarfs everything in this brief) and it's absent.\n\nCapacity via SBG/subs is unexplored. Jim already bills sub-labor ($800 to Garcia). Ben/John crews mean CWDB can book beyond Jim's hands now.\n\nRewrite the quarter: 3 closes from the open pipeline, DSPS cert filed, Quinn sent, ad spend 2x once signal works. That's the actual goal."
+    },
+    {
+      "key": "outsider",
+      "name": "Outsider",
+      "text": "From the outside, here is what I see: a company called \"Central Wisconsin Deck Builders\" that has built exactly one deck-related thing, and it was a staining job. I got your estimate PDF three weeks ago. Nobody called me. Now the plan says you're going to call all 8 of us \"this week\" to ask what's holding us back. I'll tell you what's holding me back: silence. I assumed you were booked solid or out of business. Meanwhile the two other contractors I called came out, shook my hand, and followed up twice. A deck is a $10,000 decision; I'm not handing it to a voicemail-quality operation because they finally circled back in July.\n\nAnd when you do call, what are you offering? \"A smaller first phase or a scheduled start date.\" Sir, you have zero jobs scheduled. Your calendar is wide open, and open calendars make homeowners nervous, not eager. Worse, if I ask \"are you licensed?\" the honest answer right now is \"insured as of last month, certification pending, coverage classification still being confirmed.\" In a town like Wausau, that sentence travels. One skeptical brother-in-law at a Fourth of July cookout kills three of those eight quotes.\n\nAs the contractor friend: you billed me $800 for labor, you're winding down the lead agreements I signed, and you're at an attorney today about a partnership while holding $2,952 in cash. From where I stand, you're asking me to co-sign a business that can't yet close its own quotes.\n\nWhat would actually land? Not a phone survey. A knock, a face, a firm start date, and proof you've finished something bigger than one stain job. The plan reads like a spreadsheet fixing itself. Nobody in this town hires a spreadsheet."
+    },
+    {
+      "key": "executor",
+      "name": "Executor",
+      "text": "The plan is executable, but only if Jim treats it as one move, not three. Here is the reality of this week: an attorney consult today at 3:30, walk-throughs and estimates already on the calendar, 6 P0s and 3 P1s open, and a solo operator. Three workstreams (follow-up sweep, QBO job costing, attribution plumbing) is a plan for a three-person team. Jim ships maybe one of them, poorly, while the P0 stack grows.\n\nCut it to Move A only. Eight phone calls is the sole item on this brief that produces July revenue, and it fits in the seams of a real week: 8 calls at 15 minutes each is two hours total, splittable into drive-time between walk-throughs. Moves B and C are plumbing. Plumbing does not convert $53,740 of open estimates, and neither is a precondition for picking up the phone. B is a 30-minute QBO settings task Jim can batch to a Friday. C is multi-day integration work touching Webflow relay code, Meta Events Manager, and the warehouse pull; that is a next-week project, scheduled, not squeezed in.\n\nSingle concrete next step: before the 3:30 consult, Jim pulls the 8 June estimate contacts from HubSpot into one list with phone numbers and estimate amounts, and calls the largest one. Not a sequence design, not a HubSpot logging schema. One list, one call, today. Log outcomes in a notes column; formalize the HubSpot fields later if the sweep proves out.\n\nThe closing line says \"one close, one true GP number, one week of plumbing.\" Strike the plumbing. This week is one close. If all 8 calls happen by Friday and one converts, the plan worked. Everything else is next week's brief."
+    }
+  ],
+  "chairman_verdict": "The brief's instincts stand: the constraint is conversion, not leads; cost capture and attribution fixes are correct work. Three things fall. First, the framing of June as proof of health: +$1,970 booked against $0 logged costs is an artifact, and $2,952 cash with ~$900/month Google spend means the runway is measured in weeks, not quarters (Advisor C is right). Second, the omission of the DSPS certification. Advisors C, D, and E independently converge on this: the strategy of record is self-perform, yet CWDB cannot lawfully sign as prime on build work, Quinn's $7,751 contract sits held for exactly this reason, and an unknown share of the $53,740 pipeline is unsellable until the cert exists. The license is not a downstream errand; it is the critical path of the pivot and the likely close-rate fix. Third, the workload shape: three workstreams for a solo operator with 6 P0s is fiction (Advisor B). The plumbing is real work but it is project/agent work, not Jim's week. Two changes to the brief. One: Move A becomes the cert filing plus a focused sweep of the 8 estimates, largest first, in person where possible (Advisor A's point about silence and open calendars is how homeowners actually read us), selling only what is legally deliverable today and logging loss reasons as a diagnostic, not a checkbox. Two: the quarter's bar rises. 'One close is the quarter' concedes a 90% gap against the 2-4 jobs/month target (Advisor E); with Quinn, Winchester, and $53K open, the honest target is cert filed, Quinn sent, 2-3 closes, and attribution fixed so spend can scale on real signal.",
+  "recommended_moves": [
+    {
+      "title": "File the DSPS Dwelling Contractor application this week",
+      "detail": "The single biggest revenue unlock: it releases the held Quinn contract ($7,751), legalizes prime-signing on the build portion of the $53,740 pipeline, and makes the self-perform strategy executable. Prep the application packet and prerequisites (course/exam status, fees, GL COI attachment) so Jim only signs and submits. Also confirm the GL classification covers hands-on construction + staining while the insurer file is open.",
+      "owner_group": "jim",
+      "priority": "P0",
+      "suggested_agent": "legal-compliance-counsel"
+    },
+    {
+      "title": "Convert-the-pipeline sweep: 8 June estimates, largest first, in person where possible",
+      "detail": "Not a survey call, a sales pass: re-offer with a walk-through, phased/smaller first-phase option, firm start-date windows, and honest licensing language (insured now, cert filed). Only close what is legally deliverable pre-cert (stain/resurface self-perform; builder-lane for structural). Log outcome + loss reason per estimate in HubSpot so the 0/8 pattern gets a diagnosis (price vs silence vs legal scope). Agent preps the ranked call list, scripts, and loss-reason taxonomy before Jim dials.",
+      "owner_group": "jim",
+      "priority": "P0",
+      "suggested_agent": "lead-qualification"
+    },
+    {
+      "title": "Fix the conversion signal end-to-end (project work, not Jim's week)",
+      "detail": "Meta Pixel Lead event, hutk/UTM persistence in the Webflow form relay, hs_analytics_source read into the warehouse pull, Google Ads conversion cleanup. This is multi-day integration work that agents execute; it gates any Meta re-enable or Google scale-up. No spend increase until CPL is trustworthy.",
+      "owner_group": "project",
+      "priority": "P1",
+      "suggested_agent": "analytics"
+    },
+    {
+      "title": "Job-level cost capture in QBO + retro-cost Overbeck",
+      "detail": "Stand up job costing (projects/classes) in QBO, define the cost categories, and retro-cost Overbeck (materials, Jim hours, sub-labor) to produce the first true GP/job number. Until this lands, June's profit claim stays unverified and pricing decisions are blind. Agent builds the structure; Jim supplies receipts/hours once.",
+      "owner_group": "project",
+      "priority": "P1",
+      "suggested_agent": "accounting"
+    },
+    {
+      "title": "Execute post-Yde legal cleanup: wind down lead-fee agreements, sequence SBG",
+      "detail": "Using today's attorney consult output: terminate the Ben/John lead-purchase agreements cleanly (they are already de facto joint-job partners), document the Winchester joint-job arrangement properly (W-9/COI already exchanged), and hold SBG formation strictly behind the adopted unlock triggers (license, insurance scope, booked demand, cash-positive months). No new entity spend from a $2,952 cash position.",
+      "owner_group": "others",
+      "priority": "P2",
+      "suggested_agent": "legal-compliance-counsel"
+    }
+  ],
+  "kpi_snapshot": {
+    "as_of": "2026-07-06",
+    "financial_position": {
+      "cash": 2952.04,
+      "card_liability": 1651.69,
+      "ar_total": 0,
+      "ytd_revenue": 3605.00,
+      "ytd_expense": 1950.27,
+      "ytd_net_income": 1550.35
+    },
+    "pl_monthly_net_income": { "2026-04": -20.84, "2026-05": -398.40, "2026-06": 1969.59 },
+    "booked_revenue": { "2026-06": { "jobs_booked": 1, "booked_revenue": 2800, "job_numbers": ["CWDB-2026-043"] } },
+    "job_profitability": [
+      { "job": "CWDB-2026-043", "client": "Debbie Overbeck", "status": "completed", "revenue": 2800, "direct_costs": 0, "gross_profit": 2800, "gp_pct": 100, "note": "no direct costs logged; GP overstated" },
+      { "job": "John Garcia sub-labor", "revenue": 800, "direct_costs": 0, "gross_profit": 800, "gp_pct": 100 },
+      { "job": "Sample Customer", "revenue": 5, "note": "test row" }
+    ],
+    "close_rate": {
+      "2026-05": { "estimates_delivered": 6, "estimates_accepted": 1, "close_rate_pct": 16.7, "open_estimate_value": 24000 },
+      "2026-06": { "estimates_delivered": 8, "estimates_accepted": 0, "close_rate_pct": 0, "open_estimate_value": 53740 }
+    },
+    "cost_per_booked_job": {
+      "2026-04": { "ad_spend": 46.48, "jobs_booked": 0 },
+      "2026-05": { "ad_spend": 501.27, "jobs_booked": 0 },
+      "2026-06": { "ad_spend": 1179.13, "jobs_booked": 1, "cost_per_booked_job": 1179.13 },
+      "2026-07": { "ad_spend": 196.07, "jobs_booked": 0 }
+    },
+    "backlog": { "jobs_in_backlog": 0, "backlog_value": null },
+    "lead_funnel": [
+      { "month": "2026-06", "submitted": 9, "qualified": 9, "delivered": 9, "bid_sent": 8, "accepted": 0, "paid": 0, "consent_missing": 3 },
+      { "month": "2026-05", "submitted": 7, "qualified": 7, "delivered": 6, "bid_sent": 6, "accepted": 1, "paid": 1, "consent_missing": 1 }
+    ],
+    "open_tasks_p0_p1": {
+      "jim": { "P0": 6, "P1": 3 },
+      "project": { "P0": 0, "P1": 4 },
+      "others": { "P0": 0, "P1": 1 }
+    },
+    "strategy_of_record": "audit_findings #18 (2026-07-05): construction/SBG tilt endorsed. Phase 1 closed with pivot verdict; pay-per-accepted-bid parked ($1,000 fee survives only as shelf product). Validated model: self-perform construction fed by the owned lead engine. Phase 2 = construction profitability: licensed, insured, 2-4 booked jobs/month. KPIs: booked revenue, GP/job, close rate, cost per booked job. SBG: keep evaluating, do not commit; unlock triggers = DSPS cert + GL in scope, reliable booked-job demand, 2-3 cash-positive months, attorney+CPA scoping.",
+    "agents_convened": {
+      "specialty": ["accounting", "contractor-sales", "ad-campaign", "lead-qualification"],
+      "legal_included": false,
+      "legal_skip_reason": "no legal-state change since last run; Yde Law consult scheduled later today 2026-07-06 15:30 Central"
+    }
+  }
+}

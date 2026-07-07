@@ -94,6 +94,7 @@ $ContactProperties = @(
     "project_type","budget_range","project_timeline","lead_notes","owns_property",
     "source_city","utm_source","utm_medium","utm_campaign","utm_term","utm_content",
     "gclid","tcpa_consent_given","lead_source_page","lead_channel","tcpa_consent_source",
+    "hs_analytics_source",
     # CWDB-custom contractor fields
     "business_name","service_area_zips","onboarded_at"
 )
@@ -295,7 +296,8 @@ try {
     # ===========================================================================
     # Typed layer: fact_leads (homeowner-lead contacts with TCPA consent)
     # ---------------------------------------------------------------------------
-    # Filter: lifecyclestage != 'customer' (those are contractors) AND tcpa_consent_given truthy.
+    # Filter: lifecyclestage != 'customer' (those are contractors). Consent is
+    # recorded as data (consent_missing flag), never used as an ingestion gate.
     # We resolve city_id via dim_city by source_city/city name OR matching zip.
     # Campaign attribution FKs (attributed_campaign_id_via_*) are left NULL here;
     # Phase C populates dim_campaign and a later view can resolve the attribution.
@@ -348,7 +350,7 @@ try {
     }
 
     $leadRecords = New-Object System.Collections.Generic.List[hashtable]
-    $skipped = [ordered]@{ no_consent = 0; no_phone = 0; no_email = 0; is_customer = 0; no_submitted_at = 0; test_lead = 0 }
+    $skipped = [ordered]@{ consent_missing_ingested = 0; no_phone = 0; no_email = 0; is_customer = 0; no_submitted_at = 0; test_lead = 0 }
 
     foreach ($c in $contacts) {
         $props = Get-PropOrNull $c "properties"
@@ -377,21 +379,27 @@ try {
             ($utmLc -eq 'test')
         if ($isTestLead) { $skipped.test_lead++; continue }
 
-        # Consent gate (2026-06-10 pivot: all channels count).
-        # A lead passes when the form relay set tcpa_consent_given=true, OR it is
-        # a phone/manual entry where Jim recorded a consent source (verbal/assumed).
+        # Consent handling (2026-07-05 audit fix #6: consent is DATA, not a gate).
+        # Previously a lead without form TCPA or a recorded consent source was
+        # silently SKIPPED, which dropped 3 real leads (Petersen, Hanson, Neely)
+        # from the warehouse and made the funnel lie. Now every real lead is
+        # ingested; missing consent evidence sets consent_missing=true (schema
+        # 013), which blocks SMS outreach until Jim re-captures consent but
+        # never hides the lead. The counter is kept for the skip-alert log line.
         $tcpaRaw    = Get-PropOrNull $props "tcpa_consent_given"
         $tcpa       = ConvertTo-BoolOrNull $tcpaRaw
         $channelRaw = Get-PropOrNull $props "lead_channel"
         $consentSrc = Get-PropOrNull $props "tcpa_consent_source"
         $consentOk  = ($tcpa -eq $true) -or
                       ($consentSrc -and $channelRaw -in @("phone", "manual", "other"))
-        if (-not $consentOk) { $skipped.no_consent++; continue }
+        if (-not $consentOk) { $skipped.consent_missing_ingested++ }
 
         # Channel: explicit property wins; otherwise a form-set TCPA means webform
         # (the relay was the only path that ever set it before lead_channel existed).
         $leadChannel = if ($channelRaw) { $channelRaw } else { "webform" }
-        if (-not $consentSrc) { $consentSrc = "form" }
+        # Consent source defaults to "form" ONLY when the form actually recorded
+        # consent; a consent-missing lead keeps a NULL source (never fake it).
+        if (-not $consentSrc -and $tcpa -eq $true) { $consentSrc = "form" }
 
         $phone = Get-PropOrNull $props "phone"
         $email = Get-PropOrNull $props "email"
@@ -442,7 +450,8 @@ try {
             budget_range                       = $budget
             project_timeline                   = (Get-PropOrNull $props "project_timeline")
             lead_notes                         = (Get-PropOrNull $props "lead_notes")
-            tcpa_consent_given                 = $true
+            tcpa_consent_given                 = $tcpa
+            consent_missing                    = (-not $consentOk)
             lead_channel                       = $leadChannel
             tcpa_consent_source                = $consentSrc
             utm_source                         = (Get-PropOrNull $props "utm_source")
@@ -452,24 +461,31 @@ try {
             utm_content                        = (Get-PropOrNull $props "utm_content")
             gclid                              = (Get-PropOrNull $props "gclid")
             lead_source_page                   = (Get-PropOrNull $props "lead_source_page")
+            hs_analytics_source                = (Get-PropOrNull $props "hs_analytics_source")
             attributed_campaign_id_via_utm     = $null
             attributed_campaign_id_via_gclid   = $null
-            lead_score                         = 0
-            disqualification_reason            = $null
+            # lead_score / disqualification_reason intentionally OMITTED from the
+            # payload (audit fix: the nightly pull hardcoded lead_score=0, wiping
+            # any score ever written). PostgREST leaves omitted columns untouched
+            # on conflict-update; new rows get the column DEFAULT (0).
             updated_at                         = $capturedAt
         })
     }
 
     if ($DryRun) {
         Write-Output "DryRun: would upsert $($leadRecords.Count) fact_leads rows."
-        Write-Output "DryRun: skipped $($skipped.is_customer) contractors, $($skipped.test_lead) test leads, $($skipped.no_consent) without consent (no form TCPA and no recorded consent source), $($skipped.no_phone) without phone, $($skipped.no_email) without email, $($skipped.no_submitted_at) without createdate"
+        Write-Output "DryRun: skipped $($skipped.is_customer) contractors, $($skipped.test_lead) test leads, $($skipped.no_phone) without phone, $($skipped.no_email) without email, $($skipped.no_submitted_at) without createdate; ingested WITH consent_missing: $($skipped.consent_missing_ingested)"
     } elseif ($leadRecords.Count -gt 0) {
         $n = Invoke-SupabaseUpsert -Table "fact_leads" -Records $leadRecords.ToArray() -ConflictColumns "hubspot_contact_id"
         Write-Output "Upserted $n rows into fact_leads"
-        Write-Output "Skipped: contractors=$($skipped.is_customer), test_leads=$($skipped.test_lead), no_consent=$($skipped.no_consent), no_phone=$($skipped.no_phone), no_email=$($skipped.no_email), no_createdate=$($skipped.no_submitted_at)"
+        Write-Output "Skipped: contractors=$($skipped.is_customer), test_leads=$($skipped.test_lead), no_phone=$($skipped.no_phone), no_email=$($skipped.no_email), no_createdate=$($skipped.no_submitted_at)"
+        if ($skipped.consent_missing_ingested -gt 0) {
+            # Loud, greppable alert line (audit fix #6: never silent again).
+            Write-Output "ALERT consent_missing: $($skipped.consent_missing_ingested) lead(s) ingested WITHOUT consent evidence - re-capture consent before any SMS (see fact_leads.consent_missing)"
+        }
     } else {
-        Write-Output "No homeowner leads with TCPA + phone + email; fact_leads unchanged"
-        Write-Output "Skipped: contractors=$($skipped.is_customer), test_leads=$($skipped.test_lead), no_consent=$($skipped.no_consent), no_phone=$($skipped.no_phone), no_email=$($skipped.no_email), no_createdate=$($skipped.no_submitted_at)"
+        Write-Output "No homeowner leads with phone; fact_leads unchanged"
+        Write-Output "Skipped: contractors=$($skipped.is_customer), test_leads=$($skipped.test_lead), no_phone=$($skipped.no_phone), no_email=$($skipped.no_email), no_createdate=$($skipped.no_submitted_at)"
     }
 
     # ===========================================================================
@@ -537,6 +553,16 @@ try {
         return $null
     }
 
+    # Lookup: existing accepted_at by deal id. HubSpot's closedate RE-STAMPS when
+    # a deal is touched later (moving Overbeck to Won on 7/5 moved bid 4's
+    # accepted_at from the true 6/11 to 7/6), so the earliest recorded
+    # acceptance must win over closedate. (2026-07-06 dashboard build.)
+    $existingAccepted = Invoke-SupabaseSelect -Table "fact_bids" -Select "hubspot_deal_id,accepted_at" -Filter "accepted_at=not.is.null"
+    $acceptedAtByDealId = @{}
+    foreach ($eb in @($existingAccepted)) {
+        if ($eb.hubspot_deal_id) { $acceptedAtByDealId[[string] $eb.hubspot_deal_id] = [string] $eb.accepted_at }
+    }
+
     $bidRecords = New-Object System.Collections.Generic.List[hashtable]
     $bidSkipped = [ordered]@{ wrong_pipeline = 0; unknown_stage = 0; no_associated_contact = 0; no_matching_lead = 0; no_createdate = 0 }
 
@@ -577,6 +603,13 @@ try {
 
         $bidSentAt = if ($stageInfo.BidStatus -in @("sent","accepted","paid","declined","expired")) { $createdAt } else { $null }
         $acceptedAt = if ($stageInfo.BidStatus -in @("accepted","paid")) { ConvertTo-IsoOrNull $closedate } else { $null }
+        # Earliest acceptance wins (closedate re-stamps on later deal touches).
+        if ($acceptedAt -and $acceptedAtByDealId.ContainsKey("$($d.id)")) {
+            $existingIso = ConvertTo-IsoOrNull $acceptedAtByDealId["$($d.id)"]
+            if ($existingIso -and ([datetime]::Parse($existingIso) -lt [datetime]::Parse($acceptedAt))) {
+                $acceptedAt = $existingIso
+            }
+        }
         $declinedAt = if ($stageInfo.BidStatus -eq "declined") { ConvertTo-IsoOrNull $closedate } else { $null }
 
         # bid_amount: prefer custom bid_amount property, fall back to standard amount

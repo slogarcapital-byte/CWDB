@@ -112,13 +112,14 @@ $requiredKeys = @(
 )
 $envMissing = @()
 $envPresent = @{}
+$envValues = @{}
 
 if (Test-Path $envFile) {
     Get-Content $envFile | ForEach-Object {
         if ($_ -match '^\s*([A-Z_][A-Z0-9_]*)\s*=\s*(.+?)\s*$') {
             $k = $Matches[1]
             $v = $Matches[2].Trim('"').Trim("'")
-            if ($v) { $envPresent[$k] = $true }
+            if ($v) { $envPresent[$k] = $true; $envValues[$k] = $v }
         }
     }
     foreach ($k in $requiredKeys) {
@@ -206,6 +207,44 @@ if (Test-Path $indexPath) {
 }
 
 # --------------------------------------------------------------------------
+# CWDB HQ dashboard events: surface unprocessed dashboard_events so the
+# session runs /dashboard-sync (the dashboard->Claude half of the two-way
+# loop). Fail-safe: a slow/unreachable Supabase must never break the hook.
+# --------------------------------------------------------------------------
+$dashboardBlock = "Dashboard events: check skipped (no Supabase credentials in .env.local)."
+if ($envValues.ContainsKey('SUPABASE_URL') -and $envValues.ContainsKey('SUPABASE_SERVICE_ROLE_KEY')) {
+    try {
+        $sbUrl = $envValues['SUPABASE_URL'].TrimEnd('/')
+        if ($sbUrl.EndsWith('/rest/v1')) { $sbUrl = $sbUrl.Substring(0, $sbUrl.Length - 8) }
+        $sbKey = $envValues['SUPABASE_SERVICE_ROLE_KEY']
+        $hdrs = @{ apikey = $sbKey; Authorization = "Bearer $sbKey" }
+        $resp = Invoke-RestMethod -Method Get -TimeoutSec 5 -Headers $hdrs -Uri (
+            "$sbUrl/rest/v1/dashboard_events?processed_at=is.null" +
+            "&select=event_id,event_type,created_at,payload&order=event_id.asc&limit=50")
+        # Force enumeration: PS7 Invoke-RestMethod emits JSON arrays as ONE
+        # Object[] item (see memory ps7-invoke-restmethod-non-enumeration).
+        $pending = @($resp | ForEach-Object { $_ })
+        if ($pending.Count -eq 0) {
+            $dashboardBlock = "Dashboard events: none pending. The CWDB HQ to-do tab is the canonical task list (``dashboard_tasks``)."
+        } else {
+            $queued = @($pending | Where-Object { $_.event_type -eq 'queued_for_claude' })
+            $lines = $pending | ForEach-Object {
+                $t = ''
+                try { $t = $_.payload.title } catch { }
+                "  - #$($_.event_id) $($_.event_type)$(if ($t) { ": $t" }) ($([string]$_.created_at))"
+            }
+            $dashboardBlock = "ACTION REQUIRED: $($pending.Count) unprocessed dashboard event(s) - run ``/dashboard-sync`` to ingest them into memory/board and execute queued work.`n" +
+                ($lines | Out-String).TrimEnd()
+            if ($queued.Count -gt 0) {
+                $dashboardBlock += "`n$($queued.Count) of these are QUEUED TASKS Jim sent from the dashboard - they carry full prompts in payload.prompt."
+            }
+        }
+    } catch {
+        $dashboardBlock = "Dashboard events: check failed ($($_.Exception.Message)). Query dashboard_events?processed_at=is.null manually."
+    }
+}
+
+# --------------------------------------------------------------------------
 # Build additionalContext for SessionStart hook output
 # --------------------------------------------------------------------------
 $additionalContext = $null
@@ -256,9 +295,13 @@ $truncated
 
 Live business state is in the **Supabase warehouse** (project ``iabiwsbmnbxmkjvkgfhg``). Query views (``v_lead_funnel``, ``v_cac_by_channel``, ``v_meta_attribution_gap``, ``v_contractor_scorecard``, ``v_pl_monthly``) for canonical numbers before forming any business-state hypothesis.
 
-## Validation Gate (active)
+## Phase 2: construction profitability (Phase 1 closed 2026-07-05 with pivot verdict)
 
-Deadline 2026-06-18. Pass: ``v_lead_funnel.qualified_count >= 3`` since 2026-06-04 OR ``v_lead_funnel.accepted_count >= 1`` lifetime. Miss: call pay-per-accepted-bid model unproven; pivot or sunset (no third extension).
+Validated model: self-perform construction fed by the owned lead engine. Pay-per-accepted-bid is parked as an overflow product. Targets: licensed + insured, 2-4 booked jobs/month, measured funnel. Construction-era KPIs: ``v_kpi_booked_revenue``, ``v_kpi_job_profitability``, ``v_kpi_close_rate``, ``v_kpi_cost_per_booked_job``, ``v_kpi_cycle_time``, ``v_kpi_backlog``.
+
+## CWDB HQ dashboard (two-way loop)
+
+$dashboardBlock
 
 ## Warehouse cron health (last 24h)
 
@@ -270,8 +313,9 @@ $envBlock
 
 ## Operational surfaces
 
+- CWDB HQ dashboard (canonical tasks + KPIs + financials): ``pwsh operations/dashboard/launch-dashboard.ps1`` (port 8511)
 - $briefStatusBlock
-- Kanban: ``_vault/board/{directives,in-flight,shipped,killed}.md``
+- Kanban mirrors (GENERATED from dashboard_tasks - edit via dashboard): ``_vault/board/*.md``
 - Sessions: ``_vault/sessions/INDEX.md``
 - Vault home: ``_vault/MOC - Home.md``
 "@

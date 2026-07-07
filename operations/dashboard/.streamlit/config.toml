@@ -1,0 +1,21 @@
+# CWDB HQ theme. Streamlit only reads .streamlit/config.toml from the CWD,
+# so launch-dashboard.ps1 sets CWD to operations/dashboard (this dir's parent).
+# Deliberately NOT at repo root: a root config would leak into the estimator's
+# Streamlit Cloud deploy (sales/estimating/streamlit_app has its own .streamlit).
+#
+# This is the real fix for the light-widget-on-dark-CSS legibility bug: widgets
+# (buttons, selects, dataframes, alerts, toasts) render from the theme, not CSS.
+
+[server]
+runOnSave = true
+
+[theme]
+base = "dark"
+primaryColor = "#e54c00"            # Crafted Orange: primary actions only
+backgroundColor = "#323434"         # Timber Slate
+secondaryBackgroundColor = "#3d403e" # raised slate: inputs, expanders, df headers
+textColor = "#f8f8f6"               # off-white, never pure #fff
+font = "'Public Sans', sans-serif"
+headingFont = "'Staatliches', 'Public Sans', sans-serif"
+baseRadius = "10px"
+borderColor = "#565a58"

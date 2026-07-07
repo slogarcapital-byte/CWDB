@@ -1,0 +1,19 @@
+The board has convened and the counsel JSON is written and validated at `_vault/counsel/2026-07-06-031534-run5.json` (run_id 5, 5 lenses, 5 recommended moves, valid JSON). Per the skill, the runner handles the `counsel_runs` upsert, so I did not touch that table.
+
+`★ Insight ─────────────────────────────────────`
+Three of the five lenses (Contrarian, First Principles, Expansionist) independently converged on the same blind spot the CEO brief missed — the DSPS cert — despite none seeing the others' output. That independent convergence is exactly what the anonymized-panel design is for: the chairman could weight it as corroboration rather than one loud voice.
+`─────────────────────────────────────────────────`
+
+**How the run went, stage by stage:**
+
+1. **KPI pull (Supabase, live):** cash $2,952, YTD net +$1,550, June close rate 0% (8 estimates, $53,740 open), backlog 0 jobs, cost per booked job $1,179. Two queries needed column-name fixes (`as_of` not `as_of_date`; `audit_findings` uses `section` not `category`). I skipped legal-compliance-counsel since legal state hasn't changed since the last run (the Yde consult is later today).
+
+2. **Specialty reads:** all four converged on the $53,740 unworked estimate pipeline as the cheapest revenue in the business; accounting flagged that GP/job is unmeasurable (Overbeck booked at 100% GP, $0 costs logged); ad-campaign said don't touch spend until the conversion signal is fixed.
+
+3. **CEO brief:** "One close, one true GP number, one week of plumbing. That is the quarter."
+
+4. **The board pushed back hard.** The chairman's verdict: the conversion diagnosis stands, but three things fall — June's "profit" is an artifact of zero logged costs, the DSPS cert (which holds the $7,751 Quinn contract and an unknown share of the open pipeline) was missing from the move list entirely, and three workstreams for a solo operator with 6 open P0s is fiction.
+
+**Chairman's recommended moves:** (P0, Jim) file the DSPS application this week; (P0, Jim) in-person sales sweep of the 8 June estimates, largest first, selling only what's legal pre-cert and logging loss reasons; (P1, project) fix attribution end-to-end; (P1, project) QBO job costing + retro-cost Overbeck; (P2, others) post-Yde legal cleanup of the Ben/John lead agreements. The quarter's bar was raised from "one close" to: cert filed, Quinn sent, 2-3 closes, attribution fixed before any ad-spend increase.
+
+One unrelated note: several MCP servers (claude.ai Figma, the financial-analysis plugin suite) need OAuth authorization via your claude.ai connector settings or an interactive `/mcp` session before their tools can be used — not needed for this run, just flagging.
