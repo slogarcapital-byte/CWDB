@@ -198,7 +198,7 @@ def _notice_of_cancellation(estimate, effective, deadline, copy_label):
 def generate_work_order(estimate, output_path, job_number, effective,
                         co_owner=None, salesperson='James Slogar'):
     total_amount = (estimate.get('_meta', {}).get('computed_sell_price')
-                    or sum(amt for _, amt in estimate['line_items']))
+                    or sum(it[1] for it in estimate['line_items']))
     deposit_pct = estimate['payment']['deposit_pct']
     deposit = round(total_amount * deposit_pct / 100)
     balance = total_amount - deposit

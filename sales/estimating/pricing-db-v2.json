@@ -1,0 +1,383 @@
+{
+  "schema_version": "2.0",
+  "status": "active",
+  "as_of": "2026-07-09",
+  "currency": "USD",
+  "company": "Central Wisconsin Deck Builders, LLC",
+  "market": "Central Wisconsin (Wausau / Schofield / Weston / Mosinee / Merrill)",
+  "notes": "v2 EXPLICIT LABOR MODEL (adopted by Jim 2026-07-09). Materials carry TRUE COST only (no sell rates); labor = task hours x loaded rate; ONE margin on top. All costs are EVERYDAY shelf prices (standing rule: never assume the Menards 11% rebate). Flip status to 'active' to cut the live estimator over to this engine; flip back to 'draft' to roll back. pricing-db.json (v1) is frozen as the audit record of every price quoted before cutover.",
+  "research_source": "Research sweep 2026-07-09: Menards Wausau live SKU prices, DecksDirect + AdvantageLumber TimberTech retail, BLS OEWS Wausau wages, published production-rate data. See plan: explicit-labor pricing model.",
+  "next_review_date": "2026-10-09",
+
+  "_confidence_note": "Every priced entry carries confidence: 'researched' (live store/retailer price or Jim-confirmed), 'estimate' (industry figure pending a dealer sheet). verify_engine.py lists all remaining 'estimate' entries - this replaces the old CONFIRM WITH JOHN markers.",
+
+  "labor": {
+    "_model": "SIMPLE CREW-DAYS (Jim 2026-07-11): labor = crew_days x crew_size x hours_per_day x loaded_rate_per_hr, printed on the estimate EXACTLY as that math. crew_days = (base_days + days_per_100 x area/100 + extras) x site multipliers + contingency_days, rounded to the nearest 0.5 day. All values are CREW-DAYS (whole 3-man crew) in 0.25-day steps - read them like a calendar.",
+    "loaded_rate_per_hr": 125,
+    "crew_size": 3,
+    "hours_per_day": 8,
+    "contingency_days": 1.0,
+    "contingency_note": "One full crew-day added to EVERY job (Jim 2026-07-09): covers contingencies; if the job runs clean it is labor margin.",
+    "crew_days_by_project_type": {
+      "stain_only":         { "base_days": 0.25, "days_per_100": 0.125, "area": "stain_sf" },
+      "stain_repairs":      { "base_days": 0.50, "days_per_100": 0.125, "area": "stain_sf" },
+      "resurface":          { "base_days": 0.50, "days_per_100": 0.25,  "area": "deck_sf" },
+      "frame_deck_rebuild": { "base_days": 0.75, "days_per_100": 0.30,  "area": "deck_sf" },
+      "full_tearout":       { "base_days": 0.75, "days_per_100": 0.35,  "area": "deck_sf" },
+      "new_build":          { "base_days": 0.50, "days_per_100": 0.30,  "area": "deck_sf" },
+      "fence":              { "base_days": 0.25, "days_per_100": 1.00,  "area": "fence_lf" }
+    },
+    "extra_days": {
+      "stair_run": 0.25,
+      "stair_landing": 0.25,
+      "wraparound": 0.25,
+      "railing_per_50lf": 0.25,
+      "double_border": 0.25,
+      "skirting_per_100sf": 0.50,
+      "stain_extra_coat_per_400sf": 0.25,
+      "board_repairs_per_10": 0.25,
+      "joist_repair_per_20lf": 0.25,
+      "lighting_per_4_fixtures": 0.25,
+      "bench_each": 0.25,
+      "privacy_screen_per_25lf": 0.25,
+      "hot_tub": 0.50,
+      "fence_walk_gate": 0.25,
+      "fence_drive_gate": 0.50,
+      "fence_tearout_per_100lf": 0.25
+    },
+    "calibration_note": "Calibrated 2026-07-11 so the 320 sf elevated reference deck lands at 4.0 crew-days incl. contingency ($12,000 labor). Overbeck actual: 416 sf stain ~1 crew-day-equivalent. Tune any value in 0.25-day steps; site multipliers (height/grade/complexity) scale calculated days before contingency."
+  },
+  "pricing_model_note": "PRICE = materials_cost / (1 - margin) x market_load + labor (day math, at face) + allowances (at face). Margin applies to MATERIALS ONLY (Jim 2026-07-11): labor profit lives in the $125 rate itself. All client-facing figures round to the nearest $50.",
+  "round_client_figures_to": 50,
+
+
+  "decking_materials": [
+    { "key": "pt_pine", "name": "Pressure-Treated Pine",
+      "cost_per_sf": 2.02, "waste_pct": 0.10, "fasteners_per_sf": 0.50,
+      "description": "Budget tier. AC2 5/4x6x16 PT decking. 8-12 yr life with stain maintenance.",
+      "source": "Menards Wausau SKU 1110669 $14.79/board = $0.92/lf x 2.18 (live 2026-07-09)", "confidence": "researched",
+      "colors": [ { "name": "Natural (finish via stain - see Stain section)" } ] },
+    { "key": "cedar", "name": "Cedar",
+      "cost_per_sf": 4.85, "waste_pct": 0.10, "fasteners_per_sf": 0.50,
+      "description": "Mid wood tier. Red Cedar 5/4x6x16. Natural rot resistance. 15-20 yr life. Price volatile (BC mill closures).",
+      "source": "Menards Wausau SKU 1072723 (confirmed 2026-05; recheck - cedar volatile)", "confidence": "researched",
+      "colors": [ { "name": "Natural (finish via stain - see Stain section)" } ] },
+    { "key": "trex_enhance", "name": "Trex Enhance",
+      "cost_per_sf": 7.50, "waste_pct": 0.08, "fasteners_per_sf": 1.66,
+      "description": "Entry composite. 25-yr warranty.",
+      "source": "John Garcia supplier sheet (verified 2026-05)", "confidence": "researched",
+      "colors": [ { "name": "Beach Dune" }, { "name": "Clam Shell" }, { "name": "Foggy Wharf" }, { "name": "Saddle" }, { "name": "Toasted Sand" }, { "name": "Rocky Harbor" } ] },
+    { "key": "trex_select", "name": "Trex Select",
+      "cost_per_sf": 10.50, "waste_pct": 0.08, "fasteners_per_sf": 1.66,
+      "description": "Mid-tier composite. 35-yr warranty. Most common composite upgrade.",
+      "source": "John Garcia supplier sheet (verified 2026-05)", "confidence": "researched",
+      "colors": [ { "name": "Pebble Grey" }, { "name": "Saddle" }, { "name": "Madeira" }, { "name": "Woodland Brown" }, { "name": "Winchester Grey" } ] },
+    { "key": "trex_transcend", "name": "Trex Transcend",
+      "cost_per_sf": 16.00, "waste_pct": 0.10, "fasteners_per_sf": 1.66,
+      "description": "Premium composite. Full grain, deep colors. 50-yr warranty.",
+      "source": "John Garcia supplier sheet (verified 2026-05)", "confidence": "researched",
+      "colors": [ { "name": "Spiced Rum" }, { "name": "Lava Rock" }, { "name": "Tiki Torch" }, { "name": "Island Mist" }, { "name": "Gravel Path" }, { "name": "Havana Gold" }, { "name": "Rope Swing" }, { "name": "Vintage Lantern" } ] },
+    { "key": "tt_azek_harvest", "name": "TimberTech AZEK Harvest",
+      "cost_per_sf": 11.92, "waste_pct": 0.08, "fasteners_per_sf": 1.66,
+      "description": "Advanced PVC (AZEK), Harvest Collection. Entry AZEK tier. NOTE: line being sunset in favor of Harvest+ (DecksDirect 2026-07).",
+      "source": "John supplier $5.47/lf x 2.18; retail band $11.51 (AdvantageLumber) - $13.60 (DecksDirect) validates", "confidence": "researched",
+      "colors": [ { "name": "Slate Gray" }, { "name": "Brownstone" }, { "name": "Kona" }, { "name": "Coconut Husk" }, { "name": "Terra" } ] },
+    { "key": "tt_azek_harvest_plus", "name": "TimberTech AZEK Harvest+",
+      "cost_per_sf": 14.91, "waste_pct": 0.08, "fasteners_per_sf": 1.66,
+      "description": "Advanced PVC (AZEK), Harvest+ Collection.",
+      "source": "John supplier $6.84/lf x 2.18; AdvantageLumber $14.50/sf validates. No per-board retail found - dealer sheet wanted.", "confidence": "researched",
+      "colors": [ { "name": "Slate Gray" }, { "name": "Brownstone" }, { "name": "Hazelwood" }, { "name": "Driftwood" } ] },
+    { "key": "tt_azek_landmark", "name": "TimberTech AZEK Landmark",
+      "cost_per_sf": 14.91, "waste_pct": 0.08, "fasteners_per_sf": 1.66,
+      "description": "Advanced PVC (AZEK), Landmark Collection.",
+      "source": "John supplier $6.84/lf x 2.18; retail band $14.58 (AdvantageLumber) - $17.14 (DecksDirect) validates", "confidence": "researched",
+      "colors": [ { "name": "American Walnut" }, { "name": "Castle Gate" }, { "name": "French White Oak" } ] },
+    { "key": "tt_azek_vintage", "name": "TimberTech AZEK Vintage",
+      "cost_per_sf": 17.24, "waste_pct": 0.08, "fasteners_per_sf": 1.66,
+      "description": "Advanced PVC (AZEK), Vintage Collection. Top AZEK tier.",
+      "source": "John supplier $7.91/lf x 2.18; retail band $16.74 (AdvantageLumber) - $19.84 (DecksDirect) validates", "confidence": "researched",
+      "colors": [ { "name": "Coastline" }, { "name": "Dark Hickory" }, { "name": "English Walnut" }, { "name": "Mahogany" }, { "name": "Cypress" }, { "name": "Weathered Teak" } ] },
+    { "key": "tt_pro_terrain", "name": "TimberTech PRO Terrain",
+      "cost_per_sf": 9.81, "waste_pct": 0.08, "fasteners_per_sf": 1.66,
+      "description": "Capped composite (PRO), Terrain Collection. Entry PRO tier.",
+      "source": "John supplier $4.50/lf x 2.18; AdvantageLumber $9.50/sf validates", "confidence": "researched",
+      "colors": [ { "name": "Brown Oak" }, { "name": "Silver Maple" }, { "name": "Stone Ash" }, { "name": "Rustic Elm" } ] },
+    { "key": "tt_pro_terrain_plus", "name": "TimberTech PRO Terrain+",
+      "cost_per_sf": 9.81, "waste_pct": 0.08, "fasteners_per_sf": 1.66,
+      "description": "Capped composite (PRO), Terrain+ Collection.",
+      "source": "Carried at Terrain cost. NO retail price found anywhere 2026-07-09 - get dealer sheet (Builders FirstSource Wausau).", "confidence": "estimate",
+      "colors": [ { "name": "Brown Oak" }, { "name": "Coconut Husk" }, { "name": "Pecan" }, { "name": "Driftwood" } ] },
+    { "key": "tt_pro_reserve", "name": "TimberTech PRO Reserve",
+      "cost_per_sf": 13.93, "waste_pct": 0.08, "fasteners_per_sf": 1.66,
+      "description": "Capped composite (PRO), Reserve Collection - reclaimed-wood look.",
+      "source": "John supplier $6.39/lf x 2.18; retail band $13.34 (AdvantageLumber) - $15.44 (DecksDirect) validates", "confidence": "researched",
+      "colors": [ { "name": "Antique Leather" }, { "name": "Dark Roast" }, { "name": "Driftwood" }, { "name": "Storm Gray" }, { "name": "Walnut" }, { "name": "Weathered Wood" } ] },
+    { "key": "tt_pro_legacy", "name": "TimberTech PRO Legacy",
+      "cost_per_sf": 16.74, "waste_pct": 0.08, "fasteners_per_sf": 1.66,
+      "description": "Capped composite (PRO), Legacy Collection. Top PRO tier.",
+      "source": "John supplier $7.68/lf x 2.18; retail band $16.04 (AdvantageLumber) - $18.14 (DecksDirect) validates", "confidence": "researched",
+      "colors": [ { "name": "Pecan" }, { "name": "Tigerwood" }, { "name": "Mocha" }, { "name": "Espresso" }, { "name": "Ashwood" } ] }
+  ],
+
+  "railing_materials": [
+    { "key": "pt_wood", "name": "Pressure-Treated Wood Rail",
+      "cost_per_lf": 12.80, "labor_class": "railing_wood",
+      "description": "PT 2x4 top/bottom rail with PT 2x2 balusters and 4x4 posts. Budget tier.",
+      "source": "Menards Wausau bottom-up 2026-07-09: rails $3.00 + spindles $7.05 + post $1.86 + cap $0.92 per lf", "confidence": "researched",
+      "colors": [ { "name": "Natural (finish via stain)" } ] },
+    { "key": "cedar_wood", "name": "Cedar Wood Rail",
+      "cost_per_lf": 18.00, "labor_class": "railing_wood",
+      "description": "Cedar 2x4 top/bottom rail with cedar balusters. Mid wood tier.",
+      "source": "Menards Wausau 2026-05 (fallback SKU 1072752 - verify in-person)", "confidence": "estimate",
+      "colors": [ { "name": "Natural (finish via stain)" } ] },
+    { "key": "trex_aluminum", "name": "Trex Aluminum",
+      "cost_per_lf": 65.00, "labor_class": "railing_system",
+      "description": "Trex Signature aluminum rail system. Lifetime warranty.",
+      "source": "John Garcia supplier sheet (verified 2026-05); kit math $219/6ft + $149 post corroborates", "confidence": "researched",
+      "colors": [ { "name": "Charcoal Black" }, { "name": "Bronze" }, { "name": "Classic White" } ] },
+    { "key": "cable", "name": "Cable Railing",
+      "cost_per_lf": 45.00, "labor_class": "railing_system",
+      "description": "Feeney CableRail on PT/cedar posts. Full system.",
+      "source": "Dunn Lumber + Menards SKU 6310-PKG (corroborated 2026-05)", "confidence": "researched",
+      "colors": [ { "name": "Black powder-coat posts" }, { "name": "Bronze posts" }, { "name": "Natural wood posts" } ] },
+    { "key": "glass_panel", "name": "Glass Panel",
+      "cost_per_lf": 180.00, "labor_class": "railing_glass",
+      "description": "Tempered glass panel railing with aluminum posts. Premium tier.",
+      "source": "Industry avg 2026-05 (Angi/HomeGuide/Viewrail)", "confidence": "estimate",
+      "colors": [ { "name": "Clear glass / Black posts" }, { "name": "Clear glass / Bronze posts" }, { "name": "Clear glass / White posts" } ] },
+    { "key": "tt_reliance_rail", "name": "TimberTech Reliance Rail (Vinyl)",
+      "cost_per_lf": 28.00, "labor_class": "railing_system",
+      "description": "Premium vinyl railing, value tier.",
+      "source": "Dealer-quote only (no published retail 2026-07-09; one eBay datapoint $148.62/kit). Get dealer sheet.", "confidence": "estimate",
+      "colors": [ { "name": "White" }, { "name": "Black" } ] },
+    { "key": "tt_premier_rail", "name": "TimberTech Premier Rail (Composite)",
+      "cost_per_lf": 45.00, "labor_class": "railing_system",
+      "description": "Composite railing, mid tier. Pairs with PRO/EDGE decking.",
+      "source": "DecksDirect 2026-07-09: rail pack $31-33/lf + post sleeve/cap/skirt + PT post ~$13/lf", "confidence": "researched",
+      "colors": [ { "name": "White" }, { "name": "Black" }, { "name": "Brown" }, { "name": "Kona" } ] },
+    { "key": "tt_impression_rail", "name": "TimberTech Impression Rail Express (Aluminum)",
+      "cost_per_lf": 50.00, "labor_class": "railing_system",
+      "description": "Powder-coated aluminum railing, mid tier. Slim sightlines.",
+      "source": "Lowe's kit $197.38/6ft panel + top rail + posts = ~$45-55/lf all-in (2026-07-09)", "confidence": "researched",
+      "colors": [ { "name": "Matte Black" }, { "name": "Matte Bronze" }, { "name": "Gloss White" }, { "name": "Textured Black" } ] },
+    { "key": "tt_radiance_rail", "name": "TimberTech RadianceRail (Premium)",
+      "cost_per_lf": 46.00, "labor_class": "railing_system",
+      "description": "Premium capped composite/PVC railing, drink-rail capable.",
+      "source": "DecksDirect 2026-07-09: RadianceRail pack $31-32/lf + posts ~$13-15/lf", "confidence": "researched",
+      "colors": [ { "name": "White" }, { "name": "Black" } ] }
+  ],
+
+  "framing_materials": [
+    { "key": "kdat_pt", "name": "KDAT Pressure-Treated",
+      "cost_per_sf": 4.75, "framing_hours_factor": 1.0,
+      "description": "PT framing package: 2x10 @ 16 in o.c., ledger, doubled beam, 6x6 posts, hangers, LedgerLOK, flashing. CWDB standard. (KDAT upgrade not stocked at Menards Wausau; CedarTone #1 is the premium tier.)",
+      "source": "Menards Wausau bottom-up takeoff 2026-07-09: $4.34/sf everyday on a 192 sf reference; $4.75 carries post/bracing allowance for typical heights", "confidence": "researched" },
+    { "key": "steel", "name": "Steel (Fortress Evolution)",
+      "cost_per_sf": 28.00, "framing_hours_factor": 1.15,
+      "description": "Galvanized steel deck framing. Premium tier - special order through Fortress dealer.",
+      "source": "HomeAdvisor + Fortress BP 2026-05 (industry avg)", "confidence": "estimate" }
+  ],
+
+  "footings": {
+    "type": "Diamond Pier",
+    "material_cost_each": 150,
+    "min_count": 4,
+    "count_rule_divisor_sf": 32,
+    "count_rule": "count = footing_count input if given, else max(4, ceil(deck_sf / 32))",
+    "source": "Jim-confirmed true material cost 2026-07-09 (Diamond Pier, no Sonotube/concrete). Reference alternative: 12in x 48in tube + 7 bags + bracket = ~$58 at Menards Wausau.",
+    "confidence": "researched"
+  },
+
+  "stair_materials": {
+    "cost_per_tread": 65,
+    "stringer_set_per_run": 150,
+    "cost_per_landing": 350,
+    "note": "Tread cost covers decking-material treads + riser stock; stringer set = 3x PT 2x12 per run.",
+    "source": "Menards Wausau 2x12x16 $46.88 (2026-07-09); tread allowance derived", "confidence": "estimate"
+  },
+
+  "stain_materials": {
+    "coverage_sf_per_gal": 250,
+    "cost_per_gal": { "Transparent": 45, "Semi-Transparent": 50, "Solid / Paint-and-Sealer": 55 },
+    "supplies_flat": 75,
+    "source": "Menards Wausau: Cabot solid $51.96-55.99, semi-solid $50.96 (live 2026-07-09); SW SuperDeck $43-58", "confidence": "researched"
+  },
+
+  "repair_materials": {
+    "cost_per_board": 22,
+    "cost_per_joist_lf": 9,
+    "hardware_allowance": 450,
+    "inspection_only_allowance": 275,
+    "source": "Menards Wausau board/joist stock 2026-07-09; allowances carried from v1", "confidence": "estimate"
+  },
+
+  "fascia_cost_per_lf": 10.70,
+  "fascia_source": "TimberTech PVC fascia 1x12x12 $121.67-135.19/pc = $10.14-11.27/lf (DecksDirect 2026-07-09)",
+  "skirting_cost_per_sf": 14.00,
+  "border_waste_adder": 0.05,
+
+  "adders": [
+    { "key": "lighting", "name": "Deck Lighting", "unit": "Fixture", "material_cost": 95, "labor_task": "lighting", "confidence": "estimate" },
+    { "key": "bench", "name": "Built-In Bench", "unit": "Each", "material_cost": 350, "labor_task": "bench", "confidence": "estimate" },
+    { "key": "privacy_screen", "name": "Privacy Screen", "unit": "LF", "material_cost": 60, "labor_task": "privacy_screen", "confidence": "estimate" },
+    { "key": "hot_tub", "name": "Hot Tub Structural Upgrade", "unit": "Allowance", "material_cost": 900, "labor_task": "hot_tub", "confidence": "estimate" }
+  ],
+
+  "allowances": {
+    "permit_engineering_default": 750,
+    "dumpster_cleanup_default": 950,
+    "mobilization_minimum_default": 2500,
+    "misc_default": 0,
+    "note": "Hard costs, passed through AT FACE VALUE (never margin-inflated) in v2 line items."
+  },
+
+  "allowances_by_project_type": [
+    { "name": "Stain Only",                            "permit": 0,   "dumpster": 250, "mobilization": 500 },
+    { "name": "Stain + Minor Repairs",                 "permit": 0,   "dumpster": 350, "mobilization": 750 },
+    { "name": "Resurface (Boards Only)",               "permit": 250, "dumpster": 600, "mobilization": 1500 },
+    { "name": "Frame + Deck Rebuild (Keep Footings)",  "permit": 500, "dumpster": 950, "mobilization": 2500 },
+    { "name": "Full Tear-Out + New Build",             "permit": 750, "dumpster": 950, "mobilization": 2500 },
+    { "name": "New Build (No Tear-Out)",               "permit": 750, "dumpster": 350, "mobilization": 2500 },
+    { "name": "Fence",                                  "permit": 200, "dumpster": 200, "mobilization": 750 }
+  ],
+
+  "condition_multipliers": {
+    "_note": "v2: these multiply LABOR HOURS of physical-work buckets, never material dollars. Values carried from v1 as the starting point; labor-hours height factor likely wants 1.4-1.6 (calibration item, step 10). market_load is NOT a cost: it multiplies the price of margin-type rungs only.",
+    "height": [
+      { "value": "1 Story / Low", "multiplier": 1.00 },
+      { "value": "2 Story / Elevated", "multiplier": 1.22 }
+    ],
+    "grade": [
+      { "value": "Flat / Normal Access", "multiplier": 1.00 },
+      { "value": "Mild Slope", "multiplier": 1.10 },
+      { "value": "Steep Slope", "multiplier": 1.22 }
+    ],
+    "complexity": [
+      { "value": "Simple Rectangle", "multiplier": 1.00 },
+      { "value": "Bump Outs / Angles", "multiplier": 1.12 },
+      { "value": "Multi-Level / Complex", "multiplier": 1.25 }
+    ],
+    "market_load": [
+      { "value": "Normal Schedule", "multiplier": 1.00 },
+      { "value": "Busy Season", "multiplier": 1.08 },
+      { "value": "Winter / Difficult Timing", "multiplier": 1.15 }
+    ]
+  },
+  "complexity_waste_adder": { "Simple Rectangle": 0.00, "Bump Outs / Angles": 0.03, "Multi-Level / Complex": 0.06 },
+
+  "margin_and_contingency": {
+    "default_margin": 0.30,
+    "margin_floor": 0.15,
+    "default_contingency": 0.08,
+    "notes": "Margin = Cost / (1 - margin_pct) on TRUE cost (materials at cost + labor at loaded rate + allowances). ONE margin - the v1 double-stack (margined sell rates + margin divisor) is gone. default_contingency is the display-only +/- band."
+  },
+
+  "pricing_rungs": [
+    { "key": "breakeven", "label": "Breakeven (true cost)", "type": "cost" },
+    { "key": "floor",     "label": "15% Margin (floor)",    "type": "margin", "value": 0.15 },
+    { "key": "market",    "label": "Average Market Price",  "type": "market" },
+    { "key": "target",    "label": "30% Margin (target)",   "type": "margin", "value": 0.30, "default": true }
+  ],
+
+  "stain_rates_note": "v1 blended stain_rates_per_sf retired; v2 prices stain as materials (gallons) + labor (prep + per-coat hours).",
+  "stain_types": ["Transparent", "Semi-Transparent", "Solid / Paint-and-Sealer"],
+  "stain_colors": [
+    "Natural / Clear", "Cedar", "Redwood", "Chestnut Brown", "Slate Gray",
+    "Driftwood Gray", "White / Farmhouse", "Custom (specify at walkthrough)"
+  ],
+
+  "demo_note": "v1 demo_rates_per_sf ($3/6/8) retired; v2 demo = hours x rate via production_rates demo_* keys; disposal cost lives in the dumpster allowance.",
+
+  "project_types": [
+    { "key": "stain_only", "name": "Stain Only",
+      "matrix": { "demo": "N", "frame": "N", "deck": "N", "rail": "N", "stair": "N", "footing": "N", "stain": "Y", "multipliers": "N" },
+      "description": "Clean, prep, and stain an existing structurally sound deck." },
+    { "key": "stain_repairs", "name": "Stain + Minor Repairs",
+      "matrix": { "demo": "N", "frame": "N", "deck": "N", "rail": "N", "stair": "N", "footing": "N", "stain": "Y", "multipliers": "Light" },
+      "description": "Stain plus targeted board/hardware repairs." },
+    { "key": "resurface", "name": "Resurface (Boards Only)",
+      "matrix": { "demo": "Y", "frame": "Inspect", "deck": "Y", "rail": "OPT", "stair": "OPT", "footing": "N", "stain": "N", "multipliers": "Y" },
+      "description": "Strip walking surface, keep frame, install new boards." },
+    { "key": "frame_deck_rebuild", "name": "Frame + Deck Rebuild (Keep Footings)",
+      "matrix": { "demo": "Y", "frame": "Y", "deck": "Y", "rail": "Y", "stair": "Y", "footing": "N", "stain": "N", "multipliers": "Y" },
+      "description": "New frame and surface on existing footings." },
+    { "key": "full_tearout", "name": "Full Tear-Out + New Build",
+      "matrix": { "demo": "Y", "frame": "Y", "deck": "Y", "rail": "Y", "stair": "Y", "footing": "Y", "stain": "N", "multipliers": "Y" },
+      "description": "Complete demolition including footings. New build from grade up." },
+    { "key": "new_build", "name": "New Build (No Tear-Out)",
+      "matrix": { "demo": "N", "frame": "Y", "deck": "Y", "rail": "Y", "stair": "Y", "footing": "Y", "stain": "N", "multipliers": "Y" },
+      "description": "New deck on a clear site." },
+    { "key": "fence", "name": "Fence",
+      "matrix": { "demo": "N", "frame": "N", "deck": "N", "rail": "N", "stair": "N", "footing": "N", "stain": "N", "multipliers": "N", "fence": "Y" },
+      "description": "Fence build, priced by linear foot: materials at cost + install hours." }
+  ],
+
+  "fence_materials": [
+    { "key": "wood_privacy", "name": "Wood Privacy (Cedar / PT)",
+      "material_cost_per_lf_by_height": { "4": 8.00, "5": 9.50, "6": 10.60, "8": 14.00 },
+      "labor_factor": 1.0,
+      "colors": [ { "name": "Natural (finish via stain)" }, { "name": "Pre-stained Cedar" }, { "name": "Pre-stained Gray" } ],
+      "description": "Solid-board privacy fence, cedar or treated pine.",
+      "source": "Menards Wausau 2026-07-09: 6x8 PT panel $69.98 = $8.75/lf + 4x4 posts = ~$10.60/lf at 6 ft", "confidence": "researched" },
+    { "key": "vinyl_privacy", "name": "Vinyl Privacy",
+      "material_cost_per_lf_by_height": { "4": 10.00, "5": 11.50, "6": 13.50, "8": 17.50 },
+      "labor_factor": 0.9,
+      "colors": [ { "name": "White" }, { "name": "Tan / Almond" }, { "name": "Khaki" }, { "name": "Gray" } ],
+      "description": "Maintenance-free vinyl privacy panels.",
+      "source": "Menards Wausau 2026-07-09: Richmond 6x8 $99 = $12.38/lf panels; vinyl posts not priced - verify", "confidence": "estimate" },
+    { "key": "aluminum_ornamental", "name": "Aluminum Ornamental",
+      "material_cost_per_lf_by_height": { "4": 15.00, "5": 19.50, "6": 24.00 },
+      "labor_factor": 0.9,
+      "colors": [ { "name": "Black" }, { "name": "Bronze" }, { "name": "White" } ],
+      "description": "Powder-coated aluminum (pool / decorative). No 8 ft option.",
+      "source": "Menards Wausau 2026-07-09: Asbury 4x6 $73.98 = $12.33/lf panels + posts; taller extrapolated", "confidence": "estimate" },
+    { "key": "chain_link", "name": "Chain Link (Galvanized)",
+      "material_cost_per_lf_by_height": { "4": 6.50, "5": 7.50, "6": 8.50, "8": 11.00 },
+      "labor_factor": 0.7,
+      "colors": [ { "name": "Galvanized" }, { "name": "Black vinyl-coated" }, { "name": "Green vinyl-coated" } ],
+      "description": "Galvanized or vinyl-coated chain link.",
+      "source": "Menards Wausau 2026-07-09: 4x50 fabric $119 = $2.38/lf + posts/rail/fittings est", "confidence": "estimate" }
+  ],
+
+  "fence_gates": [
+    { "key": "walk",  "name": "Walk gate (3-4 ft)",             "material_cost_each": 180, "labor_task": "fence_gate_walk",  "confidence": "estimate" },
+    { "key": "drive", "name": "Drive / double gate (10-12 ft)", "material_cost_each": 450, "labor_task": "fence_gate_drive", "confidence": "estimate" }
+  ],
+  "fence_heights": ["4", "5", "6", "8"],
+
+  "border_options": [ "Pencil Border", "Double Border" ],
+  "yes_no_options": ["Yes", "No"],
+
+  "takeoff": {
+    "_note": "Piece-level rules for the Materials & Hardware List PDF (replaces the emailed Excel workbook). Benchmarked against Menards deck-builder outputs; quantities are order-list heuristics, reconciled against the engine materials subtotal on the PDF footer.",
+    "joist_spacing_in": 16,
+    "board_length_ft": 16,
+    "board_coverage_lf_per_sf": 2.18,
+    "concealoc_pack_coverage_sf": 100,
+    "concealoc_pack_price": 165.99,
+    "deck_screw_box_price": 19.99,
+    "deck_screw_box_coverage_sf": 100,
+    "stringers_per_run": 3,
+    "rail_section_ft": 6,
+    "fence_panel_ft": 8,
+    "unit_costs": [
+      { "key": "pt_2x10x16",        "description": "AC2 PT 2x10x16 #2 Prime GC (joist/beam/ledger)", "unit": "each", "price": 35.18, "sku": "Menards 1111668", "confidence": "researched" },
+      { "key": "pt_2x10x12",        "description": "AC2 PT 2x10x12 #2 Prime GC (joist)",             "unit": "each", "price": 29.58, "sku": "Menards 1111642", "confidence": "researched" },
+      { "key": "pt_2x12x16",        "description": "AC2 PT 2x12x16 #2 Prime GC (stair stringer)",    "unit": "each", "price": 46.88, "sku": "Menards 1111969", "confidence": "researched" },
+      { "key": "pt_6x6x10",         "description": "AC2 6x6x10 #2 Critical Structural (post)",       "unit": "each", "price": 41.00, "sku": "Menards 1112829", "confidence": "researched" },
+      { "key": "pt_4x4x8",          "description": "AC2 4x4x8 #2 GC (rail/fence post)",              "unit": "each", "price": 11.18, "sku": "Menards 1112214", "confidence": "researched" },
+      { "key": "joist_hanger",      "description": "MiTek 2x8-10 triple-zinc joist hanger",          "unit": "each", "price": 1.99,  "sku": "Menards 2271101", "confidence": "researched" },
+      { "key": "hanger_nails_5lb",  "description": "Grip Fast 10D x 1-1/2 in HDG joist hanger nails, 5 lb", "unit": "box", "price": 19.89, "sku": "Menards 2271442", "confidence": "researched" },
+      { "key": "ledgerlok_pack",    "description": "FastenMaster LedgerLOK 1/4x5 hex (pack - verify count at shelf)", "unit": "pack", "price": 21.98, "sku": "Menards 2300028", "confidence": "estimate" },
+      { "key": "ledger_flash_membrane", "description": "Deck Flash Barrier 12 in x 25 ft self-adhesive", "unit": "roll", "price": 23.47, "sku": "Menards 1551423", "confidence": "researched" },
+      { "key": "ledger_flash_steel","description": "10 ft brown steel deck flashing",                "unit": "each", "price": 8.35,  "sku": "Menards 1571013", "confidence": "researched" },
+      { "key": "diamond_pier",      "description": "Diamond Pier foundation (per footing)",          "unit": "each", "price": 150.00, "sku": "dealer", "confidence": "researched" },
+      { "key": "post_base_hw",      "description": "Post base bracket + structural screws",          "unit": "each", "price": 15.00, "sku": "est", "confidence": "estimate" },
+      { "key": "concealoc_175",     "description": "TimberTech CONCEALoc hidden fasteners 175-pack (~100 sf)", "unit": "pack", "price": 165.99, "sku": "DecksDirect", "confidence": "researched" },
+      { "key": "deck_screw_box",    "description": "Grip Fast #9x3 in gold deck screws (box)",       "unit": "box",  "price": 19.99, "sku": "Menards 2303515", "confidence": "researched" },
+      { "key": "fascia_pc_12ft",    "description": "TimberTech PVC fascia 1x12x12",                  "unit": "each", "price": 128.00, "sku": "DecksDirect", "confidence": "researched" },
+      { "key": "stain_gal",         "description": "Deck stain, per gallon (Cabot / SW SuperDeck)",  "unit": "gal",  "price": 52.00, "sku": "Menards 5533176 / SW", "confidence": "researched" },
+      { "key": "stain_supplies",    "description": "Stain supplies: pads, brushes, masking, cleaner", "unit": "lot", "price": 75.00, "sku": "est", "confidence": "estimate" }
+    ]
+  }
+}

@@ -120,7 +120,7 @@ def generate_sow(estimate, output_path, job_number, effective, *,
                  co_owner=None, warranty='one (1) year', permits='included',
                  start_date=None, completion_date=None, exhibit_pdf=None):
     total_amount = (estimate.get('_meta', {}).get('computed_sell_price')
-                    or sum(amt for _, amt in estimate['line_items']))
+                    or sum(it[1] for it in estimate['line_items']))
     deadline = cancellation_deadline(effective)
     client = estimate['client']
     proj = estimate['project']

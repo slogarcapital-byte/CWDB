@@ -49,9 +49,39 @@ DATA_DIR.mkdir(exist_ok=True)
 # -----------------------------------------------------------------------------
 # Pricing DB load
 # -----------------------------------------------------------------------------
+PRICING_DB_V2_PATH = ESTIMATING_DIR / "pricing-db-v2.json"
+
+
 def load_pricing():
+    """Version-aware load: return the v2 explicit-labor DB iff it exists AND its
+    status is 'active' (the cutover gate); otherwise the frozen v1 DB. Flip
+    pricing-db-v2.json status back to 'draft' to roll back instantly."""
+    if PRICING_DB_V2_PATH.exists():
+        with open(PRICING_DB_V2_PATH, "r", encoding="utf-8") as f:
+            db2 = json.load(f)
+        if db2.get("status") == "active":
+            return db2
     with open(PRICING_DB_PATH, "r", encoding="utf-8") as f:
         return json.load(f)
+
+
+def load_pricing_v2(force=True):
+    """Load the v2 DB regardless of its status gate (tests / verify harness /
+    calibration). With force=False, behaves like load_pricing()."""
+    if not force:
+        return load_pricing()
+    with open(PRICING_DB_V2_PATH, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def load_pricing_v1():
+    """Load the frozen v1 DB explicitly (audit path / golden tests)."""
+    with open(PRICING_DB_PATH, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def is_v2(db):
+    return str(db.get("schema_version", "1.0")).startswith("2")
 
 
 def find_by_name(items, name, name_key="name"):
@@ -185,7 +215,10 @@ def compute_fence(db, inputs, pt):
 def compute_engine(db, inputs):
     """Run the deck estimator engine. Returns a result dict with every line
     item, subtotal, sell price, and the project-type matrix for downstream
-    use."""
+    use. Dispatches to the v2 explicit-labor engine when a v2 DB is loaded;
+    the v1 body below is FROZEN as the audit path for pre-cutover estimates."""
+    if is_v2(db):
+        return compute_engine_v2(db, inputs)
     pt = find_project_type(db, inputs["project_type"])
     matrix = pt["matrix"]
 
@@ -313,6 +346,347 @@ def compute_engine(db, inputs):
 
 
 # -----------------------------------------------------------------------------
+# v2 EXPLICIT-LABOR ENGINE (adopted 2026-07-09)
+#
+# price = materials at TRUE cost + (task hours x loaded rate) + allowances,
+# then ONE margin. Site-condition multipliers scale LABOR HOURS, never
+# material dollars. Labor totals round to the nearest 0.5 crew-day
+# (3-man crew, 24 man-hr days) after a +24 man-hr contingency day that is
+# added to EVERY job (Jim 2026-07-09).
+# -----------------------------------------------------------------------------
+def effective_cost(material, color_name, cost_key):
+    """v2 twin of effective_price: per-unit COST honoring a per-color
+    override (cost_key = 'cost_per_sf' or 'cost_per_lf')."""
+    base = material[cost_key]
+    if color_name:
+        for c in material.get("colors", []):
+            if c.get("name") == color_name and cost_key in c:
+                return c[cost_key]
+    return base
+
+
+def _labor_multiplier(db, inputs, matrix):
+    """Labor-hours multiplier per the project-type matrix gating. market_load
+    is deliberately excluded: it is a pricing posture, applied to margin-type
+    rungs only (see pricing rungs), never to cost."""
+    height_m = find_multiplier(db["condition_multipliers"]["height"], inputs["height"])
+    grade_m = find_multiplier(db["condition_multipliers"]["grade"], inputs["grade"])
+    complex_m = find_multiplier(db["condition_multipliers"]["complexity"], inputs["complexity"])
+    if matrix["multipliers"] == "N":
+        return 1.0
+    if matrix["multipliers"] == "Light":
+        return height_m * grade_m
+    return height_m * grade_m * complex_m
+
+
+def _market_multiplier(db, inputs):
+    try:
+        return find_multiplier(db["condition_multipliers"]["market_load"],
+                               inputs.get("market", "Normal Schedule"))
+    except KeyError:
+        return 1.0
+
+
+def round_client(x, db=None):
+    """Round a client-facing dollar figure to the DB's display increment
+    (nearest $50 - Jim 2026-07-11). Internal cost math stays exact."""
+    step = (db or {}).get("round_client_figures_to", 50) if db else 50
+    return int(round(x / step) * step)
+
+
+def _compute_crew_days(db, inputs, pt, lm):
+    """SIMPLE CREW-DAYS labor model (Jim 2026-07-11): crew_days =
+    (base_days + days_per_100 x area/100 + extras) x site multiplier
+    + contingency day, rounded to the nearest 0.5 day. Returns
+    (calculated_days, crew_days, labor_cost). labor_cost is always
+    crew_days x crew_size x hours_per_day x rate - the exact math printed
+    on the estimate."""
+    labor_cfg = db["labor"]
+    table = labor_cfg["crew_days_by_project_type"][pt["key"]]
+    extras = labor_cfg["extra_days"]
+
+    area = {
+        "deck_sf": inputs.get("length", 0) * inputs.get("depth", 0),
+        "stain_sf": inputs.get("stain_sf", 0),
+        "fence_lf": inputs.get("fence_lf", 0),
+    }[table["area"]]
+    days = table["base_days"] + table["days_per_100"] * area / 100.0
+
+    matrix = pt["matrix"]
+    if matrix.get("fence") == "Y":
+        days += inputs.get("walk_gates", 0) * extras["fence_walk_gate"]
+        days += inputs.get("drive_gates", 0) * extras["fence_drive_gate"]
+        days += (inputs.get("tearout_lf", 0) / 100.0
+                 * extras["fence_tearout_per_100lf"])
+    else:
+        if matrix["stair"] != "N" and inputs.get("stair_runs", 0) > 0:
+            days += inputs.get("stair_runs", 0) * extras["stair_run"]
+            days += inputs.get("stair_landings", 0) * extras["stair_landing"]
+            if inputs.get("wraparound") == "Yes":
+                days += extras["wraparound"]
+        if matrix["rail"] != "N":
+            days += inputs.get("railing_lf", 0) / 50.0 * extras["railing_per_50lf"]
+        if matrix["deck"] == "Y" and inputs.get("border_style") == "Double Border":
+            days += extras["double_border"]
+        if matrix["deck"] == "Y":
+            days += inputs.get("skirting_sf", 0) / 100.0 * extras["skirting_per_100sf"]
+        if matrix["stain"] == "Y" and inputs.get("stain_coats", 1) > 1:
+            days += (inputs.get("stain_coats", 1) - 1) * (
+                inputs.get("stain_sf", 0) / 400.0
+                * extras["stain_extra_coat_per_400sf"])
+        if pt["name"] in ("Stain + Minor Repairs", "Resurface (Boards Only)"):
+            days += inputs.get("board_repairs", 0) / 10.0 * extras["board_repairs_per_10"]
+            days += inputs.get("joist_repair_lf", 0) / 20.0 * extras["joist_repair_per_20lf"]
+        days += inputs.get("lighting_fix", 0) / 4.0 * extras["lighting_per_4_fixtures"]
+        days += inputs.get("bench_count", 0) * extras["bench_each"]
+        days += (inputs.get("privacy_screen_lf", 0) / 25.0
+                 * extras["privacy_screen_per_25lf"])
+        if inputs.get("hot_tub") == "Yes":
+            days += extras["hot_tub"]
+
+    calculated = days * lm
+    crew_days = max(0.5, round((calculated + labor_cfg["contingency_days"]) * 2) / 2)
+    labor_cost = (crew_days * labor_cfg["crew_size"]
+                  * labor_cfg["hours_per_day"] * labor_cfg["loaded_rate_per_hr"])
+    return calculated, crew_days, labor_cost
+
+
+def _finish_v2_result(db, inputs, pt, buckets, allowances, lm, extra):
+    """Shared tail for the deck + fence v2 engines. Pricing model (Jim
+    2026-07-11): PRICE = materials_cost / (1 - margin) x market_load
+    + labor (simple day math, at face) + allowances (at face). Margin lives
+    in materials ONLY; labor profit lives in the $125 rate itself. The
+    engine sell_price is already rounded to the client $50 increment."""
+    calculated_days, crew_days, labor_cost = _compute_crew_days(db, inputs, pt, lm)
+    for b in buckets.values():
+        b["total"] = b["materials"]
+    materials_subtotal = sum(b["materials"] for b in buckets.values())
+    permit, dumpster, mobil, misc = allowances
+    allowances_subtotal = permit + dumpster + mobil + misc
+    subtotal = materials_subtotal + labor_cost + allowances_subtotal
+
+    margin = inputs.get("margin", db["margin_and_contingency"]["default_margin"])
+    market_m = _market_multiplier(db, inputs)
+    materials_component = (materials_subtotal / (1 - margin)) * market_m \
+        if margin < 1 else 0
+    sell = round_client(materials_component + labor_cost + allowances_subtotal, db)
+
+    def tot(name):
+        return buckets[name]["materials"] if name in buckets else 0
+
+    labor_cfg = db["labor"]
+    result = {
+        "v2": True,
+        "project_type": pt,
+        "matrix": pt["matrix"],
+        # v1-compatible scalar buckets (material dollars; labor is job-level)
+        "demo": 0,
+        "border": 0,
+        "rail": tot("rail"),
+        "fascia": tot("fascia"),
+        "stair": tot("stair"),
+        "stain": tot("stain"),
+        "repair": tot("repair"),
+        "skirting": tot("skirting"),
+        "lighting": tot("lighting"),
+        "benches": tot("benches"),
+        "privacy": tot("privacy"),
+        "hot_tub": tot("hot_tub"),
+        "footings": tot("footings"),
+        "base_package": tot("framing") + tot("decking") + tot("footings"),
+        "permit": permit, "dumpster": dumpster, "mobilization": mobil, "misc": misc,
+        "subtotal_cost": subtotal,
+        "sell_price": sell,
+        "margin": margin,
+        # v2 detail
+        "buckets": buckets,
+        "materials_subtotal": materials_subtotal,
+        "labor_days_calculated": calculated_days,
+        "contingency_days": labor_cfg["contingency_days"],
+        "crew_days": crew_days,
+        "crew_size": labor_cfg["crew_size"],
+        "hours_per_day": labor_cfg["hours_per_day"],
+        "labor_rate": labor_cfg["loaded_rate_per_hr"],
+        "labor_hours_total": crew_days * labor_cfg["crew_size"] * labor_cfg["hours_per_day"],
+        "labor_subtotal": labor_cost,
+        "allowances_subtotal": allowances_subtotal,
+        "market_multiplier": market_m,
+    }
+    result.update(extra)
+    return result
+
+
+def compute_engine_v2(db, inputs):
+    """v2 deck engine: buckets carry MATERIALS at true cost; labor is
+    job-level simple day math (_compute_crew_days). Uniform for all 7
+    project types - the matrix only gates which buckets are active."""
+    pt = find_project_type(db, inputs["project_type"])
+    matrix = pt["matrix"]
+    if matrix.get("fence") == "Y":
+        return compute_fence_v2(db, inputs, pt)
+
+    deck_sf = inputs["length"] * inputs["depth"]
+    decking = find_by_name(db["decking_materials"], inputs["decking_material"])
+    railing = find_by_name(db["railing_materials"], inputs["railing_material"])
+    framing = find_by_name(db["framing_materials"], inputs["framing_material"])
+
+    lm = _labor_multiplier(db, inputs, matrix)
+    frame_include = matrix["frame"] == "Y"
+    deck_include = matrix["deck"] == "Y"
+    double_border = deck_include and inputs.get("border_style") == "Double Border"
+
+    buckets = {}
+
+    def add(name, materials, **detail):
+        if materials > 0:
+            b = {"materials": float(materials)}
+            b.update(detail)
+            buckets[name] = b
+
+    # Footings - Diamond Piers (consumes matrix.footing)
+    footing_count = 0
+    if matrix.get("footing") == "Y":
+        f = db["footings"]
+        footing_count = (inputs.get("footing_count")
+                         or max(f["min_count"],
+                                math.ceil(deck_sf / f["count_rule_divisor_sf"])))
+        add("footings", footing_count * f["material_cost_each"], count=footing_count)
+
+    # Framing
+    if frame_include:
+        add("framing", deck_sf * framing["cost_per_sf"])
+
+    # Decking (waste + complexity waste adder + border waste; fasteners per sf)
+    if deck_include:
+        waste = decking["waste_pct"]
+        waste += db.get("complexity_waste_adder", {}).get(inputs.get("complexity", ""), 0)
+        if double_border:
+            waste += db.get("border_waste_adder", 0)
+        cost_sf = effective_cost(decking, inputs.get("decking_color"), "cost_per_sf")
+        add("decking",
+            deck_sf * cost_sf * (1 + waste) + deck_sf * decking.get("fasteners_per_sf", 0))
+
+    # Railing
+    if matrix["rail"] != "N" and inputs.get("railing_lf", 0) > 0:
+        cost_lf = effective_cost(railing, inputs.get("railing_color"), "cost_per_lf")
+        add("rail", inputs["railing_lf"] * cost_lf)
+
+    # Fascia
+    if deck_include and inputs.get("fascia_lf", 0) > 0:
+        add("fascia", inputs["fascia_lf"] * db["fascia_cost_per_lf"])
+
+    # Stairs
+    if matrix["stair"] != "N" and inputs.get("stair_runs", 0) > 0:
+        sm = db["stair_materials"]
+        add("stair",
+            inputs.get("stair_treads", 0) * sm["cost_per_tread"]
+            + inputs.get("stair_runs", 0) * sm["stringer_set_per_run"]
+            + inputs.get("stair_landings", 0) * sm["cost_per_landing"])
+
+    # Stain - real materials (gallons + supplies)
+    if matrix["stain"] == "Y" and inputs.get("stain_sf", 0) > 0:
+        smat = db["stain_materials"]
+        sf = inputs["stain_sf"]
+        coats = inputs.get("stain_coats", 1)
+        gallons = math.ceil(sf * coats / smat["coverage_sf_per_gal"])
+        gal_cost = smat["cost_per_gal"].get(inputs.get("stain_type", ""),
+                                            max(smat["cost_per_gal"].values()))
+        add("stain", gallons * gal_cost + smat["supplies_flat"], gallons=gallons)
+
+    # Repairs
+    if pt["name"] in ("Stain + Minor Repairs", "Resurface (Boards Only)"):
+        rm = db["repair_materials"]
+        add("repair",
+            inputs.get("board_repairs", 0) * rm["cost_per_board"]
+            + inputs.get("joist_repair_lf", 0) * rm["cost_per_joist_lf"]
+            + (rm["hardware_allowance"] if inputs.get("hardware_inc") == "Yes" else 0)
+            + (rm["inspection_only_allowance"]
+               if pt["name"] == "Resurface (Boards Only)" else 0))
+
+    # Skirting
+    if deck_include and inputs.get("skirting_sf", 0) > 0:
+        add("skirting", inputs["skirting_sf"] * db["skirting_cost_per_sf"])
+
+    # Adders (materials; their labor lives in extra_days)
+    adders_by_key = {a["key"]: a for a in db["adders"]}
+    add("lighting", inputs.get("lighting_fix", 0)
+        * adders_by_key["lighting"]["material_cost"])
+    add("benches", inputs.get("bench_count", 0)
+        * adders_by_key["bench"]["material_cost"])
+    add("privacy", inputs.get("privacy_screen_lf", 0)
+        * adders_by_key["privacy_screen"]["material_cost"])
+    if inputs.get("hot_tub") == "Yes":
+        add("hot_tub", adders_by_key["hot_tub"]["material_cost"])
+
+    # Allowances - hard costs at face
+    default_permit, default_dump, default_mobil = get_project_allowances(db, pt["name"])
+    permit = inputs.get("permit_alw", default_permit)
+    dumpster = inputs.get("dumpster_alw", default_dump)
+    mobil = inputs.get("mobil_alw", default_mobil)
+    misc = inputs.get("misc_alw", db["allowances"]["misc_default"])
+
+    return _finish_v2_result(
+        db, inputs, pt, buckets, (permit, dumpster, mobil, misc), lm,
+        extra={
+            "deck_sf": deck_sf,
+            "decking": decking, "railing": railing, "framing": framing,
+            "combined_multiplier": lm,
+            "footing_count": footing_count,
+        })
+
+
+def compute_fence_v2(db, inputs, pt):
+    """v2 fence engine: materials at cost per LF; labor via the same simple
+    crew-days model (fence table + gate/tear-out day adders)."""
+    fmat = find_fence_material(db, inputs["fence_material"])
+    height = str(inputs.get("fence_height", "6"))
+    by_height = fmat["material_cost_per_lf_by_height"]
+    rate = by_height.get(height)
+    if rate is None:
+        height = sorted(by_height.keys(), key=lambda h: int(h))[-1]
+        rate = by_height[height]
+
+    fence_lf = inputs.get("fence_lf", 0) or 0
+
+    buckets = {}
+    if fence_lf > 0:
+        buckets["fence_run"] = {"materials": fence_lf * rate}
+
+    gates = {g["key"]: g for g in db.get("fence_gates", [])}
+    walk_n = inputs.get("walk_gates", 0) or 0
+    drive_n = inputs.get("drive_gates", 0) or 0
+    if walk_n or drive_n:
+        buckets["fence_gates"] = {
+            "materials": (walk_n * gates["walk"]["material_cost_each"]
+                          + drive_n * gates["drive"]["material_cost_each"]),
+        }
+
+    tearout_lf = inputs.get("tearout_lf", 0) or 0
+
+    default_permit, default_dump, default_mobil = get_project_allowances(db, pt["name"])
+    permit = inputs.get("permit_alw", default_permit)
+    dumpster = inputs.get("dumpster_alw", default_dump)
+    mobil = inputs.get("mobil_alw", default_mobil)
+    misc = inputs.get("misc_alw", db["allowances"]["misc_default"])
+
+    result = _finish_v2_result(
+        db, inputs, pt, buckets, (permit, dumpster, mobil, misc), 1.0,
+        extra={
+            "deck_sf": 0,
+            "decking": None, "railing": None, "framing": None,
+            "combined_multiplier": 1.0,
+            "fence_lf": fence_lf, "fence_rate": rate, "fence_height": height,
+            "fence_material": fmat, "walk_gates": walk_n, "drive_gates": drive_n,
+            "tearout_lf": tearout_lf,
+        })
+    # v1-compatible fence dollar keys (material dollars)
+    result["fence_run"] = result["buckets"].get("fence_run", {}).get("materials", 0)
+    result["fence_gates"] = result["buckets"].get("fence_gates", {}).get("materials", 0)
+    result["fence_tearout"] = 0
+    return result
+
+
+# -----------------------------------------------------------------------------
 # Customer-facing line item allocation
 # -----------------------------------------------------------------------------
 def round_money(x):
@@ -378,6 +752,8 @@ def build_line_items(eng, inputs, sell_override=None):
     estimator's pricing-option step), with the rounding remainder spread onto
     the last line. The cost buckets themselves are never recomputed; only the
     scale factor changes."""
+    if eng.get("v2"):
+        return build_line_items_v2(eng, inputs, sell_override)
     if eng.get("matrix", {}).get("fence") == "Y":
         return build_fence_line_items(eng, inputs, sell_override)
 
@@ -514,6 +890,10 @@ def build_line_items(eng, inputs, sell_override=None):
 def compute_cost_floor(db, inputs, eng):
     """'My Cost' rung: the lowest defensible floor the pricing DB supports.
 
+    v1 ONLY - superseded in v2 by the Breakeven rung, which IS true cost
+    (materials at cost + labor at the loaded rate + allowances). Kept for the
+    frozen v1 audit path; do not call with a v2 engine result.
+
     Rebuilds only the material-bearing buckets (framing + decking + railing) at
     the DB's RAW material rates (material_per_sf / material_per_lf) in place of
     the retail sell rates, and keeps every labor and allowance bucket at the
@@ -558,6 +938,379 @@ def compute_cost_floor(db, inputs, eng):
         + eng["permit"] + eng["dumpster"] + eng["mobilization"] + eng["misc"]
     )
     return round_money(floor)
+
+
+# -----------------------------------------------------------------------------
+# v2 line items (simple model, Jim 2026-07-11):
+#   - scope lines carry MATERIALS (marked up - the margin lives here)
+#   - ONE labor line printed as the literal day math
+#     (crew_days x crew_size x hours/day @ rate)
+#   - allowances at face
+#   - every figure rounded to the nearest $50; lines sum exactly to the
+#     chosen price (remainder absorbed by the largest materials line)
+# Line item shape is [label, amount] (legacy-compatible).
+# -----------------------------------------------------------------------------
+def _labor_line(eng, note=""):
+    label = (f"Professional labor & installation{note}: "
+             f"{eng['crew_days']:g} crew-days x {eng['crew_size']}-person crew "
+             f"x {eng['hours_per_day']} hrs @ ${eng['labor_rate']}/hr")
+    return [label, round_money(eng["labor_subtotal"])]
+
+
+def build_line_items_v2(eng, inputs, sell_override=None):
+    """v2 customer-facing line items. Labor and allowances ride at face
+    value; the materials lines absorb the margin (and any custom-price
+    override): scale = (target - labor - allowances) / materials_cost."""
+    target = round_client(sell_override if sell_override is not None
+                          else eng["sell_price"])
+    if eng["subtotal_cost"] <= 0:
+        return [["No scope priced", 0]]
+
+    labor = round_money(eng["labor_subtotal"])
+    allowances = round_money(eng["allowances_subtotal"])
+    mat_cost = eng["materials_subtotal"]
+    if mat_cost > 0 and target > labor + allowances:
+        scale = (target - labor - allowances) / mat_cost
+    else:
+        # Degenerate case (chosen price at/below labor + allowances): scale
+        # materials to zero-ish and let the delta reconciliation handle it.
+        scale = 0.0
+
+    def mat_line(label, amount):
+        return [label, round_client(amount * scale)]
+
+    pt_name = eng["project_type"]["name"]
+    matrix = eng.get("matrix", {})
+    b = eng["buckets"]
+    items = []       # materials lines first
+    labor_note = ""
+
+    if matrix.get("fence") == "Y":
+        fmat = _with_color(eng["fence_material"]["name"], inputs.get("fence_color"))
+        if "fence_run" in b:
+            items.append(mat_line(
+                f"{eng['fence_height']} ft {fmat} fence materials, "
+                f"{eng['fence_lf']} linear feet",
+                b["fence_run"]["materials"]))
+        if "fence_gates" in b:
+            gp = []
+            if eng.get("walk_gates", 0) > 0:
+                gp.append(f"{eng['walk_gates']} walk gate"
+                          + ("s" if eng["walk_gates"] > 1 else ""))
+            if eng.get("drive_gates", 0) > 0:
+                gp.append(f"{eng['drive_gates']} drive / double gate"
+                          + ("s" if eng["drive_gates"] > 1 else ""))
+            items.append(mat_line("Gates: " + ", ".join(gp),
+                                  b["fence_gates"]["materials"]))
+        labor_note = (" (tear-out, post setting, install, cleanup)"
+                      if eng.get("tearout_lf", 0) > 0
+                      else " (post setting, install, cleanup)")
+        allowance_label = "Permits, layout, mobilization, and final cleanup"
+
+    elif pt_name in ("Stain Only", "Stain + Minor Repairs"):
+        stain_type = inputs.get("stain_type", "stain")
+        coats = inputs.get("stain_coats", 1)
+        if "stain" in b:
+            items.append(mat_line(
+                f"Premium materials ({stain_type.lower()} stain "
+                f"- {b['stain'].get('gallons', 0)} gal, pads, rollers, masking)",
+                b["stain"]["materials"]))
+        if "repair" in b:
+            items.append(mat_line(
+                f"Repair materials: {inputs.get('board_repairs', 0)} board "
+                f"replacement{'s' if inputs.get('board_repairs', 0) != 1 else ''}"
+                + (f", {inputs.get('joist_repair_lf', 0)} LF joist sister"
+                   if inputs.get('joist_repair_lf', 0) > 0 else "")
+                + (", hardware allowance" if inputs.get('hardware_inc') == 'Yes' else ""),
+                b["repair"]["materials"]))
+        labor_note = (f" (prep, wash, {coats} coat"
+                      f"{'s' if coats > 1 else ''}"
+                      + (", repairs" if "repair" in b else "") + ")")
+        allowance_label = "Job site protection, cleanup, and debris haul-off"
+
+    else:
+        deck_sf = eng["deck_sf"]
+        decking_name = _with_color(eng["decking"]["name"], inputs.get("decking_color"))
+        railing_name = _with_color(eng["railing"]["name"], inputs.get("railing_color"))
+        framing_name = eng["framing"]["name"]
+
+        if "footings" in b:
+            items.append(mat_line(
+                f"Diamond Pier engineered foundation system "
+                f"({b['footings'].get('count', 0)} piers)",
+                b["footings"]["materials"]))
+
+        build_names = [n for n in ("framing", "decking", "fascia") if n in b]
+        if build_names:
+            m = sum(b[n]["materials"] for n in build_names)
+            label_parts = []
+            if "framing" in b:
+                label_parts.append(f"{framing_name} framing")
+            if "decking" in b:
+                label_parts.append(f"{decking_name} decking ({deck_sf} sq ft)")
+            if "fascia" in b:
+                label_parts.append(f"matching fascia ({inputs.get('fascia_lf', 0)} LF)")
+            if inputs.get("border_style") == "Double Border":
+                label_parts.append("double-border picture-frame detail")
+            items.append(mat_line(
+                "Deck materials including " + ", ".join(label_parts), m))
+
+        if "rail" in b:
+            items.append(mat_line(
+                f"{railing_name} railing system ({inputs.get('railing_lf', 0)} LF)",
+                b["rail"]["materials"]))
+
+        if "stair" in b:
+            wrap = " with wraparound design" if inputs.get("wraparound") == "Yes" else ""
+            items.append(mat_line(
+                f"Staircase materials: {inputs.get('stair_runs', 0)} run, "
+                f"{inputs.get('stair_treads', 0)} treads{wrap}",
+                b["stair"]["materials"]))
+
+        if "repair" in b:
+            items.append(mat_line("Frame inspection and repair materials",
+                                  b["repair"]["materials"]))
+
+        adder_names = [n for n in ("skirting", "lighting", "benches", "privacy",
+                                   "hot_tub") if n in b]
+        if adder_names:
+            m = sum(b[n]["materials"] for n in adder_names)
+            adder_parts = []
+            if "skirting" in b:
+                adder_parts.append(f"skirting ({inputs.get('skirting_sf', 0)} sq ft)")
+            if "lighting" in b:
+                adder_parts.append(f"{inputs.get('lighting_fix', 0)} deck lights")
+            if "benches" in b:
+                adder_parts.append(f"{inputs.get('bench_count', 0)} built-in bench"
+                                   + ("es" if inputs.get('bench_count', 0) > 1 else ""))
+            if "privacy" in b:
+                adder_parts.append(f"privacy screen ({inputs.get('privacy_screen_lf', 0)} LF)")
+            if "hot_tub" in b:
+                adder_parts.append("hot tub structural upgrade")
+            items.append(mat_line("Upgrades: " + ", ".join(adder_parts), m))
+
+        demo_note = (", demolition" if matrix.get("demo") not in (None, "N") else "")
+        labor_note = f" (site prep{demo_note}, construction, and cleanup)"
+        allowance_label = "Permits, dumpster, mobilization, and final cleanup"
+
+    # Reconcile: materials lines must sum to (target - labor - allowances).
+    # Absorb the $50-rounding remainder into the largest materials line.
+    mat_target = target - labor - allowances
+    delta = mat_target - sum(it[1] for it in items)
+    if items and delta != 0:
+        largest = max(items, key=lambda it: it[1])
+        largest[1] += delta
+
+    items.append(_labor_line(eng, labor_note))
+    items.append([allowance_label, allowances])
+    return items
+
+
+def build_investment_summary(eng, line_items):
+    """Materials / Labor / Site & admin rollup. Every number is reproducible:
+    labor is the printed day math, site costs are at face, materials are the
+    remainder (the margin lives there). Sums exactly to the chosen price."""
+    total = sum(it[1] for it in line_items)
+    labor = round_money(eng["labor_subtotal"])
+    site = round_money(eng["allowances_subtotal"])
+    return {
+        "materials": total - labor - site,
+        "labor": labor,
+        "site_and_admin": site,
+        "labor_hours": round(eng["labor_hours_total"], 1),
+        "crew_days": eng["crew_days"],
+        "crew_size": eng["crew_size"],
+        "hours_per_day": eng["hours_per_day"],
+        "labor_rate": eng["labor_rate"],
+        "total": total,
+    }
+
+
+# -----------------------------------------------------------------------------
+# v2 materials & hardware takeoff (replaces the emailed Excel workbook)
+#
+# Piece-level order list: joist/beam/post counts from dimensions, whole
+# decking boards, fastener packs, pier count, rail run, stair stock - each
+# with SKU (where known), qty, unit cost, extended cost. Quantities are
+# order-list heuristics (whole pieces, rounded up); the PDF footer prints the
+# reconciliation against the engine's materials subtotal.
+# -----------------------------------------------------------------------------
+def build_takeoff(db, inputs, eng):
+    """Return {rows, materials_total, engine_materials, drift} for the
+    Materials & Hardware List PDF. v2 engines only."""
+    if not eng.get("v2"):
+        raise ValueError("build_takeoff requires a v2 engine result")
+
+    tk = db["takeoff"]
+    uc = {u["key"]: u for u in tk["unit_costs"]}
+    rows = []
+
+    def add(category, qty, key=None, item=None, unit=None, unit_cost=None,
+            sku=None, note=""):
+        if not qty or qty <= 0:
+            return
+        if key is not None:
+            u = uc[key]
+            item = item or u["description"]
+            unit = unit or u["unit"]
+            unit_cost = u["price"] if unit_cost is None else unit_cost
+            sku = u.get("sku", "") if sku is None else sku
+        qty = round(qty, 1) if isinstance(qty, float) else qty
+        rows.append({
+            "category": category, "item": item, "sku": sku or "",
+            "unit": unit, "qty": qty, "unit_cost": round(unit_cost, 2),
+            "ext_cost": round(qty * unit_cost, 2), "note": note,
+        })
+
+    buckets = eng.get("buckets", {})
+
+    if eng.get("matrix", {}).get("fence") == "Y":
+        if "fence_run" in buckets:
+            fmat = eng["fence_material"]
+            lf = eng["fence_lf"]
+            panels = math.ceil(lf / tk["fence_panel_ft"])
+            add("Fence", lf, item=f"{fmat['name']} fence material, "
+                f"{eng['fence_height']} ft height", unit="lf",
+                unit_cost=eng["fence_rate"], sku="",
+                note=f"~{panels} panels @ {tk['fence_panel_ft']} ft + "
+                     f"{panels + 1} posts")
+        gates = {g["key"]: g for g in db.get("fence_gates", [])}
+        add("Fence", eng.get("walk_gates", 0), item=gates["walk"]["name"],
+            unit="each", unit_cost=gates["walk"]["material_cost_each"], sku="")
+        add("Fence", eng.get("drive_gates", 0), item=gates["drive"]["name"],
+            unit="each", unit_cost=gates["drive"]["material_cost_each"], sku="")
+    else:
+        L, D = inputs["length"], inputs["depth"]
+        deck_sf = eng["deck_sf"]
+
+        # Framing package
+        if "framing" in buckets:
+            spacing = tk["joist_spacing_in"]
+            joists = math.ceil(L * 12 / spacing) + 1
+            joist_key = "pt_2x10x12" if D <= 12 else "pt_2x10x16"
+            add("Framing", joists, key=joist_key,
+                note=f"field joists @ {spacing} in o.c., {D} ft span")
+            ledger_pieces = math.ceil(L / 16)
+            add("Framing", ledger_pieces, key="pt_2x10x16", note="ledger")
+            add("Framing", 2 * math.ceil(L / 16), key="pt_2x10x16",
+                note="doubled drop beam")
+            add("Framing", 2, key=joist_key, note="rim joists")
+            add("Framing", joists, key="joist_hanger")
+            add("Framing", math.ceil(joists / 60), key="hanger_nails_5lb")
+            add("Framing", ledger_pieces, key="ledgerlok_pack")
+            add("Framing", 1, key="ledger_flash_membrane")
+            add("Framing", math.ceil(L / 10), key="ledger_flash_steel")
+
+        # Footings - Diamond Piers + posts
+        if "footings" in buckets:
+            n = buckets["footings"].get("count", 0)
+            add("Footings", n, key="diamond_pier")
+            add("Footings", n, key="pt_6x6x10", note="structural posts")
+            add("Footings", n, key="post_base_hw")
+
+        # Decking - whole boards + fastener packs
+        if "decking" in buckets:
+            decking = eng["decking"]
+            waste = decking["waste_pct"]
+            waste += db.get("complexity_waste_adder", {}).get(
+                inputs.get("complexity", ""), 0)
+            if inputs.get("border_style") == "Double Border":
+                waste += db.get("border_waste_adder", 0)
+            board_ft = tk["board_length_ft"]
+            cost_sf = effective_cost(decking, inputs.get("decking_color"),
+                                     "cost_per_sf")
+            board_cost = cost_sf / tk["board_coverage_lf_per_sf"] * board_ft
+            boards = math.ceil(deck_sf * tk["board_coverage_lf_per_sf"]
+                               * (1 + waste) / board_ft)
+            add("Decking", boards,
+                item=f"{_with_color(decking['name'], inputs.get('decking_color'))} "
+                     f"deck board, {board_ft} ft",
+                unit="each", unit_cost=board_cost, sku="dealer",
+                note=f"{deck_sf} sf incl. {int(waste * 100)}% waste")
+            if decking.get("fasteners_per_sf", 0) >= 1.0:  # hidden-fastener composite
+                add("Decking", math.ceil(deck_sf / tk["concealoc_pack_coverage_sf"]),
+                    key="concealoc_175")
+            else:
+                add("Decking", math.ceil(deck_sf / tk["deck_screw_box_coverage_sf"]),
+                    key="deck_screw_box")
+
+        # Fascia
+        if "fascia" in buckets:
+            add("Fascia", math.ceil(inputs.get("fascia_lf", 0) / 12),
+                key="fascia_pc_12ft")
+
+        # Railing - run priced per LF with section/post counts noted
+        if "rail" in buckets:
+            lf = inputs.get("railing_lf", 0)
+            sections = math.ceil(lf / tk["rail_section_ft"])
+            cost_lf = effective_cost(eng["railing"], inputs.get("railing_color"),
+                                     "cost_per_lf")
+            add("Railing", lf,
+                item=f"{_with_color(eng['railing']['name'], inputs.get('railing_color'))} "
+                     f"rail system",
+                unit="lf", unit_cost=cost_lf, sku="dealer",
+                note=f"~{sections} sections @ {tk['rail_section_ft']} ft "
+                     f"+ {sections + 1} posts")
+
+        # Stairs
+        if "stair" in buckets:
+            sm = db["stair_materials"]
+            runs = inputs.get("stair_runs", 0)
+            treads = inputs.get("stair_treads", 0)
+            landings = inputs.get("stair_landings", 0)
+            add("Stairs", runs * tk["stringers_per_run"], key="pt_2x12x16",
+                note="stair stringers", unit_cost=uc["pt_2x12x16"]["price"])
+            add("Stairs", treads, item="Stair tread + riser stock (decking material)",
+                unit="tread", unit_cost=sm["cost_per_tread"], sku="dealer")
+            add("Stairs", landings, item="Landing platform package",
+                unit="each", unit_cost=sm["cost_per_landing"], sku="")
+
+        # Skirting
+        if "skirting" in buckets:
+            add("Skirting", inputs.get("skirting_sf", 0),
+                item="Skirting panel + frame stock", unit="sf",
+                unit_cost=db["skirting_cost_per_sf"], sku="")
+
+        # Stain
+        if "stain" in buckets:
+            add("Stain", buckets["stain"].get("gallons", 0), key="stain_gal",
+                item=f"{inputs.get('stain_type', 'Deck stain')} "
+                     f"({inputs.get('stain_color', '')})".strip())
+            add("Stain", 1, key="stain_supplies")
+
+        # Repairs
+        if "repair" in buckets:
+            rm = db["repair_materials"]
+            add("Repairs", inputs.get("board_repairs", 0),
+                item="Replacement deck board", unit="each",
+                unit_cost=rm["cost_per_board"], sku="")
+            add("Repairs", inputs.get("joist_repair_lf", 0),
+                item="Joist sister stock (PT 2x10) + structural fasteners",
+                unit="lf", unit_cost=rm["cost_per_joist_lf"], sku="")
+            if inputs.get("hardware_inc") == "Yes":
+                add("Repairs", 1, item="Hardware allowance (hangers, fasteners)",
+                    unit="lot", unit_cost=rm["hardware_allowance"], sku="")
+
+        # Adders
+        adders_by_key = {a["key"]: a for a in db["adders"]}
+        for bucket_name, key, qty in (
+                ("lighting", "lighting", inputs.get("lighting_fix", 0)),
+                ("benches", "bench", inputs.get("bench_count", 0)),
+                ("privacy", "privacy_screen", inputs.get("privacy_screen_lf", 0)),
+                ("hot_tub", "hot_tub", 1 if inputs.get("hot_tub") == "Yes" else 0)):
+            if bucket_name in buckets and qty:
+                a = adders_by_key[key]
+                add("Upgrades", qty, item=a["name"], unit=a["unit"].lower(),
+                    unit_cost=a["material_cost"], sku="")
+
+    materials_total = round(sum(r["ext_cost"] for r in rows), 2)
+    engine_materials = round(eng["materials_subtotal"], 2)
+    return {
+        "rows": rows,
+        "materials_total": materials_total,
+        "engine_materials": engine_materials,
+        "drift": round(materials_total - engine_materials, 2),
+    }
 
 
 # -----------------------------------------------------------------------------
@@ -639,19 +1392,28 @@ def build_scope_context(inputs, eng):
         stair_overview_phrase = ""
         stair_scope_line = ""
 
-    # Demo extras for build projects
+    # Demo extras for build projects. v2 prices Diamond Pier foundations
+    # (Jim 2026-07-09); v1 estimates keep the poured-footing wording they
+    # were sold with.
+    if eng.get("v2"):
+        v2_footing_phrase = ("- Install code-compliant Diamond Pier engineered "
+                             "foundation system at code-required spacing "
+                             "(rated for WI frost conditions)\n")
+        v2_footing_inclusion = ("- All new footings: Diamond Pier foundation "
+                                "units and installation hardware\n")
+    else:
+        v2_footing_phrase = ("- Excavate and pour new code-compliant footings (12 in tube "
+                             "forms × 48 in deep for WI frost line) at code-required spacing\n")
+        v2_footing_inclusion = ("- All new footings: concrete tube forms, "
+                                "concrete mix, rebar, and excavation\n")
     if pt_name == "Full Tear-Out + New Build":
         demo_extras = ", footings, and concrete posts"
-        footing_phrase = ("- Excavate and pour new code-compliant footings (12 in tube "
-                          "forms × 48 in deep for WI frost line) at code-required spacing\n")
-        footing_inclusion_phrase = ("- All new footings: concrete tube forms, "
-                                    "concrete mix, rebar, and excavation\n")
+        footing_phrase = v2_footing_phrase
+        footing_inclusion_phrase = v2_footing_inclusion
     elif pt_name == "New Build (No Tear-Out)":
         demo_extras = ""
-        footing_phrase = ("- Excavate and pour new code-compliant footings (12 in tube "
-                          "forms × 48 in deep for WI frost line) at code-required spacing\n")
-        footing_inclusion_phrase = ("- All new footings: concrete tube forms, "
-                                    "concrete mix, rebar, and excavation\n")
+        footing_phrase = v2_footing_phrase
+        footing_inclusion_phrase = v2_footing_inclusion
     elif pt_name == "Frame + Deck Rebuild (Keep Footings)":
         demo_extras = " — existing footings retained"
         footing_phrase = ("- Inspect existing footings; flag any inadequate footing "
@@ -1025,10 +1787,11 @@ def build_estimate_json(inputs, client_info, db, today=None,
 
     line_items = build_line_items(eng, inputs, sell_override=final_price)
 
-    quoted = (round_money(final_price) if final_price is not None
-              else round_money(eng["sell_price"]))
+    rounder = round_client if eng.get("v2") else round_money
+    quoted = (rounder(final_price) if final_price is not None
+              else rounder(eng["sell_price"]))
     today = today or date.today()
-    return {
+    estimate = {
         "estimate_number": make_estimate_number(today),
         "date_issued": today.strftime("%B %d, %Y"),
         "valid_days": 14,
@@ -1052,10 +1815,25 @@ def build_estimate_json(inputs, client_info, db, today=None,
             "computed_subtotal_cost": round_money(eng["subtotal_cost"]),
             "computed_margin": eng["margin"],
             "engine_sell_price": round_money(eng["sell_price"]),
-            "pricing_basis": pricing_basis or "20% margin (engine default)",
-            "engine_version": "v1.1",
+            "pricing_basis": pricing_basis or (
+                "30% margin (v2 target)" if eng.get("v2")
+                else "20% margin (engine default)"),
+            "engine_version": "v2.0" if eng.get("v2") else "v1.1",
         },
     }
+    if eng.get("v2"):
+        estimate["investment_summary"] = build_investment_summary(eng, line_items)
+        estimate["_meta"].update({
+            "materials_cost": round_money(eng["materials_subtotal"]),
+            "labor_cost": round_money(eng["labor_subtotal"]),
+            "labor_days_calculated": round(eng["labor_days_calculated"], 2),
+            "contingency_days": eng["contingency_days"],
+            "crew_days": eng["crew_days"],
+            "crew_size": eng["crew_size"],
+            "labor_rate": eng["labor_rate"],
+            "allowances_cost": round_money(eng["allowances_subtotal"]),
+        })
+    return estimate
 
 
 # -----------------------------------------------------------------------------

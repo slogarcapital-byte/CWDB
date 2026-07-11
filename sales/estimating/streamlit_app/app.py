@@ -38,14 +38,18 @@ for p in (ESTIMATING_DIR, ESTIMATES_DIR):
 
 from deck_calculator import (  # noqa: E402
     build_estimate_json,
+    build_takeoff,
     compute_cost_floor,
     compute_engine,
     find_project_type,
+    is_v2,
     load_pricing,
     make_estimate_filename,
+    round_client,
     round_money,
 )
 from generate_estimate_pdf import generate_pdf  # noqa: E402
+from generate_materials_pdf import generate_materials_pdf  # noqa: E402
 
 from email_send import send_estimate_email  # noqa: E402
 from populate_workbook import populate as populate_workbook  # noqa: E402
@@ -280,11 +284,52 @@ def market_price(eng, inputs, rates):
 
 
 def pricing_options(eng, db, inputs, rates):
-    """Build the five pricing rungs Jim chooses from before the PDF is made.
+    """Build the pricing rungs Jim chooses from before the PDF is made.
     Every rung is derived read-only from the engine's already-computed cost
-    subtotal (S) and area. No underlying calc is changed. Returns a list of
-    (display_name, price, basis_tag); default selection is the last (20%)."""
+    subtotal (S). Returns (opts, default_idx) where opts is a list of
+    (display_name, price, basis_tag).
+
+    v2 (explicit-labor DB): rungs come from db['pricing_rungs'] - breakeven is
+    TRUE cost, margin rungs apply the single margin (x market load), and the
+    default is the rung flagged in the DB (no hardcoded margins, no drift
+    against the engine).
+    v1 (frozen audit path): the legacy five rungs, default = 20% margin."""
     S = eng["subtotal_cost"]
+
+    if is_v2(db):
+        # Pricing model (Jim 2026-07-11): margin applies to MATERIALS only;
+        # labor rides at its printed day math and allowances at face.
+        # Every rung price rounds to the client $50 increment.
+        market_m = eng.get("market_multiplier", 1.0)
+        labor = eng["labor_subtotal"]
+        allowances = eng["allowances_subtotal"]
+        materials = eng["materials_subtotal"]
+        opts, default_idx = [], None
+        for rung in db["pricing_rungs"]:
+            if rung["type"] == "cost":
+                entry = (rung["label"], round_client(S, db),
+                         "Breakeven (true cost: materials + labor + allowances)")
+            elif rung["type"] == "market":
+                mkt, mkt_desc = market_price(eng, inputs, rates)
+                if mkt is None:
+                    continue
+                entry = (rung["label"], round_client(mkt, db),
+                         f"Average market price ({mkt_desc})")
+            else:  # margin - on materials only
+                pct = rung["value"]
+                price = round_client(
+                    materials / (1 - pct) * market_m + labor + allowances, db)
+                tag = f"{int(pct * 100)}% margin on materials + labor at day rate"
+                if market_m != 1.0:
+                    tag += f" x {market_m:g} market load"
+                entry = (rung["label"], price, tag)
+            if rung.get("default"):
+                default_idx = len(opts)
+            opts.append(entry)
+        if default_idx is None:
+            default_idx = len(opts) - 1
+        return opts, default_idx
+
     opts = [
         ("My Cost", compute_cost_floor(db, inputs, eng),
          "My Cost (raw material + labor floor)"),
@@ -299,7 +344,7 @@ def pricing_options(eng, db, inputs, rates):
         ("20% Margin (engine default)", round_money(S / (1 - 0.20)),
          "20% margin (engine default)"),
     ]
-    return opts
+    return opts, len(opts) - 1
 
 
 def _material_by_name(items, name):
@@ -620,9 +665,8 @@ with st.container(border=True):
         st.stop()
 
     # --- Final price selector: Jim picks the rung before the PDF is made ------
-    opts = pricing_options(eng, db, inputs, market_rates)
+    opts, default_idx = pricing_options(eng, db, inputs, market_rates)
     labels = [f"{name}  ·  ${price:,}" for name, price, _ in opts]
-    default_idx = len(opts) - 1  # 20% margin (engine default) == current behavior
     choice = st.radio(
         "Final price (you have the last word before the PDF goes out)",
         labels,
@@ -632,6 +676,31 @@ with st.container(border=True):
              "match. None of the underlying pricing math changes.",
     )
     sel_name, selected_price, pricing_basis = opts[labels.index(choice)]
+
+    if eng.get("v2"):
+        st.caption(
+            f"Labor: **{eng['labor_days_calculated']:.1f}** calculated + "
+            f"**{eng['contingency_days']:g}** contingency crew-days "
+            f"→ **{eng['crew_days']:g} days** x {eng['crew_size']} crew "
+            f"x {eng['hours_per_day']} hrs x \\${eng['labor_rate']}/hr = "
+            f"**\\${round_money(eng['labor_subtotal']):,}** (printed on the "
+            f"estimate exactly like that). Margin applies to materials only. "
+            f"Breakeven is TRUE cost - below it you pay to build."
+        )
+
+    # Custom / negotiated price (replaces the offline psf-cap workflow):
+    # 0 = use the selected rung above.
+    custom_price = st.number_input(
+        "Custom price (optional - overrides the rung above; 0 = off)",
+        min_value=0, value=0, step=100,
+        help="Type a negotiated or capped final price. Line items re-scale "
+             "to it exactly, same as picking a rung.",
+    )
+    if custom_price > 0:
+        sel_name = "Custom price"
+        selected_price = (round_client(custom_price, db) if is_v2(db)
+                          else round_money(custom_price))
+        pricing_basis = "Custom price (manual override)"
 
     sell = selected_price
     S = round_money(eng["subtotal_cost"])
@@ -660,7 +729,52 @@ with st.container(border=True):
     )
 
     with st.expander("Line-item breakdown", expanded=False):
-        if is_fence:
+        if eng.get("v2"):
+            # v2: per-bucket MATERIALS at true cost; labor is one job-level
+            # day-math line (the simple model, Jim 2026-07-11)
+            BUCKET_LABELS = {
+                "footings": "Diamond Pier footings",
+                "framing": "Framing", "decking": "Decking",
+                "rail": "Railing", "fascia": "Fascia", "stair": "Stairs",
+                "stain": "Stain", "repair": "Repairs", "skirting": "Skirting",
+                "lighting": "Lighting", "benches": "Built-in benches",
+                "privacy": "Privacy screen", "hot_tub": "Hot tub structural",
+                "fence_run": "Fence run", "fence_gates": "Gates",
+            }
+            brows = [
+                (BUCKET_LABELS.get(name, name), b["materials"])
+                for name, b in eng["buckets"].items()
+                if b["materials"]
+            ]
+            if brows:
+                st.caption(
+                    "TRUE COST basis. Materials at cost below; labor is "
+                    "simple day math; allowances at face. The chosen rung "
+                    "marks up MATERIALS only - labor and allowances print "
+                    "at face on the PDF."
+                )
+                st.table({
+                    "Materials at cost": [r[0] for r in brows],
+                    "Cost": [f"${round_money(r[1]):,}" for r in brows],
+                })
+                st.table({
+                    "Rollup": [
+                        "Materials (at cost)",
+                        f"Labor: {eng['crew_days']:g} days x "
+                        f"{eng['crew_size']} x {eng['hours_per_day']} hrs x "
+                        f"${eng['labor_rate']}/hr",
+                        "Allowances (at face)",
+                        "TRUE COST",
+                    ],
+                    "Amount": [
+                        f"${round_money(eng['materials_subtotal']):,}",
+                        f"${round_money(eng['labor_subtotal']):,}",
+                        f"${round_money(eng['allowances_subtotal']):,}",
+                        f"${round_money(eng['subtotal_cost']):,}",
+                    ],
+                })
+            nonzero = brows
+        elif is_fence:
             rows = [
                 ("Fence run", eng.get("fence_run", 0)),
                 ("Gates", eng.get("fence_gates", 0)),
@@ -690,17 +804,19 @@ with st.container(border=True):
                 ("Mobilization", eng["mobilization"]),
                 ("Misc", eng["misc"]),
             ]
-        nonzero = [(label, round_money(v)) for label, v in rows if v]
+        if not eng.get("v2"):
+            nonzero = [(label, round_money(v)) for label, v in rows if v]
         if nonzero:
-            st.caption("Rows below are your cost basis. The chosen rung sets the "
-                       "final price; the PDF re-scales these into customer "
-                       "line items that sum to it.")
-            st.table(
-                {
-                    "Component": [r[0] for r in nonzero],
-                    "Cost": [f"${v:,}" for _, v in nonzero],
-                }
-            )
+            if not eng.get("v2"):
+                st.caption("Rows below are your cost basis. The chosen rung sets the "
+                           "final price; the PDF re-scales these into customer "
+                           "line items that sum to it.")
+                st.table(
+                    {
+                        "Component": [r[0] for r in nonzero],
+                        "Cost": [f"${round_money(v):,}" for _, v in nonzero],
+                    }
+                )
             implied = (1 - S / selected_price) * 100 if selected_price else 0
             # Escape $ so Streamlit markdown does not read it as LaTeX math
             # (cause of the garbled "40,430 ** . margin : ** 2050,538" caption).
@@ -731,13 +847,17 @@ if send_disabled:
                + ("fence length" if is_fence else "dimensions")
                + " to enable send.")
 
+_v2_active = is_v2(db)
 if st.button(
-    "Send PDF + Excel to my inbox",
+    "Send PDF + materials list to my inbox" if _v2_active
+    else "Send PDF + Excel to my inbox",
     type="primary",
     disabled=send_disabled,
     use_container_width=True,
 ):
-    with st.spinner("Generating estimate, populating workbook, sending email..."):
+    with st.spinner("Generating estimate and materials list, sending email..."
+                    if _v2_active else
+                    "Generating estimate, populating workbook, sending email..."):
         client_info = {
             "name": client_name or "Homeowner",
             "address_line": client_address or "Central Wisconsin",
@@ -799,7 +919,18 @@ if st.button(
                         )
 
                 generate_pdf(estimate, pdf_path)
-                populate_workbook(inputs, client_info, xlsx_path)
+
+                # Second attachment: v2 = Materials & Hardware List PDF
+                # (piece-level takeoff); v1 = the legacy populated workbook.
+                # The workbook path is retired at cutover (Jim 2026-07-09).
+                if _v2_active:
+                    takeoff = build_takeoff(db, inputs, eng)
+                    second_attachment = tmp / f"{stem}-materials.pdf"
+                    generate_materials_pdf(
+                        takeoff, client_info, project_type, second_attachment)
+                else:
+                    populate_workbook(inputs, client_info, xlsx_path)
+                    second_attachment = xlsx_path
 
                 send_estimate_email(
                     gmail_address=st.secrets["gmail_address"],
@@ -823,10 +954,18 @@ if st.button(
                             f"Railing: {railing_material}\n"
                         )
                         + f"\nQuoted sell price: ${sell:,}\n"
-                        f"Range: ${low:,} - ${high:,}\n\n"
-                        f"PDF and populated workbook attached."
+                        f"Range: ${low:,} - ${high:,}\n"
+                        + (
+                            f"Pricing basis: {pricing_basis}\n"
+                            f"Crew commitment: {eng['crew_days']:g} crew-days "
+                            f"({eng['labor_hours_total']:.0f} man-hours incl. "
+                            f"contingency)\n\n"
+                            f"Estimate PDF and Materials & Hardware List attached."
+                            if _v2_active else
+                            "\nPDF and populated workbook attached."
+                        )
                     ),
-                    attachments=[pdf_path, xlsx_path],
+                    attachments=[pdf_path, second_attachment],
                 )
             st.success(
                 f"Sent to {st.secrets['recipient']} - ${sell:,} for "

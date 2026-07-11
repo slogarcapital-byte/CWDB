@@ -2,8 +2,19 @@
 Apply a per-square-foot price ceiling to a folder of already-generated CWDB
 estimates and regenerate the PDF + workbook in place.
 
-Why this exists
----------------
+LEGACY (v1 engine era) - deprecated 2026-07-09
+----------------------------------------------
+The estimator moved to the v2 explicit-labor engine (pricing-db-v2.json):
+prices are built from true cost, the app shows a real Breakeven rung with a
+below-cost warning, and the Excel workbook this tool reads inputs from is no
+longer attached to estimate emails (replaced by the Materials & Hardware List
+PDF). The $70/$100 psf ceilings were a patch over v1's inflated sell rates;
+under v2 a cap that back-solves margin below breakeven is a visible
+money-loser. Keep this file only to regenerate PRE-CUTOVER estimates from
+their workbooks; do not run it against v2 estimates.
+
+Why this existed
+----------------
 The deck engine prices bottom-up (sell = subtotal / (1 - margin)) and small
 decks carry the fixed allowances (mobilization, permit, dumpster) plus margin
 over very little area, so the blended $/sq ft runs far above market. For early
@@ -254,7 +265,7 @@ def regenerate(xlsx_path: Path, db, dry_run: bool = False) -> dict:
         generate_pdf(estimate, pdf_path)
 
         # Verify the rendered total equals the target (within rounding)
-        rendered = sum(amt for _, amt in estimate["line_items"])
+        rendered = sum(it[1] for it in estimate["line_items"])
         result["rendered_total"] = rendered
         result["render_ok"] = abs(rendered - round(target)) <= 2
 

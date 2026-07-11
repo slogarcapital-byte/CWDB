@@ -316,9 +316,15 @@ def _money(n):
 
 
 def _itemized_table(line_items, total_amount):
+    # v2 line items carry a per-line materials/labor split as elements 2-3
+    # ([label, amount, materials, labor]); legacy items are [label, amount].
+    # Render the split columns only when at least one line carries them.
+    has_split = any(len(it) >= 4 and it[2] is not None for it in line_items)
+    if has_split:
+        return _itemized_table_split(line_items, total_amount)
     rows = [[Paragraph('Item', table_h), Paragraph('Price', table_h_r)]]
-    for label, amount in line_items:
-        rows.append([Paragraph(label, table_c), Paragraph(_money(amount), table_c_r)])
+    for it in line_items:
+        rows.append([Paragraph(it[0], table_c), Paragraph(_money(it[1]), table_c_r)])
     rows.append([Paragraph('TOTAL FIXED PRICE', total),
                  Paragraph(_money(total_amount), total_r)])
 
@@ -338,6 +344,83 @@ def _itemized_table(line_items, total_amount):
         if i % 2 == 0:
             style.append(('BACKGROUND', (0, i), (-1, i), ROW_ALT))
     t.setStyle(TableStyle(style))
+    return t
+
+
+def _itemized_table_split(line_items, total_amount):
+    """4-column itemized table for v2 estimates: every scaled line shows its
+    materials and labor components (Jim's transparency choice 2026-07-09);
+    pass-through allowance lines show an em dash in the split columns."""
+    dash = Paragraph('&#8212;', table_c_r)
+    rows = [[Paragraph('Item', table_h), Paragraph('Materials', table_h_r),
+             Paragraph('Labor', table_h_r), Paragraph('Price', table_h_r)]]
+    for it in line_items:
+        label, amount = it[0], it[1]
+        m = it[2] if len(it) >= 4 else None
+        l = it[3] if len(it) >= 4 else None
+        rows.append([
+            Paragraph(label, table_c),
+            Paragraph(_money(m), table_c_r) if m is not None else dash,
+            Paragraph(_money(l), table_c_r) if l is not None else
+            Paragraph('&#8212;', table_c_r),
+            Paragraph(_money(amount), table_c_r),
+        ])
+    rows.append([Paragraph('TOTAL FIXED PRICE', total), Paragraph('', table_c),
+                 Paragraph('', table_c), Paragraph(_money(total_amount), total_r)])
+
+    t = Table(rows, colWidths=[3.3 * inch, 0.95 * inch, 0.95 * inch, 1.0 * inch])
+    style = [
+        ('VALIGN',        (0, 0), (-1, -1), 'MIDDLE'),
+        ('TOPPADDING',    (0, 0), (-1, -1), 8),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+        ('LEFTPADDING',   (0, 0), (-1, -1), 10),
+        ('RIGHTPADDING',  (0, 0), (-1, -1), 10),
+        ('BACKGROUND',    (0, 0), (-1, 0),  LIGHT_BG),
+        ('LINEBELOW',     (0, 0), (-1, 0),  0.6, GREY),
+        ('LINEABOVE',     (0, -1), (-1, -1), 1.2, ORANGE),
+        ('BACKGROUND',    (0, -1), (-1, -1), LIGHT_BG),
+    ]
+    for i in range(1, len(rows) - 1):
+        if i % 2 == 0:
+            style.append(('BACKGROUND', (0, i), (-1, i), ROW_ALT))
+    t.setStyle(TableStyle(style))
+    return t
+
+
+def _investment_summary_table(summary):
+    """Materials & Labor Summary block (v2 estimates only): honest rollup of
+    what the price is made of. The labor line prints the literal day math so
+    the homeowner (and Jim) can reproduce it on a napkin."""
+    crew_days = summary.get('crew_days', 0)
+    days_label = f"{crew_days:g} crew-day{'s' if crew_days != 1 else ''}"
+    if summary.get('labor_rate'):
+        labor_label = (f"Professional labor: {crew_days:g} crew-days x "
+                       f"{summary.get('crew_size', 3)}-person crew x "
+                       f"{summary.get('hours_per_day', 8)} hrs @ "
+                       f"${summary['labor_rate']}/hr")
+    else:
+        labor_label = (f"Professional labor ({days_label}, "
+                       f"{summary.get('crew_size', 3)}-person crew)")
+    rows = [
+        [Paragraph('Materials', table_c),
+         Paragraph(_money(summary['materials']), table_c_r)],
+        [Paragraph(labor_label, table_c),
+         Paragraph(_money(summary['labor']), table_c_r)],
+        [Paragraph('Permits, dumpster, mobilization &amp; site costs (at cost)',
+                   table_c),
+         Paragraph(_money(summary['site_and_admin']), table_c_r)],
+        [Paragraph('Total', total), Paragraph(_money(summary['total']), total_r)],
+    ]
+    t = Table(rows, colWidths=[4.5 * inch, 1.7 * inch])
+    t.setStyle(TableStyle([
+        ('VALIGN',        (0, 0), (-1, -1), 'MIDDLE'),
+        ('TOPPADDING',    (0, 0), (-1, -1), 7),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 7),
+        ('LEFTPADDING',   (0, 0), (-1, -1), 10),
+        ('RIGHTPADDING',  (0, 0), (-1, -1), 10),
+        ('LINEABOVE',     (0, -1), (-1, -1), 1.2, ORANGE),
+        ('BACKGROUND',    (0, -1), (-1, -1), LIGHT_BG),
+    ]))
     return t
 
 
@@ -513,11 +596,19 @@ def generate_pdf(estimate, output_path):
         s.append(_mockup_section(renderings))
 
     # ── ITEMIZED PRICING ────────────────────────────────────────────────────
-    total_amount = sum(amt for _, amt in estimate['line_items'])
+    total_amount = sum(it[1] for it in estimate['line_items'])
     s.append(KeepTogether([
         Paragraph('Itemized Pricing', h2),
         _itemized_table(estimate['line_items'], total_amount),
     ]))
+
+    # ── MATERIALS & LABOR SUMMARY (v2 estimates only; absent key = legacy
+    #    estimates render byte-identically) ──────────────────────────────────
+    if estimate.get('investment_summary'):
+        s.append(KeepTogether([
+            Paragraph('Materials &amp; Labor Summary', h2),
+            _investment_summary_table(estimate['investment_summary']),
+        ]))
 
     # ── INCLUDED ────────────────────────────────────────────────────────────
     s.append(Paragraph("What's Included", h2))
