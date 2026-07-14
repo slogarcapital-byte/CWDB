@@ -1,0 +1,39 @@
+Step,Section,Action,Value
+1,Settings > Custom Fields > Customer,Create field (Checkbox),tcpa_consent_given
+2,Settings > Custom Fields > Customer,Create field (Dropdown),tcpa_consent_source
+3,Settings > Custom Fields > Customer,Add dropdown options,form | verbal | assumed
+4,Settings > Custom Fields > Customer,Create field (Dropdown),lead_channel
+5,Settings > Custom Fields > Customer,Add dropdown options,webform | phone | manual | other
+6,Settings > Custom Fields > Customer,Create field (Text),utm_source
+7,Settings > Custom Fields > Customer,Create field (Text),utm_medium
+8,Settings > Custom Fields > Customer,Create field (Text),utm_campaign
+9,Settings > Custom Fields > Customer,Create field (Text),gclid
+10,Settings > Custom Fields > Customer,Create field (Text),lead_source_page
+11,Settings > Custom Fields > Job,Create field (Dropdown),project_type
+12,Settings > Custom Fields > Job,Add dropdown options,New deck build | Deck replacement | Deck repair | Deck addition / expansion | Not sure yet
+13,Settings > Custom Fields > Job,Create field (Dropdown),budget_range
+14,Settings > Custom Fields > Job,Add dropdown options,"Under $5,000 | $5,000 – $10,000 | $10,000 – $20,000 | $20,000 – $40,000 | $40,000+"
+15,Settings > Custom Fields > Job,Create field (Dropdown),project_timeline
+16,Settings > Custom Fields > Job,Add dropdown options,As soon as possible | Within 1–3 months | 3–6 months | Just planning ahead
+17,Settings > Custom Fields > Job,Create field (Dropdown),owns_property
+18,Settings > Custom Fields > Job,Add dropdown options,Yes | No | Not sure
+19,Settings > Custom Fields > Job,Create field (Dropdown),source_city
+20,Settings > Custom Fields > Job,Add dropdown options,Wausau | Schofield | Weston | Mosinee | Merrill | Other
+21,Settings > Custom Fields > Job,Create field (Number),lead_score
+22,Settings > Custom Fields > Job,Create field (Text),disqualification_reason
+23,Settings > Job Stages,Create stage 1,New Lead
+24,Settings > Job Stages,Create stage 2,Qualified
+25,Settings > Job Stages,Create stage 3,Walk-through Scheduled
+26,Settings > Job Stages,Create stage 4,Estimating
+27,Settings > Job Stages,Create stage 5,Estimate Delivered
+28,Settings > Job Stages,Create stage 6,Signed / Booked
+29,Settings > Job Stages,Create stage 7,In Production
+30,Settings > Job Stages,Create stage 8,Complete - Paid
+31,Settings > Job Stages,Create stage 9,Stale - No Response
+32,Settings > Job Stages,Create stage 10,Lost
+33,Settings > Cost Codes,Create,Materials
+34,Settings > Cost Codes,Create,Labor
+35,Settings > Cost Codes,Create,Permits
+36,Settings > Cost Codes,Create,Equipment
+37,Settings > Cost Codes,Create,Other
+38,Verification,Create then delete a scratch Customer with PHONE ONLY (no email),Must save successfully (phone leads arrive at webform volume)
