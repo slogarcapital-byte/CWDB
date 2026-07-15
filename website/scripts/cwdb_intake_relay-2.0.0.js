@@ -17,7 +17,11 @@
   if (window.__cwdbIntakeRelayLoaded) return;
   window.__cwdbIntakeRelayLoaded = true;
 
-  var ENDPOINT = 'https://iabiwsbmnbxmkjvkgfhg.supabase.co/functions/v1/jobtread-gateway/intake';
+  // apikey URL param: Supabase gateway requires an apikey on every function
+  // call even with verify_jwt off. This is the PUBLISHABLE key (browser-safe,
+  // same class as the public HubSpot portal id in relay v1).
+  var ENDPOINT = 'https://iabiwsbmnbxmkjvkgfhg.supabase.co/functions/v1/jobtread-gateway/intake' +
+    '?apikey=sb_publishable_dykWddolrfHGA3ID7jjBiw_Y6w3bU4A';
   var FORM_SELECTOR = 'form#wf-form-Quote-Request';
   var LOG = '[cwdb_intake_relay]';
 

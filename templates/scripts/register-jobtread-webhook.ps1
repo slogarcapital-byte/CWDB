@@ -24,12 +24,16 @@ Set-StrictMode -Version Latest
 . "$PSScriptRoot\load-supabase.ps1"
 Load-DotEnvIfNeeded -RepoRoot $RepoRoot
 
-foreach ($v in 'JOBTREAD_GRANT_KEY','JOBTREAD_ORG_ID','JT_WEBHOOK_TOKEN','SUPABASE_URL') {
+foreach ($v in 'JOBTREAD_GRANT_KEY','JOBTREAD_ORG_ID','JT_WEBHOOK_TOKEN','SUPABASE_URL','SUPABASE_PUBLISHABLE_KEY') {
     if (-not [Environment]::GetEnvironmentVariable($v, 'Process')) { throw "$v missing from .env.local" }
 }
 $grantKey = $env:JOBTREAD_GRANT_KEY
 $orgId    = $env:JOBTREAD_ORG_ID
-$hookUrl  = "$($env:SUPABASE_URL)/functions/v1/jobtread-gateway/webhook?token=$($env:JT_WEBHOOK_TOKEN)"
+# apikey param: Supabase gateway requires an apikey on every function call
+# even with verify_jwt off; JobTread cannot send headers, so it rides the URL.
+# NOTE: repo convention is SUPABASE_URL = the REST url (.../rest/v1/); strip it.
+$fnBase   = ($env:SUPABASE_URL -replace '/rest/v1/?$', '') + '/functions/v1'
+$hookUrl  = "$fnBase/jobtread-gateway/webhook?token=$($env:JT_WEBHOOK_TOKEN)&apikey=$($env:SUPABASE_PUBLISHABLE_KEY)"
 
 function Invoke-Pave {
     param([Parameter(Mandatory)] [hashtable] $Query)

@@ -37,9 +37,13 @@ async function pave(query: unknown): Promise<any> {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query }),
   });
-  const body = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(`pave ${res.status}: ${JSON.stringify(body)}`);
-  return body;
+  const text = await res.text();
+  if (!res.ok) throw new Error(`pave ${res.status}: ${text.slice(0, 500)}`);
+  try {
+    return JSON.parse(text);
+  } catch {
+    throw new Error(`pave non-json response: ${text.slice(0, 200)}`);
+  }
 }
 
 // Field name -> id map, cached per isolate. Key: `${targetType}.${name}`.
@@ -71,6 +75,13 @@ function compact(obj: Record<string, unknown>): Record<string, unknown> {
   );
 }
 
+// JobTread caps entity names at 30 characters ("Name cannot be more than 30
+// characters" 400). Truncate every composed name.
+const MAX_NAME = 30;
+function trunc(s: string): string {
+  return s.length > MAX_NAME ? s.slice(0, MAX_NAME) : s;
+}
+
 // ---- /intake ---------------------------------------------------------------
 async function handleIntake(req: Request): Promise<Response> {
   const p = await req.json(); // flat payload from the relay (Task 7 FIELD_MAP)
@@ -89,24 +100,44 @@ async function handleIntake(req: Request): Promise<Response> {
     const fm = await getFieldMap();
     const name = p.name ?? "Unknown Lead";
 
-    const acct = await pave({
-      $: { grantKey: GRANT_KEY },
-      createAccount: {
-        $: {
-          organizationId: ORG_ID,
-          name,
-          type: "customer",
-          customFieldValues: compact({
-            [fm["customer.utm_source"]]: p.utm_source,
-            [fm["customer.utm_medium"]]: p.utm_medium,
-            [fm["customer.utm_campaign"]]: p.utm_campaign,
-            [fm["customer.gclid"]]: p.gclid,
-            [fm["customer.lead_source_page"]]: p.page_uri,
-          }),
-        },
-        createdAccount: { id: {} },
-      },
-    });
+    // Account names are UNIQUE in JobTread ("already exists" 400). Two
+    // homeowners can share a name, so retry with disambiguating suffixes.
+    const last4 = (p.phone ?? "").replace(/\D/g, "").slice(-4);
+    const base = name.slice(0, 22); // leave room for a " (xxxx)" suffix
+    const candidates = [
+      trunc(name),
+      last4 ? `${base} (${last4})` : trunc(`${base} (${Date.now() % 100000})`),
+      trunc(`${base} (${Date.now() % 100000})`),
+    ];
+    let acct: any = null;
+    let lastErr: unknown = null;
+    for (const candidate of candidates) {
+      try {
+        acct = await pave({
+          $: { grantKey: GRANT_KEY },
+          createAccount: {
+            $: {
+              organizationId: ORG_ID,
+              name: candidate,
+              type: "customer",
+              customFieldValues: compact({
+                [fm["customer.utm_source"]]: p.utm_source,
+                [fm["customer.utm_medium"]]: p.utm_medium,
+                [fm["customer.utm_campaign"]]: p.utm_campaign,
+                [fm["customer.gclid"]]: p.gclid,
+                [fm["customer.lead_source_page"]]: p.page_uri,
+              }),
+            },
+            createdAccount: { id: {} },
+          },
+        });
+        break;
+      } catch (e) {
+        lastErr = e;
+        if (!String(e).includes("already exists")) throw e;
+      }
+    }
+    if (!acct) throw lastErr;
     const accountId = acct.createAccount.createdAccount.id;
     bronze.jobtread_customer_id = accountId;
 
@@ -115,7 +146,7 @@ async function handleIntake(req: Request): Promise<Response> {
       createContact: {
         $: {
           accountId,
-          name,
+          name: trunc(name),
           customFieldValues: compact({
             [fm["customerContact.Phone"]]: p.phone,
             [fm["customerContact.Email"]]: p.email,
@@ -142,7 +173,7 @@ async function handleIntake(req: Request): Promise<Response> {
       createJob: {
         $: {
           locationId: loc.createLocation.createdLocation.id,
-          name: `${name} - ${p.project_type ?? "Deck project"}`,
+          name: trunc(`${name} - ${p.project_type ?? "Deck project"}`),
           customFieldValues: compact({
             [fm["job.Status"]]: "New Lead",
             [fm["job.project_type"]]: p.project_type,
