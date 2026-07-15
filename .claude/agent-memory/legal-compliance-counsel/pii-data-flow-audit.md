@@ -42,3 +42,7 @@ Only Webflow form is live. Data accumulates in Webflow dashboard only.
 - Privacy policy draft must accurately describe retention and not promise deletion capabilities that don't exist yet
 - Contractor Lead Purchase Agreement MUST include: (a) permitted uses of lead data, (b) prohibition on resale/sharing, (c) data retention/deletion obligations, (d) notification requirements for data breaches, (e) indemnification for contractor misuse of PII
 - Consider building a manual deletion checklist (Webflow dashboard + HubSpot) before promising deletion rights in privacy policy
+
+## Addendum 2026-07-14: JobTread is now a processor
+
+Flow adds a parallel branch: Webflow Form → `jobtread-gateway` Edge Function → JobTread (accounts/contacts/jobs; consent flags on customerContact) AND → HubSpot (unchanged) AND → Supabase bronze (`raw_intake_events`). JobTread retention: indefinite, manual deletion only (child-first: job → location → account). Add JobTread to: privacy policy third-party list, deletion checklist, DPA review queue. Signing surface migration is separately gated by `operations/jobtread/proposal-template-legal-block.md` (signed off 2026-07-14, three confirm-on-build gates).

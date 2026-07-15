@@ -203,3 +203,9 @@ The following items are flagged for legal counsel prioritization before the firs
 ---
 
 *Report generated from local project files. Live system state in Make and HubSpot could not be verified due to access restrictions. All platform retention policies reflect publicly documented defaults as of the report date and should be confirmed against current vendor terms.*
+
+---
+
+## Addendum 2026-07-14: JobTread added as a PII processor
+
+JobTread (jobtread.com) became a CWDB PII processor on 2026-07-14 (accelerated hybrid, `operations/analysis/jobtread-setup-design.md`). PII held: homeowner name, phone, email, project address, project details, TCPA consent flags (`tcpa_consent_given`, `tcpa_consent_source` on the customer contact). Data path: Webflow form → Supabase Edge Function `jobtread-gateway` → JobTread (Pave API) in parallel with the existing HubSpot write; bronze copies also land in Supabase (`raw_intake_events`, `raw_jobtread_snapshot`). Retention: JobTread does not auto-expire records; deletion is manual (deleteAccount cascades contacts but is blocked while jobs reference the account, so full deletion = deleteJob → deleteLocation → deleteAccount). Action carried forward: review JobTread's DPA/terms and add JobTread to the privacy policy's third-party sharing list and to the manual deletion checklist.
