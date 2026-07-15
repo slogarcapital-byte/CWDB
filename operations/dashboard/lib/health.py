@@ -53,6 +53,7 @@ def _check_freshness() -> list[dict[str, Any]]:
         ("hubspot", "fact_leads", "updated_at"),
         ("google_ads", "fact_ad_spend_daily", "updated_at"),
         ("ga4", "fact_traffic_daily", "updated_at"),
+        ("jobtread", "raw_jobtread_snapshot", "pulled_at"),
     ]
     for platform, table, col in checks:
         try:

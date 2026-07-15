@@ -16,7 +16,7 @@ _PLATFORM_LABEL = {
     "warehouse": "Supabase warehouse", "hubspot": "HubSpot", "qbo": "QuickBooks",
     "google_ads": "Google Ads", "meta": "Meta Ads", "ga4": "GA4",
     "site": "Webflow site", "scheduler": "Task Scheduler", "make": "Make.com",
-    "control_plane": "Control plane (retired)",
+    "control_plane": "Control plane (retired)", "jobtread": "JobTread",
 }
 
 

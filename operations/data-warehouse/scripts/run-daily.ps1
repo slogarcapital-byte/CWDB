@@ -53,6 +53,7 @@ $sources = @(
     @{ Name = 'google_ads'; Path = Join-Path $RepoRoot 'templates\scripts\pull-google-ads-warehouse.ps1' }
     @{ Name = 'meta_ads';   Path = Join-Path $RepoRoot 'templates\scripts\pull-meta-ads-warehouse.ps1' }
     @{ Name = 'ga4';        Path = Join-Path $RepoRoot 'templates\scripts\pull-ga4-warehouse.ps1' }
+    @{ Name = 'jobtread';   Path = Join-Path $RepoRoot 'templates\scripts\pull-jobtread-snapshot.ps1' }
 )
 
 $runId    = [guid]::NewGuid().ToString("N").Substring(0, 12)
