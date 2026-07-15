@@ -228,19 +228,78 @@ async function handleIntake(req: Request): Promise<Response> {
   );
 }
 
-// ---- /webhook (log-only until Task 10) --------------------------------------
+// ---- /webhook ----------------------------------------------------------------
+// Observed JobTread payload shape (real event, 2026-07-15):
+//   { _type: "root", createdEvent: { id, type: "jobUpdated",
+//     job: {id}, account: {id}, location: {id},
+//     data: { next: {custom: {Status: "..."}}, previous: {custom: {Status: "..."}} },
+//     createdAt, ... } }
+// Fan-out (design §6): on transition INTO "Signed / Booked", queue a Google
+// offline conversion in conversions_outbox (uploaded by the local worker
+// push-google-offline-conversions.ps1) and fire a GA4 MP event directly.
+// Dedupe: unique index on raw_jobtread_events.event_id; a replayed event hits
+// the duplicate error and skips fan-out entirely.
+const SIGNED_STAGE = "Signed / Booked";
+
 async function handleWebhook(req: Request, url: URL): Promise<Response> {
   if (url.searchParams.get("token") !== WEBHOOK_TOKEN) {
     return new Response("unauthorized", { status: 401 });
   }
   const payload = await req.json();
+  const ev = payload?.createdEvent ?? {};
   const { error } = await supabase.from("raw_jobtread_events").insert({
-    event_id: payload?.id ?? payload?.eventId ?? null,
-    event_type: payload?.type ?? payload?.event ?? null,
+    event_id: ev.id ?? null,
+    event_type: ev.type ?? null,
     payload,
   });
-  if (error && !String(error.message).includes("duplicate")) {
-    console.error("event insert failed", error);
+  if (error) {
+    if (!String(error.message).includes("duplicate")) {
+      console.error("event insert failed", error);
+    }
+    return new Response("ok", { status: 200 }); // replay or unloggable: no fan-out
+  }
+
+  const nextStatus = ev?.data?.next?.custom?.Status;
+  const prevStatus = ev?.data?.previous?.custom?.Status;
+  const jobId = ev?.job?.id ?? null;
+  if (ev.type === "jobUpdated" && jobId && nextStatus === SIGNED_STAGE && prevStatus !== SIGNED_STAGE) {
+    try {
+      // Recover the click id from the intake record that created this job.
+      const { data: intake } = await supabase
+        .from("raw_intake_events")
+        .select("payload")
+        .eq("jobtread_job_id", jobId)
+        .order("id", { ascending: true })
+        .limit(1)
+        .maybeSingle();
+      const gclid = intake?.payload?.gclid ?? null;
+      await supabase.from("conversions_outbox").insert({
+        platform: "google_ads",
+        gclid,
+        jobtread_job_id: jobId,
+        status: gclid ? "pending" : "skipped",
+        error: gclid ? null : "no gclid on intake record",
+      });
+
+      // GA4 Measurement Protocol: real-time signed-job event. Skips silently
+      // until GA4_MEASUREMENT_ID + GA4_API_SECRET secrets are set.
+      const mid = Deno.env.get("GA4_MEASUREMENT_ID");
+      const sec = Deno.env.get("GA4_API_SECRET");
+      if (mid && sec) {
+        await fetch(
+          `https://www.google-analytics.com/mp/collect?measurement_id=${mid}&api_secret=${sec}`,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              client_id: `jobtread.${jobId}`,
+              events: [{ name: "job_signed", params: { job_id: jobId } }],
+            }),
+          },
+        ).catch((e) => console.error("ga4 mp failed", e));
+      }
+    } catch (e) {
+      console.error("fan-out failed (event logged, conversion may be missing)", e);
+    }
   }
   return new Response("ok", { status: 200 });
 }
