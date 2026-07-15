@@ -30,6 +30,15 @@ Use `mcp__claude_ai_HubSpot__search_crm_objects` to pull live pipeline data for 
 
 Capture both the raw counts and any deltas vs. yesterday's snapshot.
 
+### 2b. Pull live JobTread job pipeline (hybrid: runs alongside HubSpot)
+
+Read the JobTread job pipeline for the same Live Data Tables section. Two paths, prefer the first:
+
+- JobTread AI Connector MCP (server `jobtread`): list jobs with their `Status` custom field, grouped by the 10-stage funnel (New Lead → ... → Signed / Booked → In Production → Complete - Paid).
+- Fallback: `_vault/data/jobtread-latest.json` (auto-pulled daily, source #5) — same staleness flagging rules as the ad files below.
+
+Jobs and estimates increasingly originate in JobTread; HubSpot remains authoritative for top-of-funnel lead counts until cutover (design: `operations/analysis/jobtread-setup-design.md`).
+
 ### 3. Read ad-platform data files
 
 If present, read the latest auto-pulled JSON snapshots:
@@ -37,6 +46,7 @@ If present, read the latest auto-pulled JSON snapshots:
 - `_vault/data/google-ads-latest.json`
 - `_vault/data/meta-ads-latest.json`
 - `_vault/data/ga4-latest.json`
+- `_vault/data/jobtread-latest.json`
 
 These are auto-pulled at 6:55 AM Central. Check the `pulled_at` timestamp; if older than 24 hours, **flag stale data visibly** in the brief's Live Data Tables section (`⚠️ STALE: <file> last pulled <timestamp>`). If a file is missing entirely, note it as `(no data this morning)` rather than fabricating values.
 

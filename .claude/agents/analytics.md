@@ -28,7 +28,8 @@ DATA SOURCES:
 - Nextdoor Ads dashboard
 - TikTok Ads Manager
 - Tally form analytics
-- HubSpot pipeline data
+- HubSpot pipeline data (hybrid top-of-funnel)
+- JobTread job pipeline (Pave API / `jobtread` MCP; bronze mirror in `raw_jobtread_snapshot`; intake + stage events in `raw_intake_events` / `raw_jobtread_events`; Google offline conversions via `conversions_outbox`)
 
 OUTPUTS:
 - Funnel reports -> /finance/reports/performance/

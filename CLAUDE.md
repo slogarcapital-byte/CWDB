@@ -94,13 +94,14 @@ Phone calls arrive at the same volume as webform submissions and count identical
 ## Tech Stack (current)
 
 - **Site:** Webflow (21-page authority site at cwdeckbuilders.com, GoDaddy DNS)
-- **Forms:** Webflow native → HubSpot Forms API relay JS
-- **CRM:** HubSpot Starter ($15/mo); 9-stage pipeline; 19 custom properties
-- **Ads:** Google Ads (live since 2026-04-23); Meta Ads (live since 2026-04-26)
+- **Forms:** Webflow native → `jobtread-gateway` Supabase Edge Function (dual-writes JobTread + HubSpot + bronze; relay v2, 2026-07-14)
+- **Jobs platform:** JobTread (estimating, proposals + e-sign, scheduling, native QBO sync; AI Connector MCP + Pave API; profile `_vault/platforms/JobTread.md`)
+- **CRM (hybrid top-of-funnel):** HubSpot Starter ($15/mo); 9-stage pipeline; 19 custom properties; retires at JobTread cutover per `operations/analysis/jobtread-setup-design.md`
+- **Ads:** Google Ads (live since 2026-04-23); Meta Ads (PAUSED 2026-07-05 pending Pixel Lead fix)
 - **Community:** Nextdoor (organic only)
-- **Analytics:** GA4 + GTM + Meta Pixel + Nextdoor Pixel + Google Ads Conversion + MS Clarity
-- **Warehouse:** Supabase Postgres (12 tables, 6 views, daily ingestion)
-- **Estimator:** Streamlit app at https://cwdb-estimator.streamlit.app/ (built 2026-05-28; live 2026-05-31)
+- **Analytics:** GA4 + GTM + Meta Pixel + Nextdoor Pixel + Google Ads Conversion + MS Clarity; JobTread webhook → `conversions_outbox` → Google offline conversions
+- **Warehouse:** Supabase Postgres (daily ingestion, 6 sources incl. JobTread bronze)
+- **Estimator:** Streamlit app at https://cwdb-estimator.streamlit.app/ (fallback during JobTread estimating cutover; retire after 2 clean JobTread jobs or 1 month)
 - **Contractor onboarding:** DocuSign-driven parameterized agreement templates
 - **Automation (parked):** Make scenario 4792854 inactive since 2026-04-19 pivot
 
