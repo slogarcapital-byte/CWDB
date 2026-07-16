@@ -33,9 +33,20 @@ prints the full live field/option dump.
 
 ## Load-bearing values
 
-- `budget_range` options match HubSpot byte-for-byte including en dashes and commas.
+- **Option vocabulary (corrected 2026-07-15):** the Webflow form submits SLUGS
+  (`deck-replacement`, `35k-50k`, `asap`); HubSpot's real property options and the
+  warehouse both speak slug. The original worksheet copied labels from the STALE
+  design doc (`hubspot-lead-pipeline.json`), which broke the first real-device lead
+  (createJob 400 -> no job). Fix: the three job option fields (`project_type`,
+  `budget_range`, `project_timeline`) now hold the live form's human-readable
+  LABELS, and the gateway maps slug -> label (the ONLY translation seam; maps at
+  the top of `jobtread-gateway/index.ts`). Bronze payloads + the HubSpot write keep
+  raw slugs, so warehouse vocabulary is untouched. If the form's options change,
+  update the JobTread option lists AND the gateway maps together.
 - Status option 6 is exactly `Signed / Booked` (spaces around slash); the attribution
   webhook keys on it.
+- The live form's name field is `firstname` (relay v2.0.1 maps it to `name`; the
+  gateway also accepts `firstname` directly as a fallback).
 
 ## Pave schema facts (validated live 2026-07-14)
 

@@ -82,6 +82,40 @@ function trunc(s: string): string {
   return s.length > MAX_NAME ? s.slice(0, MAX_NAME) : s;
 }
 
+// The Webflow form submits option SLUGS (the warehouse/HubSpot vocabulary,
+// preserved raw in bronze + the HubSpot write). JobTread option fields hold
+// the form's human-readable LABELS (updated 2026-07-15 to match the live
+// form, not the stale design doc). This map is the only translation seam.
+// Unknown slug -> undefined -> compact() omits the field (job still created;
+// the raw value survives in raw_intake_events.payload).
+const PROJECT_TYPE: Record<string, string> = {
+  "new-deck": "New deck build",
+  "deck-replacement": "Replace existing deck",
+  "deck-repair": "Repair existing deck",
+  "deck-expansion": "Expand existing deck",
+  "screen-porch": "Screened-in Porch",
+  "pergola": "Pergola / shade structure",
+  "other": "Other / not sure",
+};
+const BUDGET: Record<string, string> = {
+  "under-10k": "Under $10,000",
+  "10k-20k": "$10,000 - $20,000",
+  "20k-35k": "$20,000 - $35,000",
+  "35k-50k": "$35,000 - $50,000",
+  "50k-plus": "$50,000+",
+  "not-sure": "Not sure yet",
+};
+const TIMELINE: Record<string, string> = {
+  "asap": "As soon as possible",
+  "1-3-months": "1-3 months",
+  "3-6-months": "3-6 months",
+  "6-12-months": "6-12 months",
+  "just-researching": "Just researching",
+};
+function opt(map: Record<string, string>, v?: string): string | undefined {
+  return v ? map[v] : undefined;
+}
+
 // ---- /intake ---------------------------------------------------------------
 async function handleIntake(req: Request): Promise<Response> {
   const p = await req.json(); // flat payload from the relay (Task 7 FIELD_MAP)
@@ -98,7 +132,9 @@ async function handleIntake(req: Request): Promise<Response> {
   // 1. JobTread write (failure must not block the HubSpot write, and vice versa)
   try {
     const fm = await getFieldMap();
-    const name = p.name ?? "Unknown Lead";
+    // Relay v2.0.1 maps the form's `firstname` field to `name`; accept both
+    // in case an older cached relay is still posting.
+    const name = p.name ?? p.firstname ?? "Unknown Lead";
 
     // Account names are UNIQUE in JobTread ("already exists" 400). Two
     // homeowners can share a name, so retry with disambiguating suffixes.
@@ -173,12 +209,12 @@ async function handleIntake(req: Request): Promise<Response> {
       createJob: {
         $: {
           locationId: loc.createLocation.createdLocation.id,
-          name: trunc(`${name} - ${p.project_type ?? "Deck project"}`),
+          name: trunc(`${name} - ${opt(PROJECT_TYPE, p.project_type) ?? "Deck project"}`),
           customFieldValues: compact({
             [fm["job.Status"]]: "New Lead",
-            [fm["job.project_type"]]: p.project_type,
-            [fm["job.budget_range"]]: p.budget,
-            [fm["job.project_timeline"]]: p.timeline,
+            [fm["job.project_type"]]: opt(PROJECT_TYPE, p.project_type),
+            [fm["job.budget_range"]]: opt(BUDGET, p.budget),
+            [fm["job.project_timeline"]]: opt(TIMELINE, p.timeline),
             [fm["job.owns_property"]]: p.owns_property,
             [fm["job.source_city"]]: p.city,
           }),

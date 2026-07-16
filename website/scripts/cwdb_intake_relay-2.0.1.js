@@ -1,5 +1,5 @@
 /**
- * cwdb_intake_relay v2.0.0
+ * cwdb_intake_relay v2.0.1
  *
  * Relays /get-a-quote form submissions to the CWDB jobtread-gateway Edge
  * Function, which dual-writes JobTread (Pave) + HubSpot (safety net)
@@ -29,6 +29,7 @@
   // Some keys appear twice to handle both source-HTML and Designer variants.
   var FIELD_MAP = {
     'name':           'name',
+    'firstname':      'name',   // live form uses name="firstname" (v2.0.1 fix)
     'email':          'email',
     'phone':          'phone',
     'address':        'address',

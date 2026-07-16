@@ -18,7 +18,7 @@
 | Conversion worker | source #6 `google_conv`; uploads `conversions_outbox` pending rows as Google offline conversions | `templates/scripts/push-google-offline-conversions.ps1` |
 | Org config | idempotent field/stage/cost-code setup | `templates/scripts/setup-jobtread-org.ps1` |
 | Schema prototype | live Pave validation + field dump | `templates/scripts/test-pave-query.ps1` |
-| Relay | Webflow form → `/intake` | `website/scripts/cwdb_intake_relay-2.0.0.js` |
+| Relay | Webflow form → `/intake` | `website/scripts/cwdb_intake_relay-2.0.1.js` (maps form `firstname` → `name`) |
 
 ## Secrets inventory (names only)
 
@@ -34,6 +34,7 @@
 - Pave pages 413 above ~size 25 with nested custom-field connections.
 - Webhook payload: `createdEvent.{id,type,job.id,data.next.custom.Status,data.previous.custom.Status}`.
 - AI Connector writes are immediate, NO undo: draft-then-confirm for anything customer-visible.
+- Option vocabulary (2026-07-15): form/HubSpot/warehouse = slugs; JobTread option fields = the form's human labels; gateway slug->label maps are the only translation seam. Change form options => update JobTread option lists + gateway maps together.
 
 ## Rollback (design §9)
 
