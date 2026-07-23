@@ -24,6 +24,27 @@ The good news: state fees are trivial (well under $100), the course is about $99
 
 ---
 
+## STATUS ADDENDUM 2026-07-13 (audit task #2: "Start the DSPS licensing clock")
+
+**Where things stand:**
+- **Track A (GL insurance): DONE.** Policy bound ~6/25 via HUB International ($1M/$2M CGL, ACORD 25 in docs/legal). The only open insurance item is the classification-scope confirmation call (audit task #1). Insurance is no longer the gating track.
+- **Track B (12-hour course): NOT STARTED as of 7/13.** The original 7/7 course target and 7/10 (Form 3097) / 7/14 (Form 3096) filing targets have slipped. No enrollment or DSPS activity found in email. The course is now the ONLY thing holding up both filings, since GL is already bound.
+
+**12contractor.com (John's recommendation): DO NOT use for the initial course.** Verified against both DSPS lists on 2026-07-13:
+- 12Contractor (Tom Lee, 262-834-5066, 12Contractor@gmail.com) appears on the DSPS *Course Provider List* (rev 2/4/2025), which covers continuing-education/renewal courses. Its own listing says "Contact us for your next renewal," and its site shows 4-hour CE modules.
+- It does NOT appear on the DSPS *Initial DCQ Course Provider List*, which is the list that governs the first-time 12-hour initial qualifier course required for Form 3097.
+- John is already licensed, so 12contractor works for HIS renewals. Jim is a first-time applicant; an initial course from a non-listed provider risks Form 3097 rejection. **File 12contractor away for Jim's 2-year renewal CE in 2028.**
+
+**Start-today path (prices verified 2026-07-13):**
+1. TODAY: enroll at Wisconsin Contractors Institute, Dwelling Contractor Initial Qualifier Course, $99, online self-paced: https://wicontractorinstitute.com/product/dwelling-contractor-initial-qualifier-course/ (on the DSPS initial list; course approval valid to 09/03/2029). Backups on the initial list: @-Leisure (atleisurelicense.com), @ Your Pace (wicontractortraining.com), both ~$99.
+2. By ~7/17: finish the 12 hours (self-paced, doable in 1-2 evenings), save the completion certificate.
+3. Same day the course finishes: file Form 3097 (DCQ) in LicensE (https://license.wi.gov) with the certificate. No insurance needed for this step.
+4. ~1-3 days later: file Form 3096 (LLC Certification) in LicensE, attach the COI, link Jim as Qualifier, attest the solo WC exemption. GL is already bound, so there is nothing to wait for.
+5. Week of 7/20: call City of Wausau Building Inspection + Marathon County to confirm local contractor registration (Step 5 below).
+6. Credentials realistic by mid-to-late August (DSPS processing). The Quinn signature hold (task #4) stays until the Certification issues.
+
+---
+
 ## 1. The Two Credentials (and Why Both)
 
 | | Dwelling Contractor Qualifier (DCQ) | Dwelling Contractor Certification |
@@ -162,13 +183,13 @@ Per the DSPS Trades Renewal Dates and Fees schedule (Rev. 1/4/2024):
 
 Suggested target dates from 2026-06-24 (owner: Jim; support: legal-compliance-counsel for documents). Adjust as the GL policy and course progress.
 
-- [ ] **GL policy built to the 3 DSPS features** ($250k+, WI-authorized insurer, 30-day DSPS notice) and dual-operations disclosed to carrier. Target: bind by ~2026-07-08.
-- [ ] **12-hour DCQ course completed**, certificate saved. Can finish this week; target ~2026-06-30.
-- [ ] **DCQ application (Form 3097) filed** in LicensE with course proof. Target: as soon as course done, ~2026-07-01.
-- [ ] **LLC Certification (Form 3096) filed** in LicensE with insurance proof, Jim linked as Qualifier. Target: once GL bound + DCQ filed, ~2026-07-09.
+- [x] **GL policy built to the 3 DSPS features** ($250k+, WI-authorized insurer, 30-day DSPS notice). BOUND ~2026-06-25 (HUB International, $1M/$2M CGL). Classification-scope call (audit task #1) still open.
+- [ ] **12-hour DCQ course completed**, certificate saved. Revised target: enroll 2026-07-13 (WCI $99), finish by ~2026-07-17.
+- [ ] **DCQ application (Form 3097) filed** in LicensE with course proof. Revised target: same day course finishes, ~2026-07-17.
+- [ ] **LLC Certification (Form 3096) filed** in LicensE with insurance proof, Jim linked as Qualifier. Revised target: ~2026-07-20 (GL already bound; nothing to wait for).
 - [ ] **WC exemption attested** (solo) on the Certification application.
-- [ ] **Local registration confirmed** with City of Wausau and Marathon County. Target: parallel, by ~2026-07-15.
-- [ ] **Both credentials issued** (watch the 90-day DSPS document window). Target: ~2026-08-08.
+- [ ] **Local registration confirmed** with City of Wausau and Marathon County. Revised target: week of 2026-07-20.
+- [ ] **Both credentials issued** (watch the 90-day DSPS document window). Revised target: mid-to-late August 2026.
 - [ ] **Website updated** to a truthful "licensed and insured" claim once both issue.
 - [ ] **Attorney review** of homeowner build documents before first signed build job (WB-018 item 6).
 
