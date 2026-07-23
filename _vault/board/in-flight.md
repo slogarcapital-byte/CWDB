@@ -29,9 +29,6 @@
   - Detail: Fund a tax reserve (~35% of net income); check Q3 1040-ES by 9/15; move HubSpot/Webflow/GoDaddy/Supabase/Anthropic subscriptions to the business card (currently paid personally, understating expenses).
   - Owner: Jim + accounting · Priority: P1 · Effort: 1-2 h
   - Notes: Claude 2026-07-22: computed on live QBO. Net income YTD $6,698. Reserve $2,350; Q3 1040-ES $2,350 due 9/15 (recompute 8/31 if Koy/Peksa deposits land: ~$3,480). Full memo finance/memos/2026-07-22-tax-reserve-q3-subscriptions.md. Remaining: Jim moves subscriptions to business card + schedules the 9/15 payment.
-- [audit-2026-07-05#28] Repo hygiene: commit the working tree + branch policy
-  - Detail: Commit/clean the 556-file working tree; decide test-branch vs main policy (estimator AND the CWDB HQ cloud twin deploy from test-branch).
-  - Owner: Jim + Claude · Priority: P2 · Effort: 1 h
 
 ## Project work (Claude / agents)
 - [audit-2026-07-05#10] Google Ads conversion cleanup

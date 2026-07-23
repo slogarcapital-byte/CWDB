@@ -4,6 +4,11 @@
 
 # Shipped
 
+- [audit-2026-07-05#28] Repo hygiene: commit the working tree + branch policy
+  - Detail: Commit/clean the 556-file working tree; decide test-branch vs main policy (estimator AND the CWDB HQ cloud twin deploy from test-branch).
+  - Owner: Jim + Claude · Priority: P2 · Effort: 1 h
+  - Notes: DONE 2026-07-22: working tree committed in 4 logical commits (warehouse/leads, legal/finance, site/sales, vault/memory); test-branch merged to main; both pushed; parity verified (4 refs same SHA). POLICY (Jim decision 2026-07-22): test-branch stays canonical (both Streamlit Cloud deploys pull it); merge to main for parity each session. Also healed the claude-memory vault mirror (checkout churn emptied it; restored from git; 4 mirror-only detail files copied into the real memory dir).
+  - Closed: 2026-07-23
 - [audit-2026-07-05#20] Weekly 15-min review replaces daily ritual; reconcile the board
   - Detail: Collapse the board (zombie items WB-010/016/018-GL); the CWDB HQ dashboard to-do tab is now the canonical task list with board files as generated mirrors.
   - Owner: Jim + cwdb-ceo-operator · Priority: P2 · Effort: 1 h
