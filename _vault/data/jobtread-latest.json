@@ -1,0 +1,317 @@
+﻿{
+    "pulled_at":  "2026-07-23T00:37:53.9823268Z",
+    "source":  "jobtread",
+    "data":  {
+                 "accounts":  [
+                                  {
+                                      "customFieldValues":  {
+                                                                "nodes":  [
+                                                                              {
+                                                                                  "value":  "google",
+                                                                                  "customField":  {
+                                                                                                      "targetType":  "customer",
+                                                                                                      "name":  "utm_source"
+                                                                                                  }
+                                                                              },
+                                                                              {
+                                                                                  "value":  "cpc",
+                                                                                  "customField":  {
+                                                                                                      "targetType":  "customer",
+                                                                                                      "name":  "utm_medium"
+                                                                                                  }
+                                                                              },
+                                                                              {
+                                                                                  "value":  "launch-2026-04",
+                                                                                  "customField":  {
+                                                                                                      "targetType":  "customer",
+                                                                                                      "name":  "utm_campaign"
+                                                                                                  }
+                                                                              },
+                                                                              {
+                                                                                  "value":  "EAIaIQobChMI-tiIwKjclQMVTTYIBR2GxSgCEAMYAyAAEgLzfvD_BwE",
+                                                                                  "customField":  {
+                                                                                                      "targetType":  "customer",
+                                                                                                      "name":  "gclid"
+                                                                                                  }
+                                                                              },
+                                                                              {
+                                                                                  "value":  "https://www.cwdeckbuilders.com/get-a-quote?utm_source=google\u0026utm_medium=cpc\u0026utm_campaign=launch-2026-04\u0026utm_content=g-ag1-rsa1-local\u0026utm_term=decks%20and%20porches\u0026gad_source=1\u0026gad_campaignid=23783717705\u0026gbraid=0AAAABDeiR-WEcTsAik0RVR4TFMWMQkOR_\u0026gclid=EAIaIQobChMI-tiIwKjclQMVTTYIBR2GxSgCEAMYAyAAEgLzfvD_BwE",
+                                                                                  "customField":  {
+                                                                                                      "targetType":  "customer",
+                                                                                                      "name":  "lead_source_page"
+                                                                                                  }
+                                                                              }
+                                                                          ]
+                                                            },
+                                      "name":  "Carl Dubois",
+                                      "id":  "22Pb7pCrKwzD",
+                                      "type":  "customer",
+                                      "createdAt":  "2026-07-18T13:40:03.540Z"
+                                  },
+                                  {
+                                      "customFieldValues":  {
+                                                                "nodes":  [
+                                                                              {
+                                                                                  "value":  "google",
+                                                                                  "customField":  {
+                                                                                                      "targetType":  "customer",
+                                                                                                      "name":  "utm_source"
+                                                                                                  }
+                                                                              },
+                                                                              {
+                                                                                  "value":  "cpc",
+                                                                                  "customField":  {
+                                                                                                      "targetType":  "customer",
+                                                                                                      "name":  "utm_medium"
+                                                                                                  }
+                                                                              },
+                                                                              {
+                                                                                  "value":  "launch-2026-04",
+                                                                                  "customField":  {
+                                                                                                      "targetType":  "customer",
+                                                                                                      "name":  "utm_campaign"
+                                                                                                  }
+                                                                              },
+                                                                              {
+                                                                                  "value":  "Cj0KCQjw6_HSBhCpARIsANvVltZAZAmw-Up58UCN3eLkqodq-_kKEjiLxp6EW8AI6Z9kPbeoft33GT4aAvhcEALw_wcB",
+                                                                                  "customField":  {
+                                                                                                      "targetType":  "customer",
+                                                                                                      "name":  "gclid"
+                                                                                                  }
+                                                                              },
+                                                                              {
+                                                                                  "value":  "https://www.cwdeckbuilders.com/get-a-quote?utm_source=google\u0026utm_medium=cpc\u0026utm_campaign=launch-2026-04\u0026utm_content=g-ag1-rsa1-local\u0026utm_term=deck%20building%20company\u0026gad_source=1\u0026gad_campaignid=23783717705\u0026gbraid=0AAAABDeiR-XCJec8GZubW1o9YzGb3Fncc\u0026gclid=Cj0KCQjw6_HSBhCpARIsANvVltZAZAmw-Up58UCN3eLkqodq-_kKEjiLxp6EW8AI6Z9kPbeoft33GT4aAvhcEALw_wcB",
+                                                                                  "customField":  {
+                                                                                                      "targetType":  "customer",
+                                                                                                      "name":  "lead_source_page"
+                                                                                                  }
+                                                                              }
+                                                                          ]
+                                                            },
+                                      "name":  "Mark Brown",
+                                      "id":  "22PbAs8JDZzv",
+                                      "type":  "customer",
+                                      "createdAt":  "2026-07-19T12:00:37.173Z"
+                                  }
+                              ],
+                 "contacts":  [
+                                  {
+                                      "account":  {
+                                                      "id":  "22Pb7pCrKwzD"
+                                                  },
+                                      "customFieldValues":  {
+                                                                "nodes":  [
+                                                                              {
+                                                                                  "value":  true,
+                                                                                  "customField":  {
+                                                                                                      "targetType":  "customerContact",
+                                                                                                      "name":  "tcpa_consent_given"
+                                                                                                  }
+                                                                              },
+                                                                              {
+                                                                                  "value":  "+13322109250",
+                                                                                  "customField":  {
+                                                                                                      "targetType":  "customerContact",
+                                                                                                      "name":  "Phone"
+                                                                                                  }
+                                                                              },
+                                                                              {
+                                                                                  "value":  "carldubois129@gmail.com",
+                                                                                  "customField":  {
+                                                                                                      "targetType":  "customerContact",
+                                                                                                      "name":  "Email"
+                                                                                                  }
+                                                                              },
+                                                                              {
+                                                                                  "value":  "form",
+                                                                                  "customField":  {
+                                                                                                      "targetType":  "customerContact",
+                                                                                                      "name":  "tcpa_consent_source"
+                                                                                                  }
+                                                                              },
+                                                                              {
+                                                                                  "value":  "webform",
+                                                                                  "customField":  {
+                                                                                                      "targetType":  "customerContact",
+                                                                                                      "name":  "lead_channel"
+                                                                                                  }
+                                                                              }
+                                                                          ]
+                                                            },
+                                      "name":  "Carl Dubois",
+                                      "id":  "22Pb7pCrkPkE",
+                                      "createdAt":  "2026-07-18T13:40:03.605Z"
+                                  },
+                                  {
+                                      "account":  {
+                                                      "id":  "22PbAs8JDZzv"
+                                                  },
+                                      "customFieldValues":  {
+                                                                "nodes":  [
+                                                                              {
+                                                                                  "value":  true,
+                                                                                  "customField":  {
+                                                                                                      "targetType":  "customerContact",
+                                                                                                      "name":  "tcpa_consent_given"
+                                                                                                  }
+                                                                              },
+                                                                              {
+                                                                                  "value":  "+17867558303",
+                                                                                  "customField":  {
+                                                                                                      "targetType":  "customerContact",
+                                                                                                      "name":  "Phone"
+                                                                                                  }
+                                                                              },
+                                                                              {
+                                                                                  "value":  "markbrown@draftrise.com",
+                                                                                  "customField":  {
+                                                                                                      "targetType":  "customerContact",
+                                                                                                      "name":  "Email"
+                                                                                                  }
+                                                                              },
+                                                                              {
+                                                                                  "value":  "form",
+                                                                                  "customField":  {
+                                                                                                      "targetType":  "customerContact",
+                                                                                                      "name":  "tcpa_consent_source"
+                                                                                                  }
+                                                                              },
+                                                                              {
+                                                                                  "value":  "webform",
+                                                                                  "customField":  {
+                                                                                                      "targetType":  "customerContact",
+                                                                                                      "name":  "lead_channel"
+                                                                                                  }
+                                                                              }
+                                                                          ]
+                                                            },
+                                      "name":  "Mark Brown",
+                                      "id":  "22PbAs8Kx42M",
+                                      "createdAt":  "2026-07-19T12:00:37.434Z"
+                                  }
+                              ],
+                 "locations":  [
+                                   {
+                                       "account":  {
+                                                       "id":  "22Pb7pCrKwzD"
+                                                   },
+                                       "name":  "Project site",
+                                       "id":  "22Pb7pCu6bD2",
+                                       "address":  "3983 Highland Drive, 54303"
+                                   },
+                                   {
+                                       "account":  {
+                                                       "id":  "22PbAs8JDZzv"
+                                                   },
+                                       "name":  "Project site",
+                                       "id":  "22PbAs8PcAzi",
+                                       "address":  "St. Petersburg, FL 33702, 33702"
+                                   }
+                               ],
+                 "jobs":  [
+                              {
+                                  "id":  "22Pb7pCuW6eQ",
+                                  "name":  "Carl Dubois - Other / not sure",
+                                  "number":  "55",
+                                  "createdAt":  "2026-07-18T13:40:04.017Z",
+                                  "customFieldValues":  {
+                                                            "nodes":  [
+                                                                          {
+                                                                              "value":  "New Lead",
+                                                                              "customField":  {
+                                                                                                  "targetType":  "job",
+                                                                                                  "name":  "Status"
+                                                                                              }
+                                                                          },
+                                                                          {
+                                                                              "value":  "Other / not sure",
+                                                                              "customField":  {
+                                                                                                  "targetType":  "job",
+                                                                                                  "name":  "project_type"
+                                                                                              }
+                                                                          },
+                                                                          {
+                                                                              "value":  "$50,000+",
+                                                                              "customField":  {
+                                                                                                  "targetType":  "job",
+                                                                                                  "name":  "budget_range"
+                                                                                              }
+                                                                          },
+                                                                          {
+                                                                              "value":  "3-6 months",
+                                                                              "customField":  {
+                                                                                                  "targetType":  "job",
+                                                                                                  "name":  "project_timeline"
+                                                                                              }
+                                                                          },
+                                                                          {
+                                                                              "value":  "Yes",
+                                                                              "customField":  {
+                                                                                                  "targetType":  "job",
+                                                                                                  "name":  "owns_property"
+                                                                                              }
+                                                                          }
+                                                                      ]
+                                                        },
+                                  "location":  {
+                                                   "id":  "22Pb7pCu6bD2",
+                                                   "account":  {
+                                                                   "id":  "22Pb7pCrKwzD"
+                                                               }
+                                               }
+                              },
+                              {
+                                  "id":  "22PbAs8RFJxS",
+                                  "name":  "Mark Brown - Other / not sure",
+                                  "number":  "56",
+                                  "createdAt":  "2026-07-19T12:00:38.228Z",
+                                  "customFieldValues":  {
+                                                            "nodes":  [
+                                                                          {
+                                                                              "value":  "New Lead",
+                                                                              "customField":  {
+                                                                                                  "targetType":  "job",
+                                                                                                  "name":  "Status"
+                                                                                              }
+                                                                          },
+                                                                          {
+                                                                              "value":  "Other / not sure",
+                                                                              "customField":  {
+                                                                                                  "targetType":  "job",
+                                                                                                  "name":  "project_type"
+                                                                                              }
+                                                                          },
+                                                                          {
+                                                                              "value":  "Not sure yet",
+                                                                              "customField":  {
+                                                                                                  "targetType":  "job",
+                                                                                                  "name":  "budget_range"
+                                                                                              }
+                                                                          },
+                                                                          {
+                                                                              "value":  "Just researching",
+                                                                              "customField":  {
+                                                                                                  "targetType":  "job",
+                                                                                                  "name":  "project_timeline"
+                                                                                              }
+                                                                          },
+                                                                          {
+                                                                              "value":  "No",
+                                                                              "customField":  {
+                                                                                                  "targetType":  "job",
+                                                                                                  "name":  "owns_property"
+                                                                                              }
+                                                                          }
+                                                                      ]
+                                                        },
+                                  "location":  {
+                                                   "id":  "22PbAs8PcAzi",
+                                                   "account":  {
+                                                                   "id":  "22PbAs8JDZzv"
+                                                               }
+                                               }
+                              }
+                          ]
+             },
+    "error":  null
+}

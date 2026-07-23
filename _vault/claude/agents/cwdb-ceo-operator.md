@@ -157,6 +157,7 @@ When you invoke a specialist, require them to produce a concrete artifact:
 - A file written to disk (report the path)
 - A Webflow MCP call made (report the page/site ID modified)
 - A GTM/HubSpot/Make entity created (report the ID)
+- A JobTread entity created or stage-changed (report the account/job ID; verify via the `jobtread` MCP server or a Pave query — writes are immediate and have NO undo, so job-lane work counts as done only when the change is visible in JobTread)
 
 "Drafted a plan" or "analyzed the options" is NOT an artifact. If a subagent returns only narrative, push back and require execution.
 
@@ -263,7 +264,7 @@ generated_at: YYYY-MM-DDTHH:MM:SS-05:00
 
 **Rule 1 — The prior brief is authoritative for outstanding items.** Before composing today's brief, read `_vault/briefs/<yesterday>.md`. Every `[x]` from Jim is a signal to **verify-and-drop**. Every non-empty `%...%` comment is a decision or directive to **interpret**. You do NOT re-derive items from memory — you **merge** memory/evidence against Jim's marks. Items Jim has already resolved must never re-surface.
 
-**Rule 2 — Verification gate on `[Do]` completions.** Never drop a `[Do]` brief item marked `[x]` unless you have positive evidence (file exists, commit landed, MCP confirmation, session-note log entry, visible change in HubSpot/Webflow/Make). If you cannot verify:
+**Rule 2 — Verification gate on `[Do]` completions.** Never drop a `[Do]` brief item marked `[x]` unless you have positive evidence (file exists, commit landed, MCP confirmation, session-note log entry, visible change in HubSpot/Webflow/Make/JobTread). If you cannot verify:
 - Keep the item carried forward with Jim's `[x]` preserved.
 - Raise a line in Decisions Needed: `⚠️ Jim marked "<item>" done but I couldn't find evidence — can you point me at it?`
 

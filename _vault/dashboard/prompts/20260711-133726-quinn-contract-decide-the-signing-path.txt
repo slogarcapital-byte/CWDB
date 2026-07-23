@@ -1,0 +1,19 @@
+Work on this CWDB HQ dashboard task (dashboard_tasks.task_id=4, source audit-2026-07-05#4):
+
+TITLE: Quinn contract: decide the signing path
+
+DETAIL: Hold prime signature until DSPS Certification issues; OR route builder-lane; OR add a condition-precedent clause and strip "licensed" language. $7,751 contract staged, August start target.
+
+Priority P0 · owner Jim · est. effort decision
+
+SUGGESTED AGENT: use the legal-compliance-counsel agent (Agent tool) for the domain work if it fits.
+
+RELEVANT FILES:
+sales/estimates/2026-06-26-quinn-deck-build-contract.pdf
+
+CONTEXT: this task comes from the 2026-07-05 full business audit (_vault/briefs/2026-07-05-audit.md) via the CWDB HQ dashboard.
+
+WHEN DONE (or blocked), close the loop in Supabase (project iabiwsbmnbxmkjvkgfhg):
+1. Update the task row: PATCH dashboard_tasks (task_id=4) -> status='done' + completed_at=now + a one-line notes summary (or leave status and write a blocked note).
+2. Append a dashboard_events row: event_type='task_status_change', task_id=4, actor='claude', payload = what changed, processed_at = now() (you ARE the processor for your own event).
+Use the Supabase MCP tool or PostgREST with the service key from .env.local.

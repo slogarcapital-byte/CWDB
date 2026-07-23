@@ -29,10 +29,13 @@ Pull live data from each source:
   - Open deals by pipeline stage (count + total amount)
   - Lifecycle stage breakdown (lead / mql / sql / customer counts)
 
+- **JobTread job pipeline** (hybrid, alongside HubSpot): via the JobTread AI Connector MCP (server `jobtread`) list jobs grouped by the `Status` custom field (10-stage funnel); fallback `_vault/data/jobtread-latest.json` with the same staleness rules.
+
 - **Ad-platform JSON snapshots** at `_vault/data/`:
   - `google-ads-latest.json`
   - `meta-ads-latest.json`
   - `ga4-latest.json`
+  - `jobtread-latest.json`
 
   Check each `pulled_at` timestamp. Flag any older than 24 hours as `⚠️ STALE: <file> last pulled <timestamp>`. If a file is missing, note as `(no data)` rather than fabricating.
 

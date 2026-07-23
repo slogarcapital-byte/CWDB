@@ -1,0 +1,2 @@
+[2026-07-14T22:39:22.4290373-05:00] raw_jobtread_snapshot upsert failed: UPSERT to raw_jobtread_snapshot failed (batch 1, 13 rows): The SSL connection could not be established, see inner exception.
+

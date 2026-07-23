@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "operations/dashboard/README.md",
+                "file": "operations/analysis/jobtread-setup-design.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "jobtread-setup-design"
             }
           }
         ]
@@ -183,6 +183,7 @@
   },
   "active": "303d65955df22e0b",
   "lastOpenFiles": [
+    "operations/dashboard/README.md",
     "_vault/briefs/2026-07-05-audit.md"
   ]
 }

@@ -54,6 +54,28 @@ formation via `allocate_job_number()`; mirrored to HubSpot deal property
 `cwdb_job_number` (creation pending a private-app scope fix). CWDB-2026-001 is
 reserved for the Overbeck staining job ($2,800, $840 deposit).
 
+## Mandatory legal blocks in ANY cwdb-lane self-perform contract (all platforms)
+The approved QBO signing surface (`sales/estimates/generate_estimate_pdf.py`)
+carries FOUR distinct legal blocks. A port to any new platform (JobTread, etc.)
+must carry ALL FOUR, not just the cancellation notice:
+1. Two Notice of Cancellation copies (Copy 1/2, 2/2) — 16 CFR 429.1(b) + Wis.
+   Stat. 423.203. `_notice_of_cancellation()`, lines ~169-206.
+2. Near-signature "Your Right to Cancel" bold statement — 16 CFR 429.1(a),
+   cites Wis. Stat. 423.202/423.203 + 16 CFR 429. SEPARATE from #1; must sit
+   immediately by the signature. Lines ~733-753.
+3. Notice to Owner — Wis. Stat. 779.02(2), mandatory on home-improvement
+   contracts over $1,000; omission impairs CWDB's own lien rights. Lines ~754-778.
+4. "Surface-Finish Only: No Structural Work" scope firewall — keeps the staining
+   job out of DSPS-licensed territory (pre-license posture). Lines ~703-715.
+Incident (2026-07-14): the first JobTread legal-block extraction
+(`operations/jobtread/proposal-template-legal-block.md`) captured only #1 + the
+builder disclosure and DROPPED #2 and #3 — flagged as blocking R1/R2, no sign-off.
+Explicit calendar dates (transaction + deadline) are mandatory in a "completed"
+notice; a formula/parenthetical alone fails 429.1(b)/423.203. Deadline must be
+computed from the SAME date shown as Date of Transaction (understating the window
+= violation). E-delivery of the notice needs E-SIGN 7001(c) / Wis. UETA 137.15(2)
+consumer consent captured before signing.
+
 ## Open gates before any BUILD contract
 - GL insurance bound (also a real risk for staining; flagged to Jim)
 - DSPS Dwelling Contractor Certification (entity) + Qualifier (Jim)

@@ -3,7 +3,7 @@ tags:
   - type/memory
   - agent/web-dev
 created: 2026-04-02
-updated: 2026-04-16
+updated: 2026-07-22
 status: active
 ---
 
@@ -50,6 +50,11 @@ Auto-loaded each session. Keep under 150 lines. Details in linked files.
 - [Per-instance Component Property overrides Designer-only on single-locale sites](webflow-mcp-component-bool-props.md) — all override types fail via Data API; Designer MCP has no write path; hand off to Jim in Designer
 - [Script slots cap at 15, inline cap at 2000 chars](webflow-mcp-script-constraints.md) — `data_scripts_tool` only exposes `add_inline_site_script`; page-scoped scripts via `upsert_page_script` for >2000 chars; `publish_site` requires domain IDs not hostnames
 - [No native Multi-Step Form element](webflow-no-native-multistep.md) — every multi-step is custom JS hiding wizard-step divs. Don't propose "use Webflow native multi-step."
+- **Script topology 2026-07-22:** intake relay v2.1.0 lives in the SITE freeform footer (site-wide; covers /service-area/* quote forms too), attribution keeper `cwdb_attribution_keeper` 1.0.0 is a registered inline site script (header). `cwdb_conversion_signal` 1.0.0 is a registered inline site script (slot 11/15, footer): on quote-form success it pushes generate_lead to dataLayer then enforces the form's data-redirect to /thank-you (HubSpot forms integration ignores Webflow's redirect setting). The /get-a-quote page freeform footer is now only a pointer comment. Sources + rollback notes: `website/scripts/`. Registered hosted scripts render as CDN `<script src>` tags, NOT inline — grep for the script name in the src, not its code, when verifying a publish.
+- **OAuth scope gap 2026-07-22:** the MCP connection lacks `page_client:write`. ALL of data_element_tool, data_component_tool, data_element_builder, data_whtml_builder fail with OAuthForbidden. Designer tools need Jim's Designer open with the MCP companion app. Working surfaces: sites, pages (settings/SEO/jsonLdSchema), CMS, scripts, forms(read), freeform code. DOM/component edits are blocked until the Webflow app connection is re-authorized with that scope.
+- **Page freeform code WAF 2026-07-22:** `set_page_freeform_code` returns HTTP 406 whenever content contains a `<script>` tag (comments/empty writes succeed). Put JSON-LD in page settings via `bulk_update_pages_schema_markup` instead (renders one ld+json block in head). FAQ + Home JSON-LD now live there, freeform head blocks cleared.
+- **HubSpot forms integration hijacks quote form (root cause of 6/10 conversion silence):** the HubSpot Webflow app (WB-016 wiring, 2026-06-10/11) adds data-wfhsfieldname attrs + js.hs-scripts.com loader and takes over form#wf-form-Quote-Request submits; it shows the inline success state and never executes the form's configured redirect="/thank-you" (still present in markup and in responseSettings.redirectUrl). Fixed via cwdb_conversion_signal script; if the HubSpot app is ever removed, the native redirect resumes and the script becomes a harmless no-op (it only acts on success).
+- **City page JSON-LD was never live in Webflow:** /service-area/* pages render ZERO ld+json blocks; the aggregateRating blocks existed only in local `website/pages/cities/*/content.md` reference files.
 
 ### Browser / Device
 - [Playwright MCP context dies on idle](playwright-mcp-context-death.md) — first call after idle fails; always run `browser_close` → `browser_navigate("about:blank")` → `browser_resize(1280, 800)` at session start, repeat if error recurs mid-run

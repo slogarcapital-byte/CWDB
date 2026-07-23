@@ -23,7 +23,11 @@
       "mcp__claude_ai_Webflow__element_builder",
       "Bash(unzip *)",
       "Bash(mkdir -p \".claude/skills/hormozi-operator\")",
-      "Bash(cp \"/c/Users/jslog/Downloads/SKILL.md\" \".claude/skills/hormozi-operator/SKILL.md\")"
+      "Bash(cp \"/c/Users/jslog/Downloads/SKILL.md\" \".claude/skills/hormozi-operator/SKILL.md\")",
+      "mcp__claude_ai_Supabase__execute_sql",
+      "WebFetch(domain:dsps.wi.gov)",
+      "WebFetch(domain:12contractor.com)",
+      "mcp__claude_ai_Gmail__search_threads"
     ]
   },
   "hooks": {
