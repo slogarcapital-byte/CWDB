@@ -16,10 +16,9 @@ Everything Claude could do is done. These are the steps only you can do, ordered
 7. **Google Ads clicksheet (task 10).** Demote the 4 GBP junk conversions to Secondary (not API-mutable, verified). RECOMMENDED while you are in there: flip the Search campaign to Maximize Clicks until the restored conversion signal banks 30 conversions (this re-applies your own 5/19 decision; it has been on Maximize Conversions with a dead signal since 6/10). Clicksheet: `marketing/google-ads/2026-07-22-conversion-cleanup-clicksheet.csv`.
 8. **Rotate the Supabase service-role key (task 17).** Supabase Dashboard > Settings > API > rotate service_role. Then in the SAME sitting update: `.env.local`, Streamlit Cloud secrets (estimator + HQ twin), and the edge-function secrets if shown. Until updated, the warehouse cron and cloud twin will fail; do it right before a refresh so we catch problems.
 
-### Unblock the site finish (2 minutes, high leverage)
+### Site finish: DONE 2026-07-23 (connector reconnect worked; full sweep + repositioning + /privacy + consent checkboxes live)
 
-- **Re-authorize the Webflow connection with the `page_client:write` scope** (claude.ai > Settings > Connectors > Webflow > reconnect and grant all scopes), or open the Webflow Designer with the MCP companion app active. This unblocks the remaining static-page edits: the last licensed/bonded/24-48h strings on Home/About/Get-a-Quote/Our-Builders + city trust badges, the /thank-you booking page body, the /privacy body, and (most important) the missing TCPA consent checkbox on the 5 service-area forms. Say the word after reconnecting and I run the finishing pass.
-- **Conversion-signal test**: after the reconnect pass, submit the quote form once using slogarjw@gmail.com (auto-excluded from clean-lead views) from your iPhone and confirm you land on /thank-you. Then delete the test job it creates in JobTread (JobTread writes have no undo, so it needs a manual delete). This proves the Google Ads conversion is firing again after 6 silent weeks.
+- **Conversion-signal test (still needed)**: submit the quote form once using slogarjw@gmail.com (auto-excluded from clean-lead views) from your iPhone and confirm you land on /thank-you. Then delete the test job it creates in JobTread (JobTread writes have no undo, so it needs a manual delete). This proves the Google Ads conversion is firing again after 6 silent weeks.
 
 ## Money (task 18 + 24)
 

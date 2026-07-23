@@ -67,3 +67,10 @@ Every section in local HTML files must be wrapped:
 <section class="[component-name]"> ... </section>
 <!-- /WEBFLOW COMPONENT: [component-name] -->
 ```
+
+## 2026-07-23 revamp finishing pass additions
+- `services-section-grid` — four-card services grid (new build / replacement / repair / refinishing) + estimate CTA; /services draft page. Component id 8661180e-f7e0-6ffa-8e3f-181cd1da3d31.
+- `trust-section-why` — dark why-us trust strip (Insured / Local / One crew / Built to code + phone fallback); /services draft page. Component id 92267256-1944-31e9-5737-d288cd0a3527.
+- /thank-you booking block built as native elements inside the existing hero section (booking-block / booking-steps / booking-contact classes); componentize on next touch if reused.
+- Component-default text changes 2026-07-23 (propagate everywhere hasOverride:false): cta-final headline, quote-form-inline + multi-step-form "Text 2" form intro, builders-strip Title ("THE CREW THAT BUILDS IT:"), gallery-featured heading, hero-interior subheading, hero-interior_about heading/subheading, testimonials trust badges (Insured Local Crew / Free Estimates, No Obligation / Central Wisconsin Only / Built to Code).
+- TCPA: quote-form-inline checkbox is name=tcpa_consent (was tcpa-consent), value=yes, required; disclosure span uses the canonical get-a-quote wording; long disclosure paragraph phone fixed to (715) 544-7941.
