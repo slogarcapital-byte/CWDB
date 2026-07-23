@@ -1,58 +1,105 @@
 {
+  "version": 2,
+  "updated": "2026-07-22",
+  "description": "Lead scoring rules v2 for CWDB Phase 2 (construction-first). Applies to ALL lead channels (webform, phone, manual), not just form submissions. Scores persist in the warehouse side table lead_scores (schema/016), which the nightly HubSpot pull never touches. Docs: operations/leads/lead-scoring.md",
   "scoring": {
-    "description": "Lead scoring rules for qualifying Tally form submissions. Leads scoring 60+ are routed to contractors.",
     "pass_threshold": 60,
     "max_score": 100,
-    "rules": [
+    "dimensions": [
       {
-        "field": "Do you own this property?",
-        "rule": "Must be homeowner",
-        "condition": "value == 'Yes, I own this home'",
-        "points": 30,
-        "disqualify_if_fail": true,
+        "name": "homeowner",
+        "points": 20,
+        "rule": "owns_property = true",
+        "unknown_points": 0,
+        "disqualify_if_false": true,
         "disqualify_reason": "Non-homeowner (renter)"
       },
       {
-        "field": "Property Address",
-        "rule": "Must be in service territory",
-        "condition": "zip_code in service_territory_list",
-        "points": 20,
-        "disqualify_if_fail": true,
-        "disqualify_reason": "Outside service area"
-      },
-      {
-        "field": "Phone Number",
-        "rule": "Must be a valid US phone number",
-        "condition": "valid_us_phone_format",
+        "name": "valid_phone",
         "points": 10,
-        "disqualify_if_fail": true,
-        "disqualify_reason": "Invalid phone number"
+        "rule": "Valid US phone number present",
+        "disqualify_if_missing": true,
+        "disqualify_reason": "Invalid/missing phone number"
       },
       {
-        "field": "What is your estimated budget?",
-        "rule": "Budget must be $5,000 or above",
-        "condition": "value != 'Under $5,000'",
-        "points": 20,
-        "disqualify_if_fail": false,
-        "low_score_reason": "Budget under $5,000 — flag for review"
+        "name": "drive_time",
+        "points": { "inner_30": 20, "mid_40_60": 10, "outer_60_plus": 0, "unknown": 5 },
+        "rule": "Drive time from CWDB Wausau (906 N 16th Ave, Wausau WI 54401)"
       },
       {
-        "field": "When are you looking to start?",
-        "rule": "Timeline indicates near-term intent",
-        "condition": "value in ['As soon as possible', 'Within 1–3 months']",
-        "points": 20,
-        "disqualify_if_fail": false
+        "name": "timeline",
+        "points": { "asap": 20, "1-3-months": 15, "3-6-months": 10, "6-12-months": 5, "just-researching": 5, "unknown": 0 }
+      },
+      {
+        "name": "budget",
+        "points": { "50k-plus": 15, "35k-50k": 15, "20k-35k": 15, "10k-20k": 12, "under-10k": 8, "not-sure": 5, "unknown": 0 },
+        "note": "under-10k is NOT a weak signal for repair/stain: the self-perform cwdb lane profitably serves sub-10k jobs (Overbeck $2,800). Flag for review only if budget under $5,000 on a build."
+      },
+      {
+        "name": "project_fit",
+        "points": {
+          "repair_or_stain_inner_30": 15,
+          "repair_or_stain_mid_40_60": 12,
+          "new_deck_or_replacement": 10,
+          "other_deck_related": 8,
+          "non_deck": 0
+        },
+        "note": "Repair/stain close to home outranks bigger builds right now: cwdb lane can self-perform immediately (no permit, no DSPS gate)."
       }
     ],
-    "service_territory": {
-      "zip_codes": ["54401", "54403", "54476", "54474", "54452"],
-      "cities": ["Wausau", "Schofield", "Weston", "Mosinee", "Merrill"]
+    "tiers": {
+      "A": { "min": 75, "meaning": "Act now" },
+      "B": { "min": 60, "meaning": "Solid; follow up this week" },
+      "C": { "min": 40, "meaning": "Phone-qualify before investing drive time" },
+      "D": { "min": 0, "meaning": "Weak or data-incomplete; qualify by phone, do not drive" },
+      "DQ": { "meaning": "Disqualified (see auto_disqualify_conditions); score recorded as 0" }
+    }
+  },
+  "drive_time_rubric": {
+    "origin": "906 N 16th Ave, Wausau WI 54401",
+    "tiers": {
+      "inner_30": {
+        "max_minutes": 30,
+        "cities": ["Wausau", "Schofield", "Weston", "Rothschild", "Kronenwetter", "Mosinee", "Merrill", "Marathon City", "Ringle"],
+        "zip_codes": ["54401", "54403", "54476", "54474", "54455", "54452", "54448", "54471"]
+      },
+      "mid_40_60": {
+        "min_minutes": 40,
+        "max_minutes": 60,
+        "cities": ["Stevens Point", "Plover", "Marshfield", "Antigo", "Wittenberg", "Athens", "Tomahawk"],
+        "zip_codes": ["54481", "54482", "54467", "54449", "54409", "54499", "54487"]
+      },
+      "outer_60_plus": {
+        "min_minutes": 60,
+        "note": "Outside working radius in Phase 2. Politely decline or refer; do not book."
+      },
+      "unknown": {
+        "note": "Rural fire-number addresses without a city: resolve the drive time on the qualification call before booking anything."
+      }
     },
-    "auto_disqualify_conditions": [
-      "Renter (non-homeowner)",
-      "Outside service territory",
-      "Invalid/missing phone number",
-      "Duplicate submission (same phone within 30 days)"
-    ]
-  }
+    "playbook": {
+      "repair_stain_inner_30": {
+        "action": "book-this-week",
+        "detail": "The Overbeck playbook. Repair/stain within 30 min of Wausau: call, book the walk-through for THIS WEEK, self-perform on the cwdb lane (combined estimate + work order, no permit needed)."
+      },
+      "new_build_any_tier": {
+        "action": "walkthrough-now-close-after-dsps",
+        "detail": "New builds and structural replacements: book the walk-through NOW to hold the lead, deliver the estimate, but close (prime contract + deposit) only after DSPS Dwelling Contractor cert. Pre-license, builder lane rules apply: CWDB never signs as prime or takes a build deposit."
+      },
+      "mid_40_60_any_project": {
+        "action": "phone-qualify-batch-trip",
+        "detail": "40-60 min out (Stevens Point etc.): phone-qualify FIRST (confirm scope, budget, ownership, seriousness), then batch multiple walk-throughs into one trip. Never drive an hour for a single unqualified lead."
+      }
+    }
+  },
+  "auto_disqualify_conditions": [
+    "Renter (non-homeowner)",
+    "Outside working radius (outer_60_plus)",
+    "Invalid/missing phone number",
+    "Duplicate submission (same phone within 30 days)",
+    "Spam / vendor solicitation / bot submission",
+    "Non-deck project outside CWDB scope (e.g. whole-home construction)",
+    "Internal test submission"
+  ],
+  "consent_rule": "consent_missing = true NEVER hides or deprioritizes a lead. It blocks SMS only. Call the lead, capture verbal TCPA consent with the scripted ask, log tcpa_consent_source = verbal in HubSpot."
 }

@@ -230,6 +230,12 @@ async function handleIntake(req: Request): Promise<Response> {
   }
 
   // 2. HubSpot safety-net write (same shape the old relay sent)
+  // v11 (audit #9): forward the relay's hutk cookie in context so HubSpot ties
+  // the submission to the visitor's analytics session (and merges with any
+  // collected-forms contact), and map fbclid to the default
+  // hs_facebook_click_id property. utm_medium / utm_term / utm_content have NO
+  // contact properties in this portal (verified 2026-07-22) so they are NOT
+  // sent to HubSpot; they land in bronze via the raw payload.
   try {
     const fields = Object.entries({
       firstname: p.name, email: p.email, phone: p.phone, address: p.address,
@@ -238,14 +244,20 @@ async function handleIntake(req: Request): Promise<Response> {
       tcpa_consent_given: p.tcpa_consent, owns_property: p.owns_property,
       lead_source_page: p.page_uri, utm_source: p.utm_source,
       utm_campaign: p.utm_campaign, gclid: p.gclid,
+      hs_facebook_click_id: p.fbclid,
     }).filter(([, v]) => v != null && v !== "")
       .map(([name, value]) => ({ name, value: String(value) }));
+    const hsContext: Record<string, string> = {
+      pageUri: p.page_uri ?? "",
+      pageName: p.page_name ?? "Get a Quote",
+    };
+    if (p.hutk) hsContext.hutk = p.hutk;
     const hs = await fetch(HS_ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         fields,
-        context: { pageUri: p.page_uri ?? "", pageName: p.page_name ?? "Get a Quote" },
+        context: hsContext,
       }),
     });
     bronze.hubspot_status = hs.status;
